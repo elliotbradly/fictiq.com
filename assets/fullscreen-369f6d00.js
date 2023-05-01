@@ -1,0 +1,1 @@
+import{d as e,_ as n,o,c as s,a as t}from"./index-e78355d8.js";const c=e({name:"FullScreenPage"}),a=t("h1",null,"Full-Screen",-1),r=[a];function l(_,d,p,u,f,i){return o(),s("div",null,r)}const h=n(c,[["render",l]]);export{h as default};

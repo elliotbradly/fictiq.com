@@ -36824,7 +36824,7 @@ exports.default = SpaceUnit;
 },{"../99.core/state":76,"typescript-ioc":28}],36:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.openFocus = exports.selectFocus = exports.visionFocus = exports.locateFocus = exports.spinLeftFocus = exports.spinRightFocus = exports.centerFocus = exports.deleteFocus = exports.removeFocus = exports.writeFocus = exports.readFocus = exports.cornerFocus = exports.listFocus = exports.updateFocus = exports.initFocus = void 0;
+exports.openFocus = exports.selectFocus = exports.visionFocus = exports.locateFocus = exports.spinLeftFocus = exports.spinRightFocus = exports.centerFocus = exports.cornerFocus = exports.listFocus = exports.updateFocus = exports.deleteFocus = exports.removeFocus = exports.writeFocus = exports.readFocus = exports.initFocus = void 0;
 const ActFoc = require("../focus.action");
 const ActMap = require("../../02.hexmap.unit/hexmap.action");
 const ActCol = require("../../97.collect.unit/collect.action");
@@ -36835,6 +36835,37 @@ const initFocus = (cpy, bal, ste) => {
     return cpy;
 };
 exports.initFocus = initFocus;
+const readFocus = async (cpy, bal, ste) => {
+    var slv = bal.slv;
+    if (bal.idx == null)
+        bal.idx = "foc00";
+    bit = await ste.hunt(ActCol.READ_COLLECT, { idx: bal.idx, src: bal.src, bit: ActFoc.CREATE_FOCUS });
+    if (slv != null)
+        slv({ focBit: { idx: "read-focus", dat: bit.clcBit.dat } });
+    return cpy;
+};
+exports.readFocus = readFocus;
+const writeFocus = async (cpy, bal, ste) => {
+    if (bal.idx == null)
+        bal.idx = "foc00";
+    bit = await ste.hunt(ActCol.WRITE_COLLECT, { idx: bal.idx, src: bal.src, dat: bal.dat, bit: ActFoc.CREATE_FOCUS });
+    var spot = bit.clcBit.dat;
+    ste.hunt(ActFoc.UPDATE_FOCUS, { idx: bal.idx });
+    if (bal.slv != null)
+        bal.slv({ focBit: { idx: "write-focus", dat: bit.clcBit.dat } });
+    return cpy;
+};
+exports.writeFocus = writeFocus;
+const removeFocus = (cpy, bal, ste) => {
+    debugger;
+    return cpy;
+};
+exports.removeFocus = removeFocus;
+const deleteFocus = (cpy, bal, ste) => {
+    debugger;
+    return cpy;
+};
+exports.deleteFocus = deleteFocus;
 const updateFocus = (cpy, bal, ste) => {
     if (bal.slv != null)
         bal.slv({ focBit: { idx: "update-focus" } });
@@ -36876,37 +36907,6 @@ const cornerFocus = async (cpy, bal, ste) => {
     return cpy;
 };
 exports.cornerFocus = cornerFocus;
-const readFocus = async (cpy, bal, ste) => {
-    var slv = bal.slv;
-    if (bal.idx == null)
-        bal.idx = "foc00";
-    bit = await ste.hunt(ActCol.READ_COLLECT, { idx: bal.idx, src: bal.src, bit: ActFoc.CREATE_FOCUS });
-    if (slv != null)
-        slv({ focBit: { idx: "read-focus", dat: bit.clcBit.dat } });
-    return cpy;
-};
-exports.readFocus = readFocus;
-const writeFocus = async (cpy, bal, ste) => {
-    if (bal.idx == null)
-        bal.idx = "foc00";
-    bit = await ste.hunt(ActCol.WRITE_COLLECT, { idx: bal.idx, src: bal.src, dat: bal.dat, bit: ActFoc.CREATE_FOCUS });
-    var spot = bit.clcBit.dat;
-    ste.hunt(ActFoc.UPDATE_FOCUS, { idx: bal.idx });
-    if (bal.slv != null)
-        bal.slv({ focBit: { idx: "write-focus", dat: bit.clcBit.dat } });
-    return cpy;
-};
-exports.writeFocus = writeFocus;
-const removeFocus = (cpy, bal, ste) => {
-    debugger;
-    return cpy;
-};
-exports.removeFocus = removeFocus;
-const deleteFocus = (cpy, bal, ste) => {
-    debugger;
-    return cpy;
-};
-exports.deleteFocus = deleteFocus;
 const centerFocus = async (cpy, bal, ste) => {
     if (bal.slv != null)
         bal.slv({ focBit: { idx: "center-focus", dat } });
@@ -37256,6 +37256,7 @@ const DIRECTION = require("../../val/direction");
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createFocus = void 0;
+const ActFoc = require("../focus.action");
 var bit, val, idx, dex, lst, dat;
 const createFocus = async (cpy, bal, ste) => {
     var dat = { idx: bal.idx, src: bal.src, typ: SPACE.FOCUS };
@@ -37317,8 +37318,8 @@ const createFocus = async (cpy, bal, ste) => {
         console.log("errror in the create focus");
     }
     //now let us create the corners
-    //bit = await ste.hunt(ActFoc.CORNER_FOCUS, { dat })
-    //dat.corners = bit.focBit.lst;
+    bit = await ste.hunt(ActFoc.CORNER_FOCUS, { dat });
+    dat.corners = bit.focBit.lst;
     bal.slv({ focBit: { idx: "create-focus", dat: dat } });
     return cpy;
 };
@@ -37327,7 +37328,7 @@ const Honeycomb = require("honeycomb-grid");
 const SHAPE = require("../../val/shape");
 const SPACE = require("../../val/space");
 
-},{"../../val/shape":85,"../../val/space":86,"honeycomb-grid":6}],40:[function(require,module,exports){
+},{"../../val/shape":85,"../../val/space":86,"../focus.action":41,"honeycomb-grid":6}],40:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.forwardFocus = void 0;

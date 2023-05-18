@@ -13587,8 +13587,8 @@ class ContainerBuildContext extends model_1.BuildContext {
 
 },{"./container/container":16,"./decorators":18,"./model":19,"./scopes":20,"reflect-metadata":11}],22:[function(require,module,exports){
 (function (global){(function (){
-global.TASUS = require("../dist/555.tasus/hunt");
-global.TASUS.ActTus = require("../dist/555.tasus/00.tasus.unit/tasus.action");
+global.BEING = require("../dist/006.being/hunt");
+global.BEING.ActBee = require("../dist/006.being/00.being.unit/being.action");
 
 
 
@@ -13596,39 +13596,172 @@ global.TASUS.ActTus = require("../dist/555.tasus/00.tasus.unit/tasus.action");
 
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../dist/555.tasus/00.tasus.unit/tasus.action":24,"../dist/555.tasus/hunt":58}],23:[function(require,module,exports){
+},{"../dist/006.being/00.being.unit/being.action":23,"../dist/006.being/hunt":52}],23:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PatchBeing = exports.PATCH_BEING = exports.EditBeing = exports.EDIT_BEING = exports.RunBeing = exports.RUN_BEING = exports.OpenBeing = exports.OPEN_BEING = exports.UpdateBeing = exports.UPDATE_BEING = exports.InitBeing = exports.INIT_BEING = void 0;
+exports.INIT_BEING = "[Being action] Init Being";
+class InitBeing {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.INIT_BEING;
+    }
+}
+exports.InitBeing = InitBeing;
+exports.UPDATE_BEING = "[Being action] Update Being";
+class UpdateBeing {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.UPDATE_BEING;
+    }
+}
+exports.UpdateBeing = UpdateBeing;
+exports.OPEN_BEING = "[Open action] Open Being";
+class OpenBeing {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.OPEN_BEING;
+    }
+}
+exports.OpenBeing = OpenBeing;
+exports.RUN_BEING = "[Run action] Run Being";
+class RunBeing {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.RUN_BEING;
+    }
+}
+exports.RunBeing = RunBeing;
+exports.EDIT_BEING = "[Edit action] Edit Being";
+class EditBeing {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.EDIT_BEING;
+    }
+}
+exports.EditBeing = EditBeing;
+exports.PATCH_BEING = "[Patch action] Patch Being";
+class PatchBeing {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.PATCH_BEING;
+    }
+}
+exports.PatchBeing = PatchBeing;
+
+},{}],24:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.patchBeing = exports.editBeing = exports.runBeing = exports.openBeing = exports.updateBeing = exports.initBeing = void 0;
+var being_buzz_1 = require("./buz/being.buzz");
+Object.defineProperty(exports, "initBeing", { enumerable: true, get: function () { return being_buzz_1.initBeing; } });
+var being_buzz_2 = require("./buz/being.buzz");
+Object.defineProperty(exports, "updateBeing", { enumerable: true, get: function () { return being_buzz_2.updateBeing; } });
+var being_buzz_3 = require("./buz/being.buzz");
+Object.defineProperty(exports, "openBeing", { enumerable: true, get: function () { return being_buzz_3.openBeing; } });
+var being_buzz_4 = require("./buz/being.buzz");
+Object.defineProperty(exports, "runBeing", { enumerable: true, get: function () { return being_buzz_4.runBeing; } });
+var being_buzz_5 = require("./buz/being.buzz");
+Object.defineProperty(exports, "editBeing", { enumerable: true, get: function () { return being_buzz_5.editBeing; } });
+var being_buzz_6 = require("./buz/being.buzz");
+Object.defineProperty(exports, "patchBeing", { enumerable: true, get: function () { return being_buzz_6.patchBeing; } });
+
+},{"./buz/being.buzz":28}],25:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.BeingModel = void 0;
+class BeingModel {
+    constructor() {
+        this.idx = '006.being';
+    }
+}
+exports.BeingModel = BeingModel;
+
+},{}],26:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.reducer = void 0;
+const clone = require("clone-deep");
+const Act = require("./being.action");
+const being_model_1 = require("./being.model");
+const Buzz = require("./being.buzzer");
+function reducer(model = new being_model_1.BeingModel(), act, state) {
+    switch (act.type) {
+        case Act.UPDATE_BEING:
+            return Buzz.updateBeing(clone(model), act.bale, state);
+        case Act.INIT_BEING:
+            return Buzz.initBeing(clone(model), act.bale, state);
+        case Act.OPEN_BEING:
+            return Buzz.openBeing(clone(model), act.bale, state);
+        case Act.RUN_BEING:
+            return Buzz.runBeing(clone(model), act.bale, state);
+        case Act.EDIT_BEING:
+            return Buzz.editBeing(clone(model), act.bale, state);
+        case Act.PATCH_BEING:
+            return Buzz.patchBeing(clone(model), act.bale, state);
+        default:
+            return model;
+    }
+}
+exports.reducer = reducer;
+
+},{"./being.action":23,"./being.buzzer":24,"./being.model":25,"clone-deep":3}],27:[function(require,module,exports){
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const typescript_ioc_1 = require("typescript-ioc");
+const state_1 = require("../99.core/state");
+let BeingUnit = class BeingUnit {
+    constructor(state) {
+    }
+};
+BeingUnit = __decorate([
+    typescript_ioc_1.Singleton,
+    __metadata("design:paramtypes", [state_1.default])
+], BeingUnit);
+exports.default = BeingUnit;
+
+},{"../99.core/state":47,"typescript-ioc":21}],28:[function(require,module,exports){
 (function (process){(function (){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.patchTasus = exports.editTasus = exports.runTasus = exports.openTasus = exports.updateTasus = exports.initTasus = void 0;
+exports.patchBeing = exports.editBeing = exports.runBeing = exports.openBeing = exports.updateBeing = exports.initBeing = void 0;
 const ActMnu = require("../../98.menu.unit/menu.action");
 const ActBus = require("../../99.bus.unit/bus.action");
-const ActTus = require("../tasus.action");
+const ActBee = require("../being.action");
 const ActVrt = require("../../act/vurt.action");
 const ActDsk = require("../../act/disk.action");
 var bit, val, idx, dex, lst, dat;
-const initTasus = async (cpy, bal, ste) => {
+const initBeing = async (cpy, bal, ste) => {
     if (bal.dat != null)
-        bit = await ste.hunt(ActBus.INIT_BUS, { idx: cpy.idx, lst: [ActTus], dat: bal.dat, src: bal.src });
+        bit = await ste.hunt(ActBus.INIT_BUS, { idx: cpy.idx, lst: [ActBee], dat: bal.dat, src: bal.src });
     if (bal.val == 1)
         patch(ste, ActMnu.INIT_MENU, bal);
     if (bal.slv != null)
-        bal.slv({ intBit: { idx: "init-tasus" } });
+        bal.slv({ intBit: { idx: "init-being" } });
     return cpy;
 };
-exports.initTasus = initTasus;
-const updateTasus = (cpy, bal, ste) => {
+exports.initBeing = initBeing;
+const updateBeing = (cpy, bal, ste) => {
     const { exec } = require('child_process');
-    exec('tsc -b 555.tasus', async (err, stdout, stderr) => {
+    exec('tsc -b 006.being', async (err, stdout, stderr) => {
         if (err) {
             console.error(`exec error: ${err}`);
         }
         process.chdir("../999.vurt");
-        bit = await ste.bus(ActVrt.BUNDLE_VURT, { src: "555.tasus" });
-        process.chdir("../555.tasus");
-        bit = await ste.bus(ActDsk.READ_DISK, { src: './work/555.tasus.js' });
-        var tasus = bit.dskBit.dat;
-        bit = await ste.bus(ActDsk.WRITE_DISK, { src: '../gillisse/public/jsx/555.tasus.js', dat: tasus });
+        bit = await ste.bus(ActVrt.BUNDLE_VURT, { src: "006.being" });
+        process.chdir("../006.being");
+        bit = await ste.bus(ActDsk.READ_DISK, { src: './work/006.being.js' });
+        var being = bit.dskBit.dat;
+        bit = await ste.bus(ActDsk.WRITE_DISK, { src: '../gillisse/public/jsx/006.being.js', dat: being });
         bit = await ste.bus(ActDsk.READ_DISK, { src: './index.html' });
         var html = bit.dskBit.dat;
         bit = await ste.bus(ActDsk.READ_DISK, { src: './index.js' });
@@ -13637,289 +13770,59 @@ const updateTasus = (cpy, bal, ste) => {
         bit = await ste.bus(ActDsk.WRITE_DISK, { src: '../gillisse/index.html', dat: html });
         setTimeout(() => {
             if (bal.slv != null)
-                bal.slv({ tusBit: { idx: "update-tasus" } });
+                bal.slv({ beeBit: { idx: "update-being" } });
         }, 3);
     });
     return cpy;
 };
-exports.updateTasus = updateTasus;
-const openTasus = async (cpy, bal, ste) => {
+exports.updateBeing = updateBeing;
+const openBeing = async (cpy, bal, ste) => {
     bit = await ste.bus(ActDsk.COPY_DISK, { src: './vue', idx: '../gillisse/src' });
-    bit = await ste.hunt(ActTus.RUN_TASUS, {});
+    bit = await ste.hunt(ActBee.RUN_BEING, {});
     const open = require('open');
     var loc = './vrt.opn.bat';
     bit = await open(loc);
     setTimeout(() => {
         if (bal.slv != null)
-            bal.slv({ tusBit: { idx: "open-tasus" } });
+            bal.slv({ beeBit: { idx: "open-being" } });
     }, 33);
     return cpy;
 };
-exports.openTasus = openTasus;
-const runTasus = async (cpy, bal, ste) => {
+exports.openBeing = openBeing;
+const runBeing = async (cpy, bal, ste) => {
     const open = require('open');
     var loc = './vrt.gil.bat';
     bit = await open(loc);
     setTimeout(() => {
         if (bal.slv != null)
-            bal.slv({ tusBit: { idx: "run-tasus" } });
+            bal.slv({ beeBit: { idx: "run-being" } });
     });
     return cpy;
 };
-exports.runTasus = runTasus;
-const editTasus = (cpy, bal, ste) => {
+exports.runBeing = runBeing;
+const editBeing = (cpy, bal, ste) => {
     const { exec } = require('child_process');
     process.chdir("../../studio/");
     exec('start Code.exe ../packages/gillisse', async (err, stdout, stderr) => {
         if (err) {
             console.error(`exec error: ${err}`);
         }
-        process.chdir("../packages/555.tasus");
+        process.chdir("../packages/006.being");
         if (bal.slv != null)
-            bal.slv({ tusBit: { idx: "edit-tasus", dat: {} } });
+            bal.slv({ beeBit: { idx: "edit-being", dat: {} } });
     });
     return cpy;
 };
-exports.editTasus = editTasus;
+exports.editBeing = editBeing;
 var patch = (ste, type, bale) => ste.dispatch({ type, bale });
-const patchTasus = (cpy, bal, ste) => {
+const patchBeing = (cpy, bal, ste) => {
     debugger;
     return cpy;
 };
-exports.patchTasus = patchTasus;
+exports.patchBeing = patchBeing;
 
 }).call(this)}).call(this,require('_process'))
-},{"../../98.menu.unit/menu.action":42,"../../99.bus.unit/bus.action":47,"../../act/disk.action":55,"../../act/vurt.action":57,"../tasus.action":24,"_process":10,"child_process":undefined,"open":undefined}],24:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.PatchTasus = exports.PATCH_TASUS = exports.EditTasus = exports.EDIT_TASUS = exports.RunTasus = exports.RUN_TASUS = exports.OpenTasus = exports.OPEN_TASUS = exports.UpdateTasus = exports.UPDATE_TASUS = exports.InitTasus = exports.INIT_TASUS = void 0;
-exports.INIT_TASUS = "[Tasus action] Init Tasus";
-class InitTasus {
-    constructor(bale) {
-        this.bale = bale;
-        this.type = exports.INIT_TASUS;
-    }
-}
-exports.InitTasus = InitTasus;
-exports.UPDATE_TASUS = "[Tasus action] Update Tasus";
-class UpdateTasus {
-    constructor(bale) {
-        this.bale = bale;
-        this.type = exports.UPDATE_TASUS;
-    }
-}
-exports.UpdateTasus = UpdateTasus;
-exports.OPEN_TASUS = "[Open action] Open Tasus";
-class OpenTasus {
-    constructor(bale) {
-        this.bale = bale;
-        this.type = exports.OPEN_TASUS;
-    }
-}
-exports.OpenTasus = OpenTasus;
-exports.RUN_TASUS = "[Run action] Run Tasus";
-class RunTasus {
-    constructor(bale) {
-        this.bale = bale;
-        this.type = exports.RUN_TASUS;
-    }
-}
-exports.RunTasus = RunTasus;
-exports.EDIT_TASUS = "[Edit action] Edit Tasus";
-class EditTasus {
-    constructor(bale) {
-        this.bale = bale;
-        this.type = exports.EDIT_TASUS;
-    }
-}
-exports.EditTasus = EditTasus;
-exports.PATCH_TASUS = "[Patch action] Patch Tasus";
-class PatchTasus {
-    constructor(bale) {
-        this.bale = bale;
-        this.type = exports.PATCH_TASUS;
-    }
-}
-exports.PatchTasus = PatchTasus;
-
-},{}],25:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.patchTasus = exports.editTasus = exports.runTasus = exports.openTasus = exports.updateTasus = exports.initTasus = void 0;
-var tasus_buzz_1 = require("./buz/tasus.buzz");
-Object.defineProperty(exports, "initTasus", { enumerable: true, get: function () { return tasus_buzz_1.initTasus; } });
-var tasus_buzz_2 = require("./buz/tasus.buzz");
-Object.defineProperty(exports, "updateTasus", { enumerable: true, get: function () { return tasus_buzz_2.updateTasus; } });
-var tasus_buzz_3 = require("./buz/tasus.buzz");
-Object.defineProperty(exports, "openTasus", { enumerable: true, get: function () { return tasus_buzz_3.openTasus; } });
-var tasus_buzz_4 = require("./buz/tasus.buzz");
-Object.defineProperty(exports, "runTasus", { enumerable: true, get: function () { return tasus_buzz_4.runTasus; } });
-var tasus_buzz_5 = require("./buz/tasus.buzz");
-Object.defineProperty(exports, "editTasus", { enumerable: true, get: function () { return tasus_buzz_5.editTasus; } });
-var tasus_buzz_6 = require("./buz/tasus.buzz");
-Object.defineProperty(exports, "patchTasus", { enumerable: true, get: function () { return tasus_buzz_6.patchTasus; } });
-
-},{"./buz/tasus.buzz":23}],26:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.TasusModel = void 0;
-class TasusModel {
-    constructor() {
-        this.idx = '555.tasus';
-    }
-}
-exports.TasusModel = TasusModel;
-
-},{}],27:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.reducer = void 0;
-const clone = require("clone-deep");
-const Act = require("./tasus.action");
-const tasus_model_1 = require("./tasus.model");
-const Buzz = require("./tasus.buzzer");
-function reducer(model = new tasus_model_1.TasusModel(), act, state) {
-    switch (act.type) {
-        case Act.UPDATE_TASUS:
-            return Buzz.updateTasus(clone(model), act.bale, state);
-        case Act.INIT_TASUS:
-            return Buzz.initTasus(clone(model), act.bale, state);
-        case Act.OPEN_TASUS:
-            return Buzz.openTasus(clone(model), act.bale, state);
-        case Act.RUN_TASUS:
-            return Buzz.runTasus(clone(model), act.bale, state);
-        case Act.EDIT_TASUS:
-            return Buzz.editTasus(clone(model), act.bale, state);
-        case Act.PATCH_TASUS:
-            return Buzz.patchTasus(clone(model), act.bale, state);
-        default:
-            return model;
-    }
-}
-exports.reducer = reducer;
-
-},{"./tasus.action":24,"./tasus.buzzer":25,"./tasus.model":26,"clone-deep":3}],28:[function(require,module,exports){
-"use strict";
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const typescript_ioc_1 = require("typescript-ioc");
-const state_1 = require("../99.core/state");
-let TasusUnit = class TasusUnit {
-    constructor(state) {
-    }
-};
-TasusUnit = __decorate([
-    typescript_ioc_1.Singleton,
-    __metadata("design:paramtypes", [state_1.default])
-], TasusUnit);
-exports.default = TasusUnit;
-
-},{"../99.core/state":53,"typescript-ioc":21}],29:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateGarden = exports.initGarden = void 0;
-const initGarden = (cpy, bal, ste) => {
-    debugger;
-    return cpy;
-};
-exports.initGarden = initGarden;
-const updateGarden = (cpy, bal, ste) => {
-    return cpy;
-};
-exports.updateGarden = updateGarden;
-
-},{}],30:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.UpdateGarden = exports.UPDATE_GARDEN = exports.InitGarden = exports.INIT_GARDEN = void 0;
-// Garden actions
-exports.INIT_GARDEN = "[Garden action] Init Garden";
-class InitGarden {
-    constructor(bale) {
-        this.bale = bale;
-        this.type = exports.INIT_GARDEN;
-    }
-}
-exports.InitGarden = InitGarden;
-exports.UPDATE_GARDEN = "[Garden action] Update Garden";
-class UpdateGarden {
-    constructor(bale) {
-        this.bale = bale;
-        this.type = exports.UPDATE_GARDEN;
-    }
-}
-exports.UpdateGarden = UpdateGarden;
-
-},{}],31:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateGarden = exports.initGarden = void 0;
-var garden_buzz_1 = require("./buz/garden.buzz");
-Object.defineProperty(exports, "initGarden", { enumerable: true, get: function () { return garden_buzz_1.initGarden; } });
-var garden_buzz_2 = require("./buz/garden.buzz");
-Object.defineProperty(exports, "updateGarden", { enumerable: true, get: function () { return garden_buzz_2.updateGarden; } });
-
-},{"./buz/garden.buzz":29}],32:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.GardenModel = void 0;
-class GardenModel {
-}
-exports.GardenModel = GardenModel;
-
-},{}],33:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.reducer = void 0;
-const clone = require("clone-deep");
-const Act = require("./garden.action");
-const garden_model_1 = require("./garden.model");
-const Buzz = require("./garden.buzzer");
-function reducer(model = new garden_model_1.GardenModel(), act, state) {
-    switch (act.type) {
-        case Act.UPDATE_GARDEN:
-            return Buzz.updateGarden(clone(model), act.bale, state);
-        case Act.INIT_GARDEN:
-            return Buzz.initGarden(clone(model), act.bale, state);
-        default:
-            return model;
-    }
-}
-exports.reducer = reducer;
-
-},{"./garden.action":30,"./garden.buzzer":31,"./garden.model":32,"clone-deep":3}],34:[function(require,module,exports){
-"use strict";
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const typescript_ioc_1 = require("typescript-ioc");
-const state_1 = require("../99.core/state");
-let GardenUnit = class GardenUnit {
-    constructor(state) {
-    }
-};
-GardenUnit = __decorate([
-    typescript_ioc_1.Singleton,
-    __metadata("design:paramtypes", [state_1.default])
-], GardenUnit);
-exports.default = GardenUnit;
-
-},{"../99.core/state":53,"typescript-ioc":21}],35:[function(require,module,exports){
+},{"../../98.menu.unit/menu.action":36,"../../99.bus.unit/bus.action":41,"../../act/disk.action":49,"../../act/vurt.action":51,"../being.action":23,"_process":10,"child_process":undefined,"open":undefined}],29:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.emptyCollect = exports.deleteCollect = exports.removeCollect = exports.createCollect = exports.writeCollect = exports.readCollect = exports.fetchCollect = exports.updateCollect = exports.initCollect = void 0;
@@ -14053,7 +13956,7 @@ const emptyCollect = (cpy, bal, ste) => {
 };
 exports.emptyCollect = emptyCollect;
 
-},{"../../97.collect.unit/collect.action":36}],36:[function(require,module,exports){
+},{"../../97.collect.unit/collect.action":30}],30:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EmptyCollect = exports.EMPTY_COLLECT = exports.DeleteCollect = exports.DELETE_COLLECT = exports.RemoveCollect = exports.REMOVE_COLLECT = exports.CreateCollect = exports.CREATE_COLLECT = exports.WriteCollect = exports.WRITE_COLLECT = exports.ReadCollect = exports.READ_COLLECT = exports.FetchCollect = exports.FETCH_COLLECT = exports.UpdateCollect = exports.UPDATE_COLLECT = exports.InitCollect = exports.INIT_COLLECT = void 0;
@@ -14131,7 +14034,7 @@ class EmptyCollect {
 }
 exports.EmptyCollect = EmptyCollect;
 
-},{}],37:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.removeCollect = exports.deleteCollect = exports.fetchCollect = exports.emptyCollect = exports.createCollect = exports.writeCollect = exports.readCollect = exports.updateCollect = exports.initCollect = void 0;
@@ -14154,7 +14057,7 @@ Object.defineProperty(exports, "deleteCollect", { enumerable: true, get: functio
 var collect_buzz_9 = require("./buz/collect.buzz");
 Object.defineProperty(exports, "removeCollect", { enumerable: true, get: function () { return collect_buzz_9.removeCollect; } });
 
-},{"./buz/collect.buzz":35}],38:[function(require,module,exports){
+},{"./buz/collect.buzz":29}],32:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CollectModel = void 0;
@@ -14166,7 +14069,7 @@ class CollectModel {
 }
 exports.CollectModel = CollectModel;
 
-},{}],39:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reducer = void 0;
@@ -14200,7 +14103,7 @@ function reducer(model = new collect_model_1.CollectModel(), act, state) {
 }
 exports.reducer = reducer;
 
-},{"./collect.action":36,"./collect.buzzer":37,"./collect.model":38,"clone-deep":3}],40:[function(require,module,exports){
+},{"./collect.action":30,"./collect.buzzer":31,"./collect.model":32,"clone-deep":3}],34:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -14224,11 +14127,11 @@ CollectUnit = __decorate([
 ], CollectUnit);
 exports.default = CollectUnit;
 
-},{"../99.core/state":53,"typescript-ioc":21}],41:[function(require,module,exports){
+},{"../99.core/state":47,"typescript-ioc":21}],35:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.visageMenu = exports.shadeMenu = exports.closeMenu = exports.testMenu = exports.updateMenu = exports.initMenu = void 0;
-const ActTus = require("../../00.tasus.unit/tasus.action");
+const ActBee = require("../../00.being.unit/being.action");
 const ActTrm = require("../../act/terminal.action");
 var bit, lst, dex;
 const initMenu = async (cpy, bal, ste) => {
@@ -14241,26 +14144,26 @@ const initMenu = async (cpy, bal, ste) => {
 exports.initMenu = initMenu;
 const updateMenu = async (cpy, bal, ste) => {
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "-----------", bit: 'local' });
-    bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "TASUS PIVOT V0", bit: 'local' });
+    bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "BEING PIVOT V0", bit: 'local' });
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "-----------", bit: "local" });
-    var lst = [ActTus.UPDATE_TASUS, ActTus.OPEN_TASUS, ActTus.EDIT_TASUS];
+    var lst = [ActBee.UPDATE_BEING, ActBee.OPEN_BEING, ActBee.EDIT_BEING];
     bit = await ste.bus(ActTrm.UPDATE_TERMINAL, { lst });
     bit = bit.trmBit;
     var idx = lst[bit.val];
     switch (idx) {
-        case ActTus.OPEN_TASUS:
-            bit = await ste.hunt(ActTus.OPEN_TASUS, {});
+        case ActBee.OPEN_BEING:
+            bit = await ste.hunt(ActBee.OPEN_BEING, {});
             break;
-        case ActTus.UPDATE_TASUS:
-            bit = await ste.hunt(ActTus.UPDATE_TASUS, {});
+        case ActBee.UPDATE_BEING:
+            bit = await ste.hunt(ActBee.UPDATE_BEING, {});
             break;
-        case ActTus.EDIT_TASUS:
-            bit = await ste.hunt(ActTus.EDIT_TASUS, {});
+        case ActBee.EDIT_BEING:
+            bit = await ste.hunt(ActBee.EDIT_BEING, {});
             bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "PATCHING...", bit: 'local' });
             bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "-----------", bit: "local" });
-            lst = [ActTus.PATCH_TASUS];
+            lst = [ActBee.PATCH_BEING];
             bit = await ste.bus(ActTrm.UPDATE_TERMINAL, { lst });
-            bit = await ste.hunt(ActTus.PATCH_TASUS, {});
+            bit = await ste.hunt(ActBee.PATCH_BEING, {});
             break;
         default:
             bit = await await ste.bus(ActTrm.CLOSE_TERMINAL, {});
@@ -14290,7 +14193,7 @@ const visageMenu = (cpy, bal, ste) => {
 };
 exports.visageMenu = visageMenu;
 
-},{"../../00.tasus.unit/tasus.action":24,"../../act/terminal.action":56}],42:[function(require,module,exports){
+},{"../../00.being.unit/being.action":23,"../../act/terminal.action":50}],36:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ContainerMenu = exports.CONTAINER_MENU = exports.VisageMenu = exports.VISAGE_MENU = exports.ShadeMenu = exports.SHADE_MENU = exports.CloseMenu = exports.CLOSE_MENU = exports.TestMenu = exports.TEST_MENU = exports.UpdateMenu = exports.UPDATE_MENU = exports.InitMenu = exports.INIT_MENU = void 0;
@@ -14351,7 +14254,7 @@ class ContainerMenu {
 }
 exports.ContainerMenu = ContainerMenu;
 
-},{}],43:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.shadeMenu = exports.closeMenu = exports.testMenu = exports.updateMenu = exports.initMenu = void 0;
@@ -14366,7 +14269,7 @@ Object.defineProperty(exports, "closeMenu", { enumerable: true, get: function ()
 var _00_menu_buzz_5 = require("./buz/00.menu.buzz");
 Object.defineProperty(exports, "shadeMenu", { enumerable: true, get: function () { return _00_menu_buzz_5.shadeMenu; } });
 
-},{"./buz/00.menu.buzz":41}],44:[function(require,module,exports){
+},{"./buz/00.menu.buzz":35}],38:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MenuModel = void 0;
@@ -14380,7 +14283,7 @@ class MenuModel {
 }
 exports.MenuModel = MenuModel;
 
-},{}],45:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reducer = void 0;
@@ -14406,7 +14309,7 @@ function reducer(model = new menu_model_1.MenuModel(), act, state) {
 }
 exports.reducer = reducer;
 
-},{"./menu.action":42,"./menu.buzzer":43,"./menu.model":44,"clone-deep":3}],46:[function(require,module,exports){
+},{"./menu.action":36,"./menu.buzzer":37,"./menu.model":38,"clone-deep":3}],40:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -14430,7 +14333,7 @@ MenuUnit = __decorate([
 ], MenuUnit);
 exports.default = MenuUnit;
 
-},{"../99.core/state":53,"typescript-ioc":21}],47:[function(require,module,exports){
+},{"../99.core/state":47,"typescript-ioc":21}],41:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateBus = exports.CREATE_BUS = exports.UpdateBus = exports.UPDATE_BUS = exports.MessageBus = exports.MESSAGE_BUS = exports.ConnectBus = exports.CONNECT_BUS = exports.OpenBus = exports.OPEN_BUS = exports.InitBus = exports.INIT_BUS = void 0;
@@ -14484,7 +14387,7 @@ class CreateBus {
 }
 exports.CreateBus = CreateBus;
 
-},{}],48:[function(require,module,exports){
+},{}],42:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createBus = exports.messageBus = exports.connectBus = exports.updateBus = exports.openBus = exports.initBus = void 0;
@@ -14501,7 +14404,7 @@ Object.defineProperty(exports, "messageBus", { enumerable: true, get: function (
 var bus_buzz_6 = require("./buz/bus.buzz");
 Object.defineProperty(exports, "createBus", { enumerable: true, get: function () { return bus_buzz_6.createBus; } });
 
-},{"./buz/bus.buzz":52}],49:[function(require,module,exports){
+},{"./buz/bus.buzz":46}],43:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BusModel = void 0;
@@ -14514,7 +14417,7 @@ class BusModel {
 }
 exports.BusModel = BusModel;
 
-},{}],50:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reducer = void 0;
@@ -14542,7 +14445,7 @@ function reducer(model = new bus_model_1.BusModel(), act, state) {
 }
 exports.reducer = reducer;
 
-},{"./bus.action":47,"./bus.buzzer":48,"./bus.model":49,"clone-deep":3}],51:[function(require,module,exports){
+},{"./bus.action":41,"./bus.buzzer":42,"./bus.model":43,"clone-deep":3}],45:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -14566,7 +14469,7 @@ BusUnit = __decorate([
 ], BusUnit);
 exports.default = BusUnit;
 
-},{"../99.core/state":53,"typescript-ioc":21}],52:[function(require,module,exports){
+},{"../99.core/state":47,"typescript-ioc":21}],46:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateBus = exports.messageBus = exports.connectBus = exports.openBus = exports.createBus = exports.initBus = void 0;
@@ -14742,7 +14645,7 @@ exports.updateBus = updateBus;
 var patch = (ste, type, bale) => ste.dispatch({ type, bale });
 const clone = require("clone-deep");
 
-},{"../../97.collect.unit/collect.action":36,"../../98.menu.unit/menu.action":42,"../../99.bus.unit/bus.action":47,"clone-deep":3}],53:[function(require,module,exports){
+},{"../../97.collect.unit/collect.action":30,"../../98.menu.unit/menu.action":36,"../../99.bus.unit/bus.action":41,"clone-deep":3}],47:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const rx_lite_1 = require("rx-lite");
@@ -14777,37 +14680,32 @@ class State extends rx_lite_1.BehaviorSubject {
 }
 exports.default = State;
 
-},{"../BEE":54,"rx-lite":12}],54:[function(require,module,exports){
+},{"../BEE":48,"rx-lite":12}],48:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reducer = exports.list = void 0;
-const tasus_unit_1 = require("./00.tasus.unit/tasus.unit");
-const garden_unit_1 = require("./01.garden.unit/garden.unit");
+const being_unit_1 = require("./00.being.unit/being.unit");
 const collect_unit_1 = require("./97.collect.unit/collect.unit");
 const menu_unit_1 = require("./98.menu.unit/menu.unit");
 const bus_unit_1 = require("./99.bus.unit/bus.unit");
-const tasus_model_1 = require("./00.tasus.unit/tasus.model");
-const garden_model_1 = require("./01.garden.unit/garden.model");
+const being_model_1 = require("./00.being.unit/being.model");
 const collect_model_1 = require("./97.collect.unit/collect.model");
 const menu_model_1 = require("./98.menu.unit/menu.model");
 const bus_model_1 = require("./99.bus.unit/bus.model");
-exports.list = [tasus_unit_1.default, garden_unit_1.default, collect_unit_1.default, menu_unit_1.default, bus_unit_1.default];
-const reduceFromTasus = require("./00.tasus.unit/tasus.reduce");
-const reduceFromGarden = require("./01.garden.unit/garden.reduce");
+exports.list = [being_unit_1.default, collect_unit_1.default, menu_unit_1.default, bus_unit_1.default];
+const reduceFromBeing = require("./00.being.unit/being.reduce");
 const reduceFromCollect = require("./97.collect.unit/collect.reduce");
 const reduceFromMenu = require("./98.menu.unit/menu.reduce");
 const reduceFromBus = require("./99.bus.unit/bus.reduce");
 exports.reducer = {
-    tasus: reduceFromTasus.reducer,
-    garden: reduceFromGarden.reducer,
+    being: reduceFromBeing.reducer,
     collect: reduceFromCollect.reducer,
     menu: reduceFromMenu.reducer,
     bus: reduceFromBus.reducer,
 };
 class UnitData {
     constructor() {
-        this.tasus = new tasus_model_1.TasusModel();
-        this.garden = new garden_model_1.GardenModel();
+        this.being = new being_model_1.BeingModel();
         this.collect = new collect_model_1.CollectModel();
         this.menu = new menu_model_1.MenuModel();
         this.bus = new bus_model_1.BusModel();
@@ -14815,7 +14713,7 @@ class UnitData {
 }
 exports.default = UnitData;
 
-},{"./00.tasus.unit/tasus.model":26,"./00.tasus.unit/tasus.reduce":27,"./00.tasus.unit/tasus.unit":28,"./01.garden.unit/garden.model":32,"./01.garden.unit/garden.reduce":33,"./01.garden.unit/garden.unit":34,"./97.collect.unit/collect.model":38,"./97.collect.unit/collect.reduce":39,"./97.collect.unit/collect.unit":40,"./98.menu.unit/menu.model":44,"./98.menu.unit/menu.reduce":45,"./98.menu.unit/menu.unit":46,"./99.bus.unit/bus.model":49,"./99.bus.unit/bus.reduce":50,"./99.bus.unit/bus.unit":51}],55:[function(require,module,exports){
+},{"./00.being.unit/being.model":25,"./00.being.unit/being.reduce":26,"./00.being.unit/being.unit":27,"./97.collect.unit/collect.model":32,"./97.collect.unit/collect.reduce":33,"./97.collect.unit/collect.unit":34,"./98.menu.unit/menu.model":38,"./98.menu.unit/menu.reduce":39,"./98.menu.unit/menu.unit":40,"./99.bus.unit/bus.model":43,"./99.bus.unit/bus.reduce":44,"./99.bus.unit/bus.unit":45}],49:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.COPY_DISK = exports.LOAD_LIST_DISK = exports.LIST_DISK = exports.WRITE_DISK = exports.READ_DISK = exports.UPDATE_DISK = exports.INIT_DISK = void 0;
@@ -14827,7 +14725,7 @@ exports.LIST_DISK = "[List action] List Disk";
 exports.LOAD_LIST_DISK = "[Load_list action] Load_list Disk";
 exports.COPY_DISK = "[Copy action] Copy Disk";
 
-},{}],56:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ADD_PORT = exports.CONTENT_TERMINAL = exports.ROOT_TERMINAL = exports.CLOSE_TERMINAL = exports.TABLE_TERMINAL = exports.INPUT_TERMINAL = exports.CLEAR_TERMINAL = exports.UPDATE_TERMINAL = exports.WRITE_TERMINAL = exports.FOCUS_TERMINAL = exports.OPEN_TERMINAL = exports.INIT_TERMINAL = void 0;
@@ -14845,7 +14743,7 @@ exports.ROOT_TERMINAL = "[Terminal action] Root Terminal";
 exports.CONTENT_TERMINAL = "[Terminal action] Content Terminal";
 exports.ADD_PORT = "[Terminal action] Add Port";
 
-},{}],57:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.VALUE_VURT = exports.BUNDLE_VURT = exports.CONTAINS_VURT = exports.LIST_UNIT_VURT = exports.LIST_PIVOT_VURT = exports.COUNT_VURT = exports.UNIT_VURT = exports.REPLACE_VURT = exports.UPDATE_VURT = exports.FETCH_VURT = exports.TEST_CLOUD_VURT = exports.DELAY_VURT = exports.INIT_VURT = void 0;
@@ -14863,7 +14761,7 @@ exports.CONTAINS_VURT = "[Contains action] Contains Vurt";
 exports.BUNDLE_VURT = "[Bundle action] Bundle Vurt";
 exports.VALUE_VURT = "[Value action] Value Vurt";
 
-},{}],58:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var sim = {
@@ -14895,4 +14793,4 @@ const Import = require("./BEE");
 const state_1 = require("./99.core/state");
 module.exports = sim;
 
-},{"./99.core/state":53,"./BEE":54}]},{},[22]);
+},{"./99.core/state":47,"./BEE":48}]},{},[22]);

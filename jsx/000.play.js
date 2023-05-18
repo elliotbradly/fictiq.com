@@ -13596,17 +13596,23 @@ global.PLAY.ActPly = require("../dist/000.play/00.play.unit/play.action");
 
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../dist/000.play/00.play.unit/play.action":24,"../dist/000.play/hunt":52}],23:[function(require,module,exports){
-(function (process){(function (){
+},{"../dist/000.play/00.play.unit/play.action":24,"../dist/000.play/hunt":62}],23:[function(require,module,exports){
+(function (process,global){(function (){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.patchPlay = exports.editPlay = exports.runPlay = exports.openPlay = exports.updatePlay = exports.initPlay = void 0;
+exports.patchPlay = exports.editPlay = exports.runPlay = exports.openPlay = exports.updatePlay = exports.startPlay = exports.initPlay = void 0;
 const ActMnu = require("../../98.menu.unit/menu.action");
 const ActBus = require("../../99.bus.unit/bus.action");
 const ActPly = require("../play.action");
 const ActVrt = require("../../act/vurt.action");
 const ActDsk = require("../../act/disk.action");
+const ActCan = require("../../act/container.action");
+const ActGph = require("../../act/graphic.action");
+const ActMap = require("../../act/hexmap.action");
+const ActHex = require("../../act/hexagon.action");
 var bit, val, idx, dex, lst, dat;
+var SPACE = global.SPACE;
+var SHADE = global.SHADE;
 const initPlay = async (cpy, bal, ste) => {
     if (bal.dat != null)
         bit = await ste.hunt(ActBus.INIT_BUS, { idx: cpy.idx, lst: [ActPly], dat: bal.dat, src: bal.src });
@@ -13617,6 +13623,26 @@ const initPlay = async (cpy, bal, ste) => {
     return cpy;
 };
 exports.initPlay = initPlay;
+const startPlay = async (cpy, bal, ste) => {
+    const response = await fetch("./dat/hexmap/000.json");
+    const jsonData = await response.json();
+    bit = await SHADE.hunt(ActGph.WRITE_GRAPHIC, { idx: 'gph00', src: 'vsg00' });
+    bit = await SHADE.hunt(ActCan.ADD_CONTAINER, { idx: 'fce-can-00', dat: bit.gphBit.dat });
+    bit = await SPACE.hunt(ActMap.WRITE_HEXMAP, { idx: 'map00', dat: { gph: 'gph00' } });
+    var hexmap = bit.mapBit.dat;
+    jsonData;
+    var itm = {
+        dex: 0,
+        frm: "rectangle",
+        gph: "gph00",
+        idx: "map00",
+        typ: "hexmap",
+        dat: jsonData
+    };
+    bit = await SHADE.hunt(ActHex.WRITE_HEXAGON, { idx: 'hex00', src: 'vsg00', dat: itm });
+    return cpy;
+};
+exports.startPlay = startPlay;
 const updatePlay = (cpy, bal, ste) => {
     const { exec } = require('child_process');
     exec('tsc -b 000.play', async (err, stdout, stderr) => {
@@ -13635,6 +13661,7 @@ const updatePlay = (cpy, bal, ste) => {
         var index = bit.dskBit.dat;
         bit = await ste.bus(ActDsk.WRITE_DISK, { src: '../gillisse/public/jsx/index.js', dat: index });
         bit = await ste.bus(ActDsk.WRITE_DISK, { src: '../gillisse/index.html', dat: html });
+        bit = await ste.bus(ActDsk.COPY_DISK, { src: './vue', idx: '../gillisse/src' });
         setTimeout(() => {
             if (bal.slv != null)
                 bal.slv({ plyBit: { idx: "update-play" } });
@@ -13688,11 +13715,11 @@ const patchPlay = (cpy, bal, ste) => {
 };
 exports.patchPlay = patchPlay;
 
-}).call(this)}).call(this,require('_process'))
-},{"../../98.menu.unit/menu.action":36,"../../99.bus.unit/bus.action":41,"../../act/disk.action":49,"../../act/vurt.action":51,"../play.action":24,"_process":10,"child_process":undefined,"open":undefined}],24:[function(require,module,exports){
+}).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"../../98.menu.unit/menu.action":42,"../../99.bus.unit/bus.action":47,"../../act/container.action":55,"../../act/disk.action":56,"../../act/graphic.action":57,"../../act/hexagon.action":58,"../../act/hexmap.action":59,"../../act/vurt.action":61,"../play.action":24,"_process":10,"child_process":undefined,"open":undefined}],24:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PatchPlay = exports.PATCH_PLAY = exports.EditPlay = exports.EDIT_PLAY = exports.RunPlay = exports.RUN_PLAY = exports.OpenPlay = exports.OPEN_PLAY = exports.UpdatePlay = exports.UPDATE_PLAY = exports.InitPlay = exports.INIT_PLAY = void 0;
+exports.StartPlay = exports.START_PLAY = exports.PatchPlay = exports.PATCH_PLAY = exports.EditPlay = exports.EDIT_PLAY = exports.RunPlay = exports.RUN_PLAY = exports.OpenPlay = exports.OPEN_PLAY = exports.UpdatePlay = exports.UPDATE_PLAY = exports.InitPlay = exports.INIT_PLAY = void 0;
 exports.INIT_PLAY = "[Play action] Init Play";
 class InitPlay {
     constructor(bale) {
@@ -13741,11 +13768,19 @@ class PatchPlay {
     }
 }
 exports.PatchPlay = PatchPlay;
+exports.START_PLAY = "[Start action] Start Play";
+class StartPlay {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.START_PLAY;
+    }
+}
+exports.StartPlay = StartPlay;
 
 },{}],25:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.patchPlay = exports.editPlay = exports.runPlay = exports.openPlay = exports.updatePlay = exports.initPlay = void 0;
+exports.startPlay = exports.patchPlay = exports.editPlay = exports.runPlay = exports.openPlay = exports.updatePlay = exports.initPlay = void 0;
 var play_buzz_1 = require("./buz/play.buzz");
 Object.defineProperty(exports, "initPlay", { enumerable: true, get: function () { return play_buzz_1.initPlay; } });
 var play_buzz_2 = require("./buz/play.buzz");
@@ -13758,6 +13793,8 @@ var play_buzz_5 = require("./buz/play.buzz");
 Object.defineProperty(exports, "editPlay", { enumerable: true, get: function () { return play_buzz_5.editPlay; } });
 var play_buzz_6 = require("./buz/play.buzz");
 Object.defineProperty(exports, "patchPlay", { enumerable: true, get: function () { return play_buzz_6.patchPlay; } });
+var play_buzz_7 = require("./buz/play.buzz");
+Object.defineProperty(exports, "startPlay", { enumerable: true, get: function () { return play_buzz_7.startPlay; } });
 
 },{"./buz/play.buzz":23}],26:[function(require,module,exports){
 "use strict";
@@ -13792,6 +13829,8 @@ function reducer(model = new play_model_1.PlayModel(), act, state) {
             return Buzz.editPlay(clone(model), act.bale, state);
         case Act.PATCH_PLAY:
             return Buzz.patchPlay(clone(model), act.bale, state);
+        case Act.START_PLAY:
+            return Buzz.startPlay(clone(model), act.bale, state);
         default:
             return model;
     }
@@ -13822,7 +13861,115 @@ PlayUnit = __decorate([
 ], PlayUnit);
 exports.default = PlayUnit;
 
-},{"../99.core/state":47,"typescript-ioc":21}],29:[function(require,module,exports){
+},{"../99.core/state":53,"typescript-ioc":21}],29:[function(require,module,exports){
+(function (global){(function (){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.updateShow = exports.initShow = void 0;
+var bit;
+var SPACE = global.SPACE;
+var SHADE = global.SHADE;
+const initShow = async (cpy, bal, ste) => {
+    debugger;
+    const response = await fetch("./dat/hexmap/000.json");
+    const jsonData = await response.json();
+    debugger;
+    //bit = await SPACE.hunt(SPACE.ActMap.WRITE_HEXMAP, { idx: 'map00', dat: { gph: 'gph00' } });
+    //var hexmap = bit.mapBit.dat;
+    //bit = await SHADE.hunt(SHADE.ActHex.WRITE_HEXAGON, { idx: 'hex00', src: 'vsg00', dat: {dat:hexmap }   });
+    return cpy;
+};
+exports.initShow = initShow;
+const updateShow = (cpy, bal, ste) => {
+    return cpy;
+};
+exports.updateShow = updateShow;
+
+}).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}],30:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.UpdateShow = exports.UPDATE_SHOW = exports.InitShow = exports.INIT_SHOW = void 0;
+// Show actions
+exports.INIT_SHOW = "[Show action] Init Show";
+class InitShow {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.INIT_SHOW;
+    }
+}
+exports.InitShow = InitShow;
+exports.UPDATE_SHOW = "[Show action] Update Show";
+class UpdateShow {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.UPDATE_SHOW;
+    }
+}
+exports.UpdateShow = UpdateShow;
+
+},{}],31:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.updateShow = exports.initShow = void 0;
+var show_buzz_1 = require("./buz/show.buzz");
+Object.defineProperty(exports, "initShow", { enumerable: true, get: function () { return show_buzz_1.initShow; } });
+var show_buzz_2 = require("./buz/show.buzz");
+Object.defineProperty(exports, "updateShow", { enumerable: true, get: function () { return show_buzz_2.updateShow; } });
+
+},{"./buz/show.buzz":29}],32:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ShowModel = void 0;
+class ShowModel {
+}
+exports.ShowModel = ShowModel;
+
+},{}],33:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.reducer = void 0;
+const clone = require("clone-deep");
+const Act = require("./show.action");
+const show_model_1 = require("./show.model");
+const Buzz = require("./show.buzzer");
+function reducer(model = new show_model_1.ShowModel(), act, state) {
+    switch (act.type) {
+        case Act.UPDATE_SHOW:
+            return Buzz.updateShow(clone(model), act.bale, state);
+        case Act.INIT_SHOW:
+            return Buzz.initShow(clone(model), act.bale, state);
+        default:
+            return model;
+    }
+}
+exports.reducer = reducer;
+
+},{"./show.action":30,"./show.buzzer":31,"./show.model":32,"clone-deep":3}],34:[function(require,module,exports){
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const typescript_ioc_1 = require("typescript-ioc");
+const state_1 = require("../99.core/state");
+let ShowUnit = class ShowUnit {
+    constructor(state) {
+    }
+};
+ShowUnit = __decorate([
+    typescript_ioc_1.Singleton,
+    __metadata("design:paramtypes", [state_1.default])
+], ShowUnit);
+exports.default = ShowUnit;
+
+},{"../99.core/state":53,"typescript-ioc":21}],35:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.emptyCollect = exports.deleteCollect = exports.removeCollect = exports.createCollect = exports.writeCollect = exports.readCollect = exports.fetchCollect = exports.updateCollect = exports.initCollect = void 0;
@@ -13956,7 +14103,7 @@ const emptyCollect = (cpy, bal, ste) => {
 };
 exports.emptyCollect = emptyCollect;
 
-},{"../../97.collect.unit/collect.action":30}],30:[function(require,module,exports){
+},{"../../97.collect.unit/collect.action":36}],36:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EmptyCollect = exports.EMPTY_COLLECT = exports.DeleteCollect = exports.DELETE_COLLECT = exports.RemoveCollect = exports.REMOVE_COLLECT = exports.CreateCollect = exports.CREATE_COLLECT = exports.WriteCollect = exports.WRITE_COLLECT = exports.ReadCollect = exports.READ_COLLECT = exports.FetchCollect = exports.FETCH_COLLECT = exports.UpdateCollect = exports.UPDATE_COLLECT = exports.InitCollect = exports.INIT_COLLECT = void 0;
@@ -14034,7 +14181,7 @@ class EmptyCollect {
 }
 exports.EmptyCollect = EmptyCollect;
 
-},{}],31:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.removeCollect = exports.deleteCollect = exports.fetchCollect = exports.emptyCollect = exports.createCollect = exports.writeCollect = exports.readCollect = exports.updateCollect = exports.initCollect = void 0;
@@ -14057,7 +14204,7 @@ Object.defineProperty(exports, "deleteCollect", { enumerable: true, get: functio
 var collect_buzz_9 = require("./buz/collect.buzz");
 Object.defineProperty(exports, "removeCollect", { enumerable: true, get: function () { return collect_buzz_9.removeCollect; } });
 
-},{"./buz/collect.buzz":29}],32:[function(require,module,exports){
+},{"./buz/collect.buzz":35}],38:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CollectModel = void 0;
@@ -14069,7 +14216,7 @@ class CollectModel {
 }
 exports.CollectModel = CollectModel;
 
-},{}],33:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reducer = void 0;
@@ -14103,7 +14250,7 @@ function reducer(model = new collect_model_1.CollectModel(), act, state) {
 }
 exports.reducer = reducer;
 
-},{"./collect.action":30,"./collect.buzzer":31,"./collect.model":32,"clone-deep":3}],34:[function(require,module,exports){
+},{"./collect.action":36,"./collect.buzzer":37,"./collect.model":38,"clone-deep":3}],40:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -14127,7 +14274,7 @@ CollectUnit = __decorate([
 ], CollectUnit);
 exports.default = CollectUnit;
 
-},{"../99.core/state":47,"typescript-ioc":21}],35:[function(require,module,exports){
+},{"../99.core/state":53,"typescript-ioc":21}],41:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.visageMenu = exports.shadeMenu = exports.closeMenu = exports.testMenu = exports.updateMenu = exports.initMenu = void 0;
@@ -14193,7 +14340,7 @@ const visageMenu = (cpy, bal, ste) => {
 };
 exports.visageMenu = visageMenu;
 
-},{"../../00.play.unit/play.action":24,"../../act/terminal.action":50}],36:[function(require,module,exports){
+},{"../../00.play.unit/play.action":24,"../../act/terminal.action":60}],42:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ContainerMenu = exports.CONTAINER_MENU = exports.VisageMenu = exports.VISAGE_MENU = exports.ShadeMenu = exports.SHADE_MENU = exports.CloseMenu = exports.CLOSE_MENU = exports.TestMenu = exports.TEST_MENU = exports.UpdateMenu = exports.UPDATE_MENU = exports.InitMenu = exports.INIT_MENU = void 0;
@@ -14254,7 +14401,7 @@ class ContainerMenu {
 }
 exports.ContainerMenu = ContainerMenu;
 
-},{}],37:[function(require,module,exports){
+},{}],43:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.shadeMenu = exports.closeMenu = exports.testMenu = exports.updateMenu = exports.initMenu = void 0;
@@ -14269,7 +14416,7 @@ Object.defineProperty(exports, "closeMenu", { enumerable: true, get: function ()
 var _00_menu_buzz_5 = require("./buz/00.menu.buzz");
 Object.defineProperty(exports, "shadeMenu", { enumerable: true, get: function () { return _00_menu_buzz_5.shadeMenu; } });
 
-},{"./buz/00.menu.buzz":35}],38:[function(require,module,exports){
+},{"./buz/00.menu.buzz":41}],44:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MenuModel = void 0;
@@ -14283,7 +14430,7 @@ class MenuModel {
 }
 exports.MenuModel = MenuModel;
 
-},{}],39:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reducer = void 0;
@@ -14309,7 +14456,7 @@ function reducer(model = new menu_model_1.MenuModel(), act, state) {
 }
 exports.reducer = reducer;
 
-},{"./menu.action":36,"./menu.buzzer":37,"./menu.model":38,"clone-deep":3}],40:[function(require,module,exports){
+},{"./menu.action":42,"./menu.buzzer":43,"./menu.model":44,"clone-deep":3}],46:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -14333,7 +14480,7 @@ MenuUnit = __decorate([
 ], MenuUnit);
 exports.default = MenuUnit;
 
-},{"../99.core/state":47,"typescript-ioc":21}],41:[function(require,module,exports){
+},{"../99.core/state":53,"typescript-ioc":21}],47:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateBus = exports.CREATE_BUS = exports.UpdateBus = exports.UPDATE_BUS = exports.MessageBus = exports.MESSAGE_BUS = exports.ConnectBus = exports.CONNECT_BUS = exports.OpenBus = exports.OPEN_BUS = exports.InitBus = exports.INIT_BUS = void 0;
@@ -14387,7 +14534,7 @@ class CreateBus {
 }
 exports.CreateBus = CreateBus;
 
-},{}],42:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createBus = exports.messageBus = exports.connectBus = exports.updateBus = exports.openBus = exports.initBus = void 0;
@@ -14404,7 +14551,7 @@ Object.defineProperty(exports, "messageBus", { enumerable: true, get: function (
 var bus_buzz_6 = require("./buz/bus.buzz");
 Object.defineProperty(exports, "createBus", { enumerable: true, get: function () { return bus_buzz_6.createBus; } });
 
-},{"./buz/bus.buzz":46}],43:[function(require,module,exports){
+},{"./buz/bus.buzz":52}],49:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BusModel = void 0;
@@ -14417,7 +14564,7 @@ class BusModel {
 }
 exports.BusModel = BusModel;
 
-},{}],44:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reducer = void 0;
@@ -14445,7 +14592,7 @@ function reducer(model = new bus_model_1.BusModel(), act, state) {
 }
 exports.reducer = reducer;
 
-},{"./bus.action":41,"./bus.buzzer":42,"./bus.model":43,"clone-deep":3}],45:[function(require,module,exports){
+},{"./bus.action":47,"./bus.buzzer":48,"./bus.model":49,"clone-deep":3}],51:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -14469,7 +14616,7 @@ BusUnit = __decorate([
 ], BusUnit);
 exports.default = BusUnit;
 
-},{"../99.core/state":47,"typescript-ioc":21}],46:[function(require,module,exports){
+},{"../99.core/state":53,"typescript-ioc":21}],52:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateBus = exports.messageBus = exports.connectBus = exports.openBus = exports.createBus = exports.initBus = void 0;
@@ -14645,7 +14792,7 @@ exports.updateBus = updateBus;
 var patch = (ste, type, bale) => ste.dispatch({ type, bale });
 const clone = require("clone-deep");
 
-},{"../../97.collect.unit/collect.action":30,"../../98.menu.unit/menu.action":36,"../../99.bus.unit/bus.action":41,"clone-deep":3}],47:[function(require,module,exports){
+},{"../../97.collect.unit/collect.action":36,"../../98.menu.unit/menu.action":42,"../../99.bus.unit/bus.action":47,"clone-deep":3}],53:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const rx_lite_1 = require("rx-lite");
@@ -14680,25 +14827,29 @@ class State extends rx_lite_1.BehaviorSubject {
 }
 exports.default = State;
 
-},{"../BEE":48,"rx-lite":12}],48:[function(require,module,exports){
+},{"../BEE":54,"rx-lite":12}],54:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reducer = exports.list = void 0;
 const play_unit_1 = require("./00.play.unit/play.unit");
+const show_unit_1 = require("./01.show.unit/show.unit");
 const collect_unit_1 = require("./97.collect.unit/collect.unit");
 const menu_unit_1 = require("./98.menu.unit/menu.unit");
 const bus_unit_1 = require("./99.bus.unit/bus.unit");
 const play_model_1 = require("./00.play.unit/play.model");
+const show_model_1 = require("./01.show.unit/show.model");
 const collect_model_1 = require("./97.collect.unit/collect.model");
 const menu_model_1 = require("./98.menu.unit/menu.model");
 const bus_model_1 = require("./99.bus.unit/bus.model");
-exports.list = [play_unit_1.default, collect_unit_1.default, menu_unit_1.default, bus_unit_1.default];
+exports.list = [play_unit_1.default, show_unit_1.default, collect_unit_1.default, menu_unit_1.default, bus_unit_1.default];
 const reduceFromPlay = require("./00.play.unit/play.reduce");
+const reduceFromShow = require("./01.show.unit/show.reduce");
 const reduceFromCollect = require("./97.collect.unit/collect.reduce");
 const reduceFromMenu = require("./98.menu.unit/menu.reduce");
 const reduceFromBus = require("./99.bus.unit/bus.reduce");
 exports.reducer = {
     play: reduceFromPlay.reducer,
+    show: reduceFromShow.reducer,
     collect: reduceFromCollect.reducer,
     menu: reduceFromMenu.reducer,
     bus: reduceFromBus.reducer,
@@ -14706,6 +14857,7 @@ exports.reducer = {
 class UnitData {
     constructor() {
         this.play = new play_model_1.PlayModel();
+        this.show = new show_model_1.ShowModel();
         this.collect = new collect_model_1.CollectModel();
         this.menu = new menu_model_1.MenuModel();
         this.bus = new bus_model_1.BusModel();
@@ -14713,19 +14865,84 @@ class UnitData {
 }
 exports.default = UnitData;
 
-},{"./00.play.unit/play.model":26,"./00.play.unit/play.reduce":27,"./00.play.unit/play.unit":28,"./97.collect.unit/collect.model":32,"./97.collect.unit/collect.reduce":33,"./97.collect.unit/collect.unit":34,"./98.menu.unit/menu.model":38,"./98.menu.unit/menu.reduce":39,"./98.menu.unit/menu.unit":40,"./99.bus.unit/bus.model":43,"./99.bus.unit/bus.reduce":44,"./99.bus.unit/bus.unit":45}],49:[function(require,module,exports){
+},{"./00.play.unit/play.model":26,"./00.play.unit/play.reduce":27,"./00.play.unit/play.unit":28,"./01.show.unit/show.model":32,"./01.show.unit/show.reduce":33,"./01.show.unit/show.unit":34,"./97.collect.unit/collect.model":38,"./97.collect.unit/collect.reduce":39,"./97.collect.unit/collect.unit":40,"./98.menu.unit/menu.model":44,"./98.menu.unit/menu.reduce":45,"./98.menu.unit/menu.unit":46,"./99.bus.unit/bus.model":49,"./99.bus.unit/bus.reduce":50,"./99.bus.unit/bus.unit":51}],55:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.COPY_DISK = exports.LOAD_LIST_DISK = exports.LIST_DISK = exports.WRITE_DISK = exports.READ_DISK = exports.UPDATE_DISK = exports.INIT_DISK = void 0;
-exports.INIT_DISK = "[Disk action] Init Disk";
-exports.UPDATE_DISK = "[Disk action] Update Disk";
-exports.READ_DISK = "[Disk action] Read Disk";
-exports.WRITE_DISK = "[Disk action] Write Disk";
-exports.LIST_DISK = "[List action] List Disk";
-exports.LOAD_LIST_DISK = "[Load_list action] Load_list Disk";
-exports.COPY_DISK = "[Copy action] Copy Disk";
+exports.DELETE_CONTAINER = exports.REMOVE_CONTAINER = exports.ADD_CONTAINER = exports.SURFACE_CONTAINER = exports.CREATE_CONTAINER = exports.WRITE_CONTAINER = exports.READ_CONTAINER = exports.UPDATE_CONTAINER = exports.INIT_CONTAINER = void 0;
+exports.INIT_CONTAINER = '[Container action] Init Container';
+exports.UPDATE_CONTAINER = '[Container action] Update Container';
+exports.READ_CONTAINER = '[Read action] Read Container';
+exports.WRITE_CONTAINER = '[Write action] Write Container';
+exports.CREATE_CONTAINER = '[Create action] Create Container';
+exports.SURFACE_CONTAINER = '[Surface action] Surface Container';
+exports.ADD_CONTAINER = '[Add action] Add Container';
+exports.REMOVE_CONTAINER = '[Remove action] Remove Container';
+exports.DELETE_CONTAINER = '[Delete action] Delete Container';
 
-},{}],50:[function(require,module,exports){
+},{}],56:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.COPY_DISK = exports.LOAD_LIST_DISK = exports.INDEX_DISK = exports.WRITE_DISK = exports.READ_DISK = exports.UPDATE_DISK = exports.INIT_DISK = void 0;
+exports.INIT_DISK = '[Disk action] Init Disk';
+exports.UPDATE_DISK = '[Disk action] Update Disk';
+exports.READ_DISK = '[Disk action] Read Disk';
+exports.WRITE_DISK = '[Disk action] Write Disk';
+exports.INDEX_DISK = '[Index action] Index Disk';
+exports.LOAD_LIST_DISK = '[Load_list action] Load_list Disk';
+exports.COPY_DISK = '[Copy action] Copy Disk';
+
+},{}],57:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.DELETE_GRAPHIC = exports.REMOVE_GRAPHIC = exports.CREATE_GRAPHIC = exports.WRITE_GRAPHIC = exports.READ_GRAPHIC = exports.UPDATE_GRAPHIC = exports.INIT_GRAPHIC = void 0;
+exports.INIT_GRAPHIC = '[Graphic action] Init Graphic';
+exports.UPDATE_GRAPHIC = '[Graphic action] Update Graphic';
+exports.READ_GRAPHIC = '[Read action] Read Graphic';
+exports.WRITE_GRAPHIC = '[Write action] Write Graphic';
+exports.CREATE_GRAPHIC = '[Create action] Create Graphic';
+exports.REMOVE_GRAPHIC = '[Remove action] Remove Graphic';
+exports.DELETE_GRAPHIC = '[Delete action] Delete Graphic';
+
+},{}],58:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.HEXMAP_HEXAGON = exports.FOCUS_HEXAGON = exports.DELETE_HEXAGON = exports.REMOVE_HEXAGON = exports.CREATE_HEXAGON = exports.WRITE_HEXAGON = exports.READ_HEXAGON = exports.UPDATE_HEXAGON = exports.INIT_HEXAGON = void 0;
+exports.INIT_HEXAGON = "[Hexagon action] Init Hexagon";
+exports.UPDATE_HEXAGON = "[Hexagon action] Update Hexagon";
+exports.READ_HEXAGON = "[Read action] Read Hexagon";
+exports.WRITE_HEXAGON = "[Write action] Write Hexagon";
+exports.CREATE_HEXAGON = "[Create action] Create Hexagon";
+exports.REMOVE_HEXAGON = "[Replace action] Remove Hexagon";
+exports.DELETE_HEXAGON = "[Delete action] Delete Hexagon";
+exports.FOCUS_HEXAGON = "[Focus action] Focus Hexagon";
+exports.HEXMAP_HEXAGON = "[Hexmap action] Hexmap Hexagon";
+
+},{}],59:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SELECT_HEXMAP = exports.DEFOCUS_HEXMAP = exports.FOCUSING_HEXMAP = exports.SEEK_HEXMAP = exports.NAME_HEXMAP = exports.REPLACE_HEXMAP = exports.LIST_HEXMAP = exports.LOAD_HEXMAP = exports.SHAPE_HEXMAP = exports.SAVE_HEXMAP = exports.TOOL_HEXMAP = exports.GEOJSON_HEXMAP = exports.ATLAS_HEXMAP = exports.COPY_HEXMAP = exports.CREATE_HEXMAP = exports.WRITE_HEXMAP = exports.READ_HEXMAP = exports.OPEN_HEXMAP = exports.UPDATE_HEXMAP = exports.INIT_HEXMAP = void 0;
+exports.INIT_HEXMAP = "[Hexmap action] Init Hexmap";
+exports.UPDATE_HEXMAP = "[Hexmap action] Update Hexmap";
+exports.OPEN_HEXMAP = "[Hexmap action] Open Hexmap";
+exports.READ_HEXMAP = "[Read action] Read Hexmap";
+exports.WRITE_HEXMAP = "[Write action] Write Hexmap";
+exports.CREATE_HEXMAP = "[Create action] Create Hexmap";
+exports.COPY_HEXMAP = "[Copy action] Copy Hexmap";
+exports.ATLAS_HEXMAP = "[Atlas action] Atlas Hexmap";
+exports.GEOJSON_HEXMAP = "[Geojson action] Geojson Hexmap";
+exports.TOOL_HEXMAP = "[Tool action] Tool Hexmap";
+exports.SAVE_HEXMAP = "[Save action] Save Hexmap";
+exports.SHAPE_HEXMAP = "[Shape action] Shape Hexmap";
+exports.LOAD_HEXMAP = "[Load action] Load Hexmap";
+exports.LIST_HEXMAP = "[List action] List Hexmap";
+exports.REPLACE_HEXMAP = "[Replace action] Replace Hexmap";
+exports.NAME_HEXMAP = "[Name action] Name Hexmap";
+exports.SEEK_HEXMAP = "[Seek action] Seek Hexmap";
+exports.FOCUSING_HEXMAP = "[Focusing action] Focusing Hexmap";
+exports.DEFOCUS_HEXMAP = "[Defocus action] Defocus Hexmap";
+exports.SELECT_HEXMAP = "[Select action] Select Hexmap";
+
+},{}],60:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ADD_PORT = exports.CONTENT_TERMINAL = exports.ROOT_TERMINAL = exports.CLOSE_TERMINAL = exports.TABLE_TERMINAL = exports.INPUT_TERMINAL = exports.CLEAR_TERMINAL = exports.UPDATE_TERMINAL = exports.WRITE_TERMINAL = exports.FOCUS_TERMINAL = exports.OPEN_TERMINAL = exports.INIT_TERMINAL = void 0;
@@ -14743,7 +14960,7 @@ exports.ROOT_TERMINAL = "[Terminal action] Root Terminal";
 exports.CONTENT_TERMINAL = "[Terminal action] Content Terminal";
 exports.ADD_PORT = "[Terminal action] Add Port";
 
-},{}],51:[function(require,module,exports){
+},{}],61:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.VALUE_VURT = exports.BUNDLE_VURT = exports.CONTAINS_VURT = exports.LIST_UNIT_VURT = exports.LIST_PIVOT_VURT = exports.COUNT_VURT = exports.UNIT_VURT = exports.REPLACE_VURT = exports.UPDATE_VURT = exports.FETCH_VURT = exports.TEST_CLOUD_VURT = exports.DELAY_VURT = exports.INIT_VURT = void 0;
@@ -14761,7 +14978,7 @@ exports.CONTAINS_VURT = "[Contains action] Contains Vurt";
 exports.BUNDLE_VURT = "[Bundle action] Bundle Vurt";
 exports.VALUE_VURT = "[Value action] Value Vurt";
 
-},{}],52:[function(require,module,exports){
+},{}],62:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var sim = {
@@ -14793,4 +15010,4 @@ const Import = require("./BEE");
 const state_1 = require("./99.core/state");
 module.exports = sim;
 
-},{"./99.core/state":47,"./BEE":48}]},{},[22]);
+},{"./99.core/state":53,"./BEE":54}]},{},[22]);

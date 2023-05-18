@@ -489,7 +489,6 @@ core.extensions.handle(core.ExtensionType.Asset, (extension) => {
 Object.defineProperty(exports, '__esModule', { value: true });
 
 var core = require('@pixi/core');
-var utils = require('@pixi/utils');
 var BackgroundLoader = require('./BackgroundLoader.js');
 var Cache = require('./cache/Cache.js');
 var Loader = require('./loader/Loader.js');
@@ -699,7 +698,7 @@ class AssetsClass {
     return loadTextures.loadTextures.config.preferWorkers;
   }
   set preferWorkers(value) {
-    utils.deprecation("7.2.0", "Assets.prefersWorkers is deprecated, use Assets.setPreferences({ preferWorkers: true }) instead.");
+    core.utils.deprecation("7.2.0", "Assets.prefersWorkers is deprecated, use Assets.setPreferences({ preferWorkers: true }) instead.");
     this.setPreferences({ preferWorkers: value });
   }
   setPreferences(preferences) {
@@ -719,7 +718,7 @@ exports.Assets = Assets;
 exports.AssetsClass = AssetsClass;
 
 
-},{"./BackgroundLoader.js":9,"./cache/Cache.js":10,"./loader/Loader.js":21,"./loader/parsers/index.js":25,"./loader/parsers/textures/loadTextures.js":31,"./resolver/Resolver.js":35,"./utils/convertToList.js":42,"./utils/isSingleItem.js":46,"@pixi/core":141,"@pixi/utils":381}],9:[function(require,module,exports){
+},{"./BackgroundLoader.js":9,"./cache/Cache.js":10,"./loader/Loader.js":21,"./loader/parsers/index.js":25,"./loader/parsers/textures/loadTextures.js":31,"./resolver/Resolver.js":35,"./utils/convertToList.js":42,"./utils/isSingleItem.js":46,"@pixi/core":141}],9:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', { value: true });
@@ -1507,12 +1506,24 @@ const validFontMIMEs = [
   "font/woff",
   "font/woff2"
 ];
+const CSS_IDENT_TOKEN_REGEX = /^(--|-?[A-Z_])[0-9A-Z_-]*$/i;
 function getFontFamilyName(url) {
   const ext = core.utils.path.extname(url);
   const name = core.utils.path.basename(url, ext);
   const nameWithSpaces = name.replace(/(-|_)/g, " ");
-  const nameTitleCase = nameWithSpaces.toLowerCase().split(" ").map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
-  return nameTitleCase;
+  const nameTokens = nameWithSpaces.toLowerCase().split(" ").map((word) => word.charAt(0).toUpperCase() + word.slice(1));
+  let valid = nameTokens.length > 0;
+  for (const token of nameTokens) {
+    if (!token.match(CSS_IDENT_TOKEN_REGEX)) {
+      valid = false;
+      break;
+    }
+  }
+  let fontFamilyName = nameTokens.join(" ");
+  if (!valid) {
+    fontFamilyName = `"${fontFamilyName.replace(/[\\"]/g, "\\$&")}"`;
+  }
+  return fontFamilyName;
 }
 const loadWebFont = {
   extension: {
@@ -1599,15 +1610,13 @@ const loadSVG = {
   },
   async parse(asset, data, loader) {
     const src = new core.SVGResource(asset, data?.data?.resourceOptions);
+    await src.load();
     const base = new core.BaseTexture(src, {
       resolution: core.utils.getResolutionOfUrl(asset),
       ...data?.data
     });
     base.resource.src = asset;
     const texture = createTexture.createTexture(base, loader, asset);
-    if (!data?.data?.resourceOptions?.autoLoad) {
-      await src.load();
-    }
     return texture;
   },
   async load(url, _options) {
@@ -2235,18 +2244,33 @@ class CanvasExtract {
   }
   async base64(target, format, quality) {
     const canvas = this.canvas(target);
+    if (canvas.toBlob !== void 0) {
+      return new Promise((resolve, reject) => {
+        canvas.toBlob((blob) => {
+          if (!blob) {
+            reject(new Error("ICanvas.toBlob failed!"));
+            return;
+          }
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = reject;
+          reader.readAsDataURL(blob);
+        }, format, quality);
+      });
+    }
     if (canvas.toDataURL !== void 0) {
       return canvas.toDataURL(format, quality);
     }
     if (canvas.convertToBlob !== void 0) {
       const blob = await canvas.convertToBlob({ type: format, quality });
-      return await new Promise((resolve) => {
+      return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
         reader.readAsDataURL(blob);
       });
     }
-    throw new Error("CanvasExtract.base64() requires ICanvas.toDataURL or ICanvas.convertToBlob to be implemented");
+    throw new Error("CanvasExtract.base64() requires ICanvas.toDataURL, ICanvas.toBlob, or ICanvas.convertToBlob to be implemented");
   }
   canvas(target, frame) {
     const renderer = this.renderer;
@@ -2260,7 +2284,9 @@ class CanvasExtract {
       if (target instanceof core.RenderTexture) {
         renderTexture = target;
       } else {
-        renderTexture = renderer.generateTexture(target);
+        renderTexture = renderer.generateTexture(target, {
+          resolution: renderer.resolution
+        });
       }
     }
     if (renderTexture) {
@@ -2272,8 +2298,8 @@ class CanvasExtract {
       resolution = renderer._view.resolution;
       if (!frame) {
         frame = TEMP_RECT;
-        frame.width = renderer.width;
-        frame.height = renderer.height;
+        frame.width = renderer.width / resolution;
+        frame.height = renderer.height / resolution;
       }
     }
     const x = Math.round(frame.x * resolution);
@@ -2297,7 +2323,9 @@ class CanvasExtract {
       if (target instanceof core.RenderTexture) {
         renderTexture = target;
       } else {
-        renderTexture = renderer.generateTexture(target);
+        renderTexture = renderer.generateTexture(target, {
+          resolution: renderer.resolution
+        });
       }
     }
     if (renderTexture) {
@@ -2309,8 +2337,8 @@ class CanvasExtract {
       resolution = renderer.resolution;
       if (!frame) {
         frame = TEMP_RECT;
-        frame.width = renderer.width;
-        frame.height = renderer.height;
+        frame.width = renderer.width / resolution;
+        frame.height = renderer.height / resolution;
       }
     }
     const x = Math.round(frame.x * resolution);
@@ -4017,6 +4045,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 var core = require('@pixi/core');
 
+let canUseNewCanvasBlendModesValue;
 function createColoredCanvas(color) {
   const canvas = core.settings.ADAPTER.createCanvas(6, 1);
   const context = canvas.getContext("2d");
@@ -4028,6 +4057,9 @@ function canUseNewCanvasBlendModes() {
   if (typeof document === "undefined") {
     return false;
   }
+  if (canUseNewCanvasBlendModesValue !== void 0) {
+    return canUseNewCanvasBlendModesValue;
+  }
   const magenta = createColoredCanvas("#ff00ff");
   const yellow = createColoredCanvas("#ffff00");
   const canvas = core.settings.ADAPTER.createCanvas(6, 1);
@@ -4037,10 +4069,12 @@ function canUseNewCanvasBlendModes() {
   context.drawImage(yellow, 2, 0);
   const imageData = context.getImageData(2, 0, 1, 1);
   if (!imageData) {
-    return false;
+    canUseNewCanvasBlendModesValue = false;
+  } else {
+    const data = imageData.data;
+    canUseNewCanvasBlendModesValue = data[0] === 255 && data[1] === 0 && data[2] === 0;
   }
-  const data = imageData.data;
-  return data[0] === 255 && data[1] === 0 && data[2] === 0;
+  return canUseNewCanvasBlendModesValue;
 }
 
 exports.canUseNewCanvasBlendModes = canUseNewCanvasBlendModes;
@@ -4369,18 +4403,50 @@ const _Color = class {
   }
   set value(value) {
     if (value instanceof _Color) {
-      this._value = value._value;
+      this._value = this.cloneSource(value._value);
       this._int = value._int;
       this._components.set(value._components);
     } else if (value === null) {
       throw new Error("Cannot set PIXI.Color#value to null");
-    } else if (this._value !== value) {
+    } else if (this._value === null || !this.isSourceEqual(this._value, value)) {
       this.normalize(value);
-      this._value = value;
+      this._value = this.cloneSource(value);
     }
   }
   get value() {
     return this._value;
+  }
+  cloneSource(value) {
+    if (typeof value === "string" || typeof value === "number" || value instanceof Number || value === null) {
+      return value;
+    } else if (Array.isArray(value) || ArrayBuffer.isView(value)) {
+      return value.slice(0);
+    } else if (typeof value === "object" && value !== null) {
+      return { ...value };
+    }
+    return value;
+  }
+  isSourceEqual(value1, value2) {
+    const type1 = typeof value1;
+    const type2 = typeof value2;
+    if (type1 !== type2) {
+      return false;
+    } else if (type1 === "number" || type1 === "string" || value1 instanceof Number) {
+      return value1 === value2;
+    } else if (Array.isArray(value1) && Array.isArray(value2) || ArrayBuffer.isView(value1) && ArrayBuffer.isView(value2)) {
+      if (value1.length !== value2.length) {
+        return false;
+      }
+      return value1.every((v, i) => v === value2[i]);
+    } else if (value1 !== null && value2 !== null) {
+      const keys1 = Object.keys(value1);
+      const keys2 = Object.keys(value2);
+      if (keys1.length !== keys2.length) {
+        return false;
+      }
+      return keys1.every((key) => value1[key] === value2[key]);
+    }
+    return value1 === value2;
   }
   toRgba() {
     const [r, g, b, a] = this._components;
@@ -4438,19 +4504,21 @@ const _Color = class {
     this._value = null;
     return this;
   }
-  toPremultiplied(alpha) {
+  toPremultiplied(alpha, applyToRGB = true) {
     if (alpha === 1) {
-      return (alpha * 255 << 24) + this._int;
+      return (255 << 24) + this._int;
     }
     if (alpha === 0) {
-      return 0;
+      return applyToRGB ? 0 : this._int;
     }
     let r = this._int >> 16 & 255;
     let g = this._int >> 8 & 255;
     let b = this._int & 255;
-    r = r * alpha + 0.5 | 0;
-    g = g * alpha + 0.5 | 0;
-    b = b * alpha + 0.5 | 0;
+    if (applyToRGB) {
+      r = r * alpha + 0.5 | 0;
+      g = g * alpha + 0.5 | 0;
+      b = b * alpha + 0.5 | 0;
+    }
     return (alpha * 255 << 24) + (r << 16) + (g << 8) + b;
   }
   toHex() {
@@ -4463,16 +4531,14 @@ const _Color = class {
     return this.toHex() + "00".substring(0, 2 - alphaString.length) + alphaString;
   }
   setAlpha(alpha) {
-    this._components[3] = alpha;
+    this._components[3] = this._clamp(alpha);
     return this;
   }
-  round(step) {
+  round(steps) {
     const [r, g, b] = this._components;
-    this._components.set([
-      Math.min(255, r / step * step),
-      Math.min(255, g / step * step),
-      Math.min(255, b / step * step)
-    ]);
+    this._components[0] = Math.round(r * steps) / steps;
+    this._components[1] = Math.round(g * steps) / steps;
+    this._components[2] = Math.round(b * steps) / steps;
     this.refreshInt();
     this._value = null;
     return this;
@@ -4487,21 +4553,26 @@ const _Color = class {
     return out;
   }
   normalize(value) {
-    let components;
+    let r;
+    let g;
+    let b;
+    let a;
     if ((typeof value === "number" || value instanceof Number) && value >= 0 && value <= 16777215) {
       const int = value;
-      components = [
-        (int >> 16 & 255) / 255,
-        (int >> 8 & 255) / 255,
-        (int & 255) / 255,
-        1
-      ];
-    } else if ((Array.isArray(value) || value instanceof Float32Array) && value.length >= 3 && value.length <= 4 && value.every((v) => v <= 1 && v >= 0)) {
-      const [r, g, b, a = 1] = value;
-      components = [r, g, b, a];
+      r = (int >> 16 & 255) / 255;
+      g = (int >> 8 & 255) / 255;
+      b = (int & 255) / 255;
+      a = 1;
+    } else if ((Array.isArray(value) || value instanceof Float32Array) && value.length >= 3 && value.length <= 4) {
+      value = this._clamp(value);
+      [r, g, b, a = 1] = value;
     } else if ((value instanceof Uint8Array || value instanceof Uint8ClampedArray) && value.length >= 3 && value.length <= 4) {
-      const [r, g, b, a = 255] = value;
-      components = [r / 255, g / 255, b / 255, a / 255];
+      value = this._clamp(value, 0, 255);
+      [r, g, b, a = 255] = value;
+      r /= 255;
+      g /= 255;
+      b /= 255;
+      a /= 255;
     } else if (typeof value === "string" || typeof value === "object") {
       if (typeof value === "string") {
         const match = _Color.HEX_PATTERN.exec(value);
@@ -4511,20 +4582,35 @@ const _Color = class {
       }
       const color = colord.colord(value);
       if (color.isValid()) {
-        const { r, g, b, a } = color.rgba;
-        components = [r / 255, g / 255, b / 255, a];
+        ({ r, g, b, a } = color.rgba);
+        r /= 255;
+        g /= 255;
+        b /= 255;
       }
     }
-    if (components) {
-      this._components.set(components);
+    if (r !== void 0) {
+      this._components[0] = r;
+      this._components[1] = g;
+      this._components[2] = b;
+      this._components[3] = a;
       this.refreshInt();
     } else {
       throw new Error(`Unable to convert color ${value}`);
     }
   }
   refreshInt() {
+    this._clamp(this._components);
     const [r, g, b] = this._components;
     this._int = (r * 255 << 16) + (g * 255 << 8) + (b * 255 | 0);
+  }
+  _clamp(value, min = 0, max = 1) {
+    if (typeof value === "number") {
+      return Math.min(Math.max(value, min), max);
+    }
+    value.forEach((v, i) => {
+      value[i] = Math.min(Math.max(v, min), max);
+    });
+    return value;
   }
 };
 let Color = _Color;
@@ -5434,26 +5520,32 @@ class BlobResource extends core.BufferResource {
     super(data, options);
     this.origin = origin;
     this.buffer = data ? new core.ViewableBuffer(data) : null;
-    if (this.origin && options.autoLoad !== false) {
+    this._load = null;
+    this.loaded = false;
+    if (this.origin !== null && options.autoLoad !== false) {
       this.load();
     }
-    if (data?.length) {
+    if (this.origin === null && this.buffer) {
+      this._load = Promise.resolve(this);
       this.loaded = true;
       this.onBlobLoaded(this.buffer.rawBinaryData);
     }
   }
   onBlobLoaded(_data) {
   }
-  async load() {
-    const response = await fetch(this.origin);
-    const blob = await response.blob();
-    const arrayBuffer = await blob.arrayBuffer();
-    this.data = new Uint32Array(arrayBuffer);
-    this.buffer = new core.ViewableBuffer(arrayBuffer);
-    this.loaded = true;
-    this.onBlobLoaded(arrayBuffer);
-    this.update();
-    return this;
+  load() {
+    if (this._load) {
+      return this._load;
+    }
+    this._load = fetch(this.origin).then((response) => response.blob()).then((blob) => blob.arrayBuffer()).then((arrayBuffer) => {
+      this.data = new Uint32Array(arrayBuffer);
+      this.buffer = new core.ViewableBuffer(arrayBuffer);
+      this.loaded = true;
+      this.onBlobLoaded(arrayBuffer);
+      this.update();
+      return this;
+    });
+    return this._load;
   }
 }
 
@@ -6423,7 +6515,7 @@ const _BatchRenderer = class extends ObjectRenderer.ObjectRenderer {
     const vertexData = element.vertexData;
     const textureId = element._texture.baseTexture._batchLocation;
     const alpha = Math.min(element.worldAlpha, 1);
-    const argb = color.Color.shared.setValue(element._tintRGB).toPremultiplied(alpha);
+    const argb = color.Color.shared.setValue(element._tintRGB).toPremultiplied(alpha, element._texture.baseTexture.alphaMode > 0);
     for (let i = 0; i < vertexData.length; i += 2) {
       float32View[aIndex++] = vertexData[i];
       float32View[aIndex++] = vertexData[i + 1];
@@ -7785,6 +7877,7 @@ class FramebufferSystem {
     this.bind(framebuffer);
     gl.bindFramebuffer(gl.READ_FRAMEBUFFER, fbo.framebuffer);
     gl.blitFramebuffer(sourcePixels.left, sourcePixels.top, sourcePixels.right, sourcePixels.bottom, destPixels.left, destPixels.top, destPixels.right, destPixels.bottom, gl.COLOR_BUFFER_BIT, sameSize ? gl.NEAREST : gl.LINEAR);
+    gl.bindFramebuffer(gl.READ_FRAMEBUFFER, framebuffer.glFramebuffers[this.CONTEXT_UID].framebuffer);
   }
   disposeFramebuffer(framebuffer, contextLost) {
     const fbo = framebuffer.glFramebuffers[this.CONTEXT_UID];
@@ -8854,7 +8947,7 @@ function _interopNamespace(e) {
 
 var utils__namespace = /*#__PURE__*/_interopNamespace(utils$1);
 
-const VERSION = "7.2.0";
+const VERSION = "7.2.4";
 
 exports.utils = utils__namespace;
 exports.autoDetectRenderer = autoDetectRenderer.autoDetectRenderer;
@@ -9881,6 +9974,10 @@ class RenderTextureSystem {
     this.destinationFrame = new math.Rectangle();
     this.viewportFrame = new math.Rectangle();
   }
+  contextChange() {
+    const attributes = this.renderer?.gl.getContextAttributes();
+    this._rendererPremultipliedAlpha = !!(attributes && attributes.alpha && attributes.premultipliedAlpha);
+  }
   bind(renderTexture = null, sourceFrame, destinationFrame) {
     const renderer = this.renderer;
     this.current = renderTexture;
@@ -9937,7 +10034,10 @@ class RenderTextureSystem {
   }
   clear(clearColor, mask) {
     const fallbackColor = this.current ? this.current.baseTexture.clear : this.renderer.background.backgroundColor;
-    const color$1 = clearColor ? color.Color.shared.setValue(clearColor) : fallbackColor;
+    const color$1 = color.Color.shared.setValue(clearColor ? clearColor : fallbackColor);
+    if (this.current && this.current.baseTexture.alphaMode > 0 || !this.current && this._rendererPremultipliedAlpha) {
+      color$1.premultiply(color$1.alpha);
+    }
     const destinationFrame = this.destinationFrame;
     const baseFrame = this.current ? this.current.baseTexture : this.renderer._view.screen;
     const clearMask = destinationFrame.width !== baseFrame.width || destinationFrame.height !== baseFrame.height;
@@ -11745,7 +11845,7 @@ class StartupSystem {
     const { renderer } = this;
     renderer.runners.init.emit(renderer.options);
     if (options.hello) {
-      console.log(`PixiJS ${"7.2.0"} - ${renderer.rendererLogId} - https://pixijs.com`);
+      console.log(`PixiJS ${"7.2.4"} - ${renderer.rendererLogId} - https://pixijs.com`);
     }
     renderer.resize(renderer.screen.width, renderer.screen.height);
   }
@@ -12393,7 +12493,7 @@ const _BaseTexture = class extends utils.EventEmitter {
     buffer = buffer || new Float32Array(width * height * 4);
     const resource = new BufferResource.BufferResource(buffer, { width, height });
     const type = buffer instanceof Float32Array ? constants.TYPES.FLOAT : constants.TYPES.UNSIGNED_BYTE;
-    return new _BaseTexture(resource, Object.assign({}, defaultBufferOptions, options || { width, height, type }));
+    return new _BaseTexture(resource, Object.assign({}, defaultBufferOptions, { type }, options));
   }
   static addToCache(baseTexture, id) {
     if (id) {
@@ -15650,7 +15750,7 @@ class EventBoundary {
     this.eventPool = /* @__PURE__ */ new Map();
     this._allInteractiveElements = [];
     this._hitElements = [];
-    this._collectInteractiveElements = false;
+    this._isPointerMoveEvent = false;
     this.rootTarget = rootTarget;
     this.hitPruneFn = this.hitPruneFn.bind(this);
     this.hitTestFn = this.hitTestFn.bind(this);
@@ -15702,7 +15802,9 @@ class EventBoundary {
   }
   hitTest(x, y) {
     EventTicker.EventsTicker.pauseUpdate = true;
-    const invertedPath = this.hitTestRecursive(this.rootTarget, this.rootTarget.eventMode, tempHitLocation.set(x, y), this.hitTestFn, this.hitPruneFn);
+    const useMove = this._isPointerMoveEvent && this.enableGlobalMoveEvents;
+    const fn = useMove ? "hitTestMoveRecursive" : "hitTestRecursive";
+    const invertedPath = this[fn](this.rootTarget, this.rootTarget.eventMode, tempHitLocation.set(x, y), this.hitTestFn, this.hitPruneFn);
     return invertedPath && invertedPath[0];
   }
   propagate(e, type) {
@@ -15754,8 +15856,49 @@ class EventBoundary {
     propagationPath.reverse();
     return propagationPath;
   }
+  hitTestMoveRecursive(currentTarget, eventMode, location, testFn, pruneFn, ignore = false) {
+    let shouldReturn = false;
+    if (this._interactivePrune(currentTarget))
+      return null;
+    if (currentTarget.eventMode === "dynamic" || eventMode === "dynamic") {
+      EventTicker.EventsTicker.pauseUpdate = false;
+    }
+    if (currentTarget.interactiveChildren && currentTarget.children) {
+      const children = currentTarget.children;
+      for (let i = children.length - 1; i >= 0; i--) {
+        const child = children[i];
+        const nestedHit = this.hitTestMoveRecursive(child, this._isInteractive(eventMode) ? eventMode : child.eventMode, location, testFn, pruneFn, ignore || pruneFn(currentTarget, location));
+        if (nestedHit) {
+          if (nestedHit.length > 0 && !nestedHit[nestedHit.length - 1].parent) {
+            continue;
+          }
+          const isInteractive = currentTarget.isInteractive();
+          if (nestedHit.length > 0 || isInteractive) {
+            if (isInteractive)
+              this._allInteractiveElements.push(currentTarget);
+            nestedHit.push(currentTarget);
+          }
+          if (this._hitElements.length === 0)
+            this._hitElements = nestedHit;
+          shouldReturn = true;
+        }
+      }
+    }
+    const isInteractiveMode = this._isInteractive(eventMode);
+    const isInteractiveTarget = currentTarget.isInteractive();
+    if (isInteractiveTarget && isInteractiveTarget)
+      this._allInteractiveElements.push(currentTarget);
+    if (ignore || this._hitElements.length > 0)
+      return null;
+    if (shouldReturn)
+      return this._hitElements;
+    if (isInteractiveMode && (!pruneFn(currentTarget, location) && testFn(currentTarget, location))) {
+      return isInteractiveTarget ? [currentTarget] : [];
+    }
+    return null;
+  }
   hitTestRecursive(currentTarget, eventMode, location, testFn, pruneFn) {
-    if (pruneFn(currentTarget, location)) {
+    if (this._interactivePrune(currentTarget) || pruneFn(currentTarget, location)) {
       return null;
     }
     if (currentTarget.eventMode === "dynamic" || eventMode === "dynamic") {
@@ -15771,28 +15914,14 @@ class EventBoundary {
             continue;
           }
           const isInteractive = currentTarget.isInteractive();
-          if (nestedHit.length > 0 || isInteractive) {
-            if (this._collectInteractiveElements && isInteractive) {
-              this._allInteractiveElements.push(currentTarget);
-            }
+          if (nestedHit.length > 0 || isInteractive)
             nestedHit.push(currentTarget);
-          }
-          if (this._collectInteractiveElements && this._hitElements.length === 0) {
-            this._hitElements = nestedHit;
-          }
-          if (!this._collectInteractiveElements)
-            return nestedHit;
+          return nestedHit;
         }
       }
     }
     const isInteractiveMode = this._isInteractive(eventMode);
     const isInteractiveTarget = currentTarget.isInteractive();
-    if (this._collectInteractiveElements) {
-      if (isInteractiveMode && isInteractiveTarget)
-        this._allInteractiveElements.push(currentTarget);
-      if (this._hitElements.length > 0)
-        return null;
-    }
     if (isInteractiveMode && testFn(currentTarget, location)) {
       return isInteractiveTarget ? [currentTarget] : [];
     }
@@ -15801,7 +15930,7 @@ class EventBoundary {
   _isInteractive(int) {
     return int === "static" || int === "dynamic";
   }
-  hitPruneFn(displayObject, location) {
+  _interactivePrune(displayObject) {
     if (!displayObject || displayObject.isMask || !displayObject.visible || !displayObject.renderable) {
       return true;
     }
@@ -15814,8 +15943,9 @@ class EventBoundary {
     if (displayObject.isMask) {
       return true;
     }
-    if (this._collectInteractiveElements && this._hitElements.length > 0)
-      return false;
+    return false;
+  }
+  hitPruneFn(displayObject, location) {
     if (displayObject.hitArea) {
       displayObject.worldTransform.applyInverse(location, tempLocalMapping);
       if (!displayObject.hitArea.contains(tempLocalMapping.x, tempLocalMapping.y)) {
@@ -15876,9 +16006,9 @@ class EventBoundary {
     }
     this._allInteractiveElements.length = 0;
     this._hitElements.length = 0;
-    this._collectInteractiveElements = true;
+    this._isPointerMoveEvent = true;
     const e = this.createPointerEvent(from);
-    this._collectInteractiveElements = false;
+    this._isPointerMoveEvent = false;
     const isMouse = e.pointerType === "mouse" || e.pointerType === "pen";
     const trackingData = this.trackingData(from.pointerId);
     const outTarget = this.findMountedTarget(trackingData.overTargets);
@@ -16766,10 +16896,10 @@ class FederatedEvent {
     this.propagationImmediatelyStopped = false;
     this.layer = new core.Point();
     this.page = new core.Point();
-    this.AT_TARGET = 1;
-    this.BUBBLING_PHASE = 2;
-    this.CAPTURING_PHASE = 3;
     this.NONE = 0;
+    this.CAPTURING_PHASE = 1;
+    this.AT_TARGET = 2;
+    this.BUBBLING_PHASE = 3;
     this.manager = manager;
   }
   get layerX() {
@@ -16826,8 +16956,8 @@ exports.FederatedEvent = FederatedEvent;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
+var core = require('@pixi/core');
 var display = require('@pixi/display');
-var utils = require('@pixi/utils');
 var EventSystem = require('./EventSystem.js');
 var FederatedEvent = require('./FederatedEvent.js');
 
@@ -16873,7 +17003,7 @@ const FederatedDisplayObject = {
     return this._internalInteractive ?? convertEventModeToInteractiveMode(EventSystem.EventSystem.defaultEventMode);
   },
   set interactive(value) {
-    utils.deprecation("7.2.0", `Setting interactive is deprecated, use eventMode = 'none'/'passive'/'auto'/'static'/'dynamic' instead.`);
+    core.utils.deprecation("7.2.0", `Setting interactive is deprecated, use eventMode = 'none'/'passive'/'auto'/'static'/'dynamic' instead.`);
     this._internalInteractive = value;
     this.eventMode = value ? "static" : "auto";
   },
@@ -16920,7 +17050,7 @@ display.DisplayObject.mixin(FederatedDisplayObject);
 exports.FederatedDisplayObject = FederatedDisplayObject;
 
 
-},{"./EventSystem.js":220,"./FederatedEvent.js":222,"@pixi/display":217,"@pixi/utils":381}],225:[function(require,module,exports){
+},{"./EventSystem.js":220,"./FederatedEvent.js":222,"@pixi/core":141,"@pixi/display":217}],225:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', { value: true });
@@ -17187,37 +17317,51 @@ const _Extract = class {
   }
   async base64(target, format, quality) {
     const canvas = this.canvas(target);
+    if (canvas.toBlob !== void 0) {
+      return new Promise((resolve, reject) => {
+        canvas.toBlob((blob) => {
+          if (!blob) {
+            reject(new Error("ICanvas.toBlob failed!"));
+            return;
+          }
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = reject;
+          reader.readAsDataURL(blob);
+        }, format, quality);
+      });
+    }
     if (canvas.toDataURL !== void 0) {
       return canvas.toDataURL(format, quality);
     }
     if (canvas.convertToBlob !== void 0) {
       const blob = await canvas.convertToBlob({ type: format, quality });
-      return await new Promise((resolve) => {
+      return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
         reader.readAsDataURL(blob);
       });
     }
-    throw new Error("Extract.base64() requires ICanvas.toDataURL or ICanvas.convertToBlob to be implemented");
+    throw new Error("Extract.base64() requires ICanvas.toDataURL, ICanvas.toBlob, or ICanvas.convertToBlob to be implemented");
   }
   canvas(target, frame) {
     const { pixels, width, height, flipY } = this._rawPixels(target, frame);
-    let canvasBuffer = new core.utils.CanvasRenderTarget(width, height, 1);
-    const canvasData = canvasBuffer.context.getImageData(0, 0, width, height);
-    _Extract.arrayPostDivide(pixels, canvasData.data);
-    canvasBuffer.context.putImageData(canvasData, 0, 0);
     if (flipY) {
-      const target2 = new core.utils.CanvasRenderTarget(canvasBuffer.width, canvasBuffer.height, 1);
-      target2.context.scale(1, -1);
-      target2.context.drawImage(canvasBuffer.canvas, 0, -height);
-      canvasBuffer.destroy();
-      canvasBuffer = target2;
+      _Extract._flipY(pixels, width, height);
     }
+    _Extract._unpremultiplyAlpha(pixels);
+    const canvasBuffer = new core.utils.CanvasRenderTarget(width, height, 1);
+    const imageData = new ImageData(new Uint8ClampedArray(pixels.buffer), width, height);
+    canvasBuffer.context.putImageData(imageData, 0, 0);
     return canvasBuffer.canvas;
   }
   pixels(target, frame) {
-    const { pixels } = this._rawPixels(target, frame);
-    _Extract.arrayPostDivide(pixels, pixels);
+    const { pixels, width, height, flipY } = this._rawPixels(target, frame);
+    if (flipY) {
+      _Extract._flipY(pixels, width, height);
+    }
+    _Extract._unpremultiplyAlpha(pixels);
     return pixels;
   }
   _rawPixels(target, frame) {
@@ -17233,19 +17377,10 @@ const _Extract = class {
       if (target instanceof core.RenderTexture) {
         renderTexture = target;
       } else {
-        const multisample = renderer.context.webGLVersion >= 2 ? renderer.multisample : core.MSAA_QUALITY.NONE;
-        renderTexture = renderer.generateTexture(target, { multisample });
-        if (multisample !== core.MSAA_QUALITY.NONE) {
-          const resolvedTexture = core.RenderTexture.create({
-            width: renderTexture.width,
-            height: renderTexture.height
-          });
-          renderer.framebuffer.bind(renderTexture.framebuffer);
-          renderer.framebuffer.blit(resolvedTexture.framebuffer);
-          renderer.framebuffer.bind();
-          renderTexture.destroy(true);
-          renderTexture = resolvedTexture;
-        }
+        renderTexture = renderer.generateTexture(target, {
+          resolution: renderer.resolution,
+          multisample: renderer.multisample
+        });
         generated = true;
       }
     }
@@ -17253,13 +17388,19 @@ const _Extract = class {
       resolution = renderTexture.baseTexture.resolution;
       frame = frame ?? renderTexture.frame;
       flipY = false;
-      renderer.renderTexture.bind(renderTexture);
+      if (!generated) {
+        renderer.renderTexture.bind(renderTexture);
+        const fbo = renderTexture.framebuffer.glFramebuffers[renderer.CONTEXT_UID];
+        if (fbo.blitFramebuffer) {
+          renderer.framebuffer.bind(fbo.blitFramebuffer);
+        }
+      }
     } else {
       resolution = renderer.resolution;
       if (!frame) {
         frame = TEMP_RECT;
-        frame.width = renderer.width;
-        frame.height = renderer.height;
+        frame.width = renderer.width / resolution;
+        frame.height = renderer.height / resolution;
       }
       flipY = true;
       renderer.renderTexture.bind();
@@ -17277,17 +17418,30 @@ const _Extract = class {
   destroy() {
     this.renderer = null;
   }
-  static arrayPostDivide(pixels, out) {
-    for (let i = 0; i < pixels.length; i += 4) {
-      const alpha = out[i + 3] = pixels[i + 3];
+  static _flipY(pixels, width, height) {
+    const w = width << 2;
+    const h = height >> 1;
+    const temp = new Uint8Array(w);
+    for (let y = 0; y < h; y++) {
+      const t = y * w;
+      const b = (height - y - 1) * w;
+      temp.set(pixels.subarray(t, t + w));
+      pixels.copyWithin(t, b, b + w);
+      pixels.set(temp, b);
+    }
+  }
+  static _unpremultiplyAlpha(pixels) {
+    if (pixels instanceof Uint8ClampedArray) {
+      pixels = new Uint8Array(pixels.buffer);
+    }
+    const n = pixels.length;
+    for (let i = 0; i < n; i += 4) {
+      const alpha = pixels[i + 3];
       if (alpha !== 0) {
-        out[i] = Math.round(Math.min(pixels[i] * 255 / alpha, 255));
-        out[i + 1] = Math.round(Math.min(pixels[i + 1] * 255 / alpha, 255));
-        out[i + 2] = Math.round(Math.min(pixels[i + 2] * 255 / alpha, 255));
-      } else {
-        out[i] = pixels[i];
-        out[i + 1] = pixels[i + 1];
-        out[i + 2] = pixels[i + 2];
+        const a = 255.001 / alpha;
+        pixels[i] = pixels[i] * a + 0.5;
+        pixels[i + 1] = pixels[i + 1] * a + 0.5;
+        pixels[i + 2] = pixels[i + 2] * a + 0.5;
       }
     }
   }
@@ -18837,7 +18991,7 @@ const _Graphics = class extends display.Container {
     const uniforms = shader.uniforms;
     const drawCalls = geometry.drawCalls;
     uniforms.translationMatrix = this.transform.worldTransform;
-    core.Color.shared.setValue(this._tintColor).multiply([worldAlpha, worldAlpha, worldAlpha]).setAlpha(worldAlpha).toArray(uniforms.tint);
+    core.Color.shared.setValue(this._tintColor).premultiply(worldAlpha).toArray(uniforms.tint);
     renderer.shader.bind(shader);
     renderer.geometry.bind(geometry, shader);
     renderer.state.set(this.state);
@@ -22966,7 +23120,7 @@ class ParticleRenderer extends core.ObjectRenderer {
   uploadTint(children, startIndex, amount, array, stride, offset) {
     for (let i = 0; i < amount; ++i) {
       const sprite = children[startIndex + i];
-      const result = core.Color.shared.setValue(sprite._tintRGB).toPremultiplied(sprite.alpha);
+      const result = core.Color.shared.setValue(sprite._tintRGB).toPremultiplied(sprite.alpha, sprite.texture.baseTexture.alphaMode > 0);
       array[offset] = result;
       array[offset + stride] = result;
       array[offset + stride * 2] = result;
@@ -45740,10 +45894,10 @@ global.SHADE.ActFme = require("../dist/110.shade/12.frame.unit/frame.action");
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"../dist/110.shade/00.shade.unit/shade.action":435,"../dist/110.shade/01.visage.unit/visage.action":441,"../dist/110.shade/03.container.unit/container.action":453,"../dist/110.shade/04.graphic.unit/graphic.action":459,"../dist/110.shade/05.text.unit/text.action":465,"../dist/110.shade/06.sprite.unit/sprite.action":471,"../dist/110.shade/07.hexagon.unit/hexagon.action":477,"../dist/110.shade/08.focigon.unit/focigon.action":483,"../dist/110.shade/09.loop.unit/loop.action":489,"../dist/110.shade/10.toon.unit/toon.action":495,"../dist/110.shade/11.video.unit/video.action":501,"../dist/110.shade/12.frame.unit/frame.action":507,"../dist/110.shade/hunt":538}],434:[function(require,module,exports){
-(function (process){(function (){
+(function (process,global){(function (){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.patchShade = exports.editShade = exports.bodyShade = exports.updateShade = exports.browserShade = exports.runShade = exports.openShade = exports.initShade = void 0;
+exports.testShade = exports.patchShade = exports.editShade = exports.bodyShade = exports.updateShade = exports.browserShade = exports.runShade = exports.openShade = exports.initShade = void 0;
 const ActMnu = require("../../98.menu.unit/menu.action");
 const ActBus = require("../../99.bus.unit/bus.action");
 const ActShd = require("../../00.shade.unit/shade.action");
@@ -45759,6 +45913,8 @@ const ActTun = require("../../10.toon.unit/toon.action");
 const ActSpc = require("../../act/space.action");
 const ActVrt = require("../../act/vurt.action");
 const ActDsk = require("../../act/disk.action");
+var SHADE = global.SHADE;
+var SPACE = global.SPACE;
 var bit, val, idx, dex, lst, dat;
 const initShade = async (cpy, bal, ste) => {
     if (bal.dat != null)
@@ -45773,7 +45929,7 @@ const initShade = async (cpy, bal, ste) => {
 exports.initShade = initShade;
 const openShade = async (cpy, bal, ste) => {
     //we need to move a whole directory over
-    bit = await ste.bus(ActDsk.COPY_DISK, { src: './source', idx: '../gillisse/src' });
+    bit = await ste.bus(ActDsk.COPY_DISK, { src: './vue', idx: '../gillisse/src' });
     bit = await ste.hunt(ActShd.RUN_SHADE, {});
     const open = require('open');
     var loc = './vrt.opn.bat';
@@ -45825,6 +45981,7 @@ const updateShade = async (cpy, bal, ste) => {
         var index = bit.dskBit.dat;
         bit = await ste.bus(ActDsk.WRITE_DISK, { src: '../gillisse/public/jsx/index.js', dat: index });
         bit = await ste.bus(ActDsk.WRITE_DISK, { src: '../gillisse/index.html', dat: html });
+        bit = await ste.bus(ActDsk.COPY_DISK, { src: './vue', idx: '../gillisse/src' });
         setTimeout(() => {
             if (bal.slv != null)
                 bal.slv({ shdBit: { idx: "update-shade" } });
@@ -45869,14 +46026,40 @@ const patchShade = async (cpy, bal, ste) => {
     return cpy;
 };
 exports.patchShade = patchShade;
+const testShade = async (cpy, bal, ste) => {
+    //bit = await ste.hunt( ActCan.ADD_CONTAINER, { idx: 'fce-can-00', dat: bit.fmeBit.dat });
+    bit = await ste.hunt(ActGph.WRITE_GRAPHIC, { idx: 'gph00', src: 'vsg00' });
+    bit = await ste.hunt(ActCan.ADD_CONTAINER, { idx: 'fce-can-00', dat: bit.gphBit.dat });
+    //bit = await ste.hunt(ActGph.WRITE_GRAPHIC, { idx: 'gph01', src: 'vsg00' });
+    //bit = await ste.hunt(ActCan.ADD_CONTAINER, { idx: 'fce-can-00', dat: bit.gphBit.dat });
+    const response = await fetch("./dat/hexmap/000.swamp.json");
+    const jsonData = await response.json();
+    bit = await SPACE.hunt(SPACE.ActMap.ADD_HEXMAP, { idx: 'map00', dat: { gph: 'gph00', dat: jsonData } });
+    dat = bit.mapBit.dat;
+    bit = await ste.hunt(ActHex.WRITE_HEXAGON, { idx: 'hex00', src: 'vsg00', dat });
+    //bit = await SHADE.hunt(SHADE.ActTxt.WRITE_TEXT, { idx: 'txt00', src: 'vsg00', dat: { txt: "feel the love", y: 100 } });
+    //bit = await SHADE.hunt(SHADE.ActCan.ADD_CONTAINER, { idx: 'fce-can-00', dat: bit.txtBit.dat });
+    //bit = await SHADE.hunt(SHADE.ActTxt.WRITE_TEXT, { idx: 'txt01', src: 'vsg00', dat: { txt: "thank you", y: 110 } });
+    //bit = await SHADE.hunt(SHADE.ActCan.ADD_CONTAINER, { idx: 'fce-can-00', dat: bit.txtBit.dat });
+    //bit = await SHADE.hunt(SHADE.ActTxt.WRITE_TEXT, { idx: 'txt02', src: 'vsg00', dat: { txt: "looks really nice", y: 120 } });
+    //bit = await SHADE.hunt(SHADE.ActCan.ADD_CONTAINER, { idx: 'fce-can-00', dat: bit.txtBit.dat });
+    //bit = await SHADE.hunt(SHADE.ActSpr.WRITE_SPRITE, { idx: 'spr00', src: 'vsg00', dat: { src: "./img/000.png", y: 130 } });
+    //bit = await SHADE.hunt(SHADE.ActCan.ADD_CONTAINER, { idx: 'fce-can-00', dat: bit.sprBit.dat });
+    //var hexmap = bit.mapBit.dat;
+    //bit = await ste.hunt( ActFcg.WRITE_FOCIGON, { idx: 'fcg01', src: 'vsg00', dat: {dat:bit.focBit.dat}   });
+    if (bal.slv != null)
+        bal.slv({ symBit: { idx: "test-shade", dat: {} } });
+    return cpy;
+};
+exports.testShade = testShade;
 var patch = (ste, type, bale) => ste.dispatch({ type, bale });
 const doT = require("dot");
 
-}).call(this)}).call(this,require('_process'))
+}).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"../../00.shade.unit/shade.action":435,"../../01.visage.unit/visage.action":441,"../../02.surface.unit/surface.action":447,"../../03.container.unit/container.action":453,"../../04.graphic.unit/graphic.action":459,"../../05.text.unit/text.action":465,"../../06.sprite.unit/sprite.action":471,"../../07.hexagon.unit/hexagon.action":477,"../../10.toon.unit/toon.action":495,"../../11.video.unit/video.action":501,"../../98.menu.unit/menu.action":521,"../../99.bus.unit/bus.action":526,"../../act/disk.action":534,"../../act/space.action":535,"../../act/vurt.action":537,"_process":415,"child_process":undefined,"dot":400,"open":undefined}],435:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PatchShade = exports.PATCH_SHADE = exports.EditShade = exports.EDIT_SHADE = exports.RunShade = exports.RUN_SHADE = exports.BrowserShade = exports.BROWSER_SHADE = exports.BodyShade = exports.BODY_SHADE = exports.OpenShade = exports.OPEN_SHADE = exports.UpdateShade = exports.UPDATE_SHADE = exports.InitShade = exports.INIT_SHADE = void 0;
+exports.TestShade = exports.TEST_SHADE = exports.PatchShade = exports.PATCH_SHADE = exports.EditShade = exports.EDIT_SHADE = exports.RunShade = exports.RUN_SHADE = exports.BrowserShade = exports.BROWSER_SHADE = exports.BodyShade = exports.BODY_SHADE = exports.OpenShade = exports.OPEN_SHADE = exports.UpdateShade = exports.UPDATE_SHADE = exports.InitShade = exports.INIT_SHADE = void 0;
 // Shade actions
 exports.INIT_SHADE = "[Shade action] Init Shade";
 class InitShade {
@@ -45942,11 +46125,19 @@ class PatchShade {
     }
 }
 exports.PatchShade = PatchShade;
+exports.TEST_SHADE = "[Test action] Test Shade";
+class TestShade {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.TEST_SHADE;
+    }
+}
+exports.TestShade = TestShade;
 
 },{}],436:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.patchShade = exports.editShade = exports.runShade = exports.browserShade = exports.bodyShade = exports.openShade = exports.updateShade = exports.initShade = void 0;
+exports.testShade = exports.patchShade = exports.editShade = exports.runShade = exports.browserShade = exports.bodyShade = exports.openShade = exports.updateShade = exports.initShade = void 0;
 var shade_buzz_1 = require("./buz/shade.buzz");
 Object.defineProperty(exports, "initShade", { enumerable: true, get: function () { return shade_buzz_1.initShade; } });
 var shade_buzz_2 = require("./buz/shade.buzz");
@@ -45963,6 +46154,8 @@ var shade_buzz_7 = require("./buz/shade.buzz");
 Object.defineProperty(exports, "editShade", { enumerable: true, get: function () { return shade_buzz_7.editShade; } });
 var shade_buzz_8 = require("./buz/shade.buzz");
 Object.defineProperty(exports, "patchShade", { enumerable: true, get: function () { return shade_buzz_8.patchShade; } });
+var shade_buzz_9 = require("./buz/shade.buzz");
+Object.defineProperty(exports, "testShade", { enumerable: true, get: function () { return shade_buzz_9.testShade; } });
 
 },{"./buz/shade.buzz":434}],437:[function(require,module,exports){
 "use strict";
@@ -46003,6 +46196,8 @@ function reducer(model = new shade_model_1.ShadeModel(), act, state) {
             return Buzz.editShade(clone(model), act.bale, state);
         case Act.PATCH_SHADE:
             return Buzz.patchShade(clone(model), act.bale, state);
+        case Act.TEST_SHADE:
+            return Buzz.testShade(clone(model), act.bale, state);
         default:
             return model;
     }
@@ -47942,7 +48137,7 @@ exports.default = SpriteUnit;
 },{"../99.core/state":532,"typescript-ioc":430}],476:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteHexagon = exports.createHexagon = exports.removeHexagon = exports.writeHexagon = exports.readHexagon = exports.hexmapHexagon = exports.focusHexagon = exports.updateHexagon = exports.initHexagon = void 0;
+exports.deleteHexagon = exports.createHexagon = exports.removeHexagon = exports.writeHexagon = exports.readHexagon = exports.updateHexagon = exports.initHexagon = void 0;
 const ActCol = require("../../97.collect.unit/collect.action");
 const ActGph = require("../../04.graphic.unit/graphic.action");
 const ActHex = require("../../07.hexagon.unit/hexagon.action");
@@ -47953,37 +48148,24 @@ const initHexagon = (cpy, bal, ste) => {
 };
 exports.initHexagon = initHexagon;
 const updateHexagon = async (cpy, bal, ste) => {
-    bit = await ste.hunt(ActHex.READ_HEXAGON, { idx: bal.idx });
-    var dat = bit.hexBit.dat;
-    switch (dat.frm) {
-        case HEXAGON.FOCUS:
-            ste.hunt(ActHex.FOCUS_HEXAGON, { dat, bit: bal.dat });
-            break;
-        case HEXAGON.HEXMAP:
-            ste.hunt(ActHex.HEXMAP_HEXAGON, { dat, bit: bal.dat });
-            break;
-    }
-    bal.slv({ hexBit: { idx: "update-hexagon", dat: dat } });
-    return cpy;
-};
-exports.updateHexagon = updateHexagon;
-const focusHexagon = async (cpy, bal, ste) => {
-    return cpy;
-};
-exports.focusHexagon = focusHexagon;
-const hexmapHexagon = async (cpy, bal, ste) => {
-    bit = await ste.hunt(ActGph.READ_GRAPHIC, { src: bal.src });
+    var dat = bal.dat;
+    var spaceBit = dat.bit;
+    var left = spaceBit.left;
+    var width = spaceBit.width;
+    bit = await ste.hunt(ActGph.READ_GRAPHIC, { src: dat.gph });
     var graphic = bit.gphBit.dat.bit;
-    var hexmap = bal.bit;
     graphic.clear();
     const Hex = Honeycomb.extendHex({
-        size: Number(33),
+        size: Number(1),
         orientation: 'pointy', // default: 'pointy'
     });
     const Grid = Honeycomb.defineGrid(Hex);
-    const grid = Grid(hexmap.dat);
+    const grid = Grid(dat.bit.grid);
     var pct = .333;
-    var scl = 3;
+    var scl = 200;
+    graphic.x = left * scl * -1;
+    graphic.x += 150;
+    graphic.y += 111;
     graphic.lineStyle(3, 0x0000000, 1);
     grid.forEach((hex) => {
         const point = hex.toPoint();
@@ -47992,12 +48174,13 @@ const hexmapHexagon = async (cpy, bal, ste) => {
         graphic.moveTo(firstCorner.x * scl, firstCorner.y * scl * pct);
         otherCorners.forEach(({ x, y }) => graphic.lineTo(x * scl, y * scl * pct));
         graphic.lineTo(firstCorner.x * scl, firstCorner.y * scl * pct);
+        console.log("crn " + firstCorner.x);
     });
     if (bal.slv != null)
-        bal.slv({ hexBit: { idx: "hexmap-hexagon", dat: hexmap } });
+        bal.slv({ hexBit: { idx: "update-hexagon", dat } });
     return cpy;
 };
-exports.hexmapHexagon = hexmapHexagon;
+exports.updateHexagon = updateHexagon;
 const readHexagon = async (cpy, bal, ste) => {
     var slv = bal.slv;
     if (bal.idx == null)
@@ -48010,7 +48193,7 @@ const readHexagon = async (cpy, bal, ste) => {
 exports.readHexagon = readHexagon;
 const writeHexagon = async (cpy, bal, ste) => {
     bit = await ste.hunt(ActCol.WRITE_COLLECT, { idx: bal.idx, src: bal.src, dat: bal.dat, bit: ActHex.CREATE_HEXAGON });
-    ste.hunt(ActHex.UPDATE_HEXAGON, { idx: bal.idx, dat: bal.dat.dat });
+    ste.hunt(ActHex.UPDATE_HEXAGON, { idx: bal.idx, dat: bal.dat });
     if (bal.slv != null)
         bal.slv({ hexBit: { idx: "write-hexagon", dat: bit.clcBit.dat } });
     return cpy;
@@ -48030,9 +48213,11 @@ const createHexagon = async (cpy, bal, ste) => {
             continue;
         dat[key] = bal.dat[key];
     }
-    var hexagon = bal.dat.dat;
-    dat.frm = hexagon.typ;
-    dat.gph = hexagon.gph;
+    //var hexagon = bal.dat.dat;
+    //if (hexagon != null) {
+    //  dat.frm = hexagon.typ;
+    //  dat.gph = hexagon.gph;
+    // }
     if (dat.clr == null)
         dat.clr = 0x0000000;
     if (dat.lne == null)
@@ -48047,6 +48232,7 @@ const createHexagon = async (cpy, bal, ste) => {
         dat.frm = HEXAGON.HEXMAP;
     if (bal.src != null)
         bit = await ste.hunt(ActVsg.NEST_VISAGE, { src: bal.src, dat });
+    dat;
     bal.slv({ usrBit: { idx: "create-hexagon", dat: dat } });
     return cpy;
 };
@@ -48140,7 +48326,7 @@ exports.HexmapHexagon = HexmapHexagon;
 },{}],478:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.hexmapHexagon = exports.focusHexagon = exports.deleteHexagon = exports.removeHexagon = exports.createHexagon = exports.writeHexagon = exports.readHexagon = exports.updateHexagon = exports.initHexagon = void 0;
+exports.deleteHexagon = exports.removeHexagon = exports.createHexagon = exports.writeHexagon = exports.readHexagon = exports.updateHexagon = exports.initHexagon = void 0;
 var hexagon_buzz_1 = require("./buz/hexagon.buzz");
 Object.defineProperty(exports, "initHexagon", { enumerable: true, get: function () { return hexagon_buzz_1.initHexagon; } });
 var hexagon_buzz_2 = require("./buz/hexagon.buzz");
@@ -48155,10 +48341,6 @@ var hexagon_buzz_6 = require("./buz/hexagon.buzz");
 Object.defineProperty(exports, "removeHexagon", { enumerable: true, get: function () { return hexagon_buzz_6.removeHexagon; } });
 var hexagon_buzz_7 = require("./buz/hexagon.buzz");
 Object.defineProperty(exports, "deleteHexagon", { enumerable: true, get: function () { return hexagon_buzz_7.deleteHexagon; } });
-var hexagon_buzz_8 = require("./buz/hexagon.buzz");
-Object.defineProperty(exports, "focusHexagon", { enumerable: true, get: function () { return hexagon_buzz_8.focusHexagon; } });
-var hexagon_buzz_9 = require("./buz/hexagon.buzz");
-Object.defineProperty(exports, "hexmapHexagon", { enumerable: true, get: function () { return hexagon_buzz_9.hexmapHexagon; } });
 
 },{"./buz/hexagon.buzz":476}],479:[function(require,module,exports){
 "use strict";
@@ -48192,10 +48374,6 @@ function reducer(model = new hexagon_model_1.HexagonModel(), act, state) {
             return Buzz.removeHexagon(clone(model), act.bale, state);
         case Act.DELETE_HEXAGON:
             return Buzz.deleteHexagon(clone(model), act.bale, state);
-        case Act.FOCUS_HEXAGON:
-            return Buzz.focusHexagon(clone(model), act.bale, state);
-        case Act.HEXMAP_HEXAGON:
-            return Buzz.hexmapHexagon(clone(model), act.bale, state);
         default:
             return model;
     }
@@ -48358,7 +48536,6 @@ const createFocigon = async (cpy, bal, ste) => {
     if (bal.src != null)
         bit = await ste.hunt(ActVsg.NEST_VISAGE, { src: bal.src, dat });
     bal.slv({ fcgBit: { idx: "create-focigon", dat: dat } });
-    return cpy;
     return cpy;
 };
 exports.createFocigon = createFocigon;

@@ -1933,7 +1933,7 @@ function numberIsNaN (obj) {
 }).call(this)}).call(this,require("buffer").Buffer)
 },{"base64-js":1,"buffer":2,"ieee754":7}],3:[function(require,module,exports){
 (function (Buffer){(function (){
-//  Chance.js 1.1.11
+//  Chance.js 1.1.10
 //  https://chancejs.com
 //  (c) 2013 Victor Quinn
 //  Chance may be freely distributed or modified under the MIT license.
@@ -2007,7 +2007,7 @@ function numberIsNaN (obj) {
         return this;
     }
 
-    Chance.prototype.VERSION = "1.1.11";
+    Chance.prototype.VERSION = "1.1.10";
 
     // Random helper functions
     function initOptions(options, defaults) {
@@ -36559,21 +36559,22 @@ class ContainerBuildContext extends model_1.BuildContext {
 global.SPACE = require("../dist/002.space/hunt");
 global.SPACE.ActSpc = require("../dist/002.space/00.space.unit/space.action");
 global.SPACE.ActFoc = require("../dist/002.space/01.focus.unit/focus.action");
-global.SPACE.ActMap = require("../dist/002.space/02.hexmap.unit/hexmap.action");
+global.SPACE.ActMap = require("../dist/002.space/03.hexmap.unit/hexmap.action");
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../dist/002.space/00.space.unit/space.action":31,"../dist/002.space/01.focus.unit/focus.action":41,"../dist/002.space/02.hexmap.unit/hexmap.action":49,"../dist/002.space/hunt":83}],30:[function(require,module,exports){
-(function (process){(function (){
+},{"../dist/002.space/00.space.unit/space.action":31,"../dist/002.space/01.focus.unit/focus.action":46,"../dist/002.space/03.hexmap.unit/hexmap.action":61,"../dist/002.space/hunt":96}],30:[function(require,module,exports){
+(function (process,global){(function (){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.patchSpace = exports.readySpace = exports.editSpace = exports.updateSpace = exports.runSpace = exports.openSpace = exports.initSpace = void 0;
+exports.testSpace = exports.mergeSpace = exports.patchSpace = exports.readySpace = exports.editSpace = exports.updateSpace = exports.runSpace = exports.openSpace = exports.initSpace = void 0;
 const ActMnu = require("../../98.menu.unit/menu.action");
-const ActFoc = require("../../00.space.unit/space.action");
-const ActMap = require("../../02.hexmap.unit/hexmap.action");
+const ActFoc = require("../../01.focus.unit/focus.action");
+const ActMap = require("../../03.hexmap.unit/hexmap.action");
 const ActSpc = require("../../00.space.unit/space.action");
 const ActBus = require("../../99.bus.unit/bus.action");
 const ActVrt = require("../../act/vurt.action");
 const ActDsk = require("../../act/disk.action");
+var SHADE = global.shade;
 var bit, val, idx, dex, lst, dat, src;
 const initSpace = async (cpy, bal, ste) => {
     if (bal.dat != null)
@@ -36586,7 +36587,7 @@ const initSpace = async (cpy, bal, ste) => {
 };
 exports.initSpace = initSpace;
 const openSpace = async (cpy, bal, ste) => {
-    bit = await ste.bus(ActDsk.COPY_DISK, { src: './source', idx: '../gillisse/src' });
+    bit = await ste.bus(ActDsk.COPY_DISK, { src: './vue', idx: '../gillisse/src' });
     bit = await ste.hunt(ActSpc.RUN_SPACE, {});
     const open = require('open');
     var loc = './vrt.opn.bat';
@@ -36627,6 +36628,7 @@ const updateSpace = async (cpy, bal, ste) => {
         var index = bit.dskBit.dat;
         bit = await ste.bus(ActDsk.WRITE_DISK, { src: '../gillisse/public/jsx/index.js', dat: index });
         bit = await ste.bus(ActDsk.WRITE_DISK, { src: '../gillisse/index.html', dat: html });
+        bit = await ste.bus(ActDsk.COPY_DISK, { src: './vue', idx: '../gillisse/src' });
         setTimeout(() => {
             if (bal.slv != null)
                 bal.slv({ shdBit: { idx: "update-space" } });
@@ -36669,13 +36671,51 @@ const patchSpace = async (cpy, bal, ste) => {
     return cpy;
 };
 exports.patchSpace = patchSpace;
+const mergeSpace = async (cpy, bal, ste) => {
+    bit = await ste.bus(ActDsk.INDEX_DISK, { src: './data/hexmap' });
+    lst = bit.dskBit.lst;
+    lst.forEach((a, b) => {
+        lst[b] = '../gillisse/public/dat/hexmap/' + a;
+    });
+    bit = await ste.bus(ActDsk.COPY_DISK, { src: './data/hexmap', idx: '../gillisse/public/dat/hexmap' });
+    if (bal.slv != null)
+        bal.slv({ spcBit: { idx: "merge-space", lst } });
+    return cpy;
+};
+exports.mergeSpace = mergeSpace;
 var patch = (ste, type, bale) => ste.dispatch({ type, bale });
+const testSpace = async (cpy, bal, ste) => {
+    //bit = await ste.hunt( ActCan.ADD_CONTAINER, { idx: 'fce-can-00', dat: bit.fmeBit.dat });
+    bit = await SHADE.hunt(SHADE.ActGph.WRITE_GRAPHIC, { idx: 'gph00', src: 'vsg00' });
+    bit = await SHADE.hunt(SHADE.ActCan.ADD_CONTAINER, { idx: 'fce-can-00', dat: bit.gphBit.dat });
+    //bit = await ste.hunt(ActGph.WRITE_GRAPHIC, { idx: 'gph01', src: 'vsg00' });
+    //bit = await ste.hunt(ActCan.ADD_CONTAINER, { idx: 'fce-can-00', dat: bit.gphBit.dat });
+    const response = await fetch("./dat/hexmap/000.swamp.json");
+    const jsonData = await response.json();
+    bit = await ste.hunt(ActMap.ADD_HEXMAP, { idx: 'map00', dat: { gph: 'gph00', dat: jsonData } });
+    dat = bit.mapBit.dat;
+    bit = await SHADE.hunt(SHADE.ActHex.WRITE_HEXAGON, { idx: 'hex00', src: 'vsg00', dat });
+    //bit = await SHADE.hunt(SHADE.ActFme.WRITE_FRAME, { idx: 'fme00', src: 'vsg00' });
+    //bit = await SHADE.hunt(SHADE.ActCan.ADD_CONTAINER, { idx: 'fce-can-00', dat: bit.fmeBit.dat });
+    //bit = await SHADE.hunt(SHADE.ActGph.WRITE_GRAPHIC, { idx: 'gph00', src: 'vsg00' });
+    //bit = await SHADE.hunt(SHADE.ActCan.ADD_CONTAINER, { idx: 'fce-can-00', dat: bit.gphBit.dat });
+    //bit = await SHADE.hunt(SHADE.ActGph.WRITE_GRAPHIC, { idx: 'gph01', src: 'vsg00' });
+    //bit = await SHADE.hunt(SHADE.ActCan.ADD_CONTAINER, { idx: 'fce-can-00', dat: bit.gphBit.dat });
+    //bit = await ste.hunt(ActMap.WRITE_HEXMAP, { idx: 'map00', dat: { gph: 'gph00' } });
+    //var hexmap = bit.mapBit.dat;
+    //bit = await SHADE.hunt(SHADE.ActHex.WRITE_HEXAGON, { idx: 'hex00', src: 'vsg00', dat: { dat: hexmap } });
+    //bit = await ste.hunt( ActFoc.WRITE_FOCUS, { idx: 'foc00', dat: { gph: 'gph01' } });
+    //var focus = bit.focBit.dat;
+    //bit = await SHADE.hunt(SHADE.ActHex.WRITE_HEXAGON, { idx: 'hex01', src: 'vsg00', dat: {dat:focus}   });
+    return cpy;
+};
+exports.testSpace = testSpace;
 
-}).call(this)}).call(this,require('_process'))
-},{"../../00.space.unit/space.action":31,"../../02.hexmap.unit/hexmap.action":49,"../../98.menu.unit/menu.action":65,"../../99.bus.unit/bus.action":70,"../../act/disk.action":78,"../../act/vurt.action":82,"_process":13,"child_process":undefined,"open":undefined}],31:[function(require,module,exports){
+}).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"../../00.space.unit/space.action":31,"../../01.focus.unit/focus.action":46,"../../03.hexmap.unit/hexmap.action":61,"../../98.menu.unit/menu.action":78,"../../99.bus.unit/bus.action":83,"../../act/disk.action":91,"../../act/vurt.action":95,"_process":13,"child_process":undefined,"open":undefined}],31:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PatchSpace = exports.PATCH_SPACE = exports.RunSpace = exports.RUN_SPACE = exports.OpenSpace = exports.OPEN_SPACE = exports.EditSpace = exports.EDIT_SPACE = exports.ReadySpace = exports.READY_SPACE = exports.UpdateSpace = exports.UPDATE_SPACE = exports.InitSpace = exports.INIT_SPACE = void 0;
+exports.TestSpace = exports.TEST_SPACE = exports.MergeSpace = exports.MERGE_SPACE = exports.PatchSpace = exports.PATCH_SPACE = exports.RunSpace = exports.RUN_SPACE = exports.OpenSpace = exports.OPEN_SPACE = exports.EditSpace = exports.EDIT_SPACE = exports.ReadySpace = exports.READY_SPACE = exports.UpdateSpace = exports.UPDATE_SPACE = exports.InitSpace = exports.INIT_SPACE = void 0;
 // Space actions
 exports.INIT_SPACE = "[Space action] Init Space";
 class InitSpace {
@@ -36733,11 +36773,27 @@ class PatchSpace {
     }
 }
 exports.PatchSpace = PatchSpace;
+exports.MERGE_SPACE = "[Merge action] Merge Space";
+class MergeSpace {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.MERGE_SPACE;
+    }
+}
+exports.MergeSpace = MergeSpace;
+exports.TEST_SPACE = "[Test action] Test Space";
+class TestSpace {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.TEST_SPACE;
+    }
+}
+exports.TestSpace = TestSpace;
 
 },{}],32:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.patchSpace = exports.runSpace = exports.openSpace = exports.editSpace = exports.readySpace = exports.updateSpace = exports.initSpace = void 0;
+exports.testSpace = exports.mergeSpace = exports.patchSpace = exports.runSpace = exports.openSpace = exports.editSpace = exports.readySpace = exports.updateSpace = exports.initSpace = void 0;
 var space_buzz_1 = require("./buz/space.buzz");
 Object.defineProperty(exports, "initSpace", { enumerable: true, get: function () { return space_buzz_1.initSpace; } });
 var space_buzz_2 = require("./buz/space.buzz");
@@ -36752,6 +36808,10 @@ var space_buzz_6 = require("./buz/space.buzz");
 Object.defineProperty(exports, "runSpace", { enumerable: true, get: function () { return space_buzz_6.runSpace; } });
 var space_buzz_7 = require("./buz/space.buzz");
 Object.defineProperty(exports, "patchSpace", { enumerable: true, get: function () { return space_buzz_7.patchSpace; } });
+var space_buzz_8 = require("./buz/space.buzz");
+Object.defineProperty(exports, "mergeSpace", { enumerable: true, get: function () { return space_buzz_8.mergeSpace; } });
+var space_buzz_9 = require("./buz/space.buzz");
+Object.defineProperty(exports, "testSpace", { enumerable: true, get: function () { return space_buzz_9.testSpace; } });
 
 },{"./buz/space.buzz":30}],33:[function(require,module,exports){
 "use strict";
@@ -36791,6 +36851,10 @@ function reducer(model = new space_model_1.SpaceModel(), act, state) {
             return Buzz.runSpace(clone(model), act.bale, state);
         case Act.PATCH_SPACE:
             return Buzz.patchSpace(clone(model), act.bale, state);
+        case Act.MERGE_SPACE:
+            return Buzz.mergeSpace(clone(model), act.bale, state);
+        case Act.TEST_SPACE:
+            return Buzz.testSpace(clone(model), act.bale, state);
         default:
             return model;
     }
@@ -36821,12 +36885,12 @@ SpaceUnit = __decorate([
 ], SpaceUnit);
 exports.default = SpaceUnit;
 
-},{"../99.core/state":76,"typescript-ioc":28}],36:[function(require,module,exports){
+},{"../99.core/state":89,"typescript-ioc":28}],36:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.openFocus = exports.selectFocus = exports.visionFocus = exports.locateFocus = exports.spinLeftFocus = exports.spinRightFocus = exports.centerFocus = exports.cornerFocus = exports.listFocus = exports.updateFocus = exports.deleteFocus = exports.removeFocus = exports.writeFocus = exports.readFocus = exports.initFocus = void 0;
+exports.openFocus = exports.selectFocus = exports.locateFocus = exports.centerFocus = exports.cornerFocus = exports.listFocus = exports.deleteFocus = exports.removeFocus = exports.writeFocus = exports.readFocus = exports.initFocus = void 0;
 const ActFoc = require("../focus.action");
-const ActMap = require("../../02.hexmap.unit/hexmap.action");
+const ActMap = require("../../03.hexmap.unit/hexmap.action");
 const ActCol = require("../../97.collect.unit/collect.action");
 var bit, val, idx, dex, lst, dat;
 const initFocus = (cpy, bal, ste) => {
@@ -36848,9 +36912,10 @@ exports.readFocus = readFocus;
 const writeFocus = async (cpy, bal, ste) => {
     if (bal.idx == null)
         bal.idx = "foc00";
+    if (bal.val != 1)
+        ste.hunt(ActFoc.UPDATE_FOCUS, { idx: bal.idx });
     bit = await ste.hunt(ActCol.WRITE_COLLECT, { idx: bal.idx, src: bal.src, dat: bal.dat, bit: ActFoc.CREATE_FOCUS });
     var spot = bit.clcBit.dat;
-    ste.hunt(ActFoc.UPDATE_FOCUS, { idx: bal.idx });
     if (bal.slv != null)
         bal.slv({ focBit: { idx: "write-focus", dat: bit.clcBit.dat } });
     return cpy;
@@ -36866,12 +36931,6 @@ const deleteFocus = (cpy, bal, ste) => {
     return cpy;
 };
 exports.deleteFocus = deleteFocus;
-const updateFocus = (cpy, bal, ste) => {
-    if (bal.slv != null)
-        bal.slv({ focBit: { idx: "update-focus" } });
-    return cpy;
-};
-exports.updateFocus = updateFocus;
 const listFocus = async (cpy, bal, ste) => {
     dat = null;
     bit = await ste.hunt(ActCol.FETCH_COLLECT, { val: 0, bit: ActFoc.CREATE_FOCUS });
@@ -36891,13 +36950,10 @@ const listFocus = async (cpy, bal, ste) => {
 };
 exports.listFocus = listFocus;
 const cornerFocus = async (cpy, bal, ste) => {
-    //bit = await ste.hunt(ActFoc.READ_FOCUS, { idx: bal.idx })
     var spot = bal.dat;
     var grid;
-    if (spot.map == null) {
-        bit = await ste.hunt(ActMap.WRITE_HEXMAP, { idx: "corner-map" });
-        grid = bit.mapBit.dat.dat;
-    }
+    bit = await ste.hunt(ActMap.READ_HEXMAP, { idx: bal.idx });
+    grid = bit.mapBit.dat.grid;
     var hex = grid.get({ x: spot.x, y: spot.y });
     const point = hex.toPoint();
     lst = hex.corners().map((corner) => corner.add(point));
@@ -36912,38 +36968,325 @@ const centerFocus = async (cpy, bal, ste) => {
         bal.slv({ focBit: { idx: "center-focus", dat } });
 };
 exports.centerFocus = centerFocus;
-const spinRightFocus = async (cpy, bal, ste) => {
+const locateFocus = async (cpy, bal, ste) => {
     bit = await ste.hunt(ActFoc.READ_FOCUS, { idx: bal.idx });
-    var dat = bit.focBit.dat;
-    var face;
-    switch (dat.face) {
-        case DIRECTION.NORTH_EAST:
-            face = DIRECTION.NORTH_WEST;
-            break;
-        case DIRECTION.NORTH_WEST:
-            face = DIRECTION.WEST;
-            break;
-        case DIRECTION.WEST:
-            face = DIRECTION.SOUTH_WEST;
-            break;
-        case DIRECTION.SOUTH_WEST:
-            face = DIRECTION.SOUTH_EAST;
-            break;
-        case DIRECTION.SOUTH_EAST:
-            face = DIRECTION.EAST;
-            break;
-        case DIRECTION.EAST:
-            face = DIRECTION.NORTH_EAST;
-            break;
-    }
-    dat.move = "";
-    dat.face = face;
-    bit = await ste.hunt(ActFoc.WRITE_FOCUS, { idx: dat.idx, dat });
+    var spot = bit.focBit.dat;
+    bit = await ste.hunt(ActMap.READ_HEXMAP, { idx: spot.map });
+    var map = bit.mapBit.dat;
+    var grid = map.dat;
+    var hex = grid.get({ x: spot.x, y: spot.y });
+    var idx = spot.map + "-" + spot.x + "-" + spot.y;
+    spot.loc = hex;
     if (bal.slv != null)
-        bal.slv({ focBit: { idx: "spin-right-focus", dat } });
+        bal.slv({ focBit: { idx: "locate-focus", dat: spot } });
     return cpy;
 };
-exports.spinRightFocus = spinRightFocus;
+exports.locateFocus = locateFocus;
+const selectFocus = async (cpy, bal, ste) => {
+    bit = await ste.hunt(ActFoc.READ_FOCUS, { idx: bal.idx });
+    var spot = bit.focBit.dat;
+    cpy.select = spot;
+    //bit = await ste.hunt( ActFoc.VISION_FOCUS, { idx: bal.idx })
+    if (bal.slv != null)
+        bal.slv({ focBit: { idx: "select-focus", dat: cpy.select } });
+    return cpy;
+};
+exports.selectFocus = selectFocus;
+const openFocus = (cpy, bal, ste) => {
+    //var slv = bal.slv;
+    //bal.slv = null;
+    //var bit: FocusBit = { idx:'idx' , src:'hmm', x:0, y:0, };
+    //if (cpy.focusBits[bit.idx] != null) {
+    //  var dat = cpy.focusBitList[cpy.focusBits[bit.idx]];
+    //  if (bal.slv != null) bal.slv({ focBit: { idx: "open-focus", dat } });
+    //  return cpy;
+    //}
+    //bit.x = Number(bit.x);
+    // bit.y = Number(bit.y);
+    // bit.src = bal.src;
+    //if (bit.src == null) bit.src = "none";
+    //if (isNaN(bit.x)) bit.x = 0;
+    //if (isNaN(bit.y)) bit.y = 0;
+    //if (bit.x == null) bit.x = 0;
+    //if (bit.y == null) bit.y = 0;
+    //if (bit.face == null) bit.face = "E";
+    //if (bit.past == null) bit.past = [];
+    //if (bit.update == null) bit.update = 0;
+    //if (bit.clock == null) bit.clock = 0;
+    //if (bit.updateSpeed == null) bit.updateSpeed = 11;
+    //if (bit.turnSpeed == null) bit.turnSpeed = 11;
+    //if (bit.creation == null) bit.creation = Math.floor(Date.now() / 1000);
+    //if (bit.camX == null) bit.camX = 0.5;
+    //if (bit.camY == null) bit.camY = 0.5;
+    //if (bit.spin == null) bit.spin = true;
+    //cpy.focusBits[bit.idx] = cpy.focusBitList.length;
+    //cpy.focusBitList.push(bit);
+    if (bal.slv != null)
+        bal.slv({ focBit: { idx: "open-focus", dat: {} } });
+    return cpy;
+};
+exports.openFocus = openFocus;
+
+},{"../../03.hexmap.unit/hexmap.action":61,"../../97.collect.unit/collect.action":67,"../focus.action":46}],37:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.awakeFocus = void 0;
+const ActFoc = require("../focus.action");
+var bit, val, idx, dex, lst, dat;
+const awakeFocus = async (cpy, bal, ste) => {
+    bit = await ste.hunt(ActFoc.WRITE_FOCUS, { idx: bal.idx, val: 1, dat: { awake: true } });
+    bit = await ste.hunt(ActFoc.UPDATE_FOCUS, { idx: bal.idx });
+    bit = await ste.hunt(ActFoc.WRITE_FOCUS, { idx: bal.idx, val: 1 });
+    if (bal.slv != null)
+        bal.slv({ focBit: { idx: "backward-focus", dat } });
+};
+exports.awakeFocus = awakeFocus;
+
+},{"../focus.action":46}],38:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.backwardFocus = void 0;
+const ActFoc = require("../focus.action");
+var bit, val, idx, dex, lst, dat;
+const backwardFocus = async (cpy, bal, ste) => {
+    bit = await ste.hunt(ActFoc.READ_FOCUS, { idx: bal.idx });
+    var spot = bit.focBit.dat;
+    var x = spot.x;
+    var y = spot.y;
+    var face = spot.face;
+    var bonds;
+    //bit = await ste.hunt(ActFoc.CENTER_FOCUS, {idx:spot.idx, dat: spot } )
+    if (spot.face == DIRECTION.WEST) {
+        bit = await ste.hunt(ActFoc.BOND_FOCUS, { idx: spot.idx });
+        bonds = bit.focBit.dat;
+        var bond = bonds[DIRECTION.WEST];
+        if (bond != null) {
+            x = bond.x;
+            y = bond.y;
+        }
+    }
+    if (spot.face == DIRECTION.EAST)
+        face = DIRECTION.WEST;
+    if (spot.face == DIRECTION.NORTH_WEST)
+        face = DIRECTION.WEST;
+    if (spot.face == DIRECTION.NORTH_EAST)
+        face = DIRECTION.NORTH_WEST;
+    if (spot.face == DIRECTION.SOUTH_WEST)
+        face = DIRECTION.WEST;
+    if (spot.face == DIRECTION.SOUTH_EAST)
+        face = DIRECTION.SOUTH_WEST;
+    //patch(ste, ActFoc.LIST_VISON_FOCUS, foci);
+    //locateHex(ste, foci);
+    bit = await ste.hunt(ActFoc.WRITE_FOCUS, { idx: bal.idx, dat: { x, y, bonds, face } });
+    if (bal.slv != null)
+        bal.slv({ focBit: { idx: "backward-focus", dat } });
+};
+exports.backwardFocus = backwardFocus;
+const DIRECTION = require("../../val/direction");
+
+},{"../../val/direction":97,"../focus.action":46}],39:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.bondFocus = void 0;
+const ActFoc = require("../focus.action");
+const ActMap = require("../../03.hexmap.unit/hexmap.action");
+var bit, val, idx, dex, lst, dat;
+const bondFocus = async (cpy, bal, ste) => {
+    bit = await ste.hunt(ActFoc.READ_FOCUS, { idx: bal.idx });
+    var spot = bit.focBit.dat;
+    bit = await ste.hunt(ActMap.READ_HEXMAP, { idx: spot.src });
+    var map = bit.mapBit.dat;
+    var grid = map.grid;
+    if (grid == null)
+        throw new Error("no map present for " + bal.src);
+    var hex = grid.get({ x: spot.x, y: spot.y });
+    var bonds = {};
+    var item;
+    var face = bal.src;
+    item = grid.neighborsOf(hex, compassConvertor(face));
+    if (item[0] == null) {
+        bonds = null;
+    }
+    else {
+        if (item[0] != null)
+            bonds[face] = { x: item[0].x, y: item[0].y };
+    }
+    //GIVE ME SOME CORNERS
+    //var hex = grid.get({ x: spot.x, y: spot.y });
+    //const point = hex.toPoint();
+    //spot.corners = hex.corners().map((corner) => corner.add(point));
+    //spot.area = [];
+    //spot.vision = [];
+    //not sure why this is needed 04.03.23
+    //if (spot.bondList == null) spot.bondList = [];
+    //if (spot.viewList == null) spot.viewList = [];
+    //spot.bondList.forEach((a) => {
+    //  var b = grid.get({ x: a.x, y: a.y });
+    //  const p = b.toPoint();
+    //  var crn = hex.corners().map((corner) => corner.add(p));
+    //  spot.area.push(crn);
+    //});
+    //spot.viewList.forEach((a) => {
+    //  var b = grid.get({ x: a.x, y: a.y });
+    //  const p = b.toPoint();
+    //  var crn = hex.corners().map((corner) => corner.add(p));
+    //  spot.vision.push(crn);
+    //});
+    //console.log("vis " + spot.vision.length);
+    bonds;
+    console.log("bonds::: " + JSON.stringify(bonds));
+    if (bal.slv != null)
+        bal.slv({ focBit: { idx: "orbit-focus", dat: bonds } });
+    return cpy;
+};
+exports.bondFocus = bondFocus;
+const compassConvertor = (val) => {
+    var result = 0;
+    switch (val) {
+        case DIRECTION.NORTH_EAST:
+            result = 5;
+            break;
+        case DIRECTION.EAST:
+            result = 0;
+            break;
+        case DIRECTION.SOUTH_EAST:
+            result = 1;
+            break;
+        case DIRECTION.SOUTH_WEST:
+            result = 2;
+            break;
+        case DIRECTION.WEST:
+            result = 3;
+            break;
+        case DIRECTION.NORTH_WEST:
+            result = 4;
+            break;
+    }
+    return result;
+};
+const DIRECTION = require("../../val/direction");
+
+},{"../../03.hexmap.unit/hexmap.action":61,"../../val/direction":97,"../focus.action":46}],40:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.createFocus = void 0;
+const ActFoc = require("../focus.action");
+var bit, val, idx, dex, lst, dat;
+const createFocus = async (cpy, bal, ste) => {
+    var dat = { idx: bal.idx, src: bal.src, typ: SPACE.FOCUS };
+    for (var key in bal.dat) {
+        dat[key] = bal.dat[key];
+    }
+    if (dat.gph == null)
+        dat.gph = 'None';
+    dat.gph;
+    if (dat.frm == null)
+        dat.frm = SHAPE.RECTANGLE;
+    if (dat.x == null)
+        dat.x = 0;
+    if (dat.y == null)
+        dat.y = 0;
+    if (dat.h == null)
+        dat.h = 1;
+    if (dat.w == null)
+        dat.w = 1;
+    if (dat.awake == null)
+        dat.awake = false;
+    if (dat.face == null)
+        dat.face = 'E';
+    if (dat.past == null)
+        dat.past = [];
+    if (dat.update == null)
+        dat.update = 0;
+    if (dat.clock == null)
+        dat.clock = 0;
+    if (dat.updateSpeed == null)
+        dat.updateSpeed = 11;
+    if (dat.turnSpeed == null)
+        dat.turnSpeed = 11;
+    if (dat.spin == null)
+        dat.spin = true;
+    try {
+        const Hex = Honeycomb.extendHex({
+            size: Number(1),
+            orientation: 'pointy', // default: 'pointy'
+        });
+        const Grid = Honeycomb.defineGrid(Hex);
+        var grid;
+        grid = Grid.rectangle({ width: dat.w, height: dat.h });
+        //switch (dat.frm) {
+        //  case SHAPE.RECTANGLE:
+        //    break;
+        //  case SHAPE.TRIANGLE:
+        //    grid = Grid.triangle({ size: dat.w });
+        //    break;
+        //  case SHAPE.HEXAGON:
+        //    grid = Grid.hexagon({ radius: dat.w, center: [dat.w, dat.w] });
+        //    break;
+        //  case SHAPE.PARALLELOGRAM:
+        //    grid = Grid.parallelogram({ width: dat.w, height: dat.h });
+        //   break;
+        // }
+        dat.grid = grid;
+    }
+    catch (e) {
+        dat.grid = {};
+        console.log("errror in the create focus");
+    }
+    //now let us create the corners
+    bit = await ste.hunt(ActFoc.CORNER_FOCUS, { idx: dat.src, dat });
+    dat.corners = bit.focBit.lst;
+    bal.slv({ focBit: { idx: "create-focus", dat: dat } });
+    return cpy;
+};
+exports.createFocus = createFocus;
+const Honeycomb = require("honeycomb-grid");
+const SHAPE = require("../../val/shape");
+const SPACE = require("../../val/space");
+
+},{"../../val/shape":98,"../../val/space":99,"../focus.action":46,"honeycomb-grid":6}],41:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.forwardFocus = void 0;
+const ActFoc = require("../focus.action");
+var bit, val, idx, dex, lst, dat;
+const forwardFocus = async (cpy, bal, ste) => {
+    bit = await ste.hunt(ActFoc.READ_FOCUS, { idx: bal.idx });
+    var spot = bit.focBit.dat;
+    //bit = await ste.hunt(ActFoc.CENTER_FOCUS, {idx:spot.idx, dat: spot } )
+    var x = spot.x;
+    var y = spot.y;
+    var face = spot.face;
+    var bonds = spot.bonds;
+    if (bonds == null) {
+        //nothing happens
+    }
+    else {
+        const now = bonds[face];
+        x = now.x;
+        y = now.y;
+    }
+    bit = await ste.hunt(ActFoc.BOND_FOCUS, { idx: bal.idx, src: face });
+    var bonds = bit.focBit.dat;
+    spot.bonds = bonds;
+    spot;
+    bit = await ste.hunt(ActFoc.WRITE_FOCUS, { idx: bal.idx, dat: { x, y, bonds, face } });
+    bit = await ste.hunt(ActFoc.BOND_FOCUS, { idx: bal.idx, src: face });
+    var bonds = bit.focBit.dat;
+    spot.bonds = bonds;
+    spot;
+    bit = await ste.hunt(ActFoc.WRITE_FOCUS, { idx: bal.idx, dat: { x, y, bonds, face } });
+    if (bal.slv != null)
+        bal.slv({ focBit: { idx: "forward-focus", dat } });
+};
+exports.forwardFocus = forwardFocus;
+
+},{"../focus.action":46}],42:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.spinLeftFocus = void 0;
+const ActFoc = require("../focus.action");
+var bit, val, idx, dex, lst, dat;
 const spinLeftFocus = async (cpy, bal, ste) => {
     bit = await ste.hunt(ActFoc.READ_FOCUS, { idx: bal.idx });
     var dat = bit.focBit.dat;
@@ -36970,32 +37313,104 @@ const spinLeftFocus = async (cpy, bal, ste) => {
     }
     dat.move = "";
     dat.face = face;
+    bit = await ste.hunt(ActFoc.BOND_FOCUS, { idx: dat.idx, src: dat.face });
+    var bonds = bit.focBit.dat;
+    dat.bonds = bonds;
     bit = await ste.hunt(ActFoc.WRITE_FOCUS, { idx: dat.idx, dat });
     if (bal.slv != null)
         bal.slv({ focBit: { idx: "spin-right-focus", dat } });
     return cpy;
 };
 exports.spinLeftFocus = spinLeftFocus;
-const locateFocus = async (cpy, bal, ste) => {
+const DIRECTION = require("../../val/direction");
+
+},{"../../val/direction":97,"../focus.action":46}],43:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.spinRightFocus = void 0;
+const ActFoc = require("../focus.action");
+var bit, val, idx, dex, lst, dat;
+const spinRightFocus = async (cpy, bal, ste) => {
     bit = await ste.hunt(ActFoc.READ_FOCUS, { idx: bal.idx });
-    var spot = bit.focBit.dat;
-    bit = await ste.hunt(ActMap.READ_HEXMAP, { idx: spot.map });
-    var map = bit.mapBit.dat;
-    var grid = map.dat;
-    var hex = grid.get({ x: spot.x, y: spot.y });
-    var idx = spot.map + "-" + spot.x + "-" + spot.y;
-    spot.loc = hex;
+    var dat = bit.focBit.dat;
+    var face;
+    switch (dat.face) {
+        case DIRECTION.NORTH_EAST:
+            face = DIRECTION.NORTH_WEST;
+            break;
+        case DIRECTION.NORTH_WEST:
+            face = DIRECTION.WEST;
+            break;
+        case DIRECTION.WEST:
+            face = DIRECTION.SOUTH_WEST;
+            break;
+        case DIRECTION.SOUTH_WEST:
+            face = DIRECTION.SOUTH_EAST;
+            break;
+        case DIRECTION.SOUTH_EAST:
+            face = DIRECTION.EAST;
+            break;
+        case DIRECTION.EAST:
+            face = DIRECTION.NORTH_EAST;
+            break;
+    }
+    dat.move = "";
+    dat.face = face;
+    bit = await ste.hunt(ActFoc.BOND_FOCUS, { idx: dat.idx, src: dat.face });
+    var bonds = bit.focBit.dat;
+    dat.bonds = bonds;
+    bit = await ste.hunt(ActFoc.WRITE_FOCUS, { idx: dat.idx, dat });
     if (bal.slv != null)
-        bal.slv({ focBit: { idx: "locate-focus", dat: spot } });
+        bal.slv({ focBit: { idx: "spin-right-focus", dat } });
     return cpy;
 };
-exports.locateFocus = locateFocus;
+exports.spinRightFocus = spinRightFocus;
+const DIRECTION = require("../../val/direction");
+
+},{"../../val/direction":97,"../focus.action":46}],44:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.updateFocus = void 0;
+const ActFoc = require("../focus.action");
+var bit, val, idx, dex, lst, dat;
+var flag = false;
+const updateFocus = async (cpy, bal, ste) => {
+    if (flag == false) {
+        flag = true;
+        if (bal.slv != null)
+            bal.slv({ focBit: { idx: "update-focus" } });
+        return;
+    }
+    bit = await ste.hunt(ActFoc.READ_FOCUS, { idx: bal.idx });
+    var spot = bit.focBit.dat;
+    var viewList = [];
+    if (spot.awake == true) {
+        bit = await ste.hunt(ActFoc.VISION_FOCUS, { idx: bal.idx });
+        viewList = bit.focBit.lst;
+        bit = await ste.hunt(ActFoc.WRITE_FOCUS, { idx: bal.idx, val: 1, dat: { viewList } });
+    }
+    else {
+        bit = await ste.hunt(ActFoc.WRITE_FOCUS, { idx: bal.idx, val: 1, dat: { viewList } });
+    }
+    if (bal.slv != null)
+        bal.slv({ focBit: { idx: "update-focus" } });
+    return cpy;
+};
+exports.updateFocus = updateFocus;
+
+},{"../focus.action":46}],45:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.visionFocus = void 0;
+const ActFoc = require("../focus.action");
+const ActMap = require("../../03.hexmap.unit/hexmap.action");
+var bit, val, idx, dex, lst, dat;
 const visionFocus = async (cpy, bal, ste) => {
     bit = await ste.hunt(ActFoc.READ_FOCUS, { idx: bal.idx });
     var spot = bit.focBit.dat;
-    bit = await ste.hunt(ActMap.READ_HEXMAP, { idx: spot.map });
+    bit = await ste.hunt(ActMap.READ_HEXMAP, { idx: spot.src });
     var map = bit.mapBit.dat;
-    var grid = map.dat;
+    var grid = map.grid;
     var size = 3;
     var check = [{ face: spot.face, x: spot.x, y: spot.y }];
     switch (spot.face) {
@@ -37043,6 +37458,9 @@ const visionFocus = async (cpy, bal, ste) => {
             }
         }
     });
+    output;
+    if (bal.slv != null)
+        bal.slv({ focBit: { idx: "vision-focus", lst: output } });
     //var item = grid.neighborsOf(hex, compassConvertor(RCT.EAST));
     //if (item[0] != null) output.push({ x: item[0].x, y: item[0].y });
     //foci.viewList = output;
@@ -37052,49 +37470,6 @@ const visionFocus = async (cpy, bal, ste) => {
     return cpy;
 };
 exports.visionFocus = visionFocus;
-const selectFocus = async (cpy, bal, ste) => {
-    bit = await ste.hunt(ActFoc.READ_FOCUS, { idx: bal.idx });
-    var spot = bit.focBit.dat;
-    cpy.select = spot;
-    if (bal.slv != null)
-        bal.slv({ focBit: { idx: "select-focus", dat: cpy.select } });
-    return cpy;
-};
-exports.selectFocus = selectFocus;
-const openFocus = (cpy, bal, ste) => {
-    //var slv = bal.slv;
-    //bal.slv = null;
-    //var bit: FocusBit = { idx:'idx' , src:'hmm', x:0, y:0, };
-    //if (cpy.focusBits[bit.idx] != null) {
-    //  var dat = cpy.focusBitList[cpy.focusBits[bit.idx]];
-    //  if (bal.slv != null) bal.slv({ focBit: { idx: "open-focus", dat } });
-    //  return cpy;
-    //}
-    //bit.x = Number(bit.x);
-    // bit.y = Number(bit.y);
-    // bit.src = bal.src;
-    //if (bit.src == null) bit.src = "none";
-    //if (isNaN(bit.x)) bit.x = 0;
-    //if (isNaN(bit.y)) bit.y = 0;
-    //if (bit.x == null) bit.x = 0;
-    //if (bit.y == null) bit.y = 0;
-    //if (bit.face == null) bit.face = "E";
-    //if (bit.past == null) bit.past = [];
-    //if (bit.update == null) bit.update = 0;
-    //if (bit.clock == null) bit.clock = 0;
-    //if (bit.updateSpeed == null) bit.updateSpeed = 11;
-    //if (bit.turnSpeed == null) bit.turnSpeed = 11;
-    //if (bit.creation == null) bit.creation = Math.floor(Date.now() / 1000);
-    //if (bit.camX == null) bit.camX = 0.5;
-    //if (bit.camY == null) bit.camY = 0.5;
-    //if (bit.spin == null) bit.spin = true;
-    //cpy.focusBits[bit.idx] = cpy.focusBitList.length;
-    //cpy.focusBitList.push(bit);
-    if (bal.slv != null)
-        bal.slv({ focBit: { idx: "open-focus", dat: {} } });
-    return cpy;
-};
-exports.openFocus = openFocus;
 const compassConvertor = (val) => {
     var result = 0;
     switch (val) {
@@ -37121,260 +37496,10 @@ const compassConvertor = (val) => {
 };
 const DIRECTION = require("../../val/direction");
 
-},{"../../02.hexmap.unit/hexmap.action":49,"../../97.collect.unit/collect.action":55,"../../val/direction":84,"../focus.action":41}],37:[function(require,module,exports){
+},{"../../03.hexmap.unit/hexmap.action":61,"../../val/direction":97,"../focus.action":46}],46:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.backwardFocus = void 0;
-const ActFoc = require("../focus.action");
-var bit, val, idx, dex, lst, dat;
-const backwardFocus = async (cpy, bal, ste) => {
-    bit = await ste.hunt(ActFoc.READ_FOCUS, { idx: bal.idx });
-    var spot = bit.focBit.dat;
-    var x = spot.x;
-    var y = spot.y;
-    var face = spot.face;
-    var bonds;
-    //bit = await ste.hunt(ActFoc.CENTER_FOCUS, {idx:spot.idx, dat: spot } )
-    if (spot.face == DIRECTION.WEST) {
-        bit = await ste.hunt(ActFoc.BOND_FOCUS, { idx: spot.idx });
-        bonds = bit.focBit.dat;
-        var bond = bonds[DIRECTION.WEST];
-        if (bond != null) {
-            x = bond.x;
-            y = bond.y;
-        }
-    }
-    if (spot.face == DIRECTION.EAST)
-        face = DIRECTION.WEST;
-    if (spot.face == DIRECTION.NORTH_WEST)
-        face = DIRECTION.WEST;
-    if (spot.face == DIRECTION.NORTH_EAST)
-        face = DIRECTION.NORTH_WEST;
-    if (spot.face == DIRECTION.SOUTH_WEST)
-        face = DIRECTION.WEST;
-    if (spot.face == DIRECTION.SOUTH_EAST)
-        face = DIRECTION.SOUTH_WEST;
-    //patch(ste, ActFoc.LIST_VISON_FOCUS, foci);
-    //locateHex(ste, foci);
-    bit = await ste.hunt(ActFoc.WRITE_FOCUS, { idx: bal.idx, dat: { x, y, bonds, face } });
-    if (bal.slv != null)
-        bal.slv({ focBit: { idx: "backward-focus", dat } });
-};
-exports.backwardFocus = backwardFocus;
-const DIRECTION = require("../../val/direction");
-
-},{"../../val/direction":84,"../focus.action":41}],38:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.bondFocus = void 0;
-const ActFoc = require("../focus.action");
-const ActMap = require("../../02.hexmap.unit/hexmap.action");
-var bit, val, idx, dex, lst, dat;
-const bondFocus = async (cpy, bal, ste) => {
-    bit = await ste.hunt(ActFoc.READ_FOCUS, { idx: bal.idx });
-    var spot = bit.focBit.dat;
-    bit = await ste.hunt(ActMap.READ_HEXMAP, { idx: spot.map });
-    var map = bit.mapBit.dat;
-    var grid = map.dat;
-    if (grid == null)
-        throw new Error("no map present for " + bal.src);
-    var hex = grid.get({ x: spot.x, y: spot.y });
-    var bonds = {};
-    var item;
-    item = grid.neighborsOf(hex, compassConvertor(DIRECTION.EAST));
-    if (item[0] != null)
-        bonds[DIRECTION.EAST] = { x: item[0].x, y: item[0].y };
-    item = grid.neighborsOf(hex, compassConvertor(DIRECTION.SOUTH_EAST));
-    if (item[0] != null)
-        bonds[DIRECTION.SOUTH_EAST] = { x: item[0].x, y: item[0].y };
-    item = grid.neighborsOf(hex, compassConvertor(DIRECTION.SOUTH_WEST));
-    if (item[0] != null)
-        bonds[DIRECTION.SOUTH_WEST] = { x: item[0].x, y: item[0].y };
-    item = grid.neighborsOf(hex, compassConvertor(DIRECTION.WEST));
-    if (item[0] != null)
-        bonds[DIRECTION.WEST] = { x: item[0].x, y: item[0].y };
-    item = grid.neighborsOf(hex, compassConvertor(DIRECTION.NORTH_WEST));
-    if (item[0] != null)
-        bonds[DIRECTION.NORTH_WEST] = { x: item[0].x, y: item[0].y };
-    item = grid.neighborsOf(hex, compassConvertor(DIRECTION.NORTH_EAST));
-    if (item[0] != null)
-        bonds[DIRECTION.NORTH_EAST] = { x: item[0].x, y: item[0].y };
-    //GIVE ME SOME CORNERS
-    //var hex = grid.get({ x: spot.x, y: spot.y });
-    //const point = hex.toPoint();
-    //spot.corners = hex.corners().map((corner) => corner.add(point));
-    //spot.area = [];
-    //spot.vision = [];
-    //not sure why this is needed 04.03.23
-    //if (spot.bondList == null) spot.bondList = [];
-    //if (spot.viewList == null) spot.viewList = [];
-    //spot.bondList.forEach((a) => {
-    //  var b = grid.get({ x: a.x, y: a.y });
-    //  const p = b.toPoint();
-    //  var crn = hex.corners().map((corner) => corner.add(p));
-    //  spot.area.push(crn);
-    //});
-    //spot.viewList.forEach((a) => {
-    //  var b = grid.get({ x: a.x, y: a.y });
-    //  const p = b.toPoint();
-    //  var crn = hex.corners().map((corner) => corner.add(p));
-    //  spot.vision.push(crn);
-    //});
-    //console.log("vis " + spot.vision.length);
-    if (bal.slv != null)
-        bal.slv({ focBit: { idx: "orbit-focus", dat: bonds } });
-    return cpy;
-};
-exports.bondFocus = bondFocus;
-const compassConvertor = (val) => {
-    var result = 0;
-    switch (val) {
-        case DIRECTION.NORTH_EAST:
-            result = 5;
-            break;
-        case DIRECTION.EAST:
-            result = 0;
-            break;
-        case DIRECTION.SOUTH_EAST:
-            result = 1;
-            break;
-        case DIRECTION.SOUTH_WEST:
-            result = 2;
-            break;
-        case DIRECTION.WEST:
-            result = 3;
-            break;
-        case DIRECTION.NORTH_WEST:
-            result = 4;
-            break;
-    }
-    return result;
-};
-const DIRECTION = require("../../val/direction");
-
-},{"../../02.hexmap.unit/hexmap.action":49,"../../val/direction":84,"../focus.action":41}],39:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.createFocus = void 0;
-const ActFoc = require("../focus.action");
-var bit, val, idx, dex, lst, dat;
-const createFocus = async (cpy, bal, ste) => {
-    var dat = { idx: bal.idx, src: bal.src, typ: SPACE.FOCUS };
-    for (var key in bal.dat) {
-        dat[key] = bal.dat[key];
-    }
-    if (dat.gph == null)
-        dat.gph = 'None';
-    dat.gph;
-    if (dat.frm == null)
-        dat.frm = SHAPE.RECTANGLE;
-    if (dat.x == null)
-        dat.x = 0;
-    if (dat.y == null)
-        dat.y = 0;
-    if (dat.h == null)
-        dat.h = 1;
-    if (dat.w == null)
-        dat.w = 1;
-    if (dat.face == null)
-        dat.face = 'E';
-    if (dat.past == null)
-        dat.past = [];
-    if (dat.update == null)
-        dat.update = 0;
-    if (dat.clock == null)
-        dat.clock = 0;
-    if (dat.updateSpeed == null)
-        dat.updateSpeed = 11;
-    if (dat.turnSpeed == null)
-        dat.turnSpeed = 11;
-    if (dat.spin == null)
-        dat.spin = true;
-    try {
-        const Hex = Honeycomb.extendHex({
-            size: Number(1),
-            orientation: 'pointy', // default: 'pointy'
-        });
-        const Grid = Honeycomb.defineGrid(Hex);
-        var grid;
-        switch (dat.frm) {
-            case SHAPE.RECTANGLE:
-                grid = Grid.rectangle({ width: dat.w, height: dat.h });
-                break;
-            case SHAPE.TRIANGLE:
-                grid = Grid.triangle({ size: dat.w });
-                break;
-            case SHAPE.HEXAGON:
-                grid = Grid.hexagon({ radius: dat.w, center: [dat.w, dat.w] });
-                break;
-            case SHAPE.PARALLELOGRAM:
-                grid = Grid.parallelogram({ width: dat.w, height: dat.h });
-                break;
-        }
-        dat.grid = grid;
-    }
-    catch (e) {
-        dat.grid = {};
-        console.log("errror in the create focus");
-    }
-    //now let us create the corners
-    bit = await ste.hunt(ActFoc.CORNER_FOCUS, { dat });
-    dat.corners = bit.focBit.lst;
-    bal.slv({ focBit: { idx: "create-focus", dat: dat } });
-    return cpy;
-};
-exports.createFocus = createFocus;
-const Honeycomb = require("honeycomb-grid");
-const SHAPE = require("../../val/shape");
-const SPACE = require("../../val/space");
-
-},{"../../val/shape":85,"../../val/space":86,"../focus.action":41,"honeycomb-grid":6}],40:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.forwardFocus = void 0;
-const ActFoc = require("../focus.action");
-var bit, val, idx, dex, lst, dat;
-const forwardFocus = async (cpy, bal, ste) => {
-    bit = await ste.hunt(ActFoc.READ_FOCUS, { idx: bal.idx });
-    var spot = bit.focBit.dat;
-    //bit = await ste.hunt(ActFoc.CENTER_FOCUS, {idx:spot.idx, dat: spot } )
-    var x = spot.x;
-    var y = spot.y;
-    var face = spot.face;
-    var bonds;
-    if (face == DIRECTION.EAST) {
-        bit = await ste.hunt(ActFoc.BOND_FOCUS, { idx: spot.idx });
-        bonds = bit.focBit.dat;
-        var bond = bonds[DIRECTION.EAST];
-        if (bond != null) {
-            x = bond.x;
-            y = bond.y;
-        }
-    }
-    if (spot.face == DIRECTION.WEST)
-        face = DIRECTION.EAST;
-    if (spot.face == DIRECTION.NORTH_EAST)
-        face = DIRECTION.EAST;
-    if (spot.face == DIRECTION.SOUTH_EAST)
-        face = DIRECTION.EAST;
-    if (spot.face == DIRECTION.NORTH_WEST)
-        face = DIRECTION.NORTH_EAST;
-    if (spot.face == DIRECTION.SOUTH_WEST)
-        face = DIRECTION.SOUTH_EAST;
-    //patch(ste, ActFoc.LIST_VISON_FOCUS, foci);
-    //locateHex(ste, foci);
-    spot;
-    bit = await ste.hunt(ActFoc.WRITE_FOCUS, { idx: bal.idx, dat: { x, y, bonds, face } });
-    if (bal.slv != null)
-        bal.slv({ focBit: { idx: "forward-focus", dat } });
-};
-exports.forwardFocus = forwardFocus;
-const DIRECTION = require("../../val/direction");
-
-},{"../../val/direction":84,"../focus.action":41}],41:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.SelectFocus = exports.SELECT_FOCUS = exports.VisionFocus = exports.VISION_FOCUS = exports.LocateFocus = exports.LOCATE_FOCUS = exports.BondFocus = exports.BOND_FOCUS = exports.CenterFocus = exports.CENTER_FOCUS = exports.BackwardFocus = exports.BACKWARD_FOCUS = exports.ForwardFocus = exports.FORWARD_FOCUS = exports.SpinLeftFocus = exports.SPIN_LEFT_FOCUS = exports.SpinRightFocus = exports.SPIN_RIGHT_FOCUS = exports.ListFocus = exports.LIST_FOCUS = exports.CornerFocus = exports.CORNER_FOCUS = exports.DeleteFocus = exports.DELETE_FOCUS = exports.RemoveFocus = exports.REMOVE_FOCUS = exports.WriteFocus = exports.WRITE_FOCUS = exports.ReadFocus = exports.READ_FOCUS = exports.CreateFocus = exports.CREATE_FOCUS = exports.OpenFocus = exports.OPEN_FOCUS = exports.UpdateFocus = exports.UPDATE_FOCUS = exports.InitFocus = exports.INIT_FOCUS = void 0;
+exports.SelectFocus = exports.SELECT_FOCUS = exports.VisionFocus = exports.VISION_FOCUS = exports.LocateFocus = exports.LOCATE_FOCUS = exports.BondFocus = exports.BOND_FOCUS = exports.CenterFocus = exports.CENTER_FOCUS = exports.BackwardFocus = exports.BACKWARD_FOCUS = exports.ForwardFocus = exports.FORWARD_FOCUS = exports.SpinLeftFocus = exports.SPIN_LEFT_FOCUS = exports.SpinRightFocus = exports.SPIN_RIGHT_FOCUS = exports.ListFocus = exports.LIST_FOCUS = exports.CornerFocus = exports.CORNER_FOCUS = exports.DeleteFocus = exports.DELETE_FOCUS = exports.RemoveFocus = exports.REMOVE_FOCUS = exports.WriteFocus = exports.WRITE_FOCUS = exports.ReadFocus = exports.READ_FOCUS = exports.CreateFocus = exports.CREATE_FOCUS = exports.OpenFocus = exports.OPEN_FOCUS = exports.UpdateFocus = exports.UPDATE_FOCUS = exports.AwakeFocus = exports.AWAKE_FOCUS = exports.InitFocus = exports.INIT_FOCUS = void 0;
 // Focus actions
 exports.INIT_FOCUS = "[Focus action] Init Focus";
 class InitFocus {
@@ -37384,6 +37509,14 @@ class InitFocus {
     }
 }
 exports.InitFocus = InitFocus;
+exports.AWAKE_FOCUS = "[Focus action] Awake Focus";
+class AwakeFocus {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.AWAKE_FOCUS;
+    }
+}
+exports.AwakeFocus = AwakeFocus;
 exports.UPDATE_FOCUS = "[Focus action] Update Focus";
 class UpdateFocus {
     constructor(bale) {
@@ -37529,50 +37662,52 @@ class SelectFocus {
 }
 exports.SelectFocus = SelectFocus;
 
-},{}],42:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.selectFocus = exports.visionFocus = exports.locateFocus = exports.bondFocus = exports.centerFocus = exports.backwardFocus = exports.forwardFocus = exports.spinRightFocus = exports.spinLeftFocus = exports.listFocus = exports.cornerFocus = exports.deleteFocus = exports.removeFocus = exports.writeFocus = exports.readFocus = exports.createFocus = exports.openFocus = exports.updateFocus = exports.initFocus = void 0;
+exports.selectFocus = exports.visionFocus = exports.locateFocus = exports.bondFocus = exports.centerFocus = exports.backwardFocus = exports.forwardFocus = exports.spinRightFocus = exports.spinLeftFocus = exports.listFocus = exports.cornerFocus = exports.deleteFocus = exports.removeFocus = exports.writeFocus = exports.readFocus = exports.createFocus = exports.openFocus = exports.updateFocus = exports.awakeFocus = exports.initFocus = void 0;
 var _00_focus_buzz_1 = require("./buz/00.focus.buzz");
 Object.defineProperty(exports, "initFocus", { enumerable: true, get: function () { return _00_focus_buzz_1.initFocus; } });
+var awake_focus_buzz_1 = require("./buz/awake-focus.buzz");
+Object.defineProperty(exports, "awakeFocus", { enumerable: true, get: function () { return awake_focus_buzz_1.awakeFocus; } });
+var update_focus_buzz_1 = require("./buz/update-focus.buzz");
+Object.defineProperty(exports, "updateFocus", { enumerable: true, get: function () { return update_focus_buzz_1.updateFocus; } });
 var _00_focus_buzz_2 = require("./buz/00.focus.buzz");
-Object.defineProperty(exports, "updateFocus", { enumerable: true, get: function () { return _00_focus_buzz_2.updateFocus; } });
-var _00_focus_buzz_3 = require("./buz/00.focus.buzz");
-Object.defineProperty(exports, "openFocus", { enumerable: true, get: function () { return _00_focus_buzz_3.openFocus; } });
+Object.defineProperty(exports, "openFocus", { enumerable: true, get: function () { return _00_focus_buzz_2.openFocus; } });
 var create_focus_buzz_1 = require("./buz/create-focus.buzz");
 Object.defineProperty(exports, "createFocus", { enumerable: true, get: function () { return create_focus_buzz_1.createFocus; } });
+var _00_focus_buzz_3 = require("./buz/00.focus.buzz");
+Object.defineProperty(exports, "readFocus", { enumerable: true, get: function () { return _00_focus_buzz_3.readFocus; } });
 var _00_focus_buzz_4 = require("./buz/00.focus.buzz");
-Object.defineProperty(exports, "readFocus", { enumerable: true, get: function () { return _00_focus_buzz_4.readFocus; } });
+Object.defineProperty(exports, "writeFocus", { enumerable: true, get: function () { return _00_focus_buzz_4.writeFocus; } });
 var _00_focus_buzz_5 = require("./buz/00.focus.buzz");
-Object.defineProperty(exports, "writeFocus", { enumerable: true, get: function () { return _00_focus_buzz_5.writeFocus; } });
+Object.defineProperty(exports, "removeFocus", { enumerable: true, get: function () { return _00_focus_buzz_5.removeFocus; } });
 var _00_focus_buzz_6 = require("./buz/00.focus.buzz");
-Object.defineProperty(exports, "removeFocus", { enumerable: true, get: function () { return _00_focus_buzz_6.removeFocus; } });
+Object.defineProperty(exports, "deleteFocus", { enumerable: true, get: function () { return _00_focus_buzz_6.deleteFocus; } });
 var _00_focus_buzz_7 = require("./buz/00.focus.buzz");
-Object.defineProperty(exports, "deleteFocus", { enumerable: true, get: function () { return _00_focus_buzz_7.deleteFocus; } });
+Object.defineProperty(exports, "cornerFocus", { enumerable: true, get: function () { return _00_focus_buzz_7.cornerFocus; } });
 var _00_focus_buzz_8 = require("./buz/00.focus.buzz");
-Object.defineProperty(exports, "cornerFocus", { enumerable: true, get: function () { return _00_focus_buzz_8.cornerFocus; } });
-var _00_focus_buzz_9 = require("./buz/00.focus.buzz");
-Object.defineProperty(exports, "listFocus", { enumerable: true, get: function () { return _00_focus_buzz_9.listFocus; } });
-var _00_focus_buzz_10 = require("./buz/00.focus.buzz");
-Object.defineProperty(exports, "spinLeftFocus", { enumerable: true, get: function () { return _00_focus_buzz_10.spinLeftFocus; } });
-var _00_focus_buzz_11 = require("./buz/00.focus.buzz");
-Object.defineProperty(exports, "spinRightFocus", { enumerable: true, get: function () { return _00_focus_buzz_11.spinRightFocus; } });
+Object.defineProperty(exports, "listFocus", { enumerable: true, get: function () { return _00_focus_buzz_8.listFocus; } });
+var spin_left_focus_buzz_1 = require("./buz/spin-left-focus.buzz");
+Object.defineProperty(exports, "spinLeftFocus", { enumerable: true, get: function () { return spin_left_focus_buzz_1.spinLeftFocus; } });
+var spin_right_focus_buzz_1 = require("./buz/spin-right-focus.buzz");
+Object.defineProperty(exports, "spinRightFocus", { enumerable: true, get: function () { return spin_right_focus_buzz_1.spinRightFocus; } });
 var forward_focus_buzz_1 = require("./buz/forward-focus.buzz");
 Object.defineProperty(exports, "forwardFocus", { enumerable: true, get: function () { return forward_focus_buzz_1.forwardFocus; } });
 var backward_focus_buzz_1 = require("./buz/backward-focus.buzz");
 Object.defineProperty(exports, "backwardFocus", { enumerable: true, get: function () { return backward_focus_buzz_1.backwardFocus; } });
-var _00_focus_buzz_12 = require("./buz/00.focus.buzz");
-Object.defineProperty(exports, "centerFocus", { enumerable: true, get: function () { return _00_focus_buzz_12.centerFocus; } });
+var _00_focus_buzz_9 = require("./buz/00.focus.buzz");
+Object.defineProperty(exports, "centerFocus", { enumerable: true, get: function () { return _00_focus_buzz_9.centerFocus; } });
 var bond_focus_buzz_1 = require("./buz/bond-focus.buzz");
 Object.defineProperty(exports, "bondFocus", { enumerable: true, get: function () { return bond_focus_buzz_1.bondFocus; } });
-var _00_focus_buzz_13 = require("./buz/00.focus.buzz");
-Object.defineProperty(exports, "locateFocus", { enumerable: true, get: function () { return _00_focus_buzz_13.locateFocus; } });
-var _00_focus_buzz_14 = require("./buz/00.focus.buzz");
-Object.defineProperty(exports, "visionFocus", { enumerable: true, get: function () { return _00_focus_buzz_14.visionFocus; } });
-var _00_focus_buzz_15 = require("./buz/00.focus.buzz");
-Object.defineProperty(exports, "selectFocus", { enumerable: true, get: function () { return _00_focus_buzz_15.selectFocus; } });
+var _00_focus_buzz_10 = require("./buz/00.focus.buzz");
+Object.defineProperty(exports, "locateFocus", { enumerable: true, get: function () { return _00_focus_buzz_10.locateFocus; } });
+var vision_focus_buzz_1 = require("./buz/vision-focus.buzz");
+Object.defineProperty(exports, "visionFocus", { enumerable: true, get: function () { return vision_focus_buzz_1.visionFocus; } });
+var _00_focus_buzz_11 = require("./buz/00.focus.buzz");
+Object.defineProperty(exports, "selectFocus", { enumerable: true, get: function () { return _00_focus_buzz_11.selectFocus; } });
 
-},{"./buz/00.focus.buzz":36,"./buz/backward-focus.buzz":37,"./buz/bond-focus.buzz":38,"./buz/create-focus.buzz":39,"./buz/forward-focus.buzz":40}],43:[function(require,module,exports){
+},{"./buz/00.focus.buzz":36,"./buz/awake-focus.buzz":37,"./buz/backward-focus.buzz":38,"./buz/bond-focus.buzz":39,"./buz/create-focus.buzz":40,"./buz/forward-focus.buzz":41,"./buz/spin-left-focus.buzz":42,"./buz/spin-right-focus.buzz":43,"./buz/update-focus.buzz":44,"./buz/vision-focus.buzz":45}],48:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FocusModel = void 0;
@@ -37585,7 +37720,7 @@ class FocusModel {
 }
 exports.FocusModel = FocusModel;
 
-},{}],44:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reducer = void 0;
@@ -37597,6 +37732,8 @@ function reducer(model = new focus_model_1.FocusModel(), act, state) {
     switch (act.type) {
         case Act.UPDATE_FOCUS:
             return Buzz.updateFocus(clone(model), act.bale, state);
+        case Act.AWAKE_FOCUS:
+            return Buzz.awakeFocus(clone(model), act.bale, state);
         case Act.OPEN_FOCUS:
             return Buzz.openFocus(clone(model), act.bale, state);
         case Act.CREATE_FOCUS:
@@ -37639,7 +37776,7 @@ function reducer(model = new focus_model_1.FocusModel(), act, state) {
 }
 exports.reducer = reducer;
 
-},{"./focus.action":41,"./focus.buzzer":42,"./focus.model":43,"clone-deep":4}],45:[function(require,module,exports){
+},{"./focus.action":46,"./focus.buzzer":47,"./focus.model":48,"clone-deep":4}],50:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -37663,11 +37800,158 @@ FocusUnit = __decorate([
 ], FocusUnit);
 exports.default = FocusUnit;
 
-},{"../99.core/state":76,"typescript-ioc":28}],46:[function(require,module,exports){
+},{"../99.core/state":89,"typescript-ioc":28}],51:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.indexGeojson = exports.loadGeojson = exports.updateGeojson = exports.initGeojson = void 0;
+const ActDsk = require("../../act/disk.action");
+var bit, val, idx, dex, lst, dat, src;
+const initGeojson = (cpy, bal, ste) => {
+    debugger;
+    return cpy;
+};
+exports.initGeojson = initGeojson;
+const updateGeojson = (cpy, bal, ste) => {
+    return cpy;
+};
+exports.updateGeojson = updateGeojson;
+const loadGeojson = async (cpy, bal, ste) => {
+    src = bal.src;
+    bit = await ste.bus(ActDsk.READ_DISK, { src: cpy.geoSrc + '/' + src, val: 1 });
+    dat = bit.dskBit.dat;
+    src = bal.src.split('.')[0] + '.' + bal.src.split('.')[1];
+    if (bal.slv != null)
+        bal.slv({ geoBit: { idx: "load-geojson", dat, src } });
+    return cpy;
+};
+exports.loadGeojson = loadGeojson;
+const indexGeojson = async (cpy, bal, ste) => {
+    dat = null;
+    bit = await ste.bus(ActDsk.INDEX_DISK, { src: cpy.geoSrc });
+    lst = bit.dskBit.lst;
+    if (bal.slv != null)
+        bal.slv({ geoBit: { idx: "list-geojson", lst } });
+    return cpy;
+};
+exports.indexGeojson = indexGeojson;
+
+},{"../../act/disk.action":91}],52:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.IndexGeojson = exports.INDEX_GEOJSON = exports.LoadGeojson = exports.LOAD_GEOJSON = exports.UpdateGeojson = exports.UPDATE_GEOJSON = exports.InitGeojson = exports.INIT_GEOJSON = void 0;
+exports.INIT_GEOJSON = "[Geojson action] Init Geojson";
+class InitGeojson {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.INIT_GEOJSON;
+    }
+}
+exports.InitGeojson = InitGeojson;
+exports.UPDATE_GEOJSON = "[Geojson action] Update Geojson";
+class UpdateGeojson {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.UPDATE_GEOJSON;
+    }
+}
+exports.UpdateGeojson = UpdateGeojson;
+exports.LOAD_GEOJSON = "[Load action] Load Geojson";
+class LoadGeojson {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.LOAD_GEOJSON;
+    }
+}
+exports.LoadGeojson = LoadGeojson;
+exports.INDEX_GEOJSON = "[Index action] Index Geojson";
+class IndexGeojson {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.INDEX_GEOJSON;
+    }
+}
+exports.IndexGeojson = IndexGeojson;
+
+},{}],53:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.indexGeojson = exports.loadGeojson = exports.updateGeojson = exports.initGeojson = void 0;
+var geojson_buzz_1 = require("./buz/geojson.buzz");
+Object.defineProperty(exports, "initGeojson", { enumerable: true, get: function () { return geojson_buzz_1.initGeojson; } });
+var geojson_buzz_2 = require("./buz/geojson.buzz");
+Object.defineProperty(exports, "updateGeojson", { enumerable: true, get: function () { return geojson_buzz_2.updateGeojson; } });
+var geojson_buzz_3 = require("./buz/geojson.buzz");
+Object.defineProperty(exports, "loadGeojson", { enumerable: true, get: function () { return geojson_buzz_3.loadGeojson; } });
+var geojson_buzz_4 = require("./buz/geojson.buzz");
+Object.defineProperty(exports, "indexGeojson", { enumerable: true, get: function () { return geojson_buzz_4.indexGeojson; } });
+
+},{"./buz/geojson.buzz":51}],54:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.GeojsonModel = void 0;
+class GeojsonModel {
+    constructor() {
+        //idx:string;
+        //geojsonBitList: GeojsonBit[] = [];
+        //geojsonBits: any = {};
+        this.geoSrc = './data/geojson';
+    }
+}
+exports.GeojsonModel = GeojsonModel;
+
+},{}],55:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.reducer = void 0;
+const clone = require("clone-deep");
+const Act = require("./geojson.action");
+const geojson_model_1 = require("./geojson.model");
+const Buzz = require("./geojson.buzzer");
+function reducer(model = new geojson_model_1.GeojsonModel(), act, state) {
+    switch (act.type) {
+        case Act.UPDATE_GEOJSON:
+            return Buzz.updateGeojson(clone(model), act.bale, state);
+        case Act.INIT_GEOJSON:
+            return Buzz.initGeojson(clone(model), act.bale, state);
+        case Act.LOAD_GEOJSON:
+            return Buzz.loadGeojson(clone(model), act.bale, state);
+        case Act.INDEX_GEOJSON:
+            return Buzz.indexGeojson(clone(model), act.bale, state);
+        default:
+            return model;
+    }
+}
+exports.reducer = reducer;
+
+},{"./geojson.action":52,"./geojson.buzzer":53,"./geojson.model":54,"clone-deep":4}],56:[function(require,module,exports){
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const typescript_ioc_1 = require("typescript-ioc");
+const state_1 = require("../99.core/state");
+let GeojsonUnit = class GeojsonUnit {
+    constructor(state) {
+    }
+};
+GeojsonUnit = __decorate([
+    typescript_ioc_1.Singleton,
+    __metadata("design:paramtypes", [state_1.default])
+], GeojsonUnit);
+exports.default = GeojsonUnit;
+
+},{"../99.core/state":89,"typescript-ioc":28}],57:[function(require,module,exports){
 (function (process){(function (){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.selectHexmap = exports.seekHexmap = exports.replaceHexmap = exports.nameHexmap = exports.shapeHexmap = exports.loadHexmap = exports.listHexmap = exports.saveHexmap = exports.toolHexmap = exports.geojsonHexmap = exports.copyHexmap = exports.writeHexmap = exports.readHexmap = exports.openHexmap = exports.defocusHexmap = exports.focusingHexmap = exports.updateHexmap = exports.initHexmap = void 0;
+exports.selectHexmap = exports.seekHexmap = exports.replaceHexmap = exports.nameHexmap = exports.loadHexmap = exports.listHexmap = exports.saveHexmap = exports.toolHexmap = exports.geojsonHexmap = exports.copyHexmap = exports.readHexmap = exports.writeHexmap = exports.addHexmap = exports.openHexmap = exports.defocusHexmap = exports.focusingHexmap = exports.updateHexmap = exports.initHexmap = void 0;
 const ActMap = require("../hexmap.action");
 const ActFoc = require("../../01.focus.unit/focus.action");
 const ActCol = require("../../97.collect.unit/collect.action");
@@ -37713,6 +37997,21 @@ const openHexmap = (cpy, bal, ste) => {
     return cpy;
 };
 exports.openHexmap = openHexmap;
+const addHexmap = async (cpy, bal, ste) => {
+    dat = { frm: 'geojson', bit: bal.dat.dat, gph: bal.dat.gph };
+    bit = await ste.hunt(ActMap.WRITE_HEXMAP, { idx: bal.idx, dat });
+    if (bal.slv != null)
+        bal.slv({ mapBit: { idx: "add-hexmap", dat: bit.mapBit.dat } });
+    return cpy;
+};
+exports.addHexmap = addHexmap;
+const writeHexmap = async (cpy, bal, ste) => {
+    bit = await ste.hunt(ActCol.WRITE_COLLECT, { idx: bal.idx, dat: bal.dat, bit: ActMap.CREATE_HEXMAP });
+    if (bal.slv != null)
+        bal.slv({ mapBit: { idx: "write-hexmap", dat: bit.clcBit.dat } });
+    return cpy;
+};
+exports.writeHexmap = writeHexmap;
 const readHexmap = async (cpy, bal, ste) => {
     var slv = bal.slv;
     if (bal.idx == null)
@@ -37723,39 +38022,13 @@ const readHexmap = async (cpy, bal, ste) => {
     return cpy;
 };
 exports.readHexmap = readHexmap;
-const writeHexmap = async (cpy, bal, ste) => {
-    bit = await ste.hunt(ActCol.WRITE_COLLECT, { idx: bal.idx, dat: bal.dat, bit: ActMap.CREATE_HEXMAP });
-    if (bal.slv != null)
-        bal.slv({ mapBit: { idx: "write-hexmap", dat: bit.clcBit.dat } });
-    return cpy;
-};
-exports.writeHexmap = writeHexmap;
 const copyHexmap = async (cpy, bal, ste) => {
     return cpy;
 };
 exports.copyHexmap = copyHexmap;
 var geojson = false;
 const geojsonHexmap = async (cpy, bal, ste) => {
-    var clipboardy = require("clipboardy");
-    const reset = async () => {
-        (0, exports.toolHexmap)(cpy, bal, ste);
-        setTimeout(() => { (0, exports.geojsonHexmap)(cpy, bal, ste); }, 1111);
-    };
-    try {
-        var geo = clipboardy.readSync();
-    }
-    catch (e) {
-        reset();
-        return;
-    }
-    console.log("checking geojson...");
-    if (geo.includes("coordinates") == false)
-        return reset();
-    if (geo.includes("type") == false)
-        return reset();
-    var dat = JSON.parse(geo);
-    geojson = false;
-    cpy.geoJsonNow = dat;
+    debugger;
     if (bal.slv != null)
         bal.slv({ mapBit: { idx: "geojson-hexmap", dat: cpy.geoJsonNow } });
     return cpy;
@@ -37837,48 +38110,6 @@ const loadHexmap = async (cpy, bal, ste) => {
     return cpy;
 };
 exports.loadHexmap = loadHexmap;
-const shapeHexmap = async (cpy, bal, ste) => {
-    var dat = bal.dat;
-    if (dat == null)
-        return bal.slv({ mapBit: { idx: "shape-hexmap-error" } });
-    if (dat.frm == null)
-        dat.frm = SHAPE.RECTANGLE;
-    if (dat.w == null)
-        dat.w = 3;
-    if (dat.h == null)
-        dat.h = 3;
-    const Hex = Honeycomb.extendHex({
-        size: Number(33),
-        orientation: 'pointy', // default: 'pointy'
-    });
-    const Grid = Honeycomb.defineGrid(Hex);
-    var grid;
-    switch (dat.frm) {
-        case SHAPE.RECTANGLE:
-            grid = Grid.rectangle({ width: dat.w, height: dat.h });
-            break;
-        case SHAPE.TRIANGLE:
-            grid = Grid.triangle({ size: dat.w });
-            break;
-        case SHAPE.HEXAGON:
-            grid = Grid.hexagon({ radius: dat.w, center: [dat.w, dat.w] });
-            break;
-        case SHAPE.PARALLELOGRAM:
-            grid = Grid.parallelogram({ width: dat.w, height: dat.h });
-            break;
-    }
-    var Chance = require('chance');
-    var chance = new Chance();
-    grid.forEach((a) => {
-        a.hex = chance.bb_pin();
-    });
-    dat.dat = grid;
-    //bit = await ste.hunt(ActMap.REPLACE_HEXMAP, { dat: grid })
-    if (bal.slv != null)
-        bal.slv({ mapBit: { idx: "shape-hexmap", dat } });
-    return cpy;
-};
-exports.shapeHexmap = shapeHexmap;
 const nameHexmap = (cpy, bal, ste) => {
     cpy.mapNomNow = bal.idx;
     if (bal.slv != null)
@@ -37908,12 +38139,10 @@ const selectHexmap = async (cpy, bal, ste) => {
     return cpy;
 };
 exports.selectHexmap = selectHexmap;
-const SHAPE = require("../../val/shape");
-const Honeycomb = require("honeycomb-grid");
 const S = require("string");
 
 }).call(this)}).call(this,require('_process'))
-},{"../../01.focus.unit/focus.action":41,"../../97.collect.unit/collect.action":55,"../../act/disk.action":78,"../../val/shape":85,"../hexmap.action":49,"_process":13,"chance":3,"clipboardy":undefined,"honeycomb-grid":6,"open":undefined,"string":20}],47:[function(require,module,exports){
+},{"../../01.focus.unit/focus.action":46,"../../97.collect.unit/collect.action":67,"../../act/disk.action":91,"../hexmap.action":61,"_process":13,"chance":3,"open":undefined,"string":20}],58:[function(require,module,exports){
 (function (process){(function (){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -38217,20 +38446,12 @@ const atlasHexmap = async (cpy, bal, ste) => {
         var wX = grid.pointWidth();
         dat.width = grid.pointWidth();
         dat.height = grid.pointHeight();
+        debugger;
         //what the heck juice
         dat.grid = grid;
-        cpy.atlasNow = dat.grid;
-        cpy.sizeNow = cpy.atlasNow.length;
+        cpy.atlasNow = dat;
         if (bal.slv != null)
-            bal.slv({ mapBit: { idx: "atlas-hexmap", dat: cpy.atlasNow } });
-        // dat.src = fileName;
-        //cpy.idxMap = dat.nom;
-        //cpy.currentMap = dat;
-        //FS.ensureFileSync(fileName);
-        //FS.writeJSON(fileName, dat, () => {
-        //  console.log(" dat " + fileName);
-        //});
-        // console.log("harvest " + fileName);
+            bal.slv({ mapBit: { idx: "atlas-hexmap", dat } });
     };
     process.nextTick(endCheck);
     return cpy;
@@ -38239,37 +38460,95 @@ exports.atlasHexmap = atlasHexmap;
 const Honeycomb = require("honeycomb-grid");
 
 }).call(this)}).call(this,require('_process'))
-},{"_process":13,"clone-deep":4,"h3-js":5,"honeycomb-grid":6}],48:[function(require,module,exports){
+},{"_process":13,"clone-deep":4,"h3-js":5,"honeycomb-grid":6}],59:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createHexmap = void 0;
-const ActMap = require("../hexmap.action");
 var bit, idx, lst, dat, val, src;
 const createHexmap = async (cpy, bal, ste) => {
+    var clone = require("clone-deep");
     var dat = { idx: bal.idx, typ: SPACE.HEXMAP };
     for (var key in bal.dat) {
         dat[key] = bal.dat[key];
     }
-    if (dat.h == null)
-        dat.h = 3;
-    if (dat.w == null)
-        dat.h = 3;
-    if (dat.frm == null)
-        dat.frm = SHAPE.RECTANGLE;
-    bit = await ste.hunt(ActMap.SHAPE_HEXMAP, { dat });
-    dat = bit.mapBit.dat;
+    dat;
+    const Hex = Honeycomb.extendHex({
+        size: Number(1),
+        orientation: "pointy",
+    });
+    const Grid = Honeycomb.defineGrid(Hex);
+    var copied = clone(dat.bit.grid);
+    dat.grid = Grid(copied);
+    if (dat.bit == null) {
+        if (bal.slv != null)
+            bal.slv({ mapBit: { idx: "create-hexmap-error", src: "no bit present" } });
+        return;
+    }
     if (bal.slv != null)
         bal.slv({ mapBit: { idx: "create-hexmap", dat } });
     return cpy;
 };
 exports.createHexmap = createHexmap;
-const SHAPE = require("../../val/shape");
+const Honeycomb = require("honeycomb-grid");
 const SPACE = require("../../val/space");
 
-},{"../../val/shape":85,"../../val/space":86,"../hexmap.action":49}],49:[function(require,module,exports){
+},{"../../val/space":99,"clone-deep":4,"honeycomb-grid":6}],60:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SelectHexmap = exports.SELECT_HEXMAP = exports.DefocusHexmap = exports.DEFOCUS_HEXMAP = exports.FocusingHexmap = exports.FOCUSING_HEXMAP = exports.SeekHexmap = exports.SEEK_HEXMAP = exports.NameHexmap = exports.NAME_HEXMAP = exports.ReplaceHexmap = exports.REPLACE_HEXMAP = exports.ListHexmap = exports.LIST_HEXMAP = exports.LoadHexmap = exports.LOAD_HEXMAP = exports.ShapeHexmap = exports.SHAPE_HEXMAP = exports.SaveHexmap = exports.SAVE_HEXMAP = exports.ToolHexmap = exports.TOOL_HEXMAP = exports.GeojsonHexmap = exports.GEOJSON_HEXMAP = exports.AtlasHexmap = exports.ATLAS_HEXMAP = exports.CopyHexmap = exports.COPY_HEXMAP = exports.CreateHexmap = exports.CREATE_HEXMAP = exports.WriteHexmap = exports.WRITE_HEXMAP = exports.ReadHexmap = exports.READ_HEXMAP = exports.OpenHexmap = exports.OPEN_HEXMAP = exports.UpdateHexmap = exports.UPDATE_HEXMAP = exports.InitHexmap = exports.INIT_HEXMAP = void 0;
+exports.shapeHexmap = void 0;
+const ActMap = require("../hexmap.action");
+var bit, idx, lst, dat, val, src;
+const shapeHexmap = async (cpy, bal, ste) => {
+    var dat = bal.dat;
+    if (dat == null)
+        return bal.slv({ mapBit: { idx: "shape-hexmap-error" } });
+    if (dat.frm == null)
+        dat.frm = SHAPE.RECTANGLE;
+    if (dat.w == null)
+        dat.w = 3;
+    if (dat.h == null)
+        dat.h = 3;
+    const Hex = Honeycomb.extendHex({
+        size: Number(33),
+        orientation: 'pointy', // default: 'pointy'
+    });
+    const Grid = Honeycomb.defineGrid(Hex);
+    var grid;
+    switch (dat.frm) {
+        case SHAPE.RECTANGLE:
+            grid = Grid.rectangle({ width: dat.w, height: dat.h });
+            break;
+        case SHAPE.TRIANGLE:
+            grid = Grid.triangle({ size: dat.w });
+            break;
+        case SHAPE.HEXAGON:
+            grid = Grid.hexagon({ radius: dat.w, center: [dat.w, dat.w] });
+            break;
+        case SHAPE.PARALLELOGRAM:
+            grid = Grid.parallelogram({ width: dat.w, height: dat.h });
+            break;
+    }
+    var Chance = require('chance');
+    var chance = new Chance();
+    grid.forEach((a) => {
+        a.hex = chance.bb_pin();
+    });
+    dat.bit = grid;
+    //bit = await ste.hunt(ActMap.REPLACE_HEXMAP, { dat: grid })
+    var shape = { frm: dat.frm, bit: dat.bit, w: dat.w, h: dat.h };
+    bit = await ste.hunt(ActMap.WRITE_HEXMAP, { idx: bal.idx, dat: shape });
+    if (bal.slv != null)
+        bal.slv({ mapBit: { idx: "shape-hexmap", dat: bit.mapBit.dat } });
+    return cpy;
+};
+exports.shapeHexmap = shapeHexmap;
+const SHAPE = require("../../val/shape");
+const Honeycomb = require("honeycomb-grid");
+
+},{"../../val/shape":98,"../hexmap.action":61,"chance":3,"honeycomb-grid":6}],61:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AddHexmap = exports.ADD_HEXMAP = exports.SelectHexmap = exports.SELECT_HEXMAP = exports.DefocusHexmap = exports.DEFOCUS_HEXMAP = exports.FocusingHexmap = exports.FOCUSING_HEXMAP = exports.SeekHexmap = exports.SEEK_HEXMAP = exports.NameHexmap = exports.NAME_HEXMAP = exports.ReplaceHexmap = exports.REPLACE_HEXMAP = exports.ListHexmap = exports.LIST_HEXMAP = exports.LoadHexmap = exports.LOAD_HEXMAP = exports.ShapeHexmap = exports.SHAPE_HEXMAP = exports.SaveHexmap = exports.SAVE_HEXMAP = exports.ToolHexmap = exports.TOOL_HEXMAP = exports.GeojsonHexmap = exports.GEOJSON_HEXMAP = exports.AtlasHexmap = exports.ATLAS_HEXMAP = exports.CopyHexmap = exports.COPY_HEXMAP = exports.CreateHexmap = exports.CREATE_HEXMAP = exports.WriteHexmap = exports.WRITE_HEXMAP = exports.ReadHexmap = exports.READ_HEXMAP = exports.OpenHexmap = exports.OPEN_HEXMAP = exports.UpdateHexmap = exports.UPDATE_HEXMAP = exports.InitHexmap = exports.INIT_HEXMAP = void 0;
 // Hexmap actions
 exports.INIT_HEXMAP = "[Hexmap action] Init Hexmap";
 class InitHexmap {
@@ -38431,11 +38710,19 @@ class SelectHexmap {
     }
 }
 exports.SelectHexmap = SelectHexmap;
+exports.ADD_HEXMAP = "[Select action] Add Hexmap";
+class AddHexmap {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.ADD_HEXMAP;
+    }
+}
+exports.AddHexmap = AddHexmap;
 
-},{}],50:[function(require,module,exports){
+},{}],62:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.selectHexmap = exports.defocusHexmap = exports.focusingHexmap = exports.seekHexmap = exports.nameHexmap = exports.replaceHexmap = exports.listHexmap = exports.loadHexmap = exports.shapeHexmap = exports.saveHexmap = exports.toolHexmap = exports.geojsonHexmap = exports.atlasHexmap = exports.copyHexmap = exports.createHexmap = exports.writeHexmap = exports.readHexmap = exports.openHexmap = exports.updateHexmap = exports.initHexmap = void 0;
+exports.addHexmap = exports.selectHexmap = exports.defocusHexmap = exports.focusingHexmap = exports.seekHexmap = exports.nameHexmap = exports.replaceHexmap = exports.listHexmap = exports.loadHexmap = exports.shapeHexmap = exports.saveHexmap = exports.toolHexmap = exports.geojsonHexmap = exports.atlasHexmap = exports.copyHexmap = exports.createHexmap = exports.writeHexmap = exports.readHexmap = exports.openHexmap = exports.updateHexmap = exports.initHexmap = void 0;
 var _00_hexmap_buzz_1 = require("./buz/00.hexmap.buzz");
 Object.defineProperty(exports, "initHexmap", { enumerable: true, get: function () { return _00_hexmap_buzz_1.initHexmap; } });
 var _00_hexmap_buzz_2 = require("./buz/00.hexmap.buzz");
@@ -38458,33 +38745,34 @@ var _00_hexmap_buzz_8 = require("./buz/00.hexmap.buzz");
 Object.defineProperty(exports, "toolHexmap", { enumerable: true, get: function () { return _00_hexmap_buzz_8.toolHexmap; } });
 var _00_hexmap_buzz_9 = require("./buz/00.hexmap.buzz");
 Object.defineProperty(exports, "saveHexmap", { enumerable: true, get: function () { return _00_hexmap_buzz_9.saveHexmap; } });
+var shape_hexmap_1 = require("./buz/shape-hexmap");
+Object.defineProperty(exports, "shapeHexmap", { enumerable: true, get: function () { return shape_hexmap_1.shapeHexmap; } });
 var _00_hexmap_buzz_10 = require("./buz/00.hexmap.buzz");
-Object.defineProperty(exports, "shapeHexmap", { enumerable: true, get: function () { return _00_hexmap_buzz_10.shapeHexmap; } });
+Object.defineProperty(exports, "loadHexmap", { enumerable: true, get: function () { return _00_hexmap_buzz_10.loadHexmap; } });
 var _00_hexmap_buzz_11 = require("./buz/00.hexmap.buzz");
-Object.defineProperty(exports, "loadHexmap", { enumerable: true, get: function () { return _00_hexmap_buzz_11.loadHexmap; } });
+Object.defineProperty(exports, "listHexmap", { enumerable: true, get: function () { return _00_hexmap_buzz_11.listHexmap; } });
 var _00_hexmap_buzz_12 = require("./buz/00.hexmap.buzz");
-Object.defineProperty(exports, "listHexmap", { enumerable: true, get: function () { return _00_hexmap_buzz_12.listHexmap; } });
+Object.defineProperty(exports, "replaceHexmap", { enumerable: true, get: function () { return _00_hexmap_buzz_12.replaceHexmap; } });
 var _00_hexmap_buzz_13 = require("./buz/00.hexmap.buzz");
-Object.defineProperty(exports, "replaceHexmap", { enumerable: true, get: function () { return _00_hexmap_buzz_13.replaceHexmap; } });
+Object.defineProperty(exports, "nameHexmap", { enumerable: true, get: function () { return _00_hexmap_buzz_13.nameHexmap; } });
 var _00_hexmap_buzz_14 = require("./buz/00.hexmap.buzz");
-Object.defineProperty(exports, "nameHexmap", { enumerable: true, get: function () { return _00_hexmap_buzz_14.nameHexmap; } });
+Object.defineProperty(exports, "seekHexmap", { enumerable: true, get: function () { return _00_hexmap_buzz_14.seekHexmap; } });
 var _00_hexmap_buzz_15 = require("./buz/00.hexmap.buzz");
-Object.defineProperty(exports, "seekHexmap", { enumerable: true, get: function () { return _00_hexmap_buzz_15.seekHexmap; } });
+Object.defineProperty(exports, "focusingHexmap", { enumerable: true, get: function () { return _00_hexmap_buzz_15.focusingHexmap; } });
 var _00_hexmap_buzz_16 = require("./buz/00.hexmap.buzz");
-Object.defineProperty(exports, "focusingHexmap", { enumerable: true, get: function () { return _00_hexmap_buzz_16.focusingHexmap; } });
+Object.defineProperty(exports, "defocusHexmap", { enumerable: true, get: function () { return _00_hexmap_buzz_16.defocusHexmap; } });
 var _00_hexmap_buzz_17 = require("./buz/00.hexmap.buzz");
-Object.defineProperty(exports, "defocusHexmap", { enumerable: true, get: function () { return _00_hexmap_buzz_17.defocusHexmap; } });
+Object.defineProperty(exports, "selectHexmap", { enumerable: true, get: function () { return _00_hexmap_buzz_17.selectHexmap; } });
 var _00_hexmap_buzz_18 = require("./buz/00.hexmap.buzz");
-Object.defineProperty(exports, "selectHexmap", { enumerable: true, get: function () { return _00_hexmap_buzz_18.selectHexmap; } });
+Object.defineProperty(exports, "addHexmap", { enumerable: true, get: function () { return _00_hexmap_buzz_18.addHexmap; } });
 
-},{"./buz/00.hexmap.buzz":46,"./buz/atlas-hexmap.buzz":47,"./buz/create-hexmap":48}],51:[function(require,module,exports){
+},{"./buz/00.hexmap.buzz":57,"./buz/atlas-hexmap.buzz":58,"./buz/create-hexmap":59,"./buz/shape-hexmap":60}],63:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HexmapModel = void 0;
 class HexmapModel {
     constructor() {
         //idx:string;
-        this.atlasNow = [];
         this.sizeNow = 0;
         this.mapNomNow = 'none';
         this.platBits = {};
@@ -38508,7 +38796,7 @@ class HexmapModel {
 }
 exports.HexmapModel = HexmapModel;
 
-},{}],52:[function(require,module,exports){
+},{}],64:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reducer = void 0;
@@ -38558,13 +38846,15 @@ function reducer(model = new hexmap_model_1.HexmapModel(), act, state) {
             return Buzz.defocusHexmap(clone(model), act.bale, state);
         case Act.SELECT_HEXMAP:
             return Buzz.selectHexmap(clone(model), act.bale, state);
+        case Act.ADD_HEXMAP:
+            return Buzz.addHexmap(clone(model), act.bale, state);
         default:
             return model;
     }
 }
 exports.reducer = reducer;
 
-},{"./hexmap.action":49,"./hexmap.buzzer":50,"./hexmap.model":51,"clone-deep":4}],53:[function(require,module,exports){
+},{"./hexmap.action":61,"./hexmap.buzzer":62,"./hexmap.model":63,"clone-deep":4}],65:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -38588,7 +38878,7 @@ HexmapUnit = __decorate([
 ], HexmapUnit);
 exports.default = HexmapUnit;
 
-},{"../99.core/state":76,"typescript-ioc":28}],54:[function(require,module,exports){
+},{"../99.core/state":89,"typescript-ioc":28}],66:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.emptyCollect = exports.deleteCollect = exports.removeCollect = exports.createCollect = exports.writeCollect = exports.readCollect = exports.fetchCollect = exports.updateCollect = exports.initCollect = void 0;
@@ -38724,7 +39014,7 @@ const emptyCollect = (cpy, bal, ste) => {
 };
 exports.emptyCollect = emptyCollect;
 
-},{"../../97.collect.unit/collect.action":55}],55:[function(require,module,exports){
+},{"../../97.collect.unit/collect.action":67}],67:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EmptyCollect = exports.EMPTY_COLLECT = exports.DeleteCollect = exports.DELETE_COLLECT = exports.RemoveCollect = exports.REMOVE_COLLECT = exports.CreateCollect = exports.CREATE_COLLECT = exports.WriteCollect = exports.WRITE_COLLECT = exports.ReadCollect = exports.READ_COLLECT = exports.FetchCollect = exports.FETCH_COLLECT = exports.UpdateCollect = exports.UPDATE_COLLECT = exports.InitCollect = exports.INIT_COLLECT = void 0;
@@ -38802,7 +39092,7 @@ class EmptyCollect {
 }
 exports.EmptyCollect = EmptyCollect;
 
-},{}],56:[function(require,module,exports){
+},{}],68:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.removeCollect = exports.deleteCollect = exports.fetchCollect = exports.emptyCollect = exports.createCollect = exports.writeCollect = exports.readCollect = exports.updateCollect = exports.initCollect = void 0;
@@ -38825,7 +39115,7 @@ Object.defineProperty(exports, "deleteCollect", { enumerable: true, get: functio
 var collect_buzz_9 = require("./buz/collect.buzz");
 Object.defineProperty(exports, "removeCollect", { enumerable: true, get: function () { return collect_buzz_9.removeCollect; } });
 
-},{"./buz/collect.buzz":54}],57:[function(require,module,exports){
+},{"./buz/collect.buzz":66}],69:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CollectModel = void 0;
@@ -38837,7 +39127,7 @@ class CollectModel {
 }
 exports.CollectModel = CollectModel;
 
-},{}],58:[function(require,module,exports){
+},{}],70:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reducer = void 0;
@@ -38871,7 +39161,7 @@ function reducer(model = new collect_model_1.CollectModel(), act, state) {
 }
 exports.reducer = reducer;
 
-},{"./collect.action":55,"./collect.buzzer":56,"./collect.model":57,"clone-deep":4}],59:[function(require,module,exports){
+},{"./collect.action":67,"./collect.buzzer":68,"./collect.model":69,"clone-deep":4}],71:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -38895,7 +39185,7 @@ CollectUnit = __decorate([
 ], CollectUnit);
 exports.default = CollectUnit;
 
-},{"../99.core/state":76,"typescript-ioc":28}],60:[function(require,module,exports){
+},{"../99.core/state":89,"typescript-ioc":28}],72:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createMenu = exports.closeMenu = exports.testMenu = exports.updateMenu = exports.initMenu = void 0;
@@ -38913,10 +39203,11 @@ const initMenu = async (cpy, bal, ste) => {
 exports.initMenu = initMenu;
 const updateMenu = async (cpy, bal, ste) => {
     var bit;
+    bit = await ste.bus(ActTrm.CLEAR_TERMINAL, { src: "-----------" });
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "-----------" });
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "Space PIVOT V0" });
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "-----------" });
-    var lst = [ActMnu.FOCUS_MENU, ActMnu.HEXMAP_MENU, ActSpc.UPDATE_SPACE, ActSpc.OPEN_SPACE, ActSpc.EDIT_SPACE, ActMnu.YIELD_MENU, ActMnu.RENDER_MENU];
+    var lst = [ActSpc.UPDATE_SPACE, ActSpc.OPEN_SPACE, ActSpc.EDIT_SPACE, ActSpc.MERGE_SPACE, ActMnu.FOCUS_MENU, ActMnu.HEXMAP_MENU, ActMnu.YIELD_MENU, ActMnu.RENDER_MENU];
     bit = await ste.bus(ActTrm.UPDATE_TERMINAL, { lst });
     bit = bit.trmBit;
     var idx = lst[bit.val];
@@ -38947,6 +39238,14 @@ const updateMenu = async (cpy, bal, ste) => {
         case ActSpc.UPDATE_SPACE:
             bit = await ste.hunt(ActSpc.UPDATE_SPACE, {});
             break;
+        case ActSpc.MERGE_SPACE:
+            bit = await ste.hunt(ActSpc.MERGE_SPACE, {});
+            lst = bit.spcBit.lst;
+            bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "---merging...", val: 2, bit: "local" });
+            lst.forEach(async (a) => {
+                bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "---" + a, val: 2, bit: "local" });
+            });
+            break;
         case ActSpc.OPEN_SPACE:
             bit = await ste.hunt(ActSpc.OPEN_SPACE, {});
             break;
@@ -38974,43 +39273,162 @@ const createMenu = (cpy, bal, ste) => {
 exports.createMenu = createMenu;
 var patch = (ste, type, bale) => ste.dispatch({ type, bale });
 
-},{"../../00.space.unit/space.action":31,"../../act/terminal.action":80,"../menu.action":65,"open":undefined}],61:[function(require,module,exports){
+},{"../../00.space.unit/space.action":31,"../../act/terminal.action":93,"../menu.action":78,"open":undefined}],73:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.createHexmapMenu = void 0;
+const ActMnu = require("../menu.action");
+const ActMap = require("../../03.hexmap.unit/hexmap.action");
+const ActDsk = require("../../act/disk.action");
+const ActTrm = require("../../act/terminal.action");
+var bit, lst, dex, idx, dat, src, val;
+const createHexmapMenu = async (cpy, bal, ste) => {
+    var mapMod = ste.value.hexmap;
+    bit = await ste.bus(ActTrm.CLEAR_TERMINAL, { src: "-----------" });
+    bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "-----------" });
+    bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "Create Hexmap Menu" });
+    bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "-----------" });
+    bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "CURRENT:" + cpy.mapNomNow });
+    bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "SHAPE:" + cpy.mapShape });
+    if (cpy.atlasNow == null) {
+        cpy.atlasNow = { size: 0 };
+    }
+    bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "SIZE:" + cpy.atlasNow.size });
+    if (cpy.geoJsonNow == null) {
+        cpy.geoJsonNow = [];
+        cpy.geoJsonNow.coordinates = [];
+    }
+    bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "GEOJSON:" + cpy.geoJsonNow.coordinates.length });
+    var lst = [ActMap.NAME_HEXMAP, ActMap.SHAPE_HEXMAP, ActMap.GEOJSON_HEXMAP, ActMap.ATLAS_HEXMAP, ActMap.SAVE_HEXMAP, ActMap.TOOL_HEXMAP, ActMnu.HEXMAP_MENU];
+    bit = await ste.bus(ActTrm.UPDATE_TERMINAL, { lst });
+    bit = bit.trmBit;
+    var idx = lst[bit.val];
+    switch (idx) {
+        case ActMnu.HEXMAP_MENU:
+            bit = await ste.hunt(ActMnu.HEXMAP_MENU, {});
+            break;
+        case ActMap.NAME_HEXMAP:
+            bit = await ste.bus(ActTrm.INPUT_TERMINAL, { lst: ["", "", "Name Hexmap"] });
+            src = bit.trmBit.src;
+            cpy.mapNomNow = src;
+            bit = await ste.hunt(ActMnu.CREATE_HEXMAP_MENU, {});
+            break;
+        case ActMap.SHAPE_HEXMAP:
+            lst = [];
+            for (var key in SHAPE) {
+                lst.push(SHAPE[key]);
+            }
+            bit = await ste.bus(ActTrm.UPDATE_TERMINAL, { lst });
+            bit = bit.trmBit;
+            src = lst[bit.val];
+            cpy.mapShape = src;
+            bit = await ste.bus(ActTrm.INPUT_TERMINAL, { lst: ["", "X VALUE"] });
+            var x = Number(bit.trmBit.src);
+            bit = await ste.bus(ActTrm.INPUT_TERMINAL, { lst: ["", "Y VALUE"] });
+            var y = Number(bit.trmBit.src);
+            cpy.mapDimensions = x + '-' + y;
+            bit = await ste.hunt(ActMap.SHAPE_HEXMAP, { src, dat: { x, y } });
+            dat = bit.mapBit.dat;
+            cpy.sizeNow = dat.length;
+            bit = await ste.hunt(ActMnu.CREATE_HEXMAP_MENU, {});
+            break;
+        case ActMap.GEOJSON_HEXMAP:
+            bit = await ste.bus(ActDsk.INDEX_DISK, { src: './data/geojson/' });
+            lst = bit.dskBit.lst;
+            bit = await ste.bus(ActTrm.UPDATE_TERMINAL, { lst });
+            bit = bit.trmBit;
+            src = lst[bit.val];
+            idx = src.replace('.json', '');
+            bit = await ste.bus(ActDsk.READ_DISK, { src: './data/geojson/' + src, val: 1 });
+            dat = bit.dskBit.dat;
+            cpy.geoJsonNow = dat;
+            bit = await ste.hunt(ActMnu.CREATE_HEXMAP_MENU, {});
+            break;
+        case ActMap.ATLAS_HEXMAP:
+            lst = ['05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15'];
+            bit = await ste.bus(ActTrm.UPDATE_TERMINAL, { lst });
+            bit = bit.trmBit;
+            src = lst[bit.val];
+            val = Number(src);
+            dat = cpy.geoJsonNow;
+            bit = await ste.hunt(ActMap.ATLAS_HEXMAP, { dat, val: Number(val) });
+            dat = bit.mapBit.dat;
+            cpy.atlasNow = dat;
+            bit = await ste.hunt(ActMnu.CREATE_HEXMAP_MENU, {});
+            break;
+        case ActMap.SAVE_HEXMAP:
+            src = cpy.mapNomNow;
+            val = cpy.sizeNow;
+            bit = await ste.hunt(ActMap.SAVE_HEXMAP, { src, val });
+            bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: JSON.stringify(bit) });
+            break;
+        case ActMap.TOOL_HEXMAP:
+            bit = await ste.hunt(ActMap.TOOL_HEXMAP, {});
+            break;
+        default:
+            bit = await ste.bus(ActTrm.CLOSE_TERMINAL, {});
+            break;
+    }
+    if (bal.slv != null)
+        bal.slv({ mnuBit: { idx: "create-hexmap-menu" } });
+};
+exports.createHexmapMenu = createHexmapMenu;
+const SHAPE = require("../../val/shape");
+
+},{"../../03.hexmap.unit/hexmap.action":61,"../../act/disk.action":91,"../../act/terminal.action":93,"../../val/shape":98,"../menu.action":78}],74:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.focusMenu = void 0;
 const ActMnu = require("../menu.action");
 const ActFoc = require("../../01.focus.unit/focus.action");
-const ActMap = require("../../02.hexmap.unit/hexmap.action");
+const ActMap = require("../../03.hexmap.unit/hexmap.action");
 const ActTrm = require("../../act/terminal.action");
 var bit, lst, dex, idx, dat, src;
 const focusMenu = async (cpy, bal, ste) => {
     var focMod = ste.value.focus;
+    bit = await ste.bus(ActTrm.CLEAR_TERMINAL, { src: "-----------" });
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "-----------" });
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "Focus PIVOT V0" });
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "-----------" });
     var select = focMod.select;
     var nowIdx = 'None';
+    var nowAwake = 'None';
     var nowX = 0;
     var nowY = 0;
     var nowFace = 'None';
     var nowMap = "None";
+    var nowBnd = "NowBond";
+    var nowViz = "NowViz;";
     if (select != null) {
         nowIdx = select.idx;
         nowX = select.x;
         nowY = select.y;
         nowFace = select.face;
-        nowMap = select.map;
+        nowMap = select.src;
+        nowBnd = select.bonds;
+        nowViz = JSON.stringify(select.viewList);
+        nowAwake = String(select.awake);
     }
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { val: 3, src: "Now---" + nowIdx });
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { val: 4, src: "NowX--" + nowX });
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { val: 4, src: "NowY--" + nowY });
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { val: 5, src: "NowFace--" + nowFace });
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { val: 5, src: "NowMap--" + nowMap });
-    var lst = [ActFoc.FORWARD_FOCUS, ActFoc.BACKWARD_FOCUS, ActFoc.SPIN_LEFT_FOCUS, ActFoc.SPIN_RIGHT_FOCUS, ActFoc.WRITE_FOCUS, ActMap.FOCUSING_HEXMAP, ActFoc.SELECT_FOCUS, ActFoc.BOND_FOCUS, ActFoc.CORNER_FOCUS, ActFoc.READ_FOCUS, ActFoc.CREATE_FOCUS, ActMnu.UPDATE_MENU];
+    bit = await ste.bus(ActTrm.WRITE_TERMINAL, { val: 6, src: "Bonds--" + JSON.stringify(nowBnd) });
+    bit = await ste.bus(ActTrm.WRITE_TERMINAL, { val: 6, src: "Vision--" + JSON.stringify(nowViz) });
+    var lst = [ActFoc.FORWARD_FOCUS, ActFoc.SPIN_RIGHT_FOCUS, ActFoc.SPIN_LEFT_FOCUS, ActFoc.BACKWARD_FOCUS, ActMnu.UPDATE_MENU];
+    if (select != null && select.awake == false)
+        lst = [ActFoc.AWAKE_FOCUS, ActFoc.SPIN_RIGHT_FOCUS, ActFoc.SPIN_LEFT_FOCUS];
+    if (select == null)
+        lst = [ActFoc.WRITE_FOCUS, ActMap.FOCUSING_HEXMAP, ActFoc.SELECT_FOCUS, ActFoc.BOND_FOCUS, ActFoc.CORNER_FOCUS, ActFoc.READ_FOCUS, ActFoc.CREATE_FOCUS, ActMnu.UPDATE_MENU];
     bit = await ste.bus(ActTrm.UPDATE_TERMINAL, { lst });
     bit = bit.trmBit;
     var idx = lst[bit.val];
     switch (idx) {
+        case ActFoc.AWAKE_FOCUS:
+            bit = await ste.hunt(ActFoc.AWAKE_FOCUS, { idx: nowIdx });
+            bit = await ste.hunt(ActMnu.FOCUS_MENU);
+            break;
         case ActMap.FOCUSING_HEXMAP:
             bit = await ste.hunt(ActMap.LIST_HEXMAP, {});
             lst = bit.mapBit.lst;
@@ -39095,7 +39513,18 @@ const focusMenu = async (cpy, bal, ste) => {
         case ActFoc.WRITE_FOCUS:
             bit = await ste.bus(ActTrm.INPUT_TERMINAL, { lst: ["", "id focus..."] });
             idx = bit.trmBit.src;
-            bit = await ste.hunt(ActFoc.WRITE_FOCUS, { idx });
+            //now we need a list of maps
+            bit = await ste.hunt(ActMap.LIST_HEXMAP, { idx });
+            lst = bit.mapBit.lst;
+            if (lst.length == 0) {
+                bit = await ste.hunt(ActMnu.FOCUS_MENU, {});
+                return;
+            }
+            bit = await ste.bus(ActTrm.UPDATE_TERMINAL, { lst });
+            bit = bit.trmBit;
+            src = lst[bit.val];
+            bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: idx + " inside " + src, bit: 'local' });
+            bit = await ste.hunt(ActFoc.WRITE_FOCUS, { idx, src });
             bit = await ste.hunt(ActFoc.SELECT_FOCUS, { idx });
             bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: JSON.stringify(bit) });
             break;
@@ -39121,17 +39550,20 @@ const focusMenu = async (cpy, bal, ste) => {
 exports.focusMenu = focusMenu;
 var patch = (ste, type, bale) => ste.dispatch({ type, bale });
 
-},{"../../01.focus.unit/focus.action":41,"../../02.hexmap.unit/hexmap.action":49,"../../act/terminal.action":80,"../menu.action":65}],62:[function(require,module,exports){
+},{"../../01.focus.unit/focus.action":46,"../../03.hexmap.unit/hexmap.action":61,"../../act/terminal.action":93,"../menu.action":78}],75:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createHexmapMenu = exports.hexmapMenu = void 0;
+exports.hexmapMenu = void 0;
 const ActMnu = require("../menu.action");
 const ActFoc = require("../../01.focus.unit/focus.action");
-const ActMap = require("../../02.hexmap.unit/hexmap.action");
+const ActMap = require("../../03.hexmap.unit/hexmap.action");
+const ActGeo = require("../../02.geojson.unit/geojson.action");
+const ActDsk = require("../../act/disk.action");
 const ActTrm = require("../../act/terminal.action");
 var bit, lst, dex, idx, dat, src, val;
 const hexmapMenu = async (cpy, bal, ste) => {
     var mapMod = ste.value.hexmap;
+    bit = await ste.bus(ActTrm.CLEAR_TERMINAL, { src: "-----------" });
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "-----------" });
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "Hexmap Menu" });
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "-----------" });
@@ -39150,16 +39582,30 @@ const hexmapMenu = async (cpy, bal, ste) => {
     if (select != null) {
         nowIdx = select.idx;
     }
-    bit = await ste.bus(ActTrm.WRITE_TERMINAL, { val: 3, src: "Now---" + nowIdx });
+    bit = await ste.bus(ActTrm.WRITE_TERMINAL, { val: 3, src: "Now---" + cpy.mapNomNow });
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { val: 3, src: "Width---" + nowW });
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { val: 3, src: "Height---" + nowH });
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { val: 3, src: "Form---" + nowForm });
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "GEOJSON:" + JSON.stringify(cpy.geoJsonNow) });
-    var lst = [ActMap.WRITE_HEXMAP, ActMap.FOCUSING_HEXMAP, ActMap.LOAD_HEXMAP, ActMnu.CREATE_HEXMAP_MENU, ActMnu.UPDATE_MENU];
+    var lst = [ActMap.ADD_HEXMAP, ActMap.WRITE_HEXMAP, ActMap.FOCUSING_HEXMAP, ActMap.LOAD_HEXMAP, ActGeo.LOAD_GEOJSON, ActMnu.CREATE_HEXMAP_MENU, ActMnu.UPDATE_MENU];
     bit = await ste.bus(ActTrm.UPDATE_TERMINAL, { lst });
     bit = bit.trmBit;
     var idx = lst[bit.val];
     switch (idx) {
+        case ActMap.ADD_HEXMAP:
+            bit = await ste.bus(ActDsk.INDEX_DISK, { src: './data/hexmap/' });
+            lst = bit.dskBit.lst;
+            bit = await ste.bus(ActTrm.UPDATE_TERMINAL, { lst });
+            bit = bit.trmBit;
+            src = lst[bit.val];
+            idx = src.replace('.json', '');
+            bit = await ste.bus(ActDsk.READ_DISK, { src: './data/hexmap/' + src, val: 1 });
+            dat = bit.dskBit.dat;
+            bit = await ste.hunt(ActMap.ADD_HEXMAP, { idx, dat: { dat, gph: 'gph00' } });
+            mapMod.select = bit.mapBit.dat;
+            cpy.mapNomNow = mapMod.select.idx;
+            bit = await ste.hunt(ActMnu.UPDATE_MENU);
+            break;
         case ActMap.WRITE_HEXMAP:
             bit = await ste.bus(ActTrm.INPUT_TERMINAL, { lst: ["", "id hexmap..."] });
             idx = bit.trmBit.src;
@@ -39177,7 +39623,9 @@ const hexmapMenu = async (cpy, bal, ste) => {
             src = shapeList[bit.val];
             var frm = src;
             //now the type
-            bit = await ste.hunt(ActMap.WRITE_HEXMAP, { idx, dat: { frm, w, h } });
+            bit = await ste.hunt(ActMap.SHAPE_HEXMAP, { idx, dat: { frm, w, h } });
+            mapMod.select = bit.mapBit.dat;
+            cpy.mapNomNow = mapMod.select.idx;
             bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: JSON.stringify(bit) });
             bit = await ste.hunt(ActMap.SELECT_HEXMAP, { idx });
             bit = await ste.hunt(ActMnu.HEXMAP_MENU);
@@ -39207,6 +39655,18 @@ const hexmapMenu = async (cpy, bal, ste) => {
             bit = await ste.hunt(ActMnu.CREATE_HEXMAP_MENU);
             bit = await ste.hunt(ActMnu.HEXMAP_MENU);
             break;
+        case ActGeo.LOAD_GEOJSON:
+            bit = await ste.hunt(ActGeo.INDEX_GEOJSON, {});
+            lst = bit.geoBit.lst;
+            bit = await ste.bus(ActTrm.UPDATE_TERMINAL, { lst });
+            bit = bit.trmBit;
+            src = lst[bit.val];
+            bit = await ste.hunt(ActGeo.LOAD_GEOJSON, { src });
+            dat = bit.geoBit.dat;
+            idx = bit.geoBit.src;
+            cpy.geoJsonNow = dat;
+            cpy.mapNomNow = idx;
+            break;
         case ActMap.LOAD_HEXMAP:
             bit = await ste.hunt(ActMap.LIST_HEXMAP, {});
             lst = bit.mapBit.lst;
@@ -39234,86 +39694,18 @@ const hexmapMenu = async (cpy, bal, ste) => {
     return cpy;
 };
 exports.hexmapMenu = hexmapMenu;
-const createHexmapMenu = async (cpy, bal, ste) => {
-    var mapMod = ste.value.hexmap;
-    bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "-----------" });
-    bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "Create Hexmap Menu" });
-    bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "-----------" });
-    bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "CURRENT:" + cpy.mapNomNow });
-    bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "SHAPE:" + cpy.mapShape });
-    bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "SIZE:" + cpy.sizeNow });
-    bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "SIZE:" + cpy.sizeNow });
-    bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "GEOJSON:" + JSON.stringify(cpy.geoJsonNow) });
-    var lst = [ActMap.NAME_HEXMAP, ActMap.SHAPE_HEXMAP, ActMap.GEOJSON_HEXMAP, ActMap.ATLAS_HEXMAP, ActMap.SAVE_HEXMAP, ActMap.TOOL_HEXMAP, ActMnu.HEXMAP_MENU];
-    bit = await ste.bus(ActTrm.UPDATE_TERMINAL, { lst });
-    bit = bit.trmBit;
-    var idx = lst[bit.val];
-    switch (idx) {
-        case ActMnu.HEXMAP_MENU:
-            bit = await ste.hunt(ActMnu.HEXMAP_MENU, {});
-            break;
-        case ActMap.NAME_HEXMAP:
-            bit = await ste.bus(ActTrm.INPUT_TERMINAL, { lst: ["", "", "Name Hexmap"] });
-            src = bit.trmBit.src;
-            cpy.mapNomNow = src;
-            bit = await ste.hunt(ActMnu.CREATE_HEXMAP_MENU, {});
-            break;
-        case ActMap.SHAPE_HEXMAP:
-            lst = [];
-            for (var key in SHAPE) {
-                lst.push(SHAPE[key]);
-            }
-            bit = await ste.bus(ActTrm.UPDATE_TERMINAL, { lst });
-            bit = bit.trmBit;
-            src = lst[bit.val];
-            cpy.mapShape = src;
-            bit = await ste.bus(ActTrm.INPUT_TERMINAL, { lst: ["", "X VALUE"] });
-            var x = Number(bit.trmBit.src);
-            bit = await ste.bus(ActTrm.INPUT_TERMINAL, { lst: ["", "Y VALUE"] });
-            var y = Number(bit.trmBit.src);
-            cpy.mapDimensions = x + '-' + y;
-            bit = await ste.hunt(ActMap.SHAPE_HEXMAP, { src, dat: { x, y } });
-            dat = bit.mapBit.dat;
-            cpy.sizeNow = dat.length;
-            bit = await ste.hunt(ActMnu.CREATE_HEXMAP_MENU, {});
-            break;
-        case ActMap.GEOJSON_HEXMAP:
-            bit = await ste.hunt(ActMap.GEOJSON_HEXMAP, {});
-            bit = await ste.hunt(ActMnu.HEXMAP_MENU);
-            break;
-        case ActMap.ATLAS_HEXMAP:
-            bit = await ste.bus(ActTrm.INPUT_TERMINAL, { lst: ["", "", "ATLAS VALUE"] });
-            val = bit.trmBit.src;
-            bit = await ste.hunt(ActMap.ATLAS_HEXMAP, { dat: mapMod.geoJsonNow, val: Number(val) });
-            bit = await ste.hunt(ActMnu.HEXMAP_MENU);
-            break;
-        case ActMap.SAVE_HEXMAP:
-            src = cpy.mapNomNow;
-            val = cpy.sizeNow;
-            bit = await ste.hunt(ActMap.SAVE_HEXMAP, { src, val });
-            bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: JSON.stringify(bit) });
-            break;
-        case ActMap.TOOL_HEXMAP:
-            bit = await ste.hunt(ActMap.TOOL_HEXMAP, {});
-            break;
-        default:
-            bit = await ste.bus(ActTrm.CLOSE_TERMINAL, {});
-            break;
-    }
-    if (bal.slv != null)
-        bal.slv({ mnuBit: { idx: "create-hexmap-menu" } });
-};
-exports.createHexmapMenu = createHexmapMenu;
 const SHAPE = require("../../val/shape");
 
-},{"../../01.focus.unit/focus.action":41,"../../02.hexmap.unit/hexmap.action":49,"../../act/terminal.action":80,"../../val/shape":85,"../menu.action":65}],63:[function(require,module,exports){
+},{"../../01.focus.unit/focus.action":46,"../../02.geojson.unit/geojson.action":52,"../../03.hexmap.unit/hexmap.action":61,"../../act/disk.action":91,"../../act/terminal.action":93,"../../val/shape":98,"../menu.action":78}],76:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.renderMenu = void 0;
+const ActTrm = require("../../act/terminal.action");
 const ActVsg = require("../../act/visage.action");
 const ActHex = require("../../act/hexagon.action");
 var bit, lst, dex, idx, dat;
 const renderMenu = async (cpy, bal, ste) => {
+    bit = await ste.bus(ActTrm.CLEAR_TERMINAL, { src: "-----------" });
     bit = await ste.bus(ActVsg.SIZE_VISAGE, { dat: { w: 520, h: 520 } }, 'remote');
     //bit = await ste.bus( ActVsg.FULLSCREEN_VISAGE, {idx:"fce00"}, 'remote')
     //bit = await ste.bus( ActGph.WRITE_GRAPHIC, { idx: 'gph00' }, 'remote')
@@ -39326,15 +39718,16 @@ const renderMenu = async (cpy, bal, ste) => {
 exports.renderMenu = renderMenu;
 var patch = (ste, type, bale) => ste.dispatch({ type, bale });
 
-},{"../../act/hexagon.action":79,"../../act/visage.action":81}],64:[function(require,module,exports){
+},{"../../act/hexagon.action":92,"../../act/terminal.action":93,"../../act/visage.action":94}],77:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.yieldMenu = void 0;
 const ActFoc = require("../../01.focus.unit/focus.action");
-const ActMap = require("../../02.hexmap.unit/hexmap.action");
+const ActMap = require("../../03.hexmap.unit/hexmap.action");
 const ActTrm = require("../../act/terminal.action");
 var bit, lst, dex, idx, dat;
 const yieldMenu = async (cpy, bal, ste) => {
+    bit = await ste.bus(ActTrm.CLEAR_TERMINAL, { src: "-----------" });
     var idxMap = 'map00';
     var frm = SHAPE.RECTANGLE;
     var w = 10;
@@ -39355,7 +39748,7 @@ exports.yieldMenu = yieldMenu;
 var patch = (ste, type, bale) => ste.dispatch({ type, bale });
 const SHAPE = require("../../val/shape");
 
-},{"../../01.focus.unit/focus.action":41,"../../02.hexmap.unit/hexmap.action":49,"../../act/terminal.action":80,"../../val/shape":85}],65:[function(require,module,exports){
+},{"../../01.focus.unit/focus.action":46,"../../03.hexmap.unit/hexmap.action":61,"../../act/terminal.action":93,"../../val/shape":98}],78:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.YieldMenu = exports.YIELD_MENU = exports.RenderMenu = exports.RENDER_MENU = exports.CreateHexmapMenu = exports.CREATE_HEXMAP_MENU = exports.HexmapMenu = exports.HEXMAP_MENU = exports.CreateMenu = exports.CREATE_MENU = exports.FocusMenu = exports.FOCUS_MENU = exports.TimeMenu = exports.TIME_MENU = exports.CloseMenu = exports.CLOSE_MENU = exports.TestMenu = exports.TEST_MENU = exports.UpdateMenu = exports.UPDATE_MENU = exports.InitMenu = exports.INIT_MENU = void 0;
@@ -39448,7 +39841,7 @@ class YieldMenu {
 }
 exports.YieldMenu = YieldMenu;
 
-},{}],66:[function(require,module,exports){
+},{}],79:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.renderMenu = exports.createHexmapMenu = exports.hexmapMenu = exports.yieldMenu = exports.createMenu = exports.focusMenu = exports.closeMenu = exports.testMenu = exports.updateMenu = exports.initMenu = void 0;
@@ -39468,19 +39861,18 @@ var yield_menu_buzz_1 = require("./buz/yield-menu.buzz");
 Object.defineProperty(exports, "yieldMenu", { enumerable: true, get: function () { return yield_menu_buzz_1.yieldMenu; } });
 var hexmap_menu_buzz_1 = require("./buz/hexmap-menu.buzz");
 Object.defineProperty(exports, "hexmapMenu", { enumerable: true, get: function () { return hexmap_menu_buzz_1.hexmapMenu; } });
-var hexmap_menu_buzz_2 = require("./buz/hexmap-menu.buzz");
-Object.defineProperty(exports, "createHexmapMenu", { enumerable: true, get: function () { return hexmap_menu_buzz_2.createHexmapMenu; } });
+var create_hexmap_menu_buzz_1 = require("./buz/create-hexmap-menu.buzz");
+Object.defineProperty(exports, "createHexmapMenu", { enumerable: true, get: function () { return create_hexmap_menu_buzz_1.createHexmapMenu; } });
 var render_menu_buzz_1 = require("./buz/render-menu.buzz");
 Object.defineProperty(exports, "renderMenu", { enumerable: true, get: function () { return render_menu_buzz_1.renderMenu; } });
 
-},{"./buz/00.menu.buzz":60,"./buz/focus-menu.buzz":61,"./buz/hexmap-menu.buzz":62,"./buz/render-menu.buzz":63,"./buz/yield-menu.buzz":64}],67:[function(require,module,exports){
+},{"./buz/00.menu.buzz":72,"./buz/create-hexmap-menu.buzz":73,"./buz/focus-menu.buzz":74,"./buz/hexmap-menu.buzz":75,"./buz/render-menu.buzz":76,"./buz/yield-menu.buzz":77}],80:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MenuModel = void 0;
 class MenuModel {
     constructor() {
         this.lst = [];
-        this.atlasNow = [];
         this.sizeNow = 0;
         this.mapShape = 'none';
         this.mapNomNow = 'none';
@@ -39489,7 +39881,7 @@ class MenuModel {
 }
 exports.MenuModel = MenuModel;
 
-},{}],68:[function(require,module,exports){
+},{}],81:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reducer = void 0;
@@ -39525,7 +39917,7 @@ function reducer(model = new menu_model_1.MenuModel(), act, state) {
 }
 exports.reducer = reducer;
 
-},{"./menu.action":65,"./menu.buzzer":66,"./menu.model":67,"clone-deep":4}],69:[function(require,module,exports){
+},{"./menu.action":78,"./menu.buzzer":79,"./menu.model":80,"clone-deep":4}],82:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -39549,7 +39941,7 @@ MenuUnit = __decorate([
 ], MenuUnit);
 exports.default = MenuUnit;
 
-},{"../99.core/state":76,"typescript-ioc":28}],70:[function(require,module,exports){
+},{"../99.core/state":89,"typescript-ioc":28}],83:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateBus = exports.CREATE_BUS = exports.UpdateBus = exports.UPDATE_BUS = exports.MessageBus = exports.MESSAGE_BUS = exports.ConnectBus = exports.CONNECT_BUS = exports.OpenBus = exports.OPEN_BUS = exports.InitBus = exports.INIT_BUS = void 0;
@@ -39603,7 +39995,7 @@ class CreateBus {
 }
 exports.CreateBus = CreateBus;
 
-},{}],71:[function(require,module,exports){
+},{}],84:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createBus = exports.messageBus = exports.connectBus = exports.updateBus = exports.openBus = exports.initBus = void 0;
@@ -39620,7 +40012,7 @@ Object.defineProperty(exports, "messageBus", { enumerable: true, get: function (
 var bus_buzz_6 = require("./buz/bus.buzz");
 Object.defineProperty(exports, "createBus", { enumerable: true, get: function () { return bus_buzz_6.createBus; } });
 
-},{"./buz/bus.buzz":75}],72:[function(require,module,exports){
+},{"./buz/bus.buzz":88}],85:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BusModel = void 0;
@@ -39633,7 +40025,7 @@ class BusModel {
 }
 exports.BusModel = BusModel;
 
-},{}],73:[function(require,module,exports){
+},{}],86:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reducer = void 0;
@@ -39661,7 +40053,7 @@ function reducer(model = new bus_model_1.BusModel(), act, state) {
 }
 exports.reducer = reducer;
 
-},{"./bus.action":70,"./bus.buzzer":71,"./bus.model":72,"clone-deep":4}],74:[function(require,module,exports){
+},{"./bus.action":83,"./bus.buzzer":84,"./bus.model":85,"clone-deep":4}],87:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -39685,7 +40077,7 @@ BusUnit = __decorate([
 ], BusUnit);
 exports.default = BusUnit;
 
-},{"../99.core/state":76,"typescript-ioc":28}],75:[function(require,module,exports){
+},{"../99.core/state":89,"typescript-ioc":28}],88:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateBus = exports.messageBus = exports.connectBus = exports.openBus = exports.createBus = exports.initBus = void 0;
@@ -39861,7 +40253,7 @@ exports.updateBus = updateBus;
 var patch = (ste, type, bale) => ste.dispatch({ type, bale });
 const clone = require("clone-deep");
 
-},{"../../97.collect.unit/collect.action":55,"../../98.menu.unit/menu.action":65,"../../99.bus.unit/bus.action":70,"clone-deep":4}],76:[function(require,module,exports){
+},{"../../97.collect.unit/collect.action":67,"../../98.menu.unit/menu.action":78,"../../99.bus.unit/bus.action":83,"clone-deep":4}],89:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const rx_lite_1 = require("rx-lite");
@@ -39896,32 +40288,36 @@ class State extends rx_lite_1.BehaviorSubject {
 }
 exports.default = State;
 
-},{"../BEE":77,"rx-lite":15}],77:[function(require,module,exports){
+},{"../BEE":90,"rx-lite":15}],90:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reducer = exports.list = void 0;
 const space_unit_1 = require("./00.space.unit/space.unit");
 const focus_unit_1 = require("./01.focus.unit/focus.unit");
-const hexmap_unit_1 = require("./02.hexmap.unit/hexmap.unit");
+const geojson_unit_1 = require("./02.geojson.unit/geojson.unit");
+const hexmap_unit_1 = require("./03.hexmap.unit/hexmap.unit");
 const collect_unit_1 = require("./97.collect.unit/collect.unit");
 const menu_unit_1 = require("./98.menu.unit/menu.unit");
 const bus_unit_1 = require("./99.bus.unit/bus.unit");
 const space_model_1 = require("./00.space.unit/space.model");
 const focus_model_1 = require("./01.focus.unit/focus.model");
-const hexmap_model_1 = require("./02.hexmap.unit/hexmap.model");
+const geojson_model_1 = require("./02.geojson.unit/geojson.model");
+const hexmap_model_1 = require("./03.hexmap.unit/hexmap.model");
 const collect_model_1 = require("./97.collect.unit/collect.model");
 const menu_model_1 = require("./98.menu.unit/menu.model");
 const bus_model_1 = require("./99.bus.unit/bus.model");
-exports.list = [space_unit_1.default, focus_unit_1.default, hexmap_unit_1.default, collect_unit_1.default, menu_unit_1.default, bus_unit_1.default];
+exports.list = [space_unit_1.default, focus_unit_1.default, geojson_unit_1.default, hexmap_unit_1.default, collect_unit_1.default, menu_unit_1.default, bus_unit_1.default];
 const reduceFromSpace = require("./00.space.unit/space.reduce");
 const reduceFromFocus = require("./01.focus.unit/focus.reduce");
-const reduceFromHexmap = require("./02.hexmap.unit/hexmap.reduce");
+const reduceFromGeojson = require("./02.geojson.unit/geojson.reduce");
+const reduceFromHexmap = require("./03.hexmap.unit/hexmap.reduce");
 const reduceFromCollect = require("./97.collect.unit/collect.reduce");
 const reduceFromMenu = require("./98.menu.unit/menu.reduce");
 const reduceFromBus = require("./99.bus.unit/bus.reduce");
 exports.reducer = {
     space: reduceFromSpace.reducer,
     focus: reduceFromFocus.reducer,
+    geojson: reduceFromGeojson.reducer,
     hexmap: reduceFromHexmap.reducer,
     collect: reduceFromCollect.reducer,
     menu: reduceFromMenu.reducer,
@@ -39931,6 +40327,7 @@ class UnitData {
     constructor() {
         this.space = new space_model_1.SpaceModel();
         this.focus = new focus_model_1.FocusModel();
+        this.geojson = new geojson_model_1.GeojsonModel();
         this.hexmap = new hexmap_model_1.HexmapModel();
         this.collect = new collect_model_1.CollectModel();
         this.menu = new menu_model_1.MenuModel();
@@ -39939,23 +40336,24 @@ class UnitData {
 }
 exports.default = UnitData;
 
-},{"./00.space.unit/space.model":33,"./00.space.unit/space.reduce":34,"./00.space.unit/space.unit":35,"./01.focus.unit/focus.model":43,"./01.focus.unit/focus.reduce":44,"./01.focus.unit/focus.unit":45,"./02.hexmap.unit/hexmap.model":51,"./02.hexmap.unit/hexmap.reduce":52,"./02.hexmap.unit/hexmap.unit":53,"./97.collect.unit/collect.model":57,"./97.collect.unit/collect.reduce":58,"./97.collect.unit/collect.unit":59,"./98.menu.unit/menu.model":67,"./98.menu.unit/menu.reduce":68,"./98.menu.unit/menu.unit":69,"./99.bus.unit/bus.model":72,"./99.bus.unit/bus.reduce":73,"./99.bus.unit/bus.unit":74}],78:[function(require,module,exports){
+},{"./00.space.unit/space.model":33,"./00.space.unit/space.reduce":34,"./00.space.unit/space.unit":35,"./01.focus.unit/focus.model":48,"./01.focus.unit/focus.reduce":49,"./01.focus.unit/focus.unit":50,"./02.geojson.unit/geojson.model":54,"./02.geojson.unit/geojson.reduce":55,"./02.geojson.unit/geojson.unit":56,"./03.hexmap.unit/hexmap.model":63,"./03.hexmap.unit/hexmap.reduce":64,"./03.hexmap.unit/hexmap.unit":65,"./97.collect.unit/collect.model":69,"./97.collect.unit/collect.reduce":70,"./97.collect.unit/collect.unit":71,"./98.menu.unit/menu.model":80,"./98.menu.unit/menu.reduce":81,"./98.menu.unit/menu.unit":82,"./99.bus.unit/bus.model":85,"./99.bus.unit/bus.reduce":86,"./99.bus.unit/bus.unit":87}],91:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ENSURE_DISK = exports.TRASH_DISK = exports.BATCH_DISK = exports.FRAME_DISK = exports.COPY_DISK = exports.LOAD_LIST_DISK = exports.LIST_DISK = exports.WRITE_DISK = exports.READ_DISK = exports.UPDATE_DISK = exports.INIT_DISK = void 0;
-exports.INIT_DISK = "[Disk action] Init Disk";
-exports.UPDATE_DISK = "[Disk action] Update Disk";
-exports.READ_DISK = "[Disk action] Read Disk";
-exports.WRITE_DISK = "[Disk action] Write Disk";
-exports.LIST_DISK = "[List action] List Disk";
-exports.LOAD_LIST_DISK = "[Load_list action] Load_list Disk";
-exports.COPY_DISK = "[Copy action] Copy Disk";
-exports.FRAME_DISK = "[Frame action] Frame Disk";
-exports.BATCH_DISK = "[Batch action] Batch Disk";
-exports.TRASH_DISK = "[Trash action] Trash Disk";
-exports.ENSURE_DISK = "[Ensure action] Ensure Disk";
+exports.DELETE_DISK = exports.ENSURE_DISK = exports.TRASH_DISK = exports.BATCH_DISK = exports.FRAME_DISK = exports.COPY_DISK = exports.LOAD_LIST_DISK = exports.INDEX_DISK = exports.WRITE_DISK = exports.READ_DISK = exports.UPDATE_DISK = exports.INIT_DISK = void 0;
+exports.INIT_DISK = '[Disk action] Init Disk';
+exports.UPDATE_DISK = '[Disk action] Update Disk';
+exports.READ_DISK = '[Disk action] Read Disk';
+exports.WRITE_DISK = '[Disk action] Write Disk';
+exports.INDEX_DISK = '[Index action] Index Disk';
+exports.LOAD_LIST_DISK = '[Load_list action] Load_list Disk';
+exports.COPY_DISK = '[Copy action] Copy Disk';
+exports.FRAME_DISK = '[Frame action] Frame Disk';
+exports.BATCH_DISK = '[Batch action] Batch Disk';
+exports.TRASH_DISK = '[Trash action] Trash Disk';
+exports.ENSURE_DISK = '[Ensure action] Ensure Disk';
+exports.DELETE_DISK = '[Delete action] Delete Disk';
 
-},{}],79:[function(require,module,exports){
+},{}],92:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CREATE_HEXAGON = exports.WRITE_HEXAGON = exports.READ_HEXAGON = exports.UPDATE_HEXAGON = exports.INIT_HEXAGON = void 0;
@@ -39965,7 +40363,7 @@ exports.READ_HEXAGON = "[Read action] Read Hexagon";
 exports.WRITE_HEXAGON = "[Write action] Write Hexagon";
 exports.CREATE_HEXAGON = "[Create action] Create Hexagon";
 
-},{}],80:[function(require,module,exports){
+},{}],93:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ADD_PORT = exports.CONTENT_TERMINAL = exports.ROOT_TERMINAL = exports.CLOSE_TERMINAL = exports.TABLE_TERMINAL = exports.INPUT_TERMINAL = exports.CLEAR_TERMINAL = exports.UPDATE_TERMINAL = exports.WRITE_TERMINAL = exports.FOCUS_TERMINAL = exports.OPEN_TERMINAL = exports.INIT_TERMINAL = void 0;
@@ -39983,7 +40381,7 @@ exports.ROOT_TERMINAL = "[Terminal action] Root Terminal";
 exports.CONTENT_TERMINAL = "[Terminal action] Content Terminal";
 exports.ADD_PORT = "[Terminal action] Add Port";
 
-},{}],81:[function(require,module,exports){
+},{}],94:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RENDER_VISAGE = exports.SIZE_VISAGE = exports.CREATE_VISAGE = exports.WRITE_VISAGE = exports.READ_VISAGE = exports.FULLSCREEN_VISAGE = exports.UPDATE_VISAGE = exports.INIT_VISAGE = void 0;
@@ -39996,7 +40394,7 @@ exports.CREATE_VISAGE = "[Create action] Create Visage";
 exports.SIZE_VISAGE = "[Size action] Size Visage";
 exports.RENDER_VISAGE = "[Render action] Render Visage";
 
-},{}],82:[function(require,module,exports){
+},{}],95:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.VALUE_VURT = exports.BUNDLE_VURT = exports.CONTAINS_VURT = exports.LIST_UNIT_VURT = exports.LIST_PIVOT_VURT = exports.COUNT_VURT = exports.UNIT_VURT = exports.REPLACE_VURT = exports.UPDATE_VURT = exports.FETCH_VURT = exports.TEST_CLOUD_VURT = exports.DELAY_VURT = exports.INIT_VURT = void 0;
@@ -40014,7 +40412,7 @@ exports.CONTAINS_VURT = "[Contains action] Contains Vurt";
 exports.BUNDLE_VURT = "[Bundle action] Bundle Vurt";
 exports.VALUE_VURT = "[Value action] Value Vurt";
 
-},{}],83:[function(require,module,exports){
+},{}],96:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var sim = {
@@ -40046,7 +40444,7 @@ const Import = require("./BEE");
 const state_1 = require("./99.core/state");
 module.exports = sim;
 
-},{"./99.core/state":76,"./BEE":77}],84:[function(require,module,exports){
+},{"./99.core/state":89,"./BEE":90}],97:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.WISE_NORTH_EAST = exports.WISE_NORTH = exports.WISE_NORTH_WEST = exports.WISE_WEST = exports.WISE_SOUTH_WEST = exports.WISE_SOUTH = exports.WISE_SOUTH_EAST = exports.WISE_EAST = exports.NORTH_EAST = exports.NORTH = exports.NORTH_WEST = exports.WEST = exports.SOUTH_WEST = exports.SOUTH = exports.SOUTH_EAST = exports.EAST = void 0;
@@ -40067,16 +40465,17 @@ exports.WISE_NORTH_WEST = "Wise NW";
 exports.WISE_NORTH = "Wise N";
 exports.WISE_NORTH_EAST = "Wise NE";
 
-},{}],85:[function(require,module,exports){
+},{}],98:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PARALLELOGRAM = exports.HEXAGON = exports.TRIANGLE = exports.RECTANGLE = void 0;
+exports.PARALLELOGRAM = exports.HEXAGON = exports.TRIANGLE = exports.RECTANGLE = exports.GEOJSON = void 0;
+exports.GEOJSON = "geojson";
 exports.RECTANGLE = "rectangle";
 exports.TRIANGLE = "triangle";
 exports.HEXAGON = "hexagon";
 exports.PARALLELOGRAM = "parallelogram";
 
-},{}],86:[function(require,module,exports){
+},{}],99:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HEXMAP = exports.FOCUS = void 0;

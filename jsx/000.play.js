@@ -13589,6 +13589,7 @@ class ContainerBuildContext extends model_1.BuildContext {
 (function (global){(function (){
 global.PLAY = require("../dist/000.play/hunt");
 global.PLAY.ActPly = require("../dist/000.play/00.play.unit/play.action");
+global.PLAY.ActShw = require("../dist/000.play/01.show.unit/show.action");
 
 
 
@@ -13596,7 +13597,7 @@ global.PLAY.ActPly = require("../dist/000.play/00.play.unit/play.action");
 
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../dist/000.play/00.play.unit/play.action":24,"../dist/000.play/hunt":62}],23:[function(require,module,exports){
+},{"../dist/000.play/00.play.unit/play.action":24,"../dist/000.play/01.show.unit/show.action":30,"../dist/000.play/hunt":58}],23:[function(require,module,exports){
 (function (process,global){(function (){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -13606,10 +13607,6 @@ const ActBus = require("../../99.bus.unit/bus.action");
 const ActPly = require("../play.action");
 const ActVrt = require("../../act/vurt.action");
 const ActDsk = require("../../act/disk.action");
-const ActCan = require("../../act/container.action");
-const ActGph = require("../../act/graphic.action");
-const ActMap = require("../../act/hexmap.action");
-const ActHex = require("../../act/hexagon.action");
 var bit, val, idx, dex, lst, dat;
 var SPACE = global.SPACE;
 var SHADE = global.SHADE;
@@ -13624,22 +13621,24 @@ const initPlay = async (cpy, bal, ste) => {
 };
 exports.initPlay = initPlay;
 const startPlay = async (cpy, bal, ste) => {
-    const response = await fetch("./dat/hexmap/000.json");
-    const jsonData = await response.json();
-    bit = await SHADE.hunt(ActGph.WRITE_GRAPHIC, { idx: 'gph00', src: 'vsg00' });
-    bit = await SHADE.hunt(ActCan.ADD_CONTAINER, { idx: 'fce-can-00', dat: bit.gphBit.dat });
-    bit = await SPACE.hunt(ActMap.WRITE_HEXMAP, { idx: 'map00', dat: { gph: 'gph00' } });
-    var hexmap = bit.mapBit.dat;
-    jsonData;
-    var itm = {
-        dex: 0,
-        frm: "rectangle",
-        gph: "gph00",
-        idx: "map00",
-        typ: "hexmap",
-        dat: jsonData
-    };
-    bit = await SHADE.hunt(ActHex.WRITE_HEXAGON, { idx: 'hex00', src: 'vsg00', dat: itm });
+    //const response = await fetch("./dat/hexmap/000.json");
+    //const jsonData = await response.json();
+    //bit = await SHADE.hunt(ActGph.WRITE_GRAPHIC, { idx: 'gph00', src: 'vsg00' });
+    //bit = await SHADE.hunt(ActCan.ADD_CONTAINER, { idx: 'fce-can-00', dat: bit.gphBit.dat });
+    //bit = await SPACE.hunt(ActMap.WRITE_HEXMAP, { idx: 'map00', dat: { gph: 'gph00' } });
+    //var hexmap = bit.mapBit.dat;
+    //jsonData
+    //var itm = {
+    //    dex:0, 
+    //    frm:"rectangle",
+    //    gph:"gph00",
+    //    idx:"map00",
+    //    typ:"hexmap",
+    //    dat:jsonData
+    // }
+    // bit = await SHADE.hunt(ActHex.WRITE_HEXAGON, { idx: 'hex00', src: 'vsg00', dat: itm });
+    if (bal.slv != null)
+        bal.slv({ plyBit: { idx: "start-play" } });
     return cpy;
 };
 exports.startPlay = startPlay;
@@ -13716,7 +13715,7 @@ const patchPlay = (cpy, bal, ste) => {
 exports.patchPlay = patchPlay;
 
 }).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../../98.menu.unit/menu.action":42,"../../99.bus.unit/bus.action":47,"../../act/container.action":55,"../../act/disk.action":56,"../../act/graphic.action":57,"../../act/hexagon.action":58,"../../act/hexmap.action":59,"../../act/vurt.action":61,"../play.action":24,"_process":10,"child_process":undefined,"open":undefined}],24:[function(require,module,exports){
+},{"../../98.menu.unit/menu.action":42,"../../99.bus.unit/bus.action":47,"../../act/disk.action":55,"../../act/vurt.action":57,"../play.action":24,"_process":10,"child_process":undefined,"open":undefined}],24:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.StartPlay = exports.START_PLAY = exports.PatchPlay = exports.PATCH_PLAY = exports.EditPlay = exports.EDIT_PLAY = exports.RunPlay = exports.RUN_PLAY = exports.OpenPlay = exports.OPEN_PLAY = exports.UpdatePlay = exports.UPDATE_PLAY = exports.InitPlay = exports.INIT_PLAY = void 0;
@@ -13862,18 +13861,23 @@ PlayUnit = __decorate([
 exports.default = PlayUnit;
 
 },{"../99.core/state":53,"typescript-ioc":21}],29:[function(require,module,exports){
-(function (global){(function (){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateShow = exports.initShow = void 0;
-var bit;
-var SPACE = global.SPACE;
-var SHADE = global.SHADE;
+var bit, dat;
+//var SPACE = global.SPACE 
+//var SHADE = global.SHADE 
 const initShow = async (cpy, bal, ste) => {
-    debugger;
-    const response = await fetch("./dat/hexmap/000.json");
-    const jsonData = await response.json();
-    debugger;
+    var url = 'https://555-tasus.beeing.workers.dev/openService';
+    url = encodeURI(url);
+    //url = url.substring(0, url.length - 1);
+    console.log(url);
+    var rsp = await fetch(url, { method: 'GET', headers: { 'head': 'none' } });
+    var dat = await rsp.json();
+    console.log(JSON.stringify(dat));
+    //debugger
+    //const response = await fetch("./dat/hexmap/000.json");
+    //const jsonData = await response.json();
     //bit = await SPACE.hunt(SPACE.ActMap.WRITE_HEXMAP, { idx: 'map00', dat: { gph: 'gph00' } });
     //var hexmap = bit.mapBit.dat;
     //bit = await SHADE.hunt(SHADE.ActHex.WRITE_HEXAGON, { idx: 'hex00', src: 'vsg00', dat: {dat:hexmap }   });
@@ -13885,7 +13889,6 @@ const updateShow = (cpy, bal, ste) => {
 };
 exports.updateShow = updateShow;
 
-}).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],30:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -14340,7 +14343,7 @@ const visageMenu = (cpy, bal, ste) => {
 };
 exports.visageMenu = visageMenu;
 
-},{"../../00.play.unit/play.action":24,"../../act/terminal.action":60}],42:[function(require,module,exports){
+},{"../../00.play.unit/play.action":24,"../../act/terminal.action":56}],42:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ContainerMenu = exports.CONTAINER_MENU = exports.VisageMenu = exports.VISAGE_MENU = exports.ShadeMenu = exports.SHADE_MENU = exports.CloseMenu = exports.CLOSE_MENU = exports.TestMenu = exports.TEST_MENU = exports.UpdateMenu = exports.UPDATE_MENU = exports.InitMenu = exports.INIT_MENU = void 0;
@@ -14868,20 +14871,6 @@ exports.default = UnitData;
 },{"./00.play.unit/play.model":26,"./00.play.unit/play.reduce":27,"./00.play.unit/play.unit":28,"./01.show.unit/show.model":32,"./01.show.unit/show.reduce":33,"./01.show.unit/show.unit":34,"./97.collect.unit/collect.model":38,"./97.collect.unit/collect.reduce":39,"./97.collect.unit/collect.unit":40,"./98.menu.unit/menu.model":44,"./98.menu.unit/menu.reduce":45,"./98.menu.unit/menu.unit":46,"./99.bus.unit/bus.model":49,"./99.bus.unit/bus.reduce":50,"./99.bus.unit/bus.unit":51}],55:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DELETE_CONTAINER = exports.REMOVE_CONTAINER = exports.ADD_CONTAINER = exports.SURFACE_CONTAINER = exports.CREATE_CONTAINER = exports.WRITE_CONTAINER = exports.READ_CONTAINER = exports.UPDATE_CONTAINER = exports.INIT_CONTAINER = void 0;
-exports.INIT_CONTAINER = '[Container action] Init Container';
-exports.UPDATE_CONTAINER = '[Container action] Update Container';
-exports.READ_CONTAINER = '[Read action] Read Container';
-exports.WRITE_CONTAINER = '[Write action] Write Container';
-exports.CREATE_CONTAINER = '[Create action] Create Container';
-exports.SURFACE_CONTAINER = '[Surface action] Surface Container';
-exports.ADD_CONTAINER = '[Add action] Add Container';
-exports.REMOVE_CONTAINER = '[Remove action] Remove Container';
-exports.DELETE_CONTAINER = '[Delete action] Delete Container';
-
-},{}],56:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.COPY_DISK = exports.LOAD_LIST_DISK = exports.INDEX_DISK = exports.WRITE_DISK = exports.READ_DISK = exports.UPDATE_DISK = exports.INIT_DISK = void 0;
 exports.INIT_DISK = '[Disk action] Init Disk';
 exports.UPDATE_DISK = '[Disk action] Update Disk';
@@ -14891,58 +14880,7 @@ exports.INDEX_DISK = '[Index action] Index Disk';
 exports.LOAD_LIST_DISK = '[Load_list action] Load_list Disk';
 exports.COPY_DISK = '[Copy action] Copy Disk';
 
-},{}],57:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DELETE_GRAPHIC = exports.REMOVE_GRAPHIC = exports.CREATE_GRAPHIC = exports.WRITE_GRAPHIC = exports.READ_GRAPHIC = exports.UPDATE_GRAPHIC = exports.INIT_GRAPHIC = void 0;
-exports.INIT_GRAPHIC = '[Graphic action] Init Graphic';
-exports.UPDATE_GRAPHIC = '[Graphic action] Update Graphic';
-exports.READ_GRAPHIC = '[Read action] Read Graphic';
-exports.WRITE_GRAPHIC = '[Write action] Write Graphic';
-exports.CREATE_GRAPHIC = '[Create action] Create Graphic';
-exports.REMOVE_GRAPHIC = '[Remove action] Remove Graphic';
-exports.DELETE_GRAPHIC = '[Delete action] Delete Graphic';
-
-},{}],58:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.HEXMAP_HEXAGON = exports.FOCUS_HEXAGON = exports.DELETE_HEXAGON = exports.REMOVE_HEXAGON = exports.CREATE_HEXAGON = exports.WRITE_HEXAGON = exports.READ_HEXAGON = exports.UPDATE_HEXAGON = exports.INIT_HEXAGON = void 0;
-exports.INIT_HEXAGON = "[Hexagon action] Init Hexagon";
-exports.UPDATE_HEXAGON = "[Hexagon action] Update Hexagon";
-exports.READ_HEXAGON = "[Read action] Read Hexagon";
-exports.WRITE_HEXAGON = "[Write action] Write Hexagon";
-exports.CREATE_HEXAGON = "[Create action] Create Hexagon";
-exports.REMOVE_HEXAGON = "[Replace action] Remove Hexagon";
-exports.DELETE_HEXAGON = "[Delete action] Delete Hexagon";
-exports.FOCUS_HEXAGON = "[Focus action] Focus Hexagon";
-exports.HEXMAP_HEXAGON = "[Hexmap action] Hexmap Hexagon";
-
-},{}],59:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.SELECT_HEXMAP = exports.DEFOCUS_HEXMAP = exports.FOCUSING_HEXMAP = exports.SEEK_HEXMAP = exports.NAME_HEXMAP = exports.REPLACE_HEXMAP = exports.LIST_HEXMAP = exports.LOAD_HEXMAP = exports.SHAPE_HEXMAP = exports.SAVE_HEXMAP = exports.TOOL_HEXMAP = exports.GEOJSON_HEXMAP = exports.ATLAS_HEXMAP = exports.COPY_HEXMAP = exports.CREATE_HEXMAP = exports.WRITE_HEXMAP = exports.READ_HEXMAP = exports.OPEN_HEXMAP = exports.UPDATE_HEXMAP = exports.INIT_HEXMAP = void 0;
-exports.INIT_HEXMAP = "[Hexmap action] Init Hexmap";
-exports.UPDATE_HEXMAP = "[Hexmap action] Update Hexmap";
-exports.OPEN_HEXMAP = "[Hexmap action] Open Hexmap";
-exports.READ_HEXMAP = "[Read action] Read Hexmap";
-exports.WRITE_HEXMAP = "[Write action] Write Hexmap";
-exports.CREATE_HEXMAP = "[Create action] Create Hexmap";
-exports.COPY_HEXMAP = "[Copy action] Copy Hexmap";
-exports.ATLAS_HEXMAP = "[Atlas action] Atlas Hexmap";
-exports.GEOJSON_HEXMAP = "[Geojson action] Geojson Hexmap";
-exports.TOOL_HEXMAP = "[Tool action] Tool Hexmap";
-exports.SAVE_HEXMAP = "[Save action] Save Hexmap";
-exports.SHAPE_HEXMAP = "[Shape action] Shape Hexmap";
-exports.LOAD_HEXMAP = "[Load action] Load Hexmap";
-exports.LIST_HEXMAP = "[List action] List Hexmap";
-exports.REPLACE_HEXMAP = "[Replace action] Replace Hexmap";
-exports.NAME_HEXMAP = "[Name action] Name Hexmap";
-exports.SEEK_HEXMAP = "[Seek action] Seek Hexmap";
-exports.FOCUSING_HEXMAP = "[Focusing action] Focusing Hexmap";
-exports.DEFOCUS_HEXMAP = "[Defocus action] Defocus Hexmap";
-exports.SELECT_HEXMAP = "[Select action] Select Hexmap";
-
-},{}],60:[function(require,module,exports){
+},{}],56:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ADD_PORT = exports.CONTENT_TERMINAL = exports.ROOT_TERMINAL = exports.CLOSE_TERMINAL = exports.TABLE_TERMINAL = exports.INPUT_TERMINAL = exports.CLEAR_TERMINAL = exports.UPDATE_TERMINAL = exports.WRITE_TERMINAL = exports.FOCUS_TERMINAL = exports.OPEN_TERMINAL = exports.INIT_TERMINAL = void 0;
@@ -14960,7 +14898,7 @@ exports.ROOT_TERMINAL = "[Terminal action] Root Terminal";
 exports.CONTENT_TERMINAL = "[Terminal action] Content Terminal";
 exports.ADD_PORT = "[Terminal action] Add Port";
 
-},{}],61:[function(require,module,exports){
+},{}],57:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.VALUE_VURT = exports.BUNDLE_VURT = exports.CONTAINS_VURT = exports.LIST_UNIT_VURT = exports.LIST_PIVOT_VURT = exports.COUNT_VURT = exports.UNIT_VURT = exports.REPLACE_VURT = exports.UPDATE_VURT = exports.FETCH_VURT = exports.TEST_CLOUD_VURT = exports.DELAY_VURT = exports.INIT_VURT = void 0;
@@ -14978,7 +14916,7 @@ exports.CONTAINS_VURT = "[Contains action] Contains Vurt";
 exports.BUNDLE_VURT = "[Bundle action] Bundle Vurt";
 exports.VALUE_VURT = "[Value action] Value Vurt";
 
-},{}],62:[function(require,module,exports){
+},{}],58:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var sim = {

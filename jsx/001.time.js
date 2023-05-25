@@ -1931,7 +1931,7 @@ function numberIsNaN (obj) {
 }
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"base64-js":1,"buffer":2,"ieee754":6}],3:[function(require,module,exports){
+},{"base64-js":1,"buffer":2,"ieee754":4}],3:[function(require,module,exports){
 'use strict';
 
 /**
@@ -1982,185 +1982,7 @@ function cloneArrayDeep(val, instanceClone) {
 
 module.exports = cloneDeep;
 
-},{"is-plain-object":7,"kind-of":9,"shallow-clone":18}],4:[function(require,module,exports){
-(function (process){(function (){
-const fs = require('fs')
-const path = require('path')
-const os = require('os')
-const packageJson = require('../package.json')
-
-const version = packageJson.version
-
-const LINE = /(?:^|^)\s*(?:export\s+)?([\w.-]+)(?:\s*=\s*?|:\s+?)(\s*'(?:\\'|[^'])*'|\s*"(?:\\"|[^"])*"|\s*`(?:\\`|[^`])*`|[^#\r\n]+)?\s*(?:#.*)?(?:$|$)/mg
-
-// Parser src into an Object
-function parse (src) {
-  const obj = {}
-
-  // Convert buffer to string
-  let lines = src.toString()
-
-  // Convert line breaks to same format
-  lines = lines.replace(/\r\n?/mg, '\n')
-
-  let match
-  while ((match = LINE.exec(lines)) != null) {
-    const key = match[1]
-
-    // Default undefined or null to empty string
-    let value = (match[2] || '')
-
-    // Remove whitespace
-    value = value.trim()
-
-    // Check if double quoted
-    const maybeQuote = value[0]
-
-    // Remove surrounding quotes
-    value = value.replace(/^(['"`])([\s\S]*)\1$/mg, '$2')
-
-    // Expand newlines if double quoted
-    if (maybeQuote === '"') {
-      value = value.replace(/\\n/g, '\n')
-      value = value.replace(/\\r/g, '\r')
-    }
-
-    // Add to object
-    obj[key] = value
-  }
-
-  return obj
-}
-
-function _log (message) {
-  console.log(`[dotenv@${version}][DEBUG] ${message}`)
-}
-
-function _resolveHome (envPath) {
-  return envPath[0] === '~' ? path.join(os.homedir(), envPath.slice(1)) : envPath
-}
-
-// Populates process.env from .env file
-function config (options) {
-  let dotenvPath = path.resolve(process.cwd(), '.env')
-  let encoding = 'utf8'
-  const debug = Boolean(options && options.debug)
-  const override = Boolean(options && options.override)
-
-  if (options) {
-    if (options.path != null) {
-      dotenvPath = _resolveHome(options.path)
-    }
-    if (options.encoding != null) {
-      encoding = options.encoding
-    }
-  }
-
-  try {
-    // Specifying an encoding returns a string instead of a buffer
-    const parsed = DotenvModule.parse(fs.readFileSync(dotenvPath, { encoding }))
-
-    Object.keys(parsed).forEach(function (key) {
-      if (!Object.prototype.hasOwnProperty.call(process.env, key)) {
-        process.env[key] = parsed[key]
-      } else {
-        if (override === true) {
-          process.env[key] = parsed[key]
-        }
-
-        if (debug) {
-          if (override === true) {
-            _log(`"${key}" is already defined in \`process.env\` and WAS overwritten`)
-          } else {
-            _log(`"${key}" is already defined in \`process.env\` and was NOT overwritten`)
-          }
-        }
-      }
-    })
-
-    return { parsed }
-  } catch (e) {
-    if (debug) {
-      _log(`Failed to load ${dotenvPath} ${e.message}`)
-    }
-
-    return { error: e }
-  }
-}
-
-const DotenvModule = {
-  config,
-  parse
-}
-
-module.exports.config = DotenvModule.config
-module.exports.parse = DotenvModule.parse
-module.exports = DotenvModule
-
-}).call(this)}).call(this,require('_process'))
-},{"../package.json":5,"_process":15,"fs":undefined,"os":13,"path":14}],5:[function(require,module,exports){
-module.exports={
-  "name": "dotenv",
-  "version": "16.0.3",
-  "description": "Loads environment variables from .env file",
-  "main": "lib/main.js",
-  "types": "lib/main.d.ts",
-  "exports": {
-    ".": {
-      "require": "./lib/main.js",
-      "types": "./lib/main.d.ts",
-      "default": "./lib/main.js"
-    },
-    "./config": "./config.js",
-    "./config.js": "./config.js",
-    "./lib/env-options": "./lib/env-options.js",
-    "./lib/env-options.js": "./lib/env-options.js",
-    "./lib/cli-options": "./lib/cli-options.js",
-    "./lib/cli-options.js": "./lib/cli-options.js",
-    "./package.json": "./package.json"
-  },
-  "scripts": {
-    "dts-check": "tsc --project tests/types/tsconfig.json",
-    "lint": "standard",
-    "lint-readme": "standard-markdown",
-    "pretest": "npm run lint && npm run dts-check",
-    "test": "tap tests/*.js --100 -Rspec",
-    "prerelease": "npm test",
-    "release": "standard-version"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/motdotla/dotenv.git"
-  },
-  "keywords": [
-    "dotenv",
-    "env",
-    ".env",
-    "environment",
-    "variables",
-    "config",
-    "settings"
-  ],
-  "readmeFilename": "README.md",
-  "license": "BSD-2-Clause",
-  "devDependencies": {
-    "@types/node": "^17.0.9",
-    "decache": "^4.6.1",
-    "dtslint": "^3.7.0",
-    "sinon": "^12.0.1",
-    "standard": "^16.0.4",
-    "standard-markdown": "^7.1.0",
-    "standard-version": "^9.3.2",
-    "tap": "^15.1.6",
-    "tar": "^6.1.11",
-    "typescript": "^4.5.4"
-  },
-  "engines": {
-    "node": ">=12"
-  }
-}
-
-},{}],6:[function(require,module,exports){
+},{"is-plain-object":5,"kind-of":7,"shallow-clone":14}],4:[function(require,module,exports){
 /*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
   var e, m
@@ -2247,7 +2069,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128
 }
 
-},{}],7:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 /*!
  * is-plain-object <https://github.com/jonschlinkert/is-plain-object>
  *
@@ -2286,7 +2108,7 @@ module.exports = function isPlainObject(o) {
   return true;
 };
 
-},{"isobject":8}],8:[function(require,module,exports){
+},{"isobject":6}],6:[function(require,module,exports){
 /*!
  * isobject <https://github.com/jonschlinkert/isobject>
  *
@@ -2300,7 +2122,7 @@ module.exports = function isObject(val) {
   return val != null && typeof val === 'object' && Array.isArray(val) === false;
 };
 
-},{}],9:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 var toString = Object.prototype.toString;
 
 module.exports = function kindOf(val) {
@@ -2431,7 +2253,7 @@ function isBuffer(val) {
   return false;
 }
 
-},{}],10:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 (function (global){(function (){
 /**
  * lodash (Custom Build) <https://lodash.com/>
@@ -3366,7 +3188,7 @@ function get(object, path, defaultValue) {
 module.exports = get;
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],11:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 (function (global){(function (){
 /**
  * lodash (Custom Build) <https://lodash.com/>
@@ -4360,7 +4182,7 @@ function set(object, path, value) {
 module.exports = set;
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],12:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', { value: true });
@@ -12144,591 +11966,7 @@ exports.VERSION = VERSION;
 exports.Zone = Zone;
 
 
-},{}],13:[function(require,module,exports){
-exports.endianness = function () { return 'LE' };
-
-exports.hostname = function () {
-    if (typeof location !== 'undefined') {
-        return location.hostname
-    }
-    else return '';
-};
-
-exports.loadavg = function () { return [] };
-
-exports.uptime = function () { return 0 };
-
-exports.freemem = function () {
-    return Number.MAX_VALUE;
-};
-
-exports.totalmem = function () {
-    return Number.MAX_VALUE;
-};
-
-exports.cpus = function () { return [] };
-
-exports.type = function () { return 'Browser' };
-
-exports.release = function () {
-    if (typeof navigator !== 'undefined') {
-        return navigator.appVersion;
-    }
-    return '';
-};
-
-exports.networkInterfaces
-= exports.getNetworkInterfaces
-= function () { return {} };
-
-exports.arch = function () { return 'javascript' };
-
-exports.platform = function () { return 'browser' };
-
-exports.tmpdir = exports.tmpDir = function () {
-    return '/tmp';
-};
-
-exports.EOL = '\n';
-
-exports.homedir = function () {
-	return '/'
-};
-
-},{}],14:[function(require,module,exports){
-(function (process){(function (){
-// 'path' module extracted from Node.js v8.11.1 (only the posix part)
-// transplited with Babel
-
-// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-'use strict';
-
-function assertPath(path) {
-  if (typeof path !== 'string') {
-    throw new TypeError('Path must be a string. Received ' + JSON.stringify(path));
-  }
-}
-
-// Resolves . and .. elements in a path with directory names
-function normalizeStringPosix(path, allowAboveRoot) {
-  var res = '';
-  var lastSegmentLength = 0;
-  var lastSlash = -1;
-  var dots = 0;
-  var code;
-  for (var i = 0; i <= path.length; ++i) {
-    if (i < path.length)
-      code = path.charCodeAt(i);
-    else if (code === 47 /*/*/)
-      break;
-    else
-      code = 47 /*/*/;
-    if (code === 47 /*/*/) {
-      if (lastSlash === i - 1 || dots === 1) {
-        // NOOP
-      } else if (lastSlash !== i - 1 && dots === 2) {
-        if (res.length < 2 || lastSegmentLength !== 2 || res.charCodeAt(res.length - 1) !== 46 /*.*/ || res.charCodeAt(res.length - 2) !== 46 /*.*/) {
-          if (res.length > 2) {
-            var lastSlashIndex = res.lastIndexOf('/');
-            if (lastSlashIndex !== res.length - 1) {
-              if (lastSlashIndex === -1) {
-                res = '';
-                lastSegmentLength = 0;
-              } else {
-                res = res.slice(0, lastSlashIndex);
-                lastSegmentLength = res.length - 1 - res.lastIndexOf('/');
-              }
-              lastSlash = i;
-              dots = 0;
-              continue;
-            }
-          } else if (res.length === 2 || res.length === 1) {
-            res = '';
-            lastSegmentLength = 0;
-            lastSlash = i;
-            dots = 0;
-            continue;
-          }
-        }
-        if (allowAboveRoot) {
-          if (res.length > 0)
-            res += '/..';
-          else
-            res = '..';
-          lastSegmentLength = 2;
-        }
-      } else {
-        if (res.length > 0)
-          res += '/' + path.slice(lastSlash + 1, i);
-        else
-          res = path.slice(lastSlash + 1, i);
-        lastSegmentLength = i - lastSlash - 1;
-      }
-      lastSlash = i;
-      dots = 0;
-    } else if (code === 46 /*.*/ && dots !== -1) {
-      ++dots;
-    } else {
-      dots = -1;
-    }
-  }
-  return res;
-}
-
-function _format(sep, pathObject) {
-  var dir = pathObject.dir || pathObject.root;
-  var base = pathObject.base || (pathObject.name || '') + (pathObject.ext || '');
-  if (!dir) {
-    return base;
-  }
-  if (dir === pathObject.root) {
-    return dir + base;
-  }
-  return dir + sep + base;
-}
-
-var posix = {
-  // path.resolve([from ...], to)
-  resolve: function resolve() {
-    var resolvedPath = '';
-    var resolvedAbsolute = false;
-    var cwd;
-
-    for (var i = arguments.length - 1; i >= -1 && !resolvedAbsolute; i--) {
-      var path;
-      if (i >= 0)
-        path = arguments[i];
-      else {
-        if (cwd === undefined)
-          cwd = process.cwd();
-        path = cwd;
-      }
-
-      assertPath(path);
-
-      // Skip empty entries
-      if (path.length === 0) {
-        continue;
-      }
-
-      resolvedPath = path + '/' + resolvedPath;
-      resolvedAbsolute = path.charCodeAt(0) === 47 /*/*/;
-    }
-
-    // At this point the path should be resolved to a full absolute path, but
-    // handle relative paths to be safe (might happen when process.cwd() fails)
-
-    // Normalize the path
-    resolvedPath = normalizeStringPosix(resolvedPath, !resolvedAbsolute);
-
-    if (resolvedAbsolute) {
-      if (resolvedPath.length > 0)
-        return '/' + resolvedPath;
-      else
-        return '/';
-    } else if (resolvedPath.length > 0) {
-      return resolvedPath;
-    } else {
-      return '.';
-    }
-  },
-
-  normalize: function normalize(path) {
-    assertPath(path);
-
-    if (path.length === 0) return '.';
-
-    var isAbsolute = path.charCodeAt(0) === 47 /*/*/;
-    var trailingSeparator = path.charCodeAt(path.length - 1) === 47 /*/*/;
-
-    // Normalize the path
-    path = normalizeStringPosix(path, !isAbsolute);
-
-    if (path.length === 0 && !isAbsolute) path = '.';
-    if (path.length > 0 && trailingSeparator) path += '/';
-
-    if (isAbsolute) return '/' + path;
-    return path;
-  },
-
-  isAbsolute: function isAbsolute(path) {
-    assertPath(path);
-    return path.length > 0 && path.charCodeAt(0) === 47 /*/*/;
-  },
-
-  join: function join() {
-    if (arguments.length === 0)
-      return '.';
-    var joined;
-    for (var i = 0; i < arguments.length; ++i) {
-      var arg = arguments[i];
-      assertPath(arg);
-      if (arg.length > 0) {
-        if (joined === undefined)
-          joined = arg;
-        else
-          joined += '/' + arg;
-      }
-    }
-    if (joined === undefined)
-      return '.';
-    return posix.normalize(joined);
-  },
-
-  relative: function relative(from, to) {
-    assertPath(from);
-    assertPath(to);
-
-    if (from === to) return '';
-
-    from = posix.resolve(from);
-    to = posix.resolve(to);
-
-    if (from === to) return '';
-
-    // Trim any leading backslashes
-    var fromStart = 1;
-    for (; fromStart < from.length; ++fromStart) {
-      if (from.charCodeAt(fromStart) !== 47 /*/*/)
-        break;
-    }
-    var fromEnd = from.length;
-    var fromLen = fromEnd - fromStart;
-
-    // Trim any leading backslashes
-    var toStart = 1;
-    for (; toStart < to.length; ++toStart) {
-      if (to.charCodeAt(toStart) !== 47 /*/*/)
-        break;
-    }
-    var toEnd = to.length;
-    var toLen = toEnd - toStart;
-
-    // Compare paths to find the longest common path from root
-    var length = fromLen < toLen ? fromLen : toLen;
-    var lastCommonSep = -1;
-    var i = 0;
-    for (; i <= length; ++i) {
-      if (i === length) {
-        if (toLen > length) {
-          if (to.charCodeAt(toStart + i) === 47 /*/*/) {
-            // We get here if `from` is the exact base path for `to`.
-            // For example: from='/foo/bar'; to='/foo/bar/baz'
-            return to.slice(toStart + i + 1);
-          } else if (i === 0) {
-            // We get here if `from` is the root
-            // For example: from='/'; to='/foo'
-            return to.slice(toStart + i);
-          }
-        } else if (fromLen > length) {
-          if (from.charCodeAt(fromStart + i) === 47 /*/*/) {
-            // We get here if `to` is the exact base path for `from`.
-            // For example: from='/foo/bar/baz'; to='/foo/bar'
-            lastCommonSep = i;
-          } else if (i === 0) {
-            // We get here if `to` is the root.
-            // For example: from='/foo'; to='/'
-            lastCommonSep = 0;
-          }
-        }
-        break;
-      }
-      var fromCode = from.charCodeAt(fromStart + i);
-      var toCode = to.charCodeAt(toStart + i);
-      if (fromCode !== toCode)
-        break;
-      else if (fromCode === 47 /*/*/)
-        lastCommonSep = i;
-    }
-
-    var out = '';
-    // Generate the relative path based on the path difference between `to`
-    // and `from`
-    for (i = fromStart + lastCommonSep + 1; i <= fromEnd; ++i) {
-      if (i === fromEnd || from.charCodeAt(i) === 47 /*/*/) {
-        if (out.length === 0)
-          out += '..';
-        else
-          out += '/..';
-      }
-    }
-
-    // Lastly, append the rest of the destination (`to`) path that comes after
-    // the common path parts
-    if (out.length > 0)
-      return out + to.slice(toStart + lastCommonSep);
-    else {
-      toStart += lastCommonSep;
-      if (to.charCodeAt(toStart) === 47 /*/*/)
-        ++toStart;
-      return to.slice(toStart);
-    }
-  },
-
-  _makeLong: function _makeLong(path) {
-    return path;
-  },
-
-  dirname: function dirname(path) {
-    assertPath(path);
-    if (path.length === 0) return '.';
-    var code = path.charCodeAt(0);
-    var hasRoot = code === 47 /*/*/;
-    var end = -1;
-    var matchedSlash = true;
-    for (var i = path.length - 1; i >= 1; --i) {
-      code = path.charCodeAt(i);
-      if (code === 47 /*/*/) {
-          if (!matchedSlash) {
-            end = i;
-            break;
-          }
-        } else {
-        // We saw the first non-path separator
-        matchedSlash = false;
-      }
-    }
-
-    if (end === -1) return hasRoot ? '/' : '.';
-    if (hasRoot && end === 1) return '//';
-    return path.slice(0, end);
-  },
-
-  basename: function basename(path, ext) {
-    if (ext !== undefined && typeof ext !== 'string') throw new TypeError('"ext" argument must be a string');
-    assertPath(path);
-
-    var start = 0;
-    var end = -1;
-    var matchedSlash = true;
-    var i;
-
-    if (ext !== undefined && ext.length > 0 && ext.length <= path.length) {
-      if (ext.length === path.length && ext === path) return '';
-      var extIdx = ext.length - 1;
-      var firstNonSlashEnd = -1;
-      for (i = path.length - 1; i >= 0; --i) {
-        var code = path.charCodeAt(i);
-        if (code === 47 /*/*/) {
-            // If we reached a path separator that was not part of a set of path
-            // separators at the end of the string, stop now
-            if (!matchedSlash) {
-              start = i + 1;
-              break;
-            }
-          } else {
-          if (firstNonSlashEnd === -1) {
-            // We saw the first non-path separator, remember this index in case
-            // we need it if the extension ends up not matching
-            matchedSlash = false;
-            firstNonSlashEnd = i + 1;
-          }
-          if (extIdx >= 0) {
-            // Try to match the explicit extension
-            if (code === ext.charCodeAt(extIdx)) {
-              if (--extIdx === -1) {
-                // We matched the extension, so mark this as the end of our path
-                // component
-                end = i;
-              }
-            } else {
-              // Extension does not match, so our result is the entire path
-              // component
-              extIdx = -1;
-              end = firstNonSlashEnd;
-            }
-          }
-        }
-      }
-
-      if (start === end) end = firstNonSlashEnd;else if (end === -1) end = path.length;
-      return path.slice(start, end);
-    } else {
-      for (i = path.length - 1; i >= 0; --i) {
-        if (path.charCodeAt(i) === 47 /*/*/) {
-            // If we reached a path separator that was not part of a set of path
-            // separators at the end of the string, stop now
-            if (!matchedSlash) {
-              start = i + 1;
-              break;
-            }
-          } else if (end === -1) {
-          // We saw the first non-path separator, mark this as the end of our
-          // path component
-          matchedSlash = false;
-          end = i + 1;
-        }
-      }
-
-      if (end === -1) return '';
-      return path.slice(start, end);
-    }
-  },
-
-  extname: function extname(path) {
-    assertPath(path);
-    var startDot = -1;
-    var startPart = 0;
-    var end = -1;
-    var matchedSlash = true;
-    // Track the state of characters (if any) we see before our first dot and
-    // after any path separator we find
-    var preDotState = 0;
-    for (var i = path.length - 1; i >= 0; --i) {
-      var code = path.charCodeAt(i);
-      if (code === 47 /*/*/) {
-          // If we reached a path separator that was not part of a set of path
-          // separators at the end of the string, stop now
-          if (!matchedSlash) {
-            startPart = i + 1;
-            break;
-          }
-          continue;
-        }
-      if (end === -1) {
-        // We saw the first non-path separator, mark this as the end of our
-        // extension
-        matchedSlash = false;
-        end = i + 1;
-      }
-      if (code === 46 /*.*/) {
-          // If this is our first dot, mark it as the start of our extension
-          if (startDot === -1)
-            startDot = i;
-          else if (preDotState !== 1)
-            preDotState = 1;
-      } else if (startDot !== -1) {
-        // We saw a non-dot and non-path separator before our dot, so we should
-        // have a good chance at having a non-empty extension
-        preDotState = -1;
-      }
-    }
-
-    if (startDot === -1 || end === -1 ||
-        // We saw a non-dot character immediately before the dot
-        preDotState === 0 ||
-        // The (right-most) trimmed path component is exactly '..'
-        preDotState === 1 && startDot === end - 1 && startDot === startPart + 1) {
-      return '';
-    }
-    return path.slice(startDot, end);
-  },
-
-  format: function format(pathObject) {
-    if (pathObject === null || typeof pathObject !== 'object') {
-      throw new TypeError('The "pathObject" argument must be of type Object. Received type ' + typeof pathObject);
-    }
-    return _format('/', pathObject);
-  },
-
-  parse: function parse(path) {
-    assertPath(path);
-
-    var ret = { root: '', dir: '', base: '', ext: '', name: '' };
-    if (path.length === 0) return ret;
-    var code = path.charCodeAt(0);
-    var isAbsolute = code === 47 /*/*/;
-    var start;
-    if (isAbsolute) {
-      ret.root = '/';
-      start = 1;
-    } else {
-      start = 0;
-    }
-    var startDot = -1;
-    var startPart = 0;
-    var end = -1;
-    var matchedSlash = true;
-    var i = path.length - 1;
-
-    // Track the state of characters (if any) we see before our first dot and
-    // after any path separator we find
-    var preDotState = 0;
-
-    // Get non-dir info
-    for (; i >= start; --i) {
-      code = path.charCodeAt(i);
-      if (code === 47 /*/*/) {
-          // If we reached a path separator that was not part of a set of path
-          // separators at the end of the string, stop now
-          if (!matchedSlash) {
-            startPart = i + 1;
-            break;
-          }
-          continue;
-        }
-      if (end === -1) {
-        // We saw the first non-path separator, mark this as the end of our
-        // extension
-        matchedSlash = false;
-        end = i + 1;
-      }
-      if (code === 46 /*.*/) {
-          // If this is our first dot, mark it as the start of our extension
-          if (startDot === -1) startDot = i;else if (preDotState !== 1) preDotState = 1;
-        } else if (startDot !== -1) {
-        // We saw a non-dot and non-path separator before our dot, so we should
-        // have a good chance at having a non-empty extension
-        preDotState = -1;
-      }
-    }
-
-    if (startDot === -1 || end === -1 ||
-    // We saw a non-dot character immediately before the dot
-    preDotState === 0 ||
-    // The (right-most) trimmed path component is exactly '..'
-    preDotState === 1 && startDot === end - 1 && startDot === startPart + 1) {
-      if (end !== -1) {
-        if (startPart === 0 && isAbsolute) ret.base = ret.name = path.slice(1, end);else ret.base = ret.name = path.slice(startPart, end);
-      }
-    } else {
-      if (startPart === 0 && isAbsolute) {
-        ret.name = path.slice(1, startDot);
-        ret.base = path.slice(1, end);
-      } else {
-        ret.name = path.slice(startPart, startDot);
-        ret.base = path.slice(startPart, end);
-      }
-      ret.ext = path.slice(startDot, end);
-    }
-
-    if (startPart > 0) ret.dir = path.slice(0, startPart - 1);else if (isAbsolute) ret.dir = '/';
-
-    return ret;
-  },
-
-  sep: '/',
-  delimiter: ':',
-  win32: null,
-  posix: null
-};
-
-posix.posix = posix;
-
-module.exports = posix;
-
-}).call(this)}).call(this,require('_process'))
-},{"_process":15}],15:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -12914,7 +12152,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],16:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 (function (process,global){(function (){
 /*! *****************************************************************************
 Copyright (C) Microsoft. All rights reserved.
@@ -14049,7 +13287,7 @@ var Reflect;
 })(Reflect || (Reflect = {}));
 
 }).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":15}],17:[function(require,module,exports){
+},{"_process":11}],13:[function(require,module,exports){
 (function (process,global){(function (){
 // Copyright (c) Microsoft, All rights reserved. See License.txt in the project root for license information.
 
@@ -21107,7 +20345,7 @@ Observable.fromNodeCallback = function (fn, ctx, selector) {
 }.call(this));
 
 }).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":15}],18:[function(require,module,exports){
+},{"_process":11}],14:[function(require,module,exports){
 (function (Buffer){(function (){
 /*!
  * shallow-clone <https://github.com/jonschlinkert/shallow-clone>
@@ -21194,7 +20432,7 @@ function cloneSymbol(val) {
 module.exports = clone;
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"buffer":2,"kind-of":9}],19:[function(require,module,exports){
+},{"buffer":2,"kind-of":7}],15:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const injection_handler_1 = require("./injection-handler");
@@ -21338,7 +20576,7 @@ class PropertyPath {
 }
 exports.PropertyPath = PropertyPath;
 
-},{"../model":24,"./injection-handler":22,"lodash.get":10,"lodash.set":11}],20:[function(require,module,exports){
+},{"../model":20,"./injection-handler":18,"lodash.get":8,"lodash.set":9}],16:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class ContainerNamespaces {
@@ -21426,7 +20664,7 @@ class NamespaceBindings {
     }
 }
 
-},{}],21:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const injection_handler_1 = require("./injection-handler");
@@ -21522,7 +20760,7 @@ exports.IoCContainer = IoCContainer;
 IoCContainer.namespaces = new container_namespaces_1.ContainerNamespaces();
 IoCContainer.snapshotsCount = 0;
 
-},{"./container-binding-config":19,"./container-namespaces":20,"./injection-handler":22}],22:[function(require,module,exports){
+},{"./container-binding-config":15,"./container-namespaces":16,"./injection-handler":18}],18:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const BUILD_CONTEXT_KEY = '__BuildContext';
@@ -21634,7 +20872,7 @@ exports.InjectorHandler = InjectorHandler;
 InjectorHandler.constructorNameRegEx = /function (\w*)/;
 InjectorHandler.instantiationsBlocked = true;
 
-},{}],23:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
@@ -21869,7 +21107,7 @@ function InjectValueParamDecorator(target, propertyKey, _parameterIndex, value) 
     }
 }
 
-},{"./container/container":21,"./model":24,"reflect-metadata":16}],24:[function(require,module,exports){
+},{"./container/container":17,"./model":20,"reflect-metadata":12}],20:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
@@ -21906,7 +21144,7 @@ class BuildContext {
 }
 exports.BuildContext = BuildContext;
 
-},{}],25:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const injection_handler_1 = require("./container/injection-handler");
@@ -21959,7 +21197,7 @@ class RequestScope extends model_1.Scope {
 }
 exports.RequestScope = RequestScope;
 
-},{"./container/injection-handler":22,"./model":24}],26:[function(require,module,exports){
+},{"./container/injection-handler":18,"./model":20}],22:[function(require,module,exports){
 "use strict";
 /**
  * This is a lightweight annotation-based dependency injection container for typescript.
@@ -22131,10 +21369,11 @@ class ContainerBuildContext extends model_1.BuildContext {
     }
 }
 
-},{"./container/container":21,"./decorators":23,"./model":24,"./scopes":25,"reflect-metadata":16}],27:[function(require,module,exports){
+},{"./container/container":17,"./decorators":19,"./model":20,"./scopes":21,"reflect-metadata":12}],23:[function(require,module,exports){
 (function (global){(function (){
 global.TIME = require("../dist/001.time/hunt");
 global.TIME.ActTme = require("../dist/001.time/00.time.unit/time.action");
+global.TIME.ActClk = require("../dist/001.time/01.clock.unit/clock.action");
 
 
 
@@ -22142,7 +21381,7 @@ global.TIME.ActTme = require("../dist/001.time/00.time.unit/time.action");
 
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../dist/001.time/00.time.unit/time.action":29,"../dist/001.time/hunt":64}],28:[function(require,module,exports){
+},{"../dist/001.time/00.time.unit/time.action":25,"../dist/001.time/01.clock.unit/clock.action":31,"../dist/001.time/hunt":60}],24:[function(require,module,exports){
 (function (process){(function (){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -22252,7 +21491,7 @@ const patchTime = (cpy, bal, ste) => {
 exports.patchTime = patchTime;
 
 }).call(this)}).call(this,require('_process'))
-},{"../../98.menu.unit/menu.action":48,"../../99.bus.unit/bus.action":53,"../../act/disk.action":61,"../../act/vurt.action":63,"../time.action":29,"_process":15,"child_process":undefined,"open":undefined}],29:[function(require,module,exports){
+},{"../../98.menu.unit/menu.action":44,"../../99.bus.unit/bus.action":49,"../../act/disk.action":57,"../../act/vurt.action":59,"../time.action":25,"_process":11,"child_process":undefined,"open":undefined}],25:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PatchTime = exports.PATCH_TIME = exports.EditTime = exports.EDIT_TIME = exports.RunTime = exports.RUN_TIME = exports.OpenTime = exports.OPEN_TIME = exports.UpdateTime = exports.UPDATE_TIME = exports.InitTime = exports.INIT_TIME = void 0;
@@ -22305,7 +21544,7 @@ class PatchTime {
 }
 exports.PatchTime = PatchTime;
 
-},{}],30:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.patchTime = exports.editTime = exports.runTime = exports.openTime = exports.updateTime = exports.initTime = void 0;
@@ -22322,7 +21561,7 @@ Object.defineProperty(exports, "editTime", { enumerable: true, get: function () 
 var time_buzz_6 = require("./buz/time.buzz");
 Object.defineProperty(exports, "patchTime", { enumerable: true, get: function () { return time_buzz_6.patchTime; } });
 
-},{"./buz/time.buzz":28}],31:[function(require,module,exports){
+},{"./buz/time.buzz":24}],27:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TimeModel = void 0;
@@ -22333,7 +21572,7 @@ class TimeModel {
 }
 exports.TimeModel = TimeModel;
 
-},{}],32:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reducer = void 0;
@@ -22361,7 +21600,7 @@ function reducer(model = new time_model_1.TimeModel(), act, state) {
 }
 exports.reducer = reducer;
 
-},{"./time.action":29,"./time.buzzer":30,"./time.model":31,"clone-deep":3}],33:[function(require,module,exports){
+},{"./time.action":25,"./time.buzzer":26,"./time.model":27,"clone-deep":3}],29:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -22385,8 +21624,7 @@ TimeUnit = __decorate([
 ], TimeUnit);
 exports.default = TimeUnit;
 
-},{"../99.core/state":59,"typescript-ioc":26}],34:[function(require,module,exports){
-(function (process){(function (){
+},{"../99.core/state":55,"typescript-ioc":22}],30:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.blockClock = exports.pushClock = exports.deleteClock = exports.createClock = exports.removeClock = exports.writeClock = exports.readClock = exports.updateClock = exports.initClock = void 0;
@@ -22489,42 +21727,39 @@ const pushClock = async (cpy, bal, ste) => {
 };
 exports.pushClock = pushClock;
 const blockClock = async (cpy, bal, ste) => {
-    const { request } = require('undici');
-    var env = require("dotenv").config();
-    var blockfrost = process.env.BLOCKFROST;
     var url = 'https://cardano-mainnet.blockfrost.io/api/v0/blocks/latest/';
-    try {
-        const tokenResponseData = await request(url, {
-            method: 'GET',
-            body: '',
-            headers: {
-                'project_id': blockfrost,
-            },
-        });
-        const rsp = await tokenResponseData.body.json();
+    //var blockfrost = process.env.BLOCKFROST;
+    var blockfrost = 'mainnetiCuBCFNLf9ZP4z8lC4hEtGzMA61AuSc1';
+    fetch(url, {
+        method: 'GET',
+        headers: { 'project_id': blockfrost },
+    })
+        .then(response => response.json())
+        .then(response => {
+        const rsp = response;
         if (rsp.epoch_slot == cpy.slot) {
             cpy.tick = false;
-            val = cpy.tick;
-            dex = cpy.slot;
-            return bal.slv({ clkBit: { idx: "block-clock", val } });
         }
-        cpy.tick = true;
-        cpy.slot = rsp.epoch_slot;
-    }
-    catch (error) {
-        console.error(error);
-    }
-    val = cpy.tick;
-    dex = cpy.slot;
-    if (bal.slv != null)
+        else {
+            cpy.tick = true;
+            cpy.slot = rsp.epoch_slot;
+        }
+        val = cpy.tick;
+        dex = cpy.slot;
+        return bal.slv({ clkBit: { idx: "block-clock", val, dex } });
+    })
+        .catch(err => {
+        val = cpy.tick;
+        dex = cpy.slot;
         bal.slv({ clkBit: { idx: "block-clock", val, dex } });
+        console.error(err);
+    });
     return cpy;
 };
 exports.blockClock = blockClock;
 const luxon_1 = require("luxon");
 
-}).call(this)}).call(this,require('_process'))
-},{"../../01.clock.unit/clock.action":35,"../../97.collect.unit/collect.action":41,"_process":15,"dotenv":4,"luxon":12,"undici":undefined}],35:[function(require,module,exports){
+},{"../../01.clock.unit/clock.action":31,"../../97.collect.unit/collect.action":37,"luxon":10}],31:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BlockClock = exports.BLOCK_CLOCK = exports.DeleteClock = exports.DELETE_CLOCK = exports.CreateClock = exports.CREATE_CLOCK = exports.RemoveClock = exports.REMOVE_CLOCK = exports.WriteClock = exports.WRITE_CLOCK = exports.ReadClock = exports.READ_CLOCK = exports.UpdateClock = exports.UPDATE_CLOCK = exports.InitClock = exports.INIT_CLOCK = void 0;
@@ -22594,7 +21829,7 @@ class BlockClock {
 }
 exports.BlockClock = BlockClock;
 
-},{}],36:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.blockClock = exports.deleteClock = exports.createClock = exports.removeClock = exports.writeClock = exports.readClock = exports.updateClock = exports.initClock = void 0;
@@ -22615,7 +21850,7 @@ Object.defineProperty(exports, "deleteClock", { enumerable: true, get: function 
 var clock_buzz_8 = require("./buz/clock.buzz");
 Object.defineProperty(exports, "blockClock", { enumerable: true, get: function () { return clock_buzz_8.blockClock; } });
 
-},{"./buz/clock.buzz":34}],37:[function(require,module,exports){
+},{"./buz/clock.buzz":30}],33:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ClockModel = void 0;
@@ -22630,7 +21865,7 @@ class ClockModel {
 }
 exports.ClockModel = ClockModel;
 
-},{}],38:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reducer = void 0;
@@ -22662,7 +21897,7 @@ function reducer(model = new clock_model_1.ClockModel(), act, state) {
 }
 exports.reducer = reducer;
 
-},{"./clock.action":35,"./clock.buzzer":36,"./clock.model":37,"clone-deep":3}],39:[function(require,module,exports){
+},{"./clock.action":31,"./clock.buzzer":32,"./clock.model":33,"clone-deep":3}],35:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -22686,7 +21921,7 @@ ClockUnit = __decorate([
 ], ClockUnit);
 exports.default = ClockUnit;
 
-},{"../99.core/state":59,"typescript-ioc":26}],40:[function(require,module,exports){
+},{"../99.core/state":55,"typescript-ioc":22}],36:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.emptyCollect = exports.deleteCollect = exports.removeCollect = exports.createCollect = exports.writeCollect = exports.readCollect = exports.fetchCollect = exports.updateCollect = exports.initCollect = void 0;
@@ -22820,7 +22055,7 @@ const emptyCollect = (cpy, bal, ste) => {
 };
 exports.emptyCollect = emptyCollect;
 
-},{"../../97.collect.unit/collect.action":41}],41:[function(require,module,exports){
+},{"../../97.collect.unit/collect.action":37}],37:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EmptyCollect = exports.EMPTY_COLLECT = exports.DeleteCollect = exports.DELETE_COLLECT = exports.RemoveCollect = exports.REMOVE_COLLECT = exports.CreateCollect = exports.CREATE_COLLECT = exports.WriteCollect = exports.WRITE_COLLECT = exports.ReadCollect = exports.READ_COLLECT = exports.FetchCollect = exports.FETCH_COLLECT = exports.UpdateCollect = exports.UPDATE_COLLECT = exports.InitCollect = exports.INIT_COLLECT = void 0;
@@ -22898,7 +22133,7 @@ class EmptyCollect {
 }
 exports.EmptyCollect = EmptyCollect;
 
-},{}],42:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.removeCollect = exports.deleteCollect = exports.fetchCollect = exports.emptyCollect = exports.createCollect = exports.writeCollect = exports.readCollect = exports.updateCollect = exports.initCollect = void 0;
@@ -22921,7 +22156,7 @@ Object.defineProperty(exports, "deleteCollect", { enumerable: true, get: functio
 var collect_buzz_9 = require("./buz/collect.buzz");
 Object.defineProperty(exports, "removeCollect", { enumerable: true, get: function () { return collect_buzz_9.removeCollect; } });
 
-},{"./buz/collect.buzz":40}],43:[function(require,module,exports){
+},{"./buz/collect.buzz":36}],39:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CollectModel = void 0;
@@ -22933,7 +22168,7 @@ class CollectModel {
 }
 exports.CollectModel = CollectModel;
 
-},{}],44:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reducer = void 0;
@@ -22967,7 +22202,7 @@ function reducer(model = new collect_model_1.CollectModel(), act, state) {
 }
 exports.reducer = reducer;
 
-},{"./collect.action":41,"./collect.buzzer":42,"./collect.model":43,"clone-deep":3}],45:[function(require,module,exports){
+},{"./collect.action":37,"./collect.buzzer":38,"./collect.model":39,"clone-deep":3}],41:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -22991,7 +22226,7 @@ CollectUnit = __decorate([
 ], CollectUnit);
 exports.default = CollectUnit;
 
-},{"../99.core/state":59,"typescript-ioc":26}],46:[function(require,module,exports){
+},{"../99.core/state":55,"typescript-ioc":22}],42:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.closeMenu = exports.testMenu = exports.updateMenu = exports.initMenu = void 0;
@@ -23011,7 +22246,7 @@ const updateMenu = async (cpy, bal, ste) => {
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "-----------", bit: 'local' });
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "TIME PIVOT V0", bit: 'local' });
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "-----------", bit: "local" });
-    var lst = [ActMnu.CLOCK_MENU, ActTme.UPDATE_TIME, ActTme.OPEN_TIME, ActTme.EDIT_TIME];
+    var lst = [ActTme.UPDATE_TIME, ActTme.OPEN_TIME, ActTme.EDIT_TIME, ActMnu.CLOCK_MENU];
     bit = await ste.bus(ActTrm.UPDATE_TERMINAL, { lst });
     bit = bit.trmBit;
     var idx = lst[bit.val];
@@ -23052,7 +22287,7 @@ const closeMenu = async (cpy, bal, ste) => {
 exports.closeMenu = closeMenu;
 var patch = (ste, type, bale) => ste.dispatch({ type, bale });
 
-},{"../../00.time.unit/time.action":29,"../../act/terminal.action":62,"../menu.action":48}],47:[function(require,module,exports){
+},{"../../00.time.unit/time.action":25,"../../act/terminal.action":58,"../menu.action":44}],43:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.clockMenu = void 0;
@@ -23071,6 +22306,7 @@ const clockMenu = async (cpy, bal, ste) => {
         case ActClk.BLOCK_CLOCK:
             bit = await ste.hunt(ActClk.BLOCK_CLOCK, {});
             bit = await ste.bus(ActTrm.WRITE_TERMINAL, { val: 4, src: JSON.stringify(bit), bit: 'local' });
+            (0, exports.clockMenu)(cpy, bal, ste);
             break;
         default:
             bit = await await ste.bus(ActTrm.CLOSE_TERMINAL, {});
@@ -23081,7 +22317,7 @@ const clockMenu = async (cpy, bal, ste) => {
 exports.clockMenu = clockMenu;
 var patch = (ste, type, bale) => ste.dispatch({ type, bale });
 
-},{"../../01.clock.unit/clock.action":35,"../../act/terminal.action":62}],48:[function(require,module,exports){
+},{"../../01.clock.unit/clock.action":31,"../../act/terminal.action":58}],44:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ClockMenu = exports.CLOCK_MENU = exports.CloseMenu = exports.CLOSE_MENU = exports.TestMenu = exports.TEST_MENU = exports.UpdateMenu = exports.UPDATE_MENU = exports.InitMenu = exports.INIT_MENU = void 0;
@@ -23126,7 +22362,7 @@ class ClockMenu {
 }
 exports.ClockMenu = ClockMenu;
 
-},{}],49:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.clockMenu = exports.closeMenu = exports.testMenu = exports.updateMenu = exports.initMenu = void 0;
@@ -23141,7 +22377,7 @@ Object.defineProperty(exports, "closeMenu", { enumerable: true, get: function ()
 var clock_menu_buzz_1 = require("./buz/clock-menu.buzz");
 Object.defineProperty(exports, "clockMenu", { enumerable: true, get: function () { return clock_menu_buzz_1.clockMenu; } });
 
-},{"./buz/00.menu.buzz":46,"./buz/clock-menu.buzz":47}],50:[function(require,module,exports){
+},{"./buz/00.menu.buzz":42,"./buz/clock-menu.buzz":43}],46:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MenuModel = void 0;
@@ -23155,7 +22391,7 @@ class MenuModel {
 }
 exports.MenuModel = MenuModel;
 
-},{}],51:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reducer = void 0;
@@ -23181,7 +22417,7 @@ function reducer(model = new menu_model_1.MenuModel(), act, state) {
 }
 exports.reducer = reducer;
 
-},{"./menu.action":48,"./menu.buzzer":49,"./menu.model":50,"clone-deep":3}],52:[function(require,module,exports){
+},{"./menu.action":44,"./menu.buzzer":45,"./menu.model":46,"clone-deep":3}],48:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -23205,7 +22441,7 @@ MenuUnit = __decorate([
 ], MenuUnit);
 exports.default = MenuUnit;
 
-},{"../99.core/state":59,"typescript-ioc":26}],53:[function(require,module,exports){
+},{"../99.core/state":55,"typescript-ioc":22}],49:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateBus = exports.CREATE_BUS = exports.UpdateBus = exports.UPDATE_BUS = exports.MessageBus = exports.MESSAGE_BUS = exports.ConnectBus = exports.CONNECT_BUS = exports.OpenBus = exports.OPEN_BUS = exports.InitBus = exports.INIT_BUS = void 0;
@@ -23259,7 +22495,7 @@ class CreateBus {
 }
 exports.CreateBus = CreateBus;
 
-},{}],54:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createBus = exports.messageBus = exports.connectBus = exports.updateBus = exports.openBus = exports.initBus = void 0;
@@ -23276,7 +22512,7 @@ Object.defineProperty(exports, "messageBus", { enumerable: true, get: function (
 var bus_buzz_6 = require("./buz/bus.buzz");
 Object.defineProperty(exports, "createBus", { enumerable: true, get: function () { return bus_buzz_6.createBus; } });
 
-},{"./buz/bus.buzz":58}],55:[function(require,module,exports){
+},{"./buz/bus.buzz":54}],51:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BusModel = void 0;
@@ -23289,7 +22525,7 @@ class BusModel {
 }
 exports.BusModel = BusModel;
 
-},{}],56:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reducer = void 0;
@@ -23317,7 +22553,7 @@ function reducer(model = new bus_model_1.BusModel(), act, state) {
 }
 exports.reducer = reducer;
 
-},{"./bus.action":53,"./bus.buzzer":54,"./bus.model":55,"clone-deep":3}],57:[function(require,module,exports){
+},{"./bus.action":49,"./bus.buzzer":50,"./bus.model":51,"clone-deep":3}],53:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -23341,7 +22577,7 @@ BusUnit = __decorate([
 ], BusUnit);
 exports.default = BusUnit;
 
-},{"../99.core/state":59,"typescript-ioc":26}],58:[function(require,module,exports){
+},{"../99.core/state":55,"typescript-ioc":22}],54:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateBus = exports.messageBus = exports.connectBus = exports.openBus = exports.createBus = exports.initBus = void 0;
@@ -23517,7 +22753,7 @@ exports.updateBus = updateBus;
 var patch = (ste, type, bale) => ste.dispatch({ type, bale });
 const clone = require("clone-deep");
 
-},{"../../97.collect.unit/collect.action":41,"../../98.menu.unit/menu.action":48,"../../99.bus.unit/bus.action":53,"clone-deep":3}],59:[function(require,module,exports){
+},{"../../97.collect.unit/collect.action":37,"../../98.menu.unit/menu.action":44,"../../99.bus.unit/bus.action":49,"clone-deep":3}],55:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const rx_lite_1 = require("rx-lite");
@@ -23552,7 +22788,7 @@ class State extends rx_lite_1.BehaviorSubject {
 }
 exports.default = State;
 
-},{"../BEE":60,"rx-lite":17}],60:[function(require,module,exports){
+},{"../BEE":56,"rx-lite":13}],56:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reducer = exports.list = void 0;
@@ -23590,19 +22826,19 @@ class UnitData {
 }
 exports.default = UnitData;
 
-},{"./00.time.unit/time.model":31,"./00.time.unit/time.reduce":32,"./00.time.unit/time.unit":33,"./01.clock.unit/clock.model":37,"./01.clock.unit/clock.reduce":38,"./01.clock.unit/clock.unit":39,"./97.collect.unit/collect.model":43,"./97.collect.unit/collect.reduce":44,"./97.collect.unit/collect.unit":45,"./98.menu.unit/menu.model":50,"./98.menu.unit/menu.reduce":51,"./98.menu.unit/menu.unit":52,"./99.bus.unit/bus.model":55,"./99.bus.unit/bus.reduce":56,"./99.bus.unit/bus.unit":57}],61:[function(require,module,exports){
+},{"./00.time.unit/time.model":27,"./00.time.unit/time.reduce":28,"./00.time.unit/time.unit":29,"./01.clock.unit/clock.model":33,"./01.clock.unit/clock.reduce":34,"./01.clock.unit/clock.unit":35,"./97.collect.unit/collect.model":39,"./97.collect.unit/collect.reduce":40,"./97.collect.unit/collect.unit":41,"./98.menu.unit/menu.model":46,"./98.menu.unit/menu.reduce":47,"./98.menu.unit/menu.unit":48,"./99.bus.unit/bus.model":51,"./99.bus.unit/bus.reduce":52,"./99.bus.unit/bus.unit":53}],57:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.COPY_DISK = exports.LOAD_LIST_DISK = exports.LIST_DISK = exports.WRITE_DISK = exports.READ_DISK = exports.UPDATE_DISK = exports.INIT_DISK = void 0;
-exports.INIT_DISK = "[Disk action] Init Disk";
-exports.UPDATE_DISK = "[Disk action] Update Disk";
-exports.READ_DISK = "[Disk action] Read Disk";
-exports.WRITE_DISK = "[Disk action] Write Disk";
-exports.LIST_DISK = "[List action] List Disk";
-exports.LOAD_LIST_DISK = "[Load_list action] Load_list Disk";
-exports.COPY_DISK = "[Copy action] Copy Disk";
+exports.COPY_DISK = exports.LOAD_LIST_DISK = exports.INDEX_DISK = exports.WRITE_DISK = exports.READ_DISK = exports.UPDATE_DISK = exports.INIT_DISK = void 0;
+exports.INIT_DISK = '[Disk action] Init Disk';
+exports.UPDATE_DISK = '[Disk action] Update Disk';
+exports.READ_DISK = '[Disk action] Read Disk';
+exports.WRITE_DISK = '[Disk action] Write Disk';
+exports.INDEX_DISK = '[Index action] Index Disk';
+exports.LOAD_LIST_DISK = '[Load_list action] Load_list Disk';
+exports.COPY_DISK = '[Copy action] Copy Disk';
 
-},{}],62:[function(require,module,exports){
+},{}],58:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ADD_PORT = exports.CONTENT_TERMINAL = exports.ROOT_TERMINAL = exports.CLOSE_TERMINAL = exports.TABLE_TERMINAL = exports.INPUT_TERMINAL = exports.CLEAR_TERMINAL = exports.UPDATE_TERMINAL = exports.WRITE_TERMINAL = exports.FOCUS_TERMINAL = exports.OPEN_TERMINAL = exports.INIT_TERMINAL = void 0;
@@ -23620,7 +22856,7 @@ exports.ROOT_TERMINAL = "[Terminal action] Root Terminal";
 exports.CONTENT_TERMINAL = "[Terminal action] Content Terminal";
 exports.ADD_PORT = "[Terminal action] Add Port";
 
-},{}],63:[function(require,module,exports){
+},{}],59:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.VALUE_VURT = exports.BUNDLE_VURT = exports.CONTAINS_VURT = exports.LIST_UNIT_VURT = exports.LIST_PIVOT_VURT = exports.COUNT_VURT = exports.UNIT_VURT = exports.REPLACE_VURT = exports.UPDATE_VURT = exports.FETCH_VURT = exports.TEST_CLOUD_VURT = exports.DELAY_VURT = exports.INIT_VURT = void 0;
@@ -23638,7 +22874,7 @@ exports.CONTAINS_VURT = "[Contains action] Contains Vurt";
 exports.BUNDLE_VURT = "[Bundle action] Bundle Vurt";
 exports.VALUE_VURT = "[Value action] Value Vurt";
 
-},{}],64:[function(require,module,exports){
+},{}],60:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var sim = {
@@ -23670,4 +22906,4 @@ const Import = require("./BEE");
 const state_1 = require("./99.core/state");
 module.exports = sim;
 
-},{"./99.core/state":59,"./BEE":60}]},{},[27]);
+},{"./99.core/state":55,"./BEE":56}]},{},[23]);

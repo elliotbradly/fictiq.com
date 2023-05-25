@@ -13587,9 +13587,9 @@ class ContainerBuildContext extends model_1.BuildContext {
 
 },{"./container/container":16,"./decorators":18,"./model":19,"./scopes":20,"reflect-metadata":11}],22:[function(require,module,exports){
 (function (global){(function (){
-global.TASUS = require("../dist/555.tasus/hunt");
-global.TASUS.ActTus = require("../dist/555.tasus/00.tasus.unit/tasus.action");
-global.TASUS.ActSrv = require("../dist/555.tasus/01.service.unit/service.action");
+global.EARTH = require("../dist/444.earth/hunt");
+global.EARTH.ActErt = require("../dist/444.earth/00.earth.unit/earth.action");
+global.EARTH.ActAmb = require("../dist/444.earth/01.ambit.unit/ambit.action");
 
 
 
@@ -13597,39 +13597,800 @@ global.TASUS.ActSrv = require("../dist/555.tasus/01.service.unit/service.action"
 
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../dist/555.tasus/00.tasus.unit/tasus.action":24,"../dist/555.tasus/01.service.unit/service.action":30,"../dist/555.tasus/hunt":65}],23:[function(require,module,exports){
+},{"../dist/444.earth/00.earth.unit/earth.action":25,"../dist/444.earth/01.ambit.unit/ambit.action":30,"../dist/444.earth/hunt":62}],23:[function(require,module,exports){
+module.exports={
+    "lot": "lot",
+    "slot": "slot",
+    "flavor": "",
+    "scale": 12,
+    "size": 39,
+    "width": 27.712812921102035,
+    "height": 6.5,
+    "left": -15,
+    "right": 0,
+    "top": 0,
+    "bottom": 3,
+    "map": {
+        "8c44f10f4471bff": {
+            "hex": "8c44f10f4471bff",
+            "center": [
+                341,
+                914
+            ],
+            "color": null
+        },
+        "8c44f10f4454dff": {
+            "hex": "8c44f10f4454dff",
+            "center": [
+                298,
+                2112
+            ],
+            "color": null
+        },
+        "8c44f10f44541ff": {
+            "hex": "8c44f10f44541ff",
+            "center": [
+                143,
+                2031
+            ],
+            "color": null
+        },
+        "8c44f10f44097ff": {
+            "hex": "8c44f10f44097ff",
+            "center": [
+                329,
+                2477
+            ],
+            "color": null
+        },
+        "8c44f10f440bbff": {
+            "hex": "8c44f10f440bbff",
+            "center": [
+                345,
+                2660
+            ],
+            "color": null
+        },
+        "8c44f10f44565ff": {
+            "hex": "8c44f10f44565ff",
+            "center": [
+                52,
+                2680
+            ],
+            "color": null
+        },
+        "8c44f10f4456bff": {
+            "hex": "8c44f10f4456bff",
+            "center": [
+                20,
+                2315
+            ],
+            "color": null
+        },
+        "8c44f10f44733ff": {
+            "hex": "8c44f10f44733ff",
+            "center": [
+                95,
+                1483
+            ],
+            "color": null
+        },
+        "8c44f10f44469ff": {
+            "hex": "8c44f10f44469ff",
+            "center": [
+                63,
+                1117
+            ],
+            "color": null
+        },
+        "8c44f10f44445ff": {
+            "hex": "8c44f10f44445ff",
+            "center": [
+                47,
+                934
+            ],
+            "color": null
+        },
+        "8c44f10f4444bff": {
+            "hex": "8c44f10f4444bff",
+            "center": [
+                16,
+                569
+            ],
+            "color": null
+        },
+        "8c44f10f44637ff": {
+            "hex": "8c44f10f44637ff",
+            "center": [
+                0,
+                386
+            ],
+            "color": null
+        },
+        "8c44f10f44631ff": {
+            "hex": "8c44f10f44631ff",
+            "center": [
+                138,
+                285
+            ],
+            "color": null
+        },
+        "8c44f10f4463bff": {
+            "hex": "8c44f10f4463bff",
+            "center": [
+                122,
+                102
+            ],
+            "color": null
+        },
+        "8c44f10f44623ff": {
+            "hex": "8c44f10f44623ff",
+            "center": [
+                309,
+                549
+            ],
+            "color": null
+        },
+        "8c44f10f44449ff": {
+            "hex": "8c44f10f44449ff",
+            "center": [
+                170,
+                650
+            ],
+            "color": null
+        },
+        "8c44f10f44635ff": {
+            "hex": "8c44f10f44635ff",
+            "center": [
+                154,
+                467
+            ],
+            "color": null
+        },
+        "8c44f10f44713ff": {
+            "hex": "8c44f10f44713ff",
+            "center": [
+                202,
+                1016
+            ],
+            "color": null
+        },
+        "8c44f10f44731ff": {
+            "hex": "8c44f10f44731ff",
+            "center": [
+                250,
+                1564
+            ],
+            "color": null
+        },
+        "8c44f10f4454bff": {
+            "hex": "8c44f10f4454bff",
+            "center": [
+                127,
+                1848
+            ],
+            "color": null
+        },
+        "8c44f10f44545ff": {
+            "hex": "8c44f10f44545ff",
+            "center": [
+                159,
+                2213
+            ],
+            "color": null
+        },
+        "8c44f10f44569ff": {
+            "hex": "8c44f10f44569ff",
+            "center": [
+                175,
+                2396
+            ],
+            "color": null
+        },
+        "8c44f10f440b3ff": {
+            "hex": "8c44f10f440b3ff",
+            "center": [
+                207,
+                2762
+            ],
+            "color": null
+        },
+        "8c44f10f44737ff": {
+            "hex": "8c44f10f44737ff",
+            "center": [
+                111,
+                1665
+            ],
+            "color": null
+        },
+        "8c44f10f4446dff": {
+            "hex": "8c44f10f4446dff",
+            "center": [
+                79,
+                1300
+            ],
+            "color": null
+        },
+        "8c44f10f44615ff": {
+            "hex": "8c44f10f44615ff",
+            "center": [
+                261,
+                0
+            ],
+            "color": null
+        },
+        "8c44f10f44639ff": {
+            "hex": "8c44f10f44639ff",
+            "center": [
+                277,
+                183
+            ],
+            "color": null
+        },
+        "8c44f10f44627ff": {
+            "hex": "8c44f10f44627ff",
+            "center": [
+                325,
+                731
+            ],
+            "color": null
+        },
+        "8c44f10f4444dff": {
+            "hex": "8c44f10f4444dff",
+            "center": [
+                186,
+                833
+            ],
+            "color": null
+        },
+        "8c44f10f44711ff": {
+            "hex": "8c44f10f44711ff",
+            "center": [
+                357,
+                1097
+            ],
+            "color": null
+        },
+        "8c44f10f44717ff": {
+            "hex": "8c44f10f44717ff",
+            "center": [
+                218,
+                1198
+            ],
+            "color": null
+        },
+        "8c44f10f4473bff": {
+            "hex": "8c44f10f4473bff",
+            "center": [
+                234,
+                1381
+            ],
+            "color": null
+        },
+        "8c44f10f44735ff": {
+            "hex": "8c44f10f44735ff",
+            "center": [
+                266,
+                1746
+            ],
+            "color": null
+        },
+        "8c44f10f44549ff": {
+            "hex": "8c44f10f44549ff",
+            "center": [
+                282,
+                1929
+            ],
+            "color": null
+        },
+        "8c44f10f44093ff": {
+            "hex": "8c44f10f44093ff",
+            "center": [
+                314,
+                2295
+            ],
+            "color": null
+        },
+        "8c44f10f4456dff": {
+            "hex": "8c44f10f4456dff",
+            "center": [
+                191,
+                2579
+            ],
+            "color": null
+        },
+        "8c44f10f44561ff": {
+            "hex": "8c44f10f44561ff",
+            "center": [
+                36,
+                2498
+            ],
+            "color": null
+        },
+        "8c44f10f44441ff": {
+            "hex": "8c44f10f44441ff",
+            "center": [
+                31,
+                752
+            ],
+            "color": null
+        },
+        "8c44f10f4463dff": {
+            "hex": "8c44f10f4463dff",
+            "center": [
+                293,
+                366
+            ],
+            "color": null
+        }
+    },
+    "cube": [
+        {
+            "hex": "8c44f10f44615ff",
+            "q": 0,
+            "r": 0,
+            "s": 0
+        },
+        {
+            "hex": "8c44f10f44639ff",
+            "q": -1,
+            "r": 0,
+            "s": 1
+        },
+        {
+            "hex": "8c44f10f4463bff",
+            "q": -1,
+            "r": 1,
+            "s": 0
+        },
+        {
+            "hex": "8c44f10f4463dff",
+            "q": -2,
+            "r": 0,
+            "s": 2
+        },
+        {
+            "hex": "8c44f10f44631ff",
+            "q": -2,
+            "r": 1,
+            "s": 1
+        },
+        {
+            "hex": "8c44f10f44623ff",
+            "q": -3,
+            "r": 0,
+            "s": 3
+        },
+        {
+            "hex": "8c44f10f44635ff",
+            "q": -3,
+            "r": 1,
+            "s": 2
+        },
+        {
+            "hex": "8c44f10f44637ff",
+            "q": -3,
+            "r": 2,
+            "s": 1
+        },
+        {
+            "hex": "8c44f10f44627ff",
+            "q": -4,
+            "r": 0,
+            "s": 4
+        },
+        {
+            "hex": "8c44f10f44449ff",
+            "q": -4,
+            "r": 1,
+            "s": 3
+        },
+        {
+            "hex": "8c44f10f4444bff",
+            "q": -4,
+            "r": 2,
+            "s": 2
+        },
+        {
+            "hex": "8c44f10f4471bff",
+            "q": -5,
+            "r": 0,
+            "s": 5
+        },
+        {
+            "hex": "8c44f10f4444dff",
+            "q": -5,
+            "r": 1,
+            "s": 4
+        },
+        {
+            "hex": "8c44f10f44441ff",
+            "q": -5,
+            "r": 2,
+            "s": 3
+        },
+        {
+            "hex": "8c44f10f44711ff",
+            "q": -6,
+            "r": 0,
+            "s": 6
+        },
+        {
+            "hex": "8c44f10f44713ff",
+            "q": -6,
+            "r": 1,
+            "s": 5
+        },
+        {
+            "hex": "8c44f10f44445ff",
+            "q": -6,
+            "r": 2,
+            "s": 4
+        },
+        {
+            "hex": "8c44f10f44717ff",
+            "q": -7,
+            "r": 1,
+            "s": 6
+        },
+        {
+            "hex": "8c44f10f44469ff",
+            "q": -7,
+            "r": 2,
+            "s": 5
+        },
+        {
+            "hex": "8c44f10f4473bff",
+            "q": -8,
+            "r": 1,
+            "s": 7
+        },
+        {
+            "hex": "8c44f10f4446dff",
+            "q": -8,
+            "r": 2,
+            "s": 6
+        },
+        {
+            "hex": "8c44f10f44731ff",
+            "q": -9,
+            "r": 1,
+            "s": 8
+        },
+        {
+            "hex": "8c44f10f44733ff",
+            "q": -9,
+            "r": 2,
+            "s": 7
+        },
+        {
+            "hex": "8c44f10f44735ff",
+            "q": -10,
+            "r": 1,
+            "s": 9
+        },
+        {
+            "hex": "8c44f10f44737ff",
+            "q": -10,
+            "r": 2,
+            "s": 8
+        },
+        {
+            "hex": "8c44f10f44549ff",
+            "q": -11,
+            "r": 1,
+            "s": 10
+        },
+        {
+            "hex": "8c44f10f4454bff",
+            "q": -11,
+            "r": 2,
+            "s": 9
+        },
+        {
+            "hex": "8c44f10f4454dff",
+            "q": -12,
+            "r": 1,
+            "s": 11
+        },
+        {
+            "hex": "8c44f10f44541ff",
+            "q": -12,
+            "r": 2,
+            "s": 10
+        },
+        {
+            "hex": "8c44f10f44093ff",
+            "q": -13,
+            "r": 1,
+            "s": 12
+        },
+        {
+            "hex": "8c44f10f44545ff",
+            "q": -13,
+            "r": 2,
+            "s": 11
+        },
+        {
+            "hex": "8c44f10f44097ff",
+            "q": -14,
+            "r": 1,
+            "s": 13
+        },
+        {
+            "hex": "8c44f10f44569ff",
+            "q": -14,
+            "r": 2,
+            "s": 12
+        },
+        {
+            "hex": "8c44f10f4456bff",
+            "q": -14,
+            "r": 3,
+            "s": 11
+        },
+        {
+            "hex": "8c44f10f440bbff",
+            "q": -15,
+            "r": 1,
+            "s": 14
+        },
+        {
+            "hex": "8c44f10f4456dff",
+            "q": -15,
+            "r": 2,
+            "s": 13
+        },
+        {
+            "hex": "8c44f10f44561ff",
+            "q": -15,
+            "r": 3,
+            "s": 12
+        },
+        {
+            "hex": "8c44f10f440b3ff",
+            "q": -16,
+            "r": 2,
+            "s": 14
+        },
+        {
+            "hex": "8c44f10f44565ff",
+            "q": -16,
+            "r": 3,
+            "s": 13
+        }
+    ],
+    "grid": [
+        {
+            "x": 0,
+            "y": 0,
+            "hex": "8c44f10f44615ff"
+        },
+        {
+            "x": -1,
+            "y": 0,
+            "hex": "8c44f10f44639ff"
+        },
+        {
+            "x": -1,
+            "y": 1,
+            "hex": "8c44f10f4463bff"
+        },
+        {
+            "x": -2,
+            "y": 0,
+            "hex": "8c44f10f4463dff"
+        },
+        {
+            "x": -2,
+            "y": 1,
+            "hex": "8c44f10f44631ff"
+        },
+        {
+            "x": -3,
+            "y": 0,
+            "hex": "8c44f10f44623ff"
+        },
+        {
+            "x": -3,
+            "y": 1,
+            "hex": "8c44f10f44635ff"
+        },
+        {
+            "x": -2,
+            "y": 2,
+            "hex": "8c44f10f44637ff"
+        },
+        {
+            "x": -4,
+            "y": 0,
+            "hex": "8c44f10f44627ff"
+        },
+        {
+            "x": -4,
+            "y": 1,
+            "hex": "8c44f10f44449ff"
+        },
+        {
+            "x": -3,
+            "y": 2,
+            "hex": "8c44f10f4444bff"
+        },
+        {
+            "x": -5,
+            "y": 0,
+            "hex": "8c44f10f4471bff"
+        },
+        {
+            "x": -5,
+            "y": 1,
+            "hex": "8c44f10f4444dff"
+        },
+        {
+            "x": -4,
+            "y": 2,
+            "hex": "8c44f10f44441ff"
+        },
+        {
+            "x": -6,
+            "y": 0,
+            "hex": "8c44f10f44711ff"
+        },
+        {
+            "x": -6,
+            "y": 1,
+            "hex": "8c44f10f44713ff"
+        },
+        {
+            "x": -5,
+            "y": 2,
+            "hex": "8c44f10f44445ff"
+        },
+        {
+            "x": -7,
+            "y": 1,
+            "hex": "8c44f10f44717ff"
+        },
+        {
+            "x": -6,
+            "y": 2,
+            "hex": "8c44f10f44469ff"
+        },
+        {
+            "x": -8,
+            "y": 1,
+            "hex": "8c44f10f4473bff"
+        },
+        {
+            "x": -7,
+            "y": 2,
+            "hex": "8c44f10f4446dff"
+        },
+        {
+            "x": -9,
+            "y": 1,
+            "hex": "8c44f10f44731ff"
+        },
+        {
+            "x": -8,
+            "y": 2,
+            "hex": "8c44f10f44733ff"
+        },
+        {
+            "x": -10,
+            "y": 1,
+            "hex": "8c44f10f44735ff"
+        },
+        {
+            "x": -9,
+            "y": 2,
+            "hex": "8c44f10f44737ff"
+        },
+        {
+            "x": -11,
+            "y": 1,
+            "hex": "8c44f10f44549ff"
+        },
+        {
+            "x": -10,
+            "y": 2,
+            "hex": "8c44f10f4454bff"
+        },
+        {
+            "x": -12,
+            "y": 1,
+            "hex": "8c44f10f4454dff"
+        },
+        {
+            "x": -11,
+            "y": 2,
+            "hex": "8c44f10f44541ff"
+        },
+        {
+            "x": -13,
+            "y": 1,
+            "hex": "8c44f10f44093ff"
+        },
+        {
+            "x": -12,
+            "y": 2,
+            "hex": "8c44f10f44545ff"
+        },
+        {
+            "x": -14,
+            "y": 1,
+            "hex": "8c44f10f44097ff"
+        },
+        {
+            "x": -13,
+            "y": 2,
+            "hex": "8c44f10f44569ff"
+        },
+        {
+            "x": -13,
+            "y": 3,
+            "hex": "8c44f10f4456bff"
+        },
+        {
+            "x": -15,
+            "y": 1,
+            "hex": "8c44f10f440bbff"
+        },
+        {
+            "x": -14,
+            "y": 2,
+            "hex": "8c44f10f4456dff"
+        },
+        {
+            "x": -14,
+            "y": 3,
+            "hex": "8c44f10f44561ff"
+        },
+        {
+            "x": -15,
+            "y": 2,
+            "hex": "8c44f10f440b3ff"
+        },
+        {
+            "x": -15,
+            "y": 3,
+            "hex": "8c44f10f44565ff"
+        }
+    ]
+}
+},{}],24:[function(require,module,exports){
 (function (process){(function (){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.cloudTasus = exports.patchTasus = exports.editTasus = exports.runTasus = exports.openTasus = exports.updateTasus = exports.initTasus = void 0;
+exports.cloudEarth = exports.patchEarth = exports.editEarth = exports.runEarth = exports.openEarth = exports.updateEarth = exports.initEarth = void 0;
 const ActMnu = require("../../98.menu.unit/menu.action");
 const ActBus = require("../../99.bus.unit/bus.action");
-const ActTus = require("../tasus.action");
+const ActErt = require("../earth.action");
 const ActVrt = require("../../act/vurt.action");
 const ActDsk = require("../../act/disk.action");
 var bit, val, idx, dex, lst, dat;
-const initTasus = async (cpy, bal, ste) => {
+const initEarth = async (cpy, bal, ste) => {
     if (bal.dat != null)
-        bit = await ste.hunt(ActBus.INIT_BUS, { idx: cpy.idx, lst: [ActTus], dat: bal.dat, src: bal.src });
+        bit = await ste.hunt(ActBus.INIT_BUS, { idx: cpy.idx, lst: [ActErt], dat: bal.dat, src: bal.src });
     if (bal.val == 1)
         patch(ste, ActMnu.INIT_MENU, bal);
     if (bal.slv != null)
-        bal.slv({ intBit: { idx: "init-tasus" } });
+        bal.slv({ intBit: { idx: "init-earth" } });
     return cpy;
 };
-exports.initTasus = initTasus;
-const updateTasus = (cpy, bal, ste) => {
+exports.initEarth = initEarth;
+const updateEarth = (cpy, bal, ste) => {
     const { exec } = require('child_process');
-    exec('tsc -b 555.tasus', async (err, stdout, stderr) => {
+    exec('tsc -b 014.earth', async (err, stdout, stderr) => {
         if (err) {
             console.error(`exec error: ${err}`);
         }
         process.chdir("../999.vurt");
-        bit = await ste.bus(ActVrt.BUNDLE_VURT, { src: "555.tasus" });
-        process.chdir("../555.tasus");
-        bit = await ste.bus(ActDsk.READ_DISK, { src: './work/555.tasus.js' });
-        var tasus = bit.dskBit.dat;
-        bit = await ste.bus(ActDsk.WRITE_DISK, { src: '../gillisse/public/jsx/555.tasus.js', dat: tasus });
+        bit = await ste.bus(ActVrt.BUNDLE_VURT, { src: "014.earth" });
+        process.chdir("../014.earth");
+        bit = await ste.bus(ActDsk.READ_DISK, { src: './work/014.earth.js' });
+        var earth = bit.dskBit.dat;
+        bit = await ste.bus(ActDsk.WRITE_DISK, { src: '../gillisse/public/jsx/014.earth.js', dat: earth });
         bit = await ste.bus(ActDsk.READ_DISK, { src: './index.html' });
         var html = bit.dskBit.dat;
         bit = await ste.bus(ActDsk.READ_DISK, { src: './index.js' });
@@ -13638,201 +14399,190 @@ const updateTasus = (cpy, bal, ste) => {
         bit = await ste.bus(ActDsk.WRITE_DISK, { src: '../gillisse/index.html', dat: html });
         setTimeout(() => {
             if (bal.slv != null)
-                bal.slv({ tusBit: { idx: "update-tasus" } });
+                bal.slv({ ertBit: { idx: "update-earth" } });
         }, 3);
     });
     return cpy;
 };
-exports.updateTasus = updateTasus;
-const openTasus = async (cpy, bal, ste) => {
+exports.updateEarth = updateEarth;
+const openEarth = async (cpy, bal, ste) => {
     bit = await ste.bus(ActDsk.COPY_DISK, { src: './vue', idx: '../gillisse/src' });
-    bit = await ste.hunt(ActTus.RUN_TASUS, {});
+    bit = await ste.hunt(ActErt.RUN_EARTH, {});
     const open = require('open');
     var loc = './vrt.opn.bat';
     bit = await open(loc);
     setTimeout(() => {
         if (bal.slv != null)
-            bal.slv({ tusBit: { idx: "open-tasus" } });
+            bal.slv({ ertBit: { idx: "open-earth" } });
     }, 33);
     return cpy;
 };
-exports.openTasus = openTasus;
-const runTasus = async (cpy, bal, ste) => {
+exports.openEarth = openEarth;
+const runEarth = async (cpy, bal, ste) => {
     const open = require('open');
     var loc = './vrt.gil.bat';
     bit = await open(loc);
     setTimeout(() => {
         if (bal.slv != null)
-            bal.slv({ tusBit: { idx: "run-tasus" } });
+            bal.slv({ ertBit: { idx: "run-earth" } });
     });
     return cpy;
 };
-exports.runTasus = runTasus;
-const editTasus = (cpy, bal, ste) => {
+exports.runEarth = runEarth;
+const editEarth = (cpy, bal, ste) => {
     const { exec } = require('child_process');
     process.chdir("../../studio/");
     exec('start Code.exe ../packages/gillisse', async (err, stdout, stderr) => {
         if (err) {
             console.error(`exec error: ${err}`);
         }
-        process.chdir("../packages/555.tasus");
+        process.chdir("../packages/444.earth");
         if (bal.slv != null)
-            bal.slv({ tusBit: { idx: "edit-tasus", dat: {} } });
+            bal.slv({ ertBit: { idx: "edit-earth", dat: {} } });
     });
     return cpy;
 };
-exports.editTasus = editTasus;
-var patch = (ste, type, bale) => ste.dispatch({ type, bale });
-const patchTasus = (cpy, bal, ste) => {
+exports.editEarth = editEarth;
+const patchEarth = (cpy, bal, ste) => {
     debugger;
     return cpy;
 };
-exports.patchTasus = patchTasus;
-const cloudTasus = async (cpy, bal, ste) => {
-    bit = await ste.bus(ActDsk.READ_DISK, { src: './work/555.tasus.js' });
-    var space = bit.dskBit.dat;
-    bit = await ste.bus(ActDsk.WRITE_DISK, { src: './cloud/555.tasus.js', dat: space });
-    bit = await ste.bus(ActDsk.COPY_DISK, { src: './cloud/', idx: '../../agent/555.tasus/' });
-    const { exec } = require('child_process');
-    process.chdir("../../agent/555.tasus");
-    exec('vrt.pub.bat', async (err, stdout, stderr) => {
-        if (err) {
-            console.error(`exec error: ${err}`);
-        }
-        //then open an address
-        var open = require('open');
-        open('https://555-tasus.beeing.workers.dev/openService');
-        process.chdir("../../packages/555.tasus");
-        if (bal.slv != null)
-            bal.slv({ spcBit: { idx: "cloud-tasus" } });
-    });
+exports.patchEarth = patchEarth;
+const cloudEarth = async (cpy, bal, ste) => {
+    bit = await ste.bus(ActDsk.READ_DISK, { src: './work/014.earth.js' });
+    var earth = bit.dskBit.dat;
+    bit = await ste.bus(ActDsk.WRITE_DISK, { src: './cloud/014.earth.js', dat: earth });
+    bit = await ste.bus(ActDsk.COPY_DISK, { src: './cloud/', idx: '../../agent/014.earth/' });
+    if (bal.slv != null)
+        bal.slv({ spcBit: { idx: "cloud-earth" } });
     return cpy;
 };
-exports.cloudTasus = cloudTasus;
+exports.cloudEarth = cloudEarth;
+var patch = (ste, type, bale) => ste.dispatch({ type, bale });
 
 }).call(this)}).call(this,require('_process'))
-},{"../../98.menu.unit/menu.action":49,"../../99.bus.unit/bus.action":54,"../../act/disk.action":62,"../../act/vurt.action":64,"../tasus.action":24,"_process":10,"child_process":undefined,"open":undefined}],24:[function(require,module,exports){
+},{"../../98.menu.unit/menu.action":44,"../../99.bus.unit/bus.action":49,"../../act/disk.action":57,"../../act/vurt.action":61,"../earth.action":25,"_process":10,"child_process":undefined,"open":undefined}],25:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CloudTasus = exports.CLOUD_TASUS = exports.PatchTasus = exports.PATCH_TASUS = exports.EditTasus = exports.EDIT_TASUS = exports.RunTasus = exports.RUN_TASUS = exports.OpenTasus = exports.OPEN_TASUS = exports.UpdateTasus = exports.UPDATE_TASUS = exports.InitTasus = exports.INIT_TASUS = void 0;
-exports.INIT_TASUS = "[Tasus action] Init Tasus";
-class InitTasus {
+exports.CloudEarth = exports.CLOUD_EARTH = exports.PatchEarth = exports.PATCH_EARTH = exports.EditEarth = exports.EDIT_EARTH = exports.RunEarth = exports.RUN_EARTH = exports.OpenEarth = exports.OPEN_EARTH = exports.UpdateEarth = exports.UPDATE_EARTH = exports.InitEarth = exports.INIT_EARTH = void 0;
+exports.INIT_EARTH = "[Earth action] Init Earth";
+class InitEarth {
     constructor(bale) {
         this.bale = bale;
-        this.type = exports.INIT_TASUS;
+        this.type = exports.INIT_EARTH;
     }
 }
-exports.InitTasus = InitTasus;
-exports.UPDATE_TASUS = "[Tasus action] Update Tasus";
-class UpdateTasus {
+exports.InitEarth = InitEarth;
+exports.UPDATE_EARTH = "[Earth action] Update Earth";
+class UpdateEarth {
     constructor(bale) {
         this.bale = bale;
-        this.type = exports.UPDATE_TASUS;
+        this.type = exports.UPDATE_EARTH;
     }
 }
-exports.UpdateTasus = UpdateTasus;
-exports.OPEN_TASUS = "[Open action] Open Tasus";
-class OpenTasus {
+exports.UpdateEarth = UpdateEarth;
+exports.OPEN_EARTH = "[Open action] Open Earth";
+class OpenEarth {
     constructor(bale) {
         this.bale = bale;
-        this.type = exports.OPEN_TASUS;
+        this.type = exports.OPEN_EARTH;
     }
 }
-exports.OpenTasus = OpenTasus;
-exports.RUN_TASUS = "[Run action] Run Tasus";
-class RunTasus {
+exports.OpenEarth = OpenEarth;
+exports.RUN_EARTH = "[Run action] Run Earth";
+class RunEarth {
     constructor(bale) {
         this.bale = bale;
-        this.type = exports.RUN_TASUS;
+        this.type = exports.RUN_EARTH;
     }
 }
-exports.RunTasus = RunTasus;
-exports.EDIT_TASUS = "[Edit action] Edit Tasus";
-class EditTasus {
+exports.RunEarth = RunEarth;
+exports.EDIT_EARTH = "[Edit action] Edit Earth";
+class EditEarth {
     constructor(bale) {
         this.bale = bale;
-        this.type = exports.EDIT_TASUS;
+        this.type = exports.EDIT_EARTH;
     }
 }
-exports.EditTasus = EditTasus;
-exports.PATCH_TASUS = "[Patch action] Patch Tasus";
-class PatchTasus {
+exports.EditEarth = EditEarth;
+exports.PATCH_EARTH = "[Patch action] Patch Earth";
+class PatchEarth {
     constructor(bale) {
         this.bale = bale;
-        this.type = exports.PATCH_TASUS;
+        this.type = exports.PATCH_EARTH;
     }
 }
-exports.PatchTasus = PatchTasus;
-exports.CLOUD_TASUS = "[Cloud action] Cloud Tasus";
-class CloudTasus {
+exports.PatchEarth = PatchEarth;
+exports.CLOUD_EARTH = "[Cloud action] Cloud Earth";
+class CloudEarth {
     constructor(bale) {
         this.bale = bale;
-        this.type = exports.CLOUD_TASUS;
+        this.type = exports.CLOUD_EARTH;
     }
 }
-exports.CloudTasus = CloudTasus;
+exports.CloudEarth = CloudEarth;
 
-},{}],25:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.cloudTasus = exports.patchTasus = exports.editTasus = exports.runTasus = exports.openTasus = exports.updateTasus = exports.initTasus = void 0;
-var tasus_buzz_1 = require("./buz/tasus.buzz");
-Object.defineProperty(exports, "initTasus", { enumerable: true, get: function () { return tasus_buzz_1.initTasus; } });
-var tasus_buzz_2 = require("./buz/tasus.buzz");
-Object.defineProperty(exports, "updateTasus", { enumerable: true, get: function () { return tasus_buzz_2.updateTasus; } });
-var tasus_buzz_3 = require("./buz/tasus.buzz");
-Object.defineProperty(exports, "openTasus", { enumerable: true, get: function () { return tasus_buzz_3.openTasus; } });
-var tasus_buzz_4 = require("./buz/tasus.buzz");
-Object.defineProperty(exports, "runTasus", { enumerable: true, get: function () { return tasus_buzz_4.runTasus; } });
-var tasus_buzz_5 = require("./buz/tasus.buzz");
-Object.defineProperty(exports, "editTasus", { enumerable: true, get: function () { return tasus_buzz_5.editTasus; } });
-var tasus_buzz_6 = require("./buz/tasus.buzz");
-Object.defineProperty(exports, "patchTasus", { enumerable: true, get: function () { return tasus_buzz_6.patchTasus; } });
-var tasus_buzz_7 = require("./buz/tasus.buzz");
-Object.defineProperty(exports, "cloudTasus", { enumerable: true, get: function () { return tasus_buzz_7.cloudTasus; } });
+exports.cloudEarth = exports.patchEarth = exports.editEarth = exports.runEarth = exports.openEarth = exports.updateEarth = exports.initEarth = void 0;
+var earth_buzz_1 = require("./buz/earth.buzz");
+Object.defineProperty(exports, "initEarth", { enumerable: true, get: function () { return earth_buzz_1.initEarth; } });
+var earth_buzz_2 = require("./buz/earth.buzz");
+Object.defineProperty(exports, "updateEarth", { enumerable: true, get: function () { return earth_buzz_2.updateEarth; } });
+var earth_buzz_3 = require("./buz/earth.buzz");
+Object.defineProperty(exports, "openEarth", { enumerable: true, get: function () { return earth_buzz_3.openEarth; } });
+var earth_buzz_4 = require("./buz/earth.buzz");
+Object.defineProperty(exports, "runEarth", { enumerable: true, get: function () { return earth_buzz_4.runEarth; } });
+var earth_buzz_5 = require("./buz/earth.buzz");
+Object.defineProperty(exports, "editEarth", { enumerable: true, get: function () { return earth_buzz_5.editEarth; } });
+var earth_buzz_6 = require("./buz/earth.buzz");
+Object.defineProperty(exports, "patchEarth", { enumerable: true, get: function () { return earth_buzz_6.patchEarth; } });
+var earth_buzz_7 = require("./buz/earth.buzz");
+Object.defineProperty(exports, "cloudEarth", { enumerable: true, get: function () { return earth_buzz_7.cloudEarth; } });
 
-},{"./buz/tasus.buzz":23}],26:[function(require,module,exports){
+},{"./buz/earth.buzz":24}],27:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TasusModel = void 0;
-class TasusModel {
+exports.EarthModel = void 0;
+class EarthModel {
     constructor() {
-        this.idx = '555.tasus';
+        this.idx = '444.earth';
     }
 }
-exports.TasusModel = TasusModel;
+exports.EarthModel = EarthModel;
 
-},{}],27:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reducer = void 0;
 const clone = require("clone-deep");
-const Act = require("./tasus.action");
-const tasus_model_1 = require("./tasus.model");
-const Buzz = require("./tasus.buzzer");
-function reducer(model = new tasus_model_1.TasusModel(), act, state) {
+const Act = require("./earth.action");
+const earth_model_1 = require("./earth.model");
+const Buzz = require("./earth.buzzer");
+function reducer(model = new earth_model_1.EarthModel(), act, state) {
     switch (act.type) {
-        case Act.UPDATE_TASUS:
-            return Buzz.updateTasus(clone(model), act.bale, state);
-        case Act.INIT_TASUS:
-            return Buzz.initTasus(clone(model), act.bale, state);
-        case Act.OPEN_TASUS:
-            return Buzz.openTasus(clone(model), act.bale, state);
-        case Act.RUN_TASUS:
-            return Buzz.runTasus(clone(model), act.bale, state);
-        case Act.EDIT_TASUS:
-            return Buzz.editTasus(clone(model), act.bale, state);
-        case Act.PATCH_TASUS:
-            return Buzz.patchTasus(clone(model), act.bale, state);
-        case Act.CLOUD_TASUS:
-            return Buzz.cloudTasus(clone(model), act.bale, state);
+        case Act.UPDATE_EARTH:
+            return Buzz.updateEarth(clone(model), act.bale, state);
+        case Act.INIT_EARTH:
+            return Buzz.initEarth(clone(model), act.bale, state);
+        case Act.OPEN_EARTH:
+            return Buzz.openEarth(clone(model), act.bale, state);
+        case Act.RUN_EARTH:
+            return Buzz.runEarth(clone(model), act.bale, state);
+        case Act.EDIT_EARTH:
+            return Buzz.editEarth(clone(model), act.bale, state);
+        case Act.PATCH_EARTH:
+            return Buzz.patchEarth(clone(model), act.bale, state);
+        case Act.CLOUD_EARTH:
+            return Buzz.cloudEarth(clone(model), act.bale, state);
         default:
             return model;
     }
 }
 exports.reducer = reducer;
 
-},{"./tasus.action":24,"./tasus.buzzer":25,"./tasus.model":26,"clone-deep":3}],28:[function(require,module,exports){
+},{"./earth.action":25,"./earth.buzzer":26,"./earth.model":27,"clone-deep":3}],29:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -13846,110 +14596,94 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const typescript_ioc_1 = require("typescript-ioc");
 const state_1 = require("../99.core/state");
-let TasusUnit = class TasusUnit {
+let EarthUnit = class EarthUnit {
     constructor(state) {
     }
 };
-TasusUnit = __decorate([
+EarthUnit = __decorate([
     typescript_ioc_1.Singleton,
     __metadata("design:paramtypes", [state_1.default])
-], TasusUnit);
-exports.default = TasusUnit;
+], EarthUnit);
+exports.default = EarthUnit;
 
-},{"../99.core/state":60,"typescript-ioc":21}],29:[function(require,module,exports){
+},{"../99.core/state":55,"typescript-ioc":21}],30:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.openService = exports.updateService = exports.initService = void 0;
-const initService = (cpy, bal, ste) => {
-    debugger;
-    return cpy;
-};
-exports.initService = initService;
-const updateService = (cpy, bal, ste) => {
-    return cpy;
-};
-exports.updateService = updateService;
-const openService = (cpy, bal, ste) => {
-    const d = new Date();
-    let now = d.getTime();
-    if (bal.slv != null)
-        bal.slv({ srvBit: { idx: "open-service", dat: { now } } });
-    return cpy;
-};
-exports.openService = openService;
-
-},{}],30:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.OpenService = exports.OPEN_SERVICE = exports.UpdateService = exports.UPDATE_SERVICE = exports.InitService = exports.INIT_SERVICE = void 0;
-// Service actions
-exports.INIT_SERVICE = "[Service action] Init Service";
-class InitService {
+exports.OpenAmbit = exports.OPEN_AMBIT = exports.UpdateAmbit = exports.UPDATE_AMBIT = exports.InitAmbit = exports.INIT_AMBIT = void 0;
+// Ambit actions
+exports.INIT_AMBIT = "[Ambit action] Init Ambit";
+class InitAmbit {
     constructor(bale) {
         this.bale = bale;
-        this.type = exports.INIT_SERVICE;
+        this.type = exports.INIT_AMBIT;
     }
 }
-exports.InitService = InitService;
-exports.UPDATE_SERVICE = "[Service action] Update Service";
-class UpdateService {
+exports.InitAmbit = InitAmbit;
+exports.UPDATE_AMBIT = "[Ambit action] Update Ambit";
+class UpdateAmbit {
     constructor(bale) {
         this.bale = bale;
-        this.type = exports.UPDATE_SERVICE;
+        this.type = exports.UPDATE_AMBIT;
     }
 }
-exports.UpdateService = UpdateService;
-exports.OPEN_SERVICE = "[Open action] Open Service";
-class OpenService {
+exports.UpdateAmbit = UpdateAmbit;
+exports.OPEN_AMBIT = "[Open action] Open Ambit";
+class OpenAmbit {
     constructor(bale) {
         this.bale = bale;
-        this.type = exports.OPEN_SERVICE;
+        this.type = exports.OPEN_AMBIT;
     }
 }
-exports.OpenService = OpenService;
+exports.OpenAmbit = OpenAmbit;
 
 },{}],31:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.openService = exports.updateService = exports.initService = void 0;
-var service_buzz_1 = require("./buz/service.buzz");
-Object.defineProperty(exports, "initService", { enumerable: true, get: function () { return service_buzz_1.initService; } });
-var service_buzz_2 = require("./buz/service.buzz");
-Object.defineProperty(exports, "updateService", { enumerable: true, get: function () { return service_buzz_2.updateService; } });
-var service_buzz_3 = require("./buz/service.buzz");
-Object.defineProperty(exports, "openService", { enumerable: true, get: function () { return service_buzz_3.openService; } });
+exports.openAmbit = exports.updateAmbit = exports.initAmbit = void 0;
+var ambit_buzz_1 = require("./buz/ambit.buzz");
+Object.defineProperty(exports, "initAmbit", { enumerable: true, get: function () { return ambit_buzz_1.initAmbit; } });
+var ambit_buzz_2 = require("./buz/ambit.buzz");
+Object.defineProperty(exports, "updateAmbit", { enumerable: true, get: function () { return ambit_buzz_2.updateAmbit; } });
+var ambit_buzz_3 = require("./buz/ambit.buzz");
+Object.defineProperty(exports, "openAmbit", { enumerable: true, get: function () { return ambit_buzz_3.openAmbit; } });
 
-},{"./buz/service.buzz":29}],32:[function(require,module,exports){
+},{"./buz/ambit.buzz":35}],32:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ServiceModel = void 0;
-class ServiceModel {
+exports.AmbitModel = void 0;
+class AmbitModel {
+    constructor() {
+        //idx:string;
+        //ambitBitList: AmbitBit[] = [];
+        //ambitBits: any = {};
+        this.srcSwamp = require("../../../data/hexmap/000.swamp.json");
+    }
 }
-exports.ServiceModel = ServiceModel;
+exports.AmbitModel = AmbitModel;
 
-},{}],33:[function(require,module,exports){
+},{"../../../data/hexmap/000.swamp.json":23}],33:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reducer = void 0;
 const clone = require("clone-deep");
-const Act = require("./service.action");
-const service_model_1 = require("./service.model");
-const Buzz = require("./service.buzzer");
-function reducer(model = new service_model_1.ServiceModel(), act, state) {
+const Act = require("./ambit.action");
+const ambit_model_1 = require("./ambit.model");
+const Buzz = require("./ambit.buzzer");
+function reducer(model = new ambit_model_1.AmbitModel(), act, state) {
     switch (act.type) {
-        case Act.UPDATE_SERVICE:
-            return Buzz.updateService(clone(model), act.bale, state);
-        case Act.INIT_SERVICE:
-            return Buzz.initService(clone(model), act.bale, state);
-        case Act.OPEN_SERVICE:
-            return Buzz.openService(clone(model), act.bale, state);
+        case Act.UPDATE_AMBIT:
+            return Buzz.updateAmbit(clone(model), act.bale, state);
+        case Act.INIT_AMBIT:
+            return Buzz.initAmbit(clone(model), act.bale, state);
+        case Act.OPEN_AMBIT:
+            return Buzz.openAmbit(clone(model), act.bale, state);
         default:
             return model;
     }
 }
 exports.reducer = reducer;
 
-},{"./service.action":30,"./service.buzzer":31,"./service.model":32,"clone-deep":3}],34:[function(require,module,exports){
+},{"./ambit.action":30,"./ambit.buzzer":31,"./ambit.model":32,"clone-deep":3}],34:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -13963,114 +14697,75 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const typescript_ioc_1 = require("typescript-ioc");
 const state_1 = require("../99.core/state");
-let ServiceUnit = class ServiceUnit {
+let AmbitUnit = class AmbitUnit {
     constructor(state) {
     }
 };
-ServiceUnit = __decorate([
+AmbitUnit = __decorate([
     typescript_ioc_1.Singleton,
     __metadata("design:paramtypes", [state_1.default])
-], ServiceUnit);
-exports.default = ServiceUnit;
+], AmbitUnit);
+exports.default = AmbitUnit;
 
-},{"../99.core/state":60,"typescript-ioc":21}],35:[function(require,module,exports){
+},{"../99.core/state":55,"typescript-ioc":21}],35:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateGarden = exports.initGarden = void 0;
-const initGarden = (cpy, bal, ste) => {
+exports.openAmbit = exports.updateAmbit = exports.initAmbit = void 0;
+const ActMap = require("../../act/hexmap.action");
+const ActFoc = require("../../act/focus.action");
+var bit, val, dex, dat, src, idx;
+const initAmbit = (cpy, bal, ste) => {
     debugger;
     return cpy;
 };
-exports.initGarden = initGarden;
-const updateGarden = (cpy, bal, ste) => {
+exports.initAmbit = initAmbit;
+const updateAmbit = async (cpy, bal, ste) => {
+    var url = 'https://001-time.beeing.workers.dev/blockClock';
+    bit = await fetch(url, { method: 'GET', headers: { 'head': 'none' } });
+    bit = await bit.json();
+    // if not block clock 
+    var lst = [ActMap.OPEN_HEXMAP, ActFoc.WRITE_FOCUS, ActFoc.SPIN_RIGHT_FOCUS];
+    var out = '&lst=';
+    lst.forEach((a) => {
+        out += a + ',';
+    });
+    var url = 'https://002-space.beeing.workers.dev/batchSpace?idx=foc00&src=000.swamp' + out;
+    url = encodeURI(url);
+    url = url.substring(0, url.length - 1);
+    console.log(url);
+    bit = await fetch(url, { method: 'GET', headers: { 'head': 'none' } });
+    var url = 'https://002-space.beeing.workers.dev/readSpace?idx=foc00&src=000.swamp';
+    url = encodeURI(url);
+    console.log(url);
+    //bit = await fetch(url, { method: 'GET', headers: { 'head': 'none' } })
+    //dat = await bit.json();
+    //debugger
+    //now update the focuses   
+    bal.slv({ ambBit: { idx: "update-ambit", dat: bit } });
     return cpy;
 };
-exports.updateGarden = updateGarden;
-
-},{}],36:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.UpdateGarden = exports.UPDATE_GARDEN = exports.InitGarden = exports.INIT_GARDEN = void 0;
-// Garden actions
-exports.INIT_GARDEN = "[Garden action] Init Garden";
-class InitGarden {
-    constructor(bale) {
-        this.bale = bale;
-        this.type = exports.INIT_GARDEN;
-    }
-}
-exports.InitGarden = InitGarden;
-exports.UPDATE_GARDEN = "[Garden action] Update Garden";
-class UpdateGarden {
-    constructor(bale) {
-        this.bale = bale;
-        this.type = exports.UPDATE_GARDEN;
-    }
-}
-exports.UpdateGarden = UpdateGarden;
-
-},{}],37:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateGarden = exports.initGarden = void 0;
-var garden_buzz_1 = require("./buz/garden.buzz");
-Object.defineProperty(exports, "initGarden", { enumerable: true, get: function () { return garden_buzz_1.initGarden; } });
-var garden_buzz_2 = require("./buz/garden.buzz");
-Object.defineProperty(exports, "updateGarden", { enumerable: true, get: function () { return garden_buzz_2.updateGarden; } });
-
-},{"./buz/garden.buzz":35}],38:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.GardenModel = void 0;
-class GardenModel {
-}
-exports.GardenModel = GardenModel;
-
-},{}],39:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.reducer = void 0;
-const clone = require("clone-deep");
-const Act = require("./garden.action");
-const garden_model_1 = require("./garden.model");
-const Buzz = require("./garden.buzzer");
-function reducer(model = new garden_model_1.GardenModel(), act, state) {
-    switch (act.type) {
-        case Act.UPDATE_GARDEN:
-            return Buzz.updateGarden(clone(model), act.bale, state);
-        case Act.INIT_GARDEN:
-            return Buzz.initGarden(clone(model), act.bale, state);
-        default:
-            return model;
-    }
-}
-exports.reducer = reducer;
-
-},{"./garden.action":36,"./garden.buzzer":37,"./garden.model":38,"clone-deep":3}],40:[function(require,module,exports){
-"use strict";
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
+exports.updateAmbit = updateAmbit;
+const openAmbit = async (cpy, bal, ste) => {
+    idx = 'foc000';
+    src = '000.swamp';
+    var url = 'https://002-space.beeing.workers.dev/writeFocus?idx=' + idx + '&src=' + src;
+    bit = await fetch(url, { method: 'GET', headers: { 'head': 'none' } });
+    dat = await bit.json();
+    var url = 'https://002-space.beeing.workers.dev/spinLeftFocus?idx=' + idx;
+    bit = await fetch(url, { method: 'GET', headers: { 'head': 'none' } });
+    dat = await bit.json();
+    //bit = await ste.hunt(ActFoc.SPIN_LEFT_FOCUS, { idx: src })
+    bal.slv({ ambBit: { idx: "open-ambit", dat: bit } });
+    //bit = await ste.hunt(ActFoc.WRITE_FOCUS, { idx, src })
+    //put things in there places
+    //bit = await ste.hunt(ActFoc.WRITE_FOCUS, { idx, src })
+    //bit = await ste.hunt(ActFoc.SELECT_FOCUS, { idx })
+    return cpy;
 };
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const typescript_ioc_1 = require("typescript-ioc");
-const state_1 = require("../99.core/state");
-let GardenUnit = class GardenUnit {
-    constructor(state) {
-    }
-};
-GardenUnit = __decorate([
-    typescript_ioc_1.Singleton,
-    __metadata("design:paramtypes", [state_1.default])
-], GardenUnit);
-exports.default = GardenUnit;
+exports.openAmbit = openAmbit;
+var patch = (ste, type, bale) => ste.dispatch({ type, bale });
 
-},{"../99.core/state":60,"typescript-ioc":21}],41:[function(require,module,exports){
+},{"../../act/focus.action":58,"../../act/hexmap.action":59}],36:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.emptyCollect = exports.deleteCollect = exports.removeCollect = exports.createCollect = exports.writeCollect = exports.readCollect = exports.fetchCollect = exports.updateCollect = exports.initCollect = void 0;
@@ -14204,7 +14899,7 @@ const emptyCollect = (cpy, bal, ste) => {
 };
 exports.emptyCollect = emptyCollect;
 
-},{"../../97.collect.unit/collect.action":42}],42:[function(require,module,exports){
+},{"../../97.collect.unit/collect.action":37}],37:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EmptyCollect = exports.EMPTY_COLLECT = exports.DeleteCollect = exports.DELETE_COLLECT = exports.RemoveCollect = exports.REMOVE_COLLECT = exports.CreateCollect = exports.CREATE_COLLECT = exports.WriteCollect = exports.WRITE_COLLECT = exports.ReadCollect = exports.READ_COLLECT = exports.FetchCollect = exports.FETCH_COLLECT = exports.UpdateCollect = exports.UPDATE_COLLECT = exports.InitCollect = exports.INIT_COLLECT = void 0;
@@ -14282,7 +14977,7 @@ class EmptyCollect {
 }
 exports.EmptyCollect = EmptyCollect;
 
-},{}],43:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.removeCollect = exports.deleteCollect = exports.fetchCollect = exports.emptyCollect = exports.createCollect = exports.writeCollect = exports.readCollect = exports.updateCollect = exports.initCollect = void 0;
@@ -14305,7 +15000,7 @@ Object.defineProperty(exports, "deleteCollect", { enumerable: true, get: functio
 var collect_buzz_9 = require("./buz/collect.buzz");
 Object.defineProperty(exports, "removeCollect", { enumerable: true, get: function () { return collect_buzz_9.removeCollect; } });
 
-},{"./buz/collect.buzz":41}],44:[function(require,module,exports){
+},{"./buz/collect.buzz":36}],39:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CollectModel = void 0;
@@ -14317,7 +15012,7 @@ class CollectModel {
 }
 exports.CollectModel = CollectModel;
 
-},{}],45:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reducer = void 0;
@@ -14351,7 +15046,7 @@ function reducer(model = new collect_model_1.CollectModel(), act, state) {
 }
 exports.reducer = reducer;
 
-},{"./collect.action":42,"./collect.buzzer":43,"./collect.model":44,"clone-deep":3}],46:[function(require,module,exports){
+},{"./collect.action":37,"./collect.buzzer":38,"./collect.model":39,"clone-deep":3}],41:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -14375,12 +15070,12 @@ CollectUnit = __decorate([
 ], CollectUnit);
 exports.default = CollectUnit;
 
-},{"../99.core/state":60,"typescript-ioc":21}],47:[function(require,module,exports){
+},{"../99.core/state":55,"typescript-ioc":21}],42:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.visageMenu = exports.shadeMenu = exports.closeMenu = exports.testMenu = exports.updateMenu = exports.initMenu = void 0;
 const ActMnu = require("../menu.action");
-const ActTas = require("../../00.tasus.unit/tasus.action");
+const ActErt = require("../../00.earth.unit/earth.action");
 const ActTrm = require("../../act/terminal.action");
 var bit, lst, dex;
 const initMenu = async (cpy, bal, ste) => {
@@ -14393,32 +15088,35 @@ const initMenu = async (cpy, bal, ste) => {
 exports.initMenu = initMenu;
 const updateMenu = async (cpy, bal, ste) => {
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "-----------", bit: 'local' });
-    bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "TASUS PIVOT V0", bit: 'local' });
+    bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "EARTH PIVOT V0", bit: 'local' });
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "-----------", bit: "local" });
-    var lst = [ActTas.CLOUD_TASUS, ActTas.UPDATE_TASUS, ActTas.OPEN_TASUS, ActTas.EDIT_TASUS, ActMnu.SERVICE_MENU];
+    var lst = [ActErt.CLOUD_EARTH, ActErt.UPDATE_EARTH, ActErt.OPEN_EARTH, ActErt.EDIT_EARTH, ActMnu.AMBIT_MENU];
     bit = await ste.bus(ActTrm.UPDATE_TERMINAL, { lst });
     bit = bit.trmBit;
     var idx = lst[bit.val];
     switch (idx) {
-        case ActTas.CLOUD_TASUS:
-            bit = await ste.hunt(ActTas.CLOUD_TASUS, {});
+        case ActErt.CLOUD_EARTH:
+            bit = await ste.hunt(ActErt.CLOUD_EARTH, {});
+            bit = await ste.bus(ActTrm.WRITE_TERMINAL, { val: 9, src: "-----------", bit: 'local' });
+            bit = await ste.bus(ActTrm.WRITE_TERMINAL, { val: 9, src: "CLOUDING THE EARTH", bit: 'local' });
+            bit = await ste.bus(ActTrm.WRITE_TERMINAL, { val: 9, src: "-----------", bit: "local" });
             break;
-        case ActMnu.SERVICE_MENU:
-            bit = await ste.hunt(ActMnu.SERVICE_MENU, {});
+        case ActMnu.AMBIT_MENU:
+            bit = await ste.hunt(ActMnu.AMBIT_MENU, {});
             break;
-        case ActTas.OPEN_TASUS:
-            bit = await ste.hunt(ActTas.OPEN_TASUS, {});
+        case ActErt.OPEN_EARTH:
+            bit = await ste.hunt(ActErt.OPEN_EARTH, {});
             break;
-        case ActTas.UPDATE_TASUS:
-            bit = await ste.hunt(ActTas.UPDATE_TASUS, {});
+        case ActErt.UPDATE_EARTH:
+            bit = await ste.hunt(ActErt.UPDATE_EARTH, {});
             break;
-        case ActTas.EDIT_TASUS:
-            bit = await ste.hunt(ActTas.EDIT_TASUS, {});
+        case ActErt.EDIT_EARTH:
+            bit = await ste.hunt(ActErt.EDIT_EARTH, {});
             bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "PATCHING...", bit: 'local' });
             bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "-----------", bit: "local" });
-            lst = [ActTas.PATCH_TASUS];
+            lst = [ActErt.PATCH_EARTH];
             bit = await ste.bus(ActTrm.UPDATE_TERMINAL, { lst });
-            bit = await ste.hunt(ActTas.PATCH_TASUS, {});
+            bit = await ste.hunt(ActErt.PATCH_EARTH, {});
             break;
         default:
             bit = await await ste.bus(ActTrm.CLOSE_TERMINAL, {});
@@ -14448,36 +15146,32 @@ const visageMenu = (cpy, bal, ste) => {
 };
 exports.visageMenu = visageMenu;
 
-},{"../../00.tasus.unit/tasus.action":24,"../../act/terminal.action":63,"../menu.action":49}],48:[function(require,module,exports){
+},{"../../00.earth.unit/earth.action":25,"../../act/terminal.action":60,"../menu.action":44}],43:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.serviceMenu = void 0;
+exports.ambitMenu = void 0;
 const ActMnu = require("../menu.action");
-const ActTus = require("../../00.tasus.unit/tasus.action");
+const ActAmb = require("../../01.ambit.unit/ambit.action");
 const ActTrm = require("../../act/terminal.action");
 var bit, lst, dex;
-const serviceMenu = async (cpy, bal, ste) => {
+const ambitMenu = async (cpy, bal, ste) => {
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "-----------", bit: 'local' });
-    bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "Service Menu V0", bit: 'local' });
+    bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "Ambit Menu V0", bit: 'local' });
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "-----------", bit: "local" });
-    var lst = [ActTus.UPDATE_TASUS, ActTus.OPEN_TASUS, ActTus.EDIT_TASUS];
+    var lst = [ActAmb.UPDATE_AMBIT, ActAmb.OPEN_AMBIT];
     bit = await ste.bus(ActTrm.UPDATE_TERMINAL, { lst });
     bit = bit.trmBit;
     var idx = lst[bit.val];
     switch (idx) {
-        case ActTus.OPEN_TASUS:
-            bit = await ste.hunt(ActTus.OPEN_TASUS, {});
+        //dude you where moving so fast
+        //please protect me
+        case ActAmb.UPDATE_AMBIT:
+            bit = await ste.hunt(ActAmb.UPDATE_AMBIT, {});
+            bit = await ste.bus(ActTrm.WRITE_TERMINAL, { val: 6, src: JSON.stringify(bit), bit: "local" });
             break;
-        case ActTus.UPDATE_TASUS:
-            bit = await ste.hunt(ActTus.UPDATE_TASUS, {});
-            break;
-        case ActTus.EDIT_TASUS:
-            bit = await ste.hunt(ActTus.EDIT_TASUS, {});
-            bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "PATCHING...", bit: 'local' });
-            bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "-----------", bit: "local" });
-            lst = [ActTus.PATCH_TASUS];
-            bit = await ste.bus(ActTrm.UPDATE_TERMINAL, { lst });
-            bit = await ste.hunt(ActTus.PATCH_TASUS, {});
+        case ActAmb.OPEN_AMBIT:
+            bit = await ste.hunt(ActAmb.OPEN_AMBIT, {});
+            bit = await ste.bus(ActTrm.WRITE_TERMINAL, { val: 6, src: JSON.stringify(bit), bit: "local" });
             break;
         default:
             bit = await await ste.bus(ActTrm.CLOSE_TERMINAL, {});
@@ -14486,13 +15180,13 @@ const serviceMenu = async (cpy, bal, ste) => {
     patch(ste, ActMnu.UPDATE_MENU, {});
     return cpy;
 };
-exports.serviceMenu = serviceMenu;
+exports.ambitMenu = ambitMenu;
 var patch = (ste, type, bale) => ste.dispatch({ type, bale });
 
-},{"../../00.tasus.unit/tasus.action":24,"../../act/terminal.action":63,"../menu.action":49}],49:[function(require,module,exports){
+},{"../../01.ambit.unit/ambit.action":30,"../../act/terminal.action":60,"../menu.action":44}],44:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ContainerMenu = exports.CONTAINER_MENU = exports.VisageMenu = exports.VISAGE_MENU = exports.ServiceMenu = exports.SERVICE_MENU = exports.CloseMenu = exports.CLOSE_MENU = exports.TestMenu = exports.TEST_MENU = exports.UpdateMenu = exports.UPDATE_MENU = exports.InitMenu = exports.INIT_MENU = void 0;
+exports.ContainerMenu = exports.CONTAINER_MENU = exports.VisageMenu = exports.VISAGE_MENU = exports.AmbitMenu = exports.AMBIT_MENU = exports.CloseMenu = exports.CLOSE_MENU = exports.TestMenu = exports.TEST_MENU = exports.UpdateMenu = exports.UPDATE_MENU = exports.InitMenu = exports.INIT_MENU = void 0;
 exports.INIT_MENU = "[Menu action] Init Menu";
 class InitMenu {
     constructor(bale) {
@@ -14525,14 +15219,14 @@ class CloseMenu {
     }
 }
 exports.CloseMenu = CloseMenu;
-exports.SERVICE_MENU = "[Service Menu action] Service Menu";
-class ServiceMenu {
+exports.AMBIT_MENU = "[Ambit action] Ambit Hour Menu";
+class AmbitMenu {
     constructor(bale) {
         this.bale = bale;
-        this.type = exports.SERVICE_MENU;
+        this.type = exports.AMBIT_MENU;
     }
 }
-exports.ServiceMenu = ServiceMenu;
+exports.AmbitMenu = AmbitMenu;
 exports.VISAGE_MENU = "[Visage action] Visage Menu";
 class VisageMenu {
     constructor(bale) {
@@ -14550,10 +15244,10 @@ class ContainerMenu {
 }
 exports.ContainerMenu = ContainerMenu;
 
-},{}],50:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.serviceMenu = exports.closeMenu = exports.testMenu = exports.updateMenu = exports.initMenu = void 0;
+exports.ambitMenu = exports.shadeMenu = exports.closeMenu = exports.testMenu = exports.updateMenu = exports.initMenu = void 0;
 var _00_menu_buzz_1 = require("./buz/00.menu.buzz");
 Object.defineProperty(exports, "initMenu", { enumerable: true, get: function () { return _00_menu_buzz_1.initMenu; } });
 var _00_menu_buzz_2 = require("./buz/00.menu.buzz");
@@ -14562,10 +15256,12 @@ var _00_menu_buzz_3 = require("./buz/00.menu.buzz");
 Object.defineProperty(exports, "testMenu", { enumerable: true, get: function () { return _00_menu_buzz_3.testMenu; } });
 var _00_menu_buzz_4 = require("./buz/00.menu.buzz");
 Object.defineProperty(exports, "closeMenu", { enumerable: true, get: function () { return _00_menu_buzz_4.closeMenu; } });
-var service_menu_buzz_1 = require("./buz/service-menu.buzz");
-Object.defineProperty(exports, "serviceMenu", { enumerable: true, get: function () { return service_menu_buzz_1.serviceMenu; } });
+var _00_menu_buzz_5 = require("./buz/00.menu.buzz");
+Object.defineProperty(exports, "shadeMenu", { enumerable: true, get: function () { return _00_menu_buzz_5.shadeMenu; } });
+var ambit_menu_1 = require("./buz/ambit-menu");
+Object.defineProperty(exports, "ambitMenu", { enumerable: true, get: function () { return ambit_menu_1.ambitMenu; } });
 
-},{"./buz/00.menu.buzz":47,"./buz/service-menu.buzz":48}],51:[function(require,module,exports){
+},{"./buz/00.menu.buzz":42,"./buz/ambit-menu":43}],46:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MenuModel = void 0;
@@ -14579,7 +15275,7 @@ class MenuModel {
 }
 exports.MenuModel = MenuModel;
 
-},{}],52:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reducer = void 0;
@@ -14597,15 +15293,15 @@ function reducer(model = new menu_model_1.MenuModel(), act, state) {
             return Buzz.testMenu(clone(model), act.bale, state);
         case Act.CLOSE_MENU:
             return Buzz.closeMenu(clone(model), act.bale, state);
-        case Act.SERVICE_MENU:
-            return Buzz.serviceMenu(clone(model), act.bale, state);
+        case Act.AMBIT_MENU:
+            return Buzz.ambitMenu(clone(model), act.bale, state);
         default:
             return model;
     }
 }
 exports.reducer = reducer;
 
-},{"./menu.action":49,"./menu.buzzer":50,"./menu.model":51,"clone-deep":3}],53:[function(require,module,exports){
+},{"./menu.action":44,"./menu.buzzer":45,"./menu.model":46,"clone-deep":3}],48:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -14629,7 +15325,7 @@ MenuUnit = __decorate([
 ], MenuUnit);
 exports.default = MenuUnit;
 
-},{"../99.core/state":60,"typescript-ioc":21}],54:[function(require,module,exports){
+},{"../99.core/state":55,"typescript-ioc":21}],49:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateBus = exports.CREATE_BUS = exports.UpdateBus = exports.UPDATE_BUS = exports.MessageBus = exports.MESSAGE_BUS = exports.ConnectBus = exports.CONNECT_BUS = exports.OpenBus = exports.OPEN_BUS = exports.InitBus = exports.INIT_BUS = void 0;
@@ -14683,7 +15379,7 @@ class CreateBus {
 }
 exports.CreateBus = CreateBus;
 
-},{}],55:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createBus = exports.messageBus = exports.connectBus = exports.updateBus = exports.openBus = exports.initBus = void 0;
@@ -14700,7 +15396,7 @@ Object.defineProperty(exports, "messageBus", { enumerable: true, get: function (
 var bus_buzz_6 = require("./buz/bus.buzz");
 Object.defineProperty(exports, "createBus", { enumerable: true, get: function () { return bus_buzz_6.createBus; } });
 
-},{"./buz/bus.buzz":59}],56:[function(require,module,exports){
+},{"./buz/bus.buzz":54}],51:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BusModel = void 0;
@@ -14713,7 +15409,7 @@ class BusModel {
 }
 exports.BusModel = BusModel;
 
-},{}],57:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reducer = void 0;
@@ -14741,7 +15437,7 @@ function reducer(model = new bus_model_1.BusModel(), act, state) {
 }
 exports.reducer = reducer;
 
-},{"./bus.action":54,"./bus.buzzer":55,"./bus.model":56,"clone-deep":3}],58:[function(require,module,exports){
+},{"./bus.action":49,"./bus.buzzer":50,"./bus.model":51,"clone-deep":3}],53:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -14765,7 +15461,7 @@ BusUnit = __decorate([
 ], BusUnit);
 exports.default = BusUnit;
 
-},{"../99.core/state":60,"typescript-ioc":21}],59:[function(require,module,exports){
+},{"../99.core/state":55,"typescript-ioc":21}],54:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateBus = exports.messageBus = exports.connectBus = exports.openBus = exports.createBus = exports.initBus = void 0;
@@ -14941,7 +15637,7 @@ exports.updateBus = updateBus;
 var patch = (ste, type, bale) => ste.dispatch({ type, bale });
 const clone = require("clone-deep");
 
-},{"../../97.collect.unit/collect.action":42,"../../98.menu.unit/menu.action":49,"../../99.bus.unit/bus.action":54,"clone-deep":3}],60:[function(require,module,exports){
+},{"../../97.collect.unit/collect.action":37,"../../98.menu.unit/menu.action":44,"../../99.bus.unit/bus.action":49,"clone-deep":3}],55:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const rx_lite_1 = require("rx-lite");
@@ -14976,42 +15672,37 @@ class State extends rx_lite_1.BehaviorSubject {
 }
 exports.default = State;
 
-},{"../BEE":61,"rx-lite":12}],61:[function(require,module,exports){
+},{"../BEE":56,"rx-lite":12}],56:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reducer = exports.list = void 0;
-const tasus_unit_1 = require("./00.tasus.unit/tasus.unit");
-const service_unit_1 = require("./01.service.unit/service.unit");
-const garden_unit_1 = require("./02.garden.unit/garden.unit");
+const earth_unit_1 = require("./00.earth.unit/earth.unit");
+const ambit_unit_1 = require("./01.ambit.unit/ambit.unit");
 const collect_unit_1 = require("./97.collect.unit/collect.unit");
 const menu_unit_1 = require("./98.menu.unit/menu.unit");
 const bus_unit_1 = require("./99.bus.unit/bus.unit");
-const tasus_model_1 = require("./00.tasus.unit/tasus.model");
-const service_model_1 = require("./01.service.unit/service.model");
-const garden_model_1 = require("./02.garden.unit/garden.model");
+const earth_model_1 = require("./00.earth.unit/earth.model");
+const ambit_model_1 = require("./01.ambit.unit/ambit.model");
 const collect_model_1 = require("./97.collect.unit/collect.model");
 const menu_model_1 = require("./98.menu.unit/menu.model");
 const bus_model_1 = require("./99.bus.unit/bus.model");
-exports.list = [tasus_unit_1.default, service_unit_1.default, garden_unit_1.default, collect_unit_1.default, menu_unit_1.default, bus_unit_1.default];
-const reduceFromTasus = require("./00.tasus.unit/tasus.reduce");
-const reduceFromService = require("./01.service.unit/service.reduce");
-const reduceFromGarden = require("./02.garden.unit/garden.reduce");
+exports.list = [earth_unit_1.default, ambit_unit_1.default, collect_unit_1.default, menu_unit_1.default, bus_unit_1.default];
+const reduceFromEarth = require("./00.earth.unit/earth.reduce");
+const reduceFromAmbit = require("./01.ambit.unit/ambit.reduce");
 const reduceFromCollect = require("./97.collect.unit/collect.reduce");
 const reduceFromMenu = require("./98.menu.unit/menu.reduce");
 const reduceFromBus = require("./99.bus.unit/bus.reduce");
 exports.reducer = {
-    tasus: reduceFromTasus.reducer,
-    service: reduceFromService.reducer,
-    garden: reduceFromGarden.reducer,
+    earth: reduceFromEarth.reducer,
+    ambit: reduceFromAmbit.reducer,
     collect: reduceFromCollect.reducer,
     menu: reduceFromMenu.reducer,
     bus: reduceFromBus.reducer,
 };
 class UnitData {
     constructor() {
-        this.tasus = new tasus_model_1.TasusModel();
-        this.service = new service_model_1.ServiceModel();
-        this.garden = new garden_model_1.GardenModel();
+        this.earth = new earth_model_1.EarthModel();
+        this.ambit = new ambit_model_1.AmbitModel();
         this.collect = new collect_model_1.CollectModel();
         this.menu = new menu_model_1.MenuModel();
         this.bus = new bus_model_1.BusModel();
@@ -15019,19 +15710,72 @@ class UnitData {
 }
 exports.default = UnitData;
 
-},{"./00.tasus.unit/tasus.model":26,"./00.tasus.unit/tasus.reduce":27,"./00.tasus.unit/tasus.unit":28,"./01.service.unit/service.model":32,"./01.service.unit/service.reduce":33,"./01.service.unit/service.unit":34,"./02.garden.unit/garden.model":38,"./02.garden.unit/garden.reduce":39,"./02.garden.unit/garden.unit":40,"./97.collect.unit/collect.model":44,"./97.collect.unit/collect.reduce":45,"./97.collect.unit/collect.unit":46,"./98.menu.unit/menu.model":51,"./98.menu.unit/menu.reduce":52,"./98.menu.unit/menu.unit":53,"./99.bus.unit/bus.model":56,"./99.bus.unit/bus.reduce":57,"./99.bus.unit/bus.unit":58}],62:[function(require,module,exports){
+},{"./00.earth.unit/earth.model":27,"./00.earth.unit/earth.reduce":28,"./00.earth.unit/earth.unit":29,"./01.ambit.unit/ambit.model":32,"./01.ambit.unit/ambit.reduce":33,"./01.ambit.unit/ambit.unit":34,"./97.collect.unit/collect.model":39,"./97.collect.unit/collect.reduce":40,"./97.collect.unit/collect.unit":41,"./98.menu.unit/menu.model":46,"./98.menu.unit/menu.reduce":47,"./98.menu.unit/menu.unit":48,"./99.bus.unit/bus.model":51,"./99.bus.unit/bus.reduce":52,"./99.bus.unit/bus.unit":53}],57:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.COPY_DISK = exports.LOAD_LIST_DISK = exports.INDEX_DISK = exports.WRITE_DISK = exports.READ_DISK = exports.UPDATE_DISK = exports.INIT_DISK = void 0;
-exports.INIT_DISK = '[Disk action] Init Disk';
-exports.UPDATE_DISK = '[Disk action] Update Disk';
-exports.READ_DISK = '[Disk action] Read Disk';
-exports.WRITE_DISK = '[Disk action] Write Disk';
-exports.INDEX_DISK = '[Index action] Index Disk';
-exports.LOAD_LIST_DISK = '[Load_list action] Load_list Disk';
-exports.COPY_DISK = '[Copy action] Copy Disk';
+exports.COPY_DISK = exports.LOAD_LIST_DISK = exports.LIST_DISK = exports.WRITE_DISK = exports.READ_DISK = exports.UPDATE_DISK = exports.INIT_DISK = void 0;
+exports.INIT_DISK = "[Disk action] Init Disk";
+exports.UPDATE_DISK = "[Disk action] Update Disk";
+exports.READ_DISK = "[Disk action] Read Disk";
+exports.WRITE_DISK = "[Disk action] Write Disk";
+exports.LIST_DISK = "[List action] List Disk";
+exports.LOAD_LIST_DISK = "[Load_list action] Load_list Disk";
+exports.COPY_DISK = "[Copy action] Copy Disk";
 
-},{}],63:[function(require,module,exports){
+},{}],58:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.MODEL_FOCUS = exports.SELECT_FOCUS = exports.VISION_FOCUS = exports.LOCATE_FOCUS = exports.BOND_FOCUS = exports.CENTER_FOCUS = exports.BACKWARD_FOCUS = exports.FORWARD_FOCUS = exports.SPIN_LEFT_FOCUS = exports.SPIN_RIGHT_FOCUS = exports.LIST_FOCUS = exports.CORNER_FOCUS = exports.DELETE_FOCUS = exports.REMOVE_FOCUS = exports.WRITE_FOCUS = exports.READ_FOCUS = exports.CREATE_FOCUS = exports.OPEN_FOCUS = exports.UPDATE_FOCUS = exports.AWAKE_FOCUS = exports.INIT_FOCUS = void 0;
+exports.INIT_FOCUS = "[Focus action] Init Focus";
+exports.AWAKE_FOCUS = "[Focus action] Awake Focus";
+exports.UPDATE_FOCUS = "[Focus action] Update Focus";
+exports.OPEN_FOCUS = "[Focus action] Open Focus";
+exports.CREATE_FOCUS = "[Focus action] Create Focus";
+exports.READ_FOCUS = "[Read action] Read Focus";
+exports.WRITE_FOCUS = "[Write action] Write Focus";
+exports.REMOVE_FOCUS = "[Remove action] Remove Focus";
+exports.DELETE_FOCUS = "[Delete action] Delete Focus";
+exports.CORNER_FOCUS = "[Corner action] Corner Focus";
+exports.LIST_FOCUS = "[List action] List Focus";
+exports.SPIN_RIGHT_FOCUS = "[List action] Spin Left Focus";
+exports.SPIN_LEFT_FOCUS = "[List action] Spin Right Focus";
+exports.FORWARD_FOCUS = "[List action] Forward Focus";
+exports.BACKWARD_FOCUS = "[List action] Backward Focus";
+exports.CENTER_FOCUS = "[List action] Center Focus";
+exports.BOND_FOCUS = "[Bond action] Bond Focus";
+exports.LOCATE_FOCUS = "[Locate action] Locate Focus";
+exports.VISION_FOCUS = "[Vision action] Vision Focus";
+exports.SELECT_FOCUS = "[Select action] Select Focus";
+exports.MODEL_FOCUS = "[Select action] Model Focus";
+
+},{}],59:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ADD_HEXMAP = exports.SELECT_HEXMAP = exports.DEFOCUS_HEXMAP = exports.FOCUSING_HEXMAP = exports.SEEK_HEXMAP = exports.NAME_HEXMAP = exports.REPLACE_HEXMAP = exports.LIST_HEXMAP = exports.LOAD_HEXMAP = exports.SHAPE_HEXMAP = exports.STORE_HEXMAP = exports.SAVE_HEXMAP = exports.TOOL_HEXMAP = exports.GEOJSON_HEXMAP = exports.ATLAS_HEXMAP = exports.COPY_HEXMAP = exports.CREATE_HEXMAP = exports.WRITE_HEXMAP = exports.READ_HEXMAP = exports.OPEN_HEXMAP = exports.UPDATE_HEXMAP = exports.INIT_HEXMAP = void 0;
+exports.INIT_HEXMAP = "[Hexmap action] Init Hexmap";
+exports.UPDATE_HEXMAP = "[Hexmap action] Update Hexmap";
+exports.OPEN_HEXMAP = "[Hexmap action] Open Hexmap";
+exports.READ_HEXMAP = "[Read action] Read Hexmap";
+exports.WRITE_HEXMAP = "[Write action] Write Hexmap";
+exports.CREATE_HEXMAP = "[Create action] Create Hexmap";
+exports.COPY_HEXMAP = "[Copy action] Copy Hexmap";
+exports.ATLAS_HEXMAP = "[Atlas action] Atlas Hexmap";
+exports.GEOJSON_HEXMAP = "[Geojson action] Geojson Hexmap";
+exports.TOOL_HEXMAP = "[Tool action] Tool Hexmap";
+exports.SAVE_HEXMAP = "[Save action] Save Hexmap";
+exports.STORE_HEXMAP = "[Store action] Store Hexmap";
+exports.SHAPE_HEXMAP = "[Shape action] Shape Hexmap";
+exports.LOAD_HEXMAP = "[Load action] Load Hexmap";
+exports.LIST_HEXMAP = "[List action] List Hexmap";
+exports.REPLACE_HEXMAP = "[Replace action] Replace Hexmap";
+exports.NAME_HEXMAP = "[Name action] Name Hexmap";
+exports.SEEK_HEXMAP = "[Seek action] Seek Hexmap";
+exports.FOCUSING_HEXMAP = "[Focusing action] Focusing Hexmap";
+exports.DEFOCUS_HEXMAP = "[Defocus action] Defocus Hexmap";
+exports.SELECT_HEXMAP = "[Select action] Select Hexmap";
+exports.ADD_HEXMAP = "[Select action] Add Hexmap";
+
+},{}],60:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ADD_PORT = exports.CONTENT_TERMINAL = exports.ROOT_TERMINAL = exports.CLOSE_TERMINAL = exports.TABLE_TERMINAL = exports.INPUT_TERMINAL = exports.CLEAR_TERMINAL = exports.UPDATE_TERMINAL = exports.WRITE_TERMINAL = exports.FOCUS_TERMINAL = exports.OPEN_TERMINAL = exports.INIT_TERMINAL = void 0;
@@ -15049,7 +15793,7 @@ exports.ROOT_TERMINAL = "[Terminal action] Root Terminal";
 exports.CONTENT_TERMINAL = "[Terminal action] Content Terminal";
 exports.ADD_PORT = "[Terminal action] Add Port";
 
-},{}],64:[function(require,module,exports){
+},{}],61:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.VALUE_VURT = exports.BUNDLE_VURT = exports.CONTAINS_VURT = exports.LIST_UNIT_VURT = exports.LIST_PIVOT_VURT = exports.COUNT_VURT = exports.UNIT_VURT = exports.REPLACE_VURT = exports.UPDATE_VURT = exports.FETCH_VURT = exports.TEST_CLOUD_VURT = exports.DELAY_VURT = exports.INIT_VURT = void 0;
@@ -15067,7 +15811,7 @@ exports.CONTAINS_VURT = "[Contains action] Contains Vurt";
 exports.BUNDLE_VURT = "[Bundle action] Bundle Vurt";
 exports.VALUE_VURT = "[Value action] Value Vurt";
 
-},{}],65:[function(require,module,exports){
+},{}],62:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var sim = {
@@ -15099,4 +15843,4 @@ const Import = require("./BEE");
 const state_1 = require("./99.core/state");
 module.exports = sim;
 
-},{"./99.core/state":60,"./BEE":61}]},{},[22]);
+},{"./99.core/state":55,"./BEE":56}]},{},[22]);

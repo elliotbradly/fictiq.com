@@ -13873,7 +13873,8 @@ const initShow = async (cpy, bal, ste) => {
     //url = url.substring(0, url.length - 1);
     console.log(url);
     bit = await fetch(url, { method: 'GET' });
-    console.log('sjow ' + JSON.stringify(bit));
+    var dat = await bit.json();
+    console.log('sjow ' + JSON.stringify(dat));
     debugger;
     //var dat = await rsp.json()
     //console.log( JSON.stringify(dat))

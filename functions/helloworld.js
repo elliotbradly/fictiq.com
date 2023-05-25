@@ -8,7 +8,7 @@ export default {
 
         return new Response(json, {
             headers: {
-                "content-type": "application/json;charset=UTF-8",
+                "text/html;charset=UTF-8"
             },
         });
     },

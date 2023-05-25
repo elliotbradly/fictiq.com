@@ -13701,7 +13701,7 @@ const cloudTasus = async (cpy, bal, ste) => {
         }
         //then open an address
         var open = require('open');
-        open('https://555-tasus.beeing.workers.dev/openService');
+        open('https://tasus.fictiq.com/openService');
         process.chdir("../../packages/555.tasus");
         if (bal.slv != null)
             bal.slv({ spcBit: { idx: "cloud-tasus" } });

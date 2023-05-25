@@ -13868,7 +13868,7 @@ var bit, dat;
 //var SPACE = global.SPACE 
 //var SHADE = global.SHADE 
 const initShow = async (cpy, bal, ste) => {
-    var url = 'https://555-tasus.beeing.workers.dev/openService';
+    var url = 'https://001-time.fictiq.com/blockClock';
     url = encodeURI(url);
     //url = url.substring(0, url.length - 1);
     console.log(url);

@@ -13868,11 +13868,12 @@ var bit, dat;
 //var SPACE = global.SPACE 
 //var SHADE = global.SHADE 
 const initShow = async (cpy, bal, ste) => {
-    var url = 'https://555-tasus.fictiq.com//';
+    var url = 'https://www.fictiq.com/helloworld';
     url = encodeURI(url);
     //url = url.substring(0, url.length - 1);
     console.log(url);
-    bit = await fetch(url, { method: 'GET', mode: "same-origin", headers: { 'head': 'none' } });
+    bit = await fetch(url, { method: 'GET' });
+    console.log('sjow ' + JSON.stringify(bit));
     debugger;
     //var dat = await rsp.json()
     //console.log( JSON.stringify(dat))

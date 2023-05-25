@@ -12,7 +12,7 @@ export default {
                 case '/update':
                     value = Number(value) + 1
                     break
-                case '/reset':
+                case '/reset/':
                     value = 555
                     break
                 case '/':

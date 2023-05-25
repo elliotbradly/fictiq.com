@@ -13868,7 +13868,7 @@ var bit, dat;
 //var SPACE = global.SPACE 
 //var SHADE = global.SHADE 
 const initShow = async (cpy, bal, ste) => {
-    var url = './api/';
+    var url = './api/reset/';
     url = encodeURI(url);
     //url = url.substring(0, url.length - 1);
     console.log(url);

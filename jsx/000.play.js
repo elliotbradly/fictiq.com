@@ -13868,13 +13868,16 @@ var bit, dat;
 //var SPACE = global.SPACE 
 //var SHADE = global.SHADE 
 const initShow = async (cpy, bal, ste) => {
-    var url = 'https://001-time.fictiq.com/blockClock';
+    var url = 'https://001-time.fictiq.com/';
     url = encodeURI(url);
     //url = url.substring(0, url.length - 1);
     console.log(url);
-    var rsp = await fetch(url, { method: 'GET', headers: { 'head': 'none' } });
-    var dat = await rsp.json();
-    console.log(JSON.stringify(dat));
+    var rsp = await fetch(url, { method: 'GET', mode: 'no-cors', headers: { 'head': 'none' } });
+    console.log(JSON.stringify(rsp));
+    var dat = await rsp.text();
+    debugger;
+    //var dat = await rsp.json()
+    //console.log( JSON.stringify(dat))
     //debugger
     //const response = await fetch("./dat/hexmap/000.json");
     //const jsonData = await response.json();

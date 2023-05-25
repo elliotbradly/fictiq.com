@@ -1,6 +1,6 @@
 export default {
     async fetch(request, env) {
-        return new Response('Ok');
+        return new Response('Everything is OK');
 
     },
 }

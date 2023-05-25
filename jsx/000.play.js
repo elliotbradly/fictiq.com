@@ -13875,7 +13875,6 @@ const initShow = async (cpy, bal, ste) => {
     bit = await fetch(url, { mode: "no-cors", method: 'GET' });
     var dat = await bit.text();
     console.log('sjow ' + JSON.stringify(dat));
-    debugger;
     //var dat = await rsp.json()
     //console.log( JSON.stringify(dat))
     //debugger

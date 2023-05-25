@@ -13868,11 +13868,11 @@ var bit, dat;
 //var SPACE = global.SPACE 
 //var SHADE = global.SHADE 
 const initShow = async (cpy, bal, ste) => {
-    var url = 'https://www.fictiq.com/api/';
+    var url = './api/';
     url = encodeURI(url);
     //url = url.substring(0, url.length - 1);
     console.log(url);
-    bit = await fetch(url, { method: 'GET' });
+    bit = await fetch(url, { mode: "no-cors", method: 'GET' });
     var dat = await bit.text();
     console.log('sjow ' + JSON.stringify(dat));
     debugger;

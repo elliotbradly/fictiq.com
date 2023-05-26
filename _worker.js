@@ -20,10 +20,10 @@ export default {
             bit = await fetch(neo, { method: 'GET' })
             var jsonBit = await bit.json()
 
-            //var dat = jsonBit.clrBit.dat
+            var bit = jsonBit.bit.clrBit.dat;
 
-            //console.log('name ' + dat.name)
-            //console.log('hex ' + dat.hex)
+            console.log('name ' + bit.name)
+            console.log('hex ' + bit.hex)
 
             //we get a color
             // Creating a token

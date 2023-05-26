@@ -1933,7 +1933,7 @@ function numberIsNaN (obj) {
 }).call(this)}).call(this,require("buffer").Buffer)
 },{"base64-js":1,"buffer":2,"ieee754":11}],3:[function(require,module,exports){
 (function (Buffer){(function (){
-//  Chance.js 1.1.10
+//  Chance.js 1.1.11
 //  https://chancejs.com
 //  (c) 2013 Victor Quinn
 //  Chance may be freely distributed or modified under the MIT license.
@@ -2007,7 +2007,7 @@ function numberIsNaN (obj) {
         return this;
     }
 
-    Chance.prototype.VERSION = "1.1.10";
+    Chance.prototype.VERSION = "1.1.11";
 
     // Random helper functions
     function initOptions(options, defaults) {
@@ -25099,14 +25099,15 @@ class ContainerBuildContext extends model_1.BuildContext {
 (function (global){(function (){
 global.COLOR = require("../dist/004.color/hunt");
 global.COLOR.ActClr = require("../dist/004.color/00.color.unit/color.action");
+global.COLOR.ActSpk = require("../dist/004.color/01.spectrum.unit/spectrum.action");
 
 
 
-
+var colorHunt = COLOR
 
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../dist/004.color/00.color.unit/color.action":39,"../dist/004.color/hunt":74}],37:[function(require,module,exports){
+},{"../dist/004.color/00.color.unit/color.action":39,"../dist/004.color/01.spectrum.unit/spectrum.action":45,"../dist/004.color/hunt":74}],37:[function(require,module,exports){
 module.exports=[
   {
     "idx": "00",
@@ -25493,7 +25494,7 @@ exports.default = ColorUnit;
 },{"../99.core/state":69,"typescript-ioc":35}],44:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.setupSpectrum = exports.updateSpectrum = exports.mixSpectrum = exports.mapSpectrum = exports.matchSpectrum = exports.fetchSpectrum = exports.selectSpectrum = exports.createSpectrum = exports.readSpectrum = exports.initSpectrum = void 0;
+exports.setupSpectrum = exports.updateSpectrum = exports.mixSpectrum = exports.mapSpectrum = exports.matchSpectrum = exports.fetchSpectrum = exports.selectSpectrum = exports.createSpectrum = exports.readSpectrum = exports.loadSpectrum = exports.initSpectrum = void 0;
 //the colors we work from
 var fate, near, near0; //near0 is the master number
 const ActSpc = require("../spectrum.action");
@@ -25516,6 +25517,18 @@ const initSpectrum = async (cpy, bal, ste) => {
     return cpy;
 };
 exports.initSpectrum = initSpectrum;
+const loadSpectrum = async (cpy, bal, ste) => {
+    var url = 'https://www.fictiq.com/dat/color/colornames.json';
+    url = encodeURI(url);
+    //url = url.substring(0, url.length - 1);
+    console.log(url);
+    bit = await fetch(url, { mode: "no-cors", method: 'GET' });
+    var dat = await bit.json();
+    if (bal.slv != null)
+        bal.slv({ spkBit: { idx: "load-spectrum" } });
+    return cpy;
+};
+exports.loadSpectrum = loadSpectrum;
 const readSpectrum = (cpy, bal, ste) => {
     if (bal.val == null)
         bal.val = 0;
@@ -25637,7 +25650,7 @@ const Fate = require("chance");
 },{"../spectrum.action":45,"chance":3,"color":10,"color-convert":6,"fs-extra":undefined,"nearest-color":18,"string":27}],45:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SetupSpectrum = exports.SETUP_SPECTRUM = exports.ReadSpectrum = exports.READ_SPECTRUM = exports.CreateSpectrum = exports.CREATE_SPECTRUM = exports.MixSpectrum = exports.MIX_SPECTRUM = exports.SelectSpectrum = exports.SELECT_SPECTRUM = exports.FetchSpectrum = exports.FETCH_SPECTRUM = exports.UpdateSpectrum = exports.UPDATE_SPECTRUM = exports.InitSpectrum = exports.INIT_SPECTRUM = void 0;
+exports.LoadSpectrum = exports.LOAD_SPECTRUM = exports.SetupSpectrum = exports.SETUP_SPECTRUM = exports.ReadSpectrum = exports.READ_SPECTRUM = exports.CreateSpectrum = exports.CREATE_SPECTRUM = exports.MixSpectrum = exports.MIX_SPECTRUM = exports.SelectSpectrum = exports.SELECT_SPECTRUM = exports.FetchSpectrum = exports.FETCH_SPECTRUM = exports.UpdateSpectrum = exports.UPDATE_SPECTRUM = exports.InitSpectrum = exports.INIT_SPECTRUM = void 0;
 // Spectrum actions
 exports.INIT_SPECTRUM = "[Spectrum action] Init Spectrum";
 class InitSpectrum {
@@ -25703,11 +25716,19 @@ class SetupSpectrum {
     }
 }
 exports.SetupSpectrum = SetupSpectrum;
+exports.LOAD_SPECTRUM = "[Load action] Load Spectrum";
+class LoadSpectrum {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.LOAD_SPECTRUM;
+    }
+}
+exports.LoadSpectrum = LoadSpectrum;
 
 },{}],46:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createSpectrum = exports.readSpectrum = exports.setupSpectrum = exports.fetchSpectrum = exports.mixSpectrum = exports.selectSpectrum = exports.updateSpectrum = exports.initSpectrum = void 0;
+exports.loadSpectrum = exports.createSpectrum = exports.readSpectrum = exports.setupSpectrum = exports.fetchSpectrum = exports.mixSpectrum = exports.selectSpectrum = exports.updateSpectrum = exports.initSpectrum = void 0;
 var spectrum_buzz_1 = require("./buz/spectrum.buzz");
 Object.defineProperty(exports, "initSpectrum", { enumerable: true, get: function () { return spectrum_buzz_1.initSpectrum; } });
 var spectrum_buzz_2 = require("./buz/spectrum.buzz");
@@ -25724,6 +25745,8 @@ var spectrum_buzz_7 = require("./buz/spectrum.buzz");
 Object.defineProperty(exports, "readSpectrum", { enumerable: true, get: function () { return spectrum_buzz_7.readSpectrum; } });
 var spectrum_buzz_8 = require("./buz/spectrum.buzz");
 Object.defineProperty(exports, "createSpectrum", { enumerable: true, get: function () { return spectrum_buzz_8.createSpectrum; } });
+var spectrum_buzz_9 = require("./buz/spectrum.buzz");
+Object.defineProperty(exports, "loadSpectrum", { enumerable: true, get: function () { return spectrum_buzz_9.loadSpectrum; } });
 
 },{"./buz/spectrum.buzz":44}],47:[function(require,module,exports){
 "use strict";
@@ -25778,6 +25801,8 @@ function reducer(model = new spectrum_model_1.SpectrumModel(), act, state) {
             return Buzz.readSpectrum(clone(model), act.bale, state);
         case Act.SETUP_SPECTRUM:
             return Buzz.setupSpectrum(clone(model), act.bale, state);
+        case Act.LOAD_SPECTRUM:
+            return Buzz.loadSpectrum(clone(model), act.bale, state);
         default:
             return model;
     }
@@ -26197,13 +26222,16 @@ const spectrumMenu = async (cpy, bal, ste) => {
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "-----------", bit: 'local' });
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "Spectrum Menu", bit: 'local' });
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "-----------", bit: "local" });
-    var lst = [ActSpk.FETCH_SPECTRUM, ActSpk.CREATE_SPECTRUM, ActSpk.INIT_SPECTRUM];
+    var lst = [ActSpk.FETCH_SPECTRUM, ActSpk.CREATE_SPECTRUM, ActSpk.LOAD_SPECTRUM, ActSpk.INIT_SPECTRUM];
     bit = await ste.bus(ActTrm.UPDATE_TERMINAL, { lst });
     bit = bit.trmBit;
     var idx = lst[bit.val];
     switch (idx) {
         case ActSpk.FETCH_SPECTRUM:
             bit = await ste.hunt(ActSpk.FETCH_SPECTRUM, {});
+            break;
+        case ActSpk.LOAD_SPECTRUM:
+            bit = await ste.hunt(ActSpk.LOAD_SPECTRUM, {});
             break;
         case ActClr.UPDATE_COLOR:
             bit = await ste.hunt(ActClr.UPDATE_COLOR, {});

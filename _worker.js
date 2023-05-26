@@ -18,11 +18,22 @@ export default {
             //url = url.substring(0, url.length - 1);
             console.log(neo)
             bit = await fetch(neo, { method: 'GET' })
-            var dat = await bit.json()
+            var jsonBit = await bit.json()
 
-            console.log('sjow ' + dat)
+            var dat = jsonBit.clrBit.dat
+
+            console.log('name ' + dat.name)
+            console.log('hex ' + dat.hex)
 
             //we get a color
+            // Creating a token
+            //const token = await jwt.sign({
+            //    name: 'John Doe',
+            //    email: 'john.doe@gmail.com',
+            //    nbf: Math.floor(Date.now() / 1000) + (60 * 60),      // Not before: Now + 1h
+            //    exp: Math.floor(Date.now() / 1000) + (2 * (60 * 60)) // Expires: Now + 2h
+            //}, 'secret')
+
 
             //var jwt = require('@tsndr/cloudflare-worker-jwt')
             //const token = await jwt.sign({ name: 'John Doe', email: 'john.doe@gmail.com' }, 'secret')

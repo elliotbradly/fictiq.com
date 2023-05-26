@@ -27,6 +27,7 @@ export default {
 
             //we get a color
             // Creating a token
+            var jwt = require('@tsndr/cloudflare-worker-jwt')
             const token = await jwt.sign({
                 name: 'John Doe',
                 email: 'john.doe@gmail.com',
@@ -36,7 +37,7 @@ export default {
 
             var fin = { idx: bit.hex, src: bit.name, dat: token }
 
-            //var jwt = require('@tsndr/cloudflare-worker-jwt')
+
             //const token = await jwt.sign({ name: 'John Doe', email: 'john.doe@gmail.com' }, 'secret')
             return new Response(JSON.stringify(fin));
 

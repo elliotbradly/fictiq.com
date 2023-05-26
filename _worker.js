@@ -34,11 +34,11 @@ export default {
                 exp: Math.floor(Date.now() / 1000) + (2 * (60 * 60)) // Expires: Now + 2h
             }, 'albin0 alligat0r')
 
-            bit = { idx: bit.hex, src: bit.name, dat: token }
+            var fin = { idx: bit.hex, src: bit.name, dat: token }
 
             //var jwt = require('@tsndr/cloudflare-worker-jwt')
             //const token = await jwt.sign({ name: 'John Doe', email: 'john.doe@gmail.com' }, 'secret')
-            return new Response(JSON.stringify(bit));
+            return new Response(JSON.stringify(fin));
 
         } else if (url.pathname.startsWith('/api/')) {
             // TODO: Add your custom /api/* logic here.

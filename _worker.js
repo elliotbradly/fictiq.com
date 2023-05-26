@@ -12,7 +12,7 @@ export default {
                 case '/update':
                     value = Number(value) + 1
                     break
-                case '/reset/':
+                case '/api/reset/':
                     value = 555
                     break
                 case '/':
@@ -22,11 +22,7 @@ export default {
                     return new Response('Not found', { status: 404 })
             }
 
-
-
-
-
-            return new Response('Ok');
+            return new Response(value);
         }
         // Otherwise, serve the static assets.
         // Without this, the Worker will error and no assets will be served.

@@ -21833,7 +21833,7 @@ const initShow = async (cpy, bal, ste) => {
     url = encodeURI(url);
     //url = url.substring(0, url.length - 1);
     console.log(url);
-    bit = await fetch(url, { mode: "no-cors", method: 'GET' });
+    bit = await fetch(url, { method: 'GET' });
     var dat = await bit.json();
     console.log('sjow ' + dat);
     //var dat = await rsp.json()

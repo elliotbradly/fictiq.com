@@ -1,7 +1,15 @@
+
 export default {
+
     async fetch(request, env) {
         const url = new URL(request.url);
-        if (url.pathname.startsWith('/api/')) {
+        if (url.pathname.startsWith('/auth/')) {
+
+            var jwt = require('@tsndr/cloudflare-worker-jwt')
+            const token = await jwt.sign({ name: 'John Doe', email: 'john.doe@gmail.com' }, 'secret')
+            return new Response(JSON.stringify(token));
+
+        } else if (url.pathname.startsWith('/api/')) {
             // TODO: Add your custom /api/* logic here.
 
             var value = 'sweet'

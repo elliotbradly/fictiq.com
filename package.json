@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@tsndr/cloudflare-worker-jwt": "^2.2.1"
+  }
+}

@@ -17,7 +17,7 @@ export default {
             neo = encodeURI(neo);
             //url = url.substring(0, url.length - 1);
             console.log(neo)
-            bit = await fetch(url, { method: 'GET' })
+            bit = await fetch(neo, { method: 'GET' })
             var dat = await bit.json()
 
             console.log('sjow ' + dat)

@@ -4,6 +4,8 @@ export default {
         if (url.pathname.startsWith('/api/')) {
             // TODO: Add your custom /api/* logic here.
 
+            var value = 'sweet'
+
             switch (url.pathname) {
                 case '/openService':
                     bit = await globalThis.TASUS.hunt(globalThis.TASUS.ActSrv.OPEN_SERVICE, { idx });
@@ -21,6 +23,8 @@ export default {
                 default:
                     return new Response('Not found', { status: 404 })
             }
+
+
 
             return new Response(value);
         }

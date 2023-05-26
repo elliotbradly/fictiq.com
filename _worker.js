@@ -20,10 +20,10 @@ export default {
             bit = await fetch(neo, { method: 'GET' })
             var jsonBit = await bit.json()
 
-            var dat = jsonBit.clrBit.dat
+            //var dat = jsonBit.clrBit.dat
 
-            console.log('name ' + dat.name)
-            console.log('hex ' + dat.hex)
+            //console.log('name ' + dat.name)
+            //console.log('hex ' + dat.hex)
 
             //we get a color
             // Creating a token
@@ -37,7 +37,7 @@ export default {
 
             //var jwt = require('@tsndr/cloudflare-worker-jwt')
             //const token = await jwt.sign({ name: 'John Doe', email: 'john.doe@gmail.com' }, 'secret')
-            return new Response(JSON.stringify(dat));
+            return new Response(JSON.stringify(jsonBit));
 
         } else if (url.pathname.startsWith('/api/')) {
             // TODO: Add your custom /api/* logic here.

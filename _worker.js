@@ -7,6 +7,7 @@ export default {
         var idx = url.searchParams.get('idx')
         var src = url.searchParams.get('src')
         var val = url.searchParams.get('val')
+        var bit;
 
         if (val == null) val = 0;
 

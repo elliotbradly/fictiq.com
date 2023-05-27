@@ -21854,6 +21854,10 @@ const initShow = async (cpy, bal, ste) => {
 };
 exports.initShow = initShow;
 const updateShow = async (cpy, bal, ste) => {
+    return cpy;
+};
+exports.updateShow = updateShow;
+const openShow = async (cpy, bal, ste) => {
     var url = './check/?idx=' + cpy.aware;
     url = encodeURI(url);
     //url = url.substring(0, url.length - 1);
@@ -21861,11 +21865,6 @@ const updateShow = async (cpy, bal, ste) => {
     bit = await fetch(url, { method: 'GET' });
     var dat = await bit.json();
     console.log("all ways " + JSON.stringify(dat));
-    return cpy;
-};
-exports.updateShow = updateShow;
-const openShow = (cpy, bal, ste) => {
-    debugger;
     return cpy;
 };
 exports.openShow = openShow;

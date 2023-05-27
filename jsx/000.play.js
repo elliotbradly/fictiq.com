@@ -21630,15 +21630,15 @@ exports.updatePlay = updatePlay;
 const openPlay = async (cpy, bal, ste) => {
     bit = await ste.bus(ActDsk.COPY_DISK, { src: './vue', idx: '../gillisse/src' });
     bit = await ste.hunt(ActPly.RUN_PLAY, {});
-    //const open = require('open')
-    //var loc = './vrt.opn.bat'
-    //bit = await open(loc)
+    const open = require('open');
+    var loc = './vrt.opn.bat';
+    bit = await open(loc);
     const { exec } = require('child_process');
-    exec('vrt.opn.bat', async (err, stdout, stderr) => {
-        if (err) {
-            console.error(`exec error: ${err}`);
-        }
-    });
+    //exec('./vrt.opn.bat', async (err, stdout, stderr) => {
+    //    if (err) {
+    //        console.error(`exec error: ${err}`);
+    //    }
+    //});
     process.chdir("../../deploy/fictiq.com");
     exec('vrt.dev.bat', async (err, stdout, stderr) => {
         if (err) {
@@ -21830,17 +21830,38 @@ PlayUnit = __decorate([
 exports.default = PlayUnit;
 
 },{"../99.core/state":54,"typescript-ioc":22}],30:[function(require,module,exports){
+(function (process){(function (){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.openShow = exports.updateShow = exports.initShow = void 0;
 var bit, dat, idx, src;
 //var SPACE = global.SPACE 
 //var SHADE = global.SHADE 
+var isElectron = () => {
+    // Renderer process
+    if (typeof window !== 'undefined' && typeof window.process === 'object' && window.process['type'] === 'renderer') {
+        return true;
+    }
+    // Main process
+    if (typeof process !== 'undefined' && typeof process.versions === 'object' && !!process.versions.electron) {
+        return true;
+    }
+    // Detect the user agent when the `nodeIntegration` option is set to true
+    if (typeof navigator === 'object' && typeof navigator.userAgent === 'string' && navigator.userAgent.indexOf('Electron') >= 0) {
+        return true;
+    }
+    return false;
+};
 const initShow = async (cpy, bal, ste) => {
+    //if ( isElectron() == true ){
+    //  cpy.root = 'http://127.0.0.1:8787' 
+    // }
     var chance = require('chance');
     var Chance = new chance();
     var value = Chance.integer({ min: 0, max: 18260 });
-    var url = 'http://127.0.0.1:8787/auth/?val=' + value;
+    //routers
+    //needed here
+    var url = cpy.root + '/auth/?val=' + value;
     url = encodeURI(url);
     //url = url.substring(0, url.length - 1);
     console.log(url);
@@ -21869,7 +21890,7 @@ const updateShow = async (cpy, bal, ste) => {
 };
 exports.updateShow = updateShow;
 const openShow = async (cpy, bal, ste) => {
-    var url = 'http://127.0.0.1:8787/check/?idx=' + cpy.aware;
+    var url = cpy.root + '/check/?idx=' + cpy.aware;
     //url = encodeURI(url);
     //url = url.substring(0, url.length - 1);
     console.log(url);
@@ -21880,7 +21901,8 @@ const openShow = async (cpy, bal, ste) => {
 };
 exports.openShow = openShow;
 
-},{"chance":3}],31:[function(require,module,exports){
+}).call(this)}).call(this,require('_process'))
+},{"_process":11,"chance":3}],31:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OpenShow = exports.OPEN_SHOW = exports.UpdateShow = exports.UPDATE_SHOW = exports.InitShow = exports.INIT_SHOW = void 0;
@@ -21926,6 +21948,11 @@ Object.defineProperty(exports, "openShow", { enumerable: true, get: function () 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ShowModel = void 0;
 class ShowModel {
+    constructor() {
+        this.root = '.';
+        //showBitList: ShowBit[] = [];
+        //showBits: any = {};
+    }
 }
 exports.ShowModel = ShowModel;
 

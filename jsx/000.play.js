@@ -21822,7 +21822,7 @@ exports.default = PlayUnit;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateShow = exports.initShow = void 0;
-var bit, dat;
+var bit, dat, idx, src;
 //var SPACE = global.SPACE 
 //var SHADE = global.SHADE 
 const initShow = async (cpy, bal, ste) => {
@@ -21835,9 +21835,12 @@ const initShow = async (cpy, bal, ste) => {
     console.log(url);
     bit = await fetch(url, { method: 'GET' });
     var dat = await bit.json();
-    for (var key in dat) {
-        console.log('key ' + key);
-    }
+    idx = dat.idx;
+    src = dat.src;
+    dat = dat.dat;
+    console.log('idx:' + idx);
+    console.log('src:' + src);
+    console.log('dat:' + dat);
     //var dat = await rsp.json()
     //console.log( JSON.stringify(dat))
     //debugger

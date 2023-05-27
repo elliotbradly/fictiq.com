@@ -21821,7 +21821,7 @@ exports.default = PlayUnit;
 },{"../99.core/state":54,"typescript-ioc":22}],30:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateShow = exports.initShow = void 0;
+exports.openShow = exports.updateShow = exports.initShow = void 0;
 var bit, dat, idx, src;
 //var SPACE = global.SPACE 
 //var SHADE = global.SHADE 
@@ -21838,6 +21838,7 @@ const initShow = async (cpy, bal, ste) => {
     idx = dat.idx;
     src = dat.src;
     dat = dat.dat;
+    cpy.aware = dat;
     console.log('idx:' + idx);
     console.log('src:' + src);
     console.log('dat:' + dat);
@@ -21852,15 +21853,27 @@ const initShow = async (cpy, bal, ste) => {
     return cpy;
 };
 exports.initShow = initShow;
-const updateShow = (cpy, bal, ste) => {
+const updateShow = async (cpy, bal, ste) => {
+    var url = './check/?idx=' + cpy.aware;
+    url = encodeURI(url);
+    //url = url.substring(0, url.length - 1);
+    console.log(url);
+    bit = await fetch(url, { method: 'GET' });
+    var dat = await bit.json();
+    console.log("all ways " + JSON.stringify(dat));
     return cpy;
 };
 exports.updateShow = updateShow;
+const openShow = (cpy, bal, ste) => {
+    debugger;
+    return cpy;
+};
+exports.openShow = openShow;
 
 },{"chance":3}],31:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UpdateShow = exports.UPDATE_SHOW = exports.InitShow = exports.INIT_SHOW = void 0;
+exports.OpenShow = exports.OPEN_SHOW = exports.UpdateShow = exports.UPDATE_SHOW = exports.InitShow = exports.INIT_SHOW = void 0;
 // Show actions
 exports.INIT_SHOW = "[Show action] Init Show";
 class InitShow {
@@ -21878,15 +21891,25 @@ class UpdateShow {
     }
 }
 exports.UpdateShow = UpdateShow;
+exports.OPEN_SHOW = "[Open action] Open Show";
+class OpenShow {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.OPEN_SHOW;
+    }
+}
+exports.OpenShow = OpenShow;
 
 },{}],32:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateShow = exports.initShow = void 0;
+exports.openShow = exports.updateShow = exports.initShow = void 0;
 var show_buzz_1 = require("./buz/show.buzz");
 Object.defineProperty(exports, "initShow", { enumerable: true, get: function () { return show_buzz_1.initShow; } });
 var show_buzz_2 = require("./buz/show.buzz");
 Object.defineProperty(exports, "updateShow", { enumerable: true, get: function () { return show_buzz_2.updateShow; } });
+var show_buzz_3 = require("./buz/show.buzz");
+Object.defineProperty(exports, "openShow", { enumerable: true, get: function () { return show_buzz_3.openShow; } });
 
 },{"./buz/show.buzz":30}],33:[function(require,module,exports){
 "use strict";
@@ -21910,6 +21933,8 @@ function reducer(model = new show_model_1.ShowModel(), act, state) {
             return Buzz.updateShow(clone(model), act.bale, state);
         case Act.INIT_SHOW:
             return Buzz.initShow(clone(model), act.bale, state);
+        case Act.OPEN_SHOW:
+            return Buzz.openShow(clone(model), act.bale, state);
         default:
             return model;
     }

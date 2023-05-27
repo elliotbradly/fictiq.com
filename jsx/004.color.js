@@ -1933,7 +1933,7 @@ function numberIsNaN (obj) {
 }).call(this)}).call(this,require("buffer").Buffer)
 },{"base64-js":1,"buffer":2,"ieee754":11}],3:[function(require,module,exports){
 (function (Buffer){(function (){
-//  Chance.js 1.1.10
+//  Chance.js 1.1.11
 //  https://chancejs.com
 //  (c) 2013 Victor Quinn
 //  Chance may be freely distributed or modified under the MIT license.
@@ -2007,7 +2007,7 @@ function numberIsNaN (obj) {
         return this;
     }
 
-    Chance.prototype.VERSION = "1.1.10";
+    Chance.prototype.VERSION = "1.1.11";
 
     // Random helper functions
     function initOptions(options, defaults) {
@@ -25099,14 +25099,15 @@ class ContainerBuildContext extends model_1.BuildContext {
 (function (global){(function (){
 global.COLOR = require("../dist/004.color/hunt");
 global.COLOR.ActClr = require("../dist/004.color/00.color.unit/color.action");
+global.COLOR.ActSpk = require("../dist/004.color/01.spectrum.unit/spectrum.action");
 
 
 
-
+var colorHunt = COLOR
 
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../dist/004.color/00.color.unit/color.action":39,"../dist/004.color/hunt":74}],37:[function(require,module,exports){
+},{"../dist/004.color/00.color.unit/color.action":39,"../dist/004.color/01.spectrum.unit/spectrum.action":45,"../dist/004.color/hunt":74}],37:[function(require,module,exports){
 module.exports=[
   {
     "idx": "00",
@@ -25234,7 +25235,7 @@ module.exports=[
 (function (process){(function (){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.patchColor = exports.editColor = exports.runColor = exports.openColor = exports.updateColor = exports.initColor = void 0;
+exports.cloudColor = exports.patchColor = exports.editColor = exports.runColor = exports.openColor = exports.updateColor = exports.initColor = void 0;
 const ActMnu = require("../../98.menu.unit/menu.action");
 const ActBus = require("../../99.bus.unit/bus.action");
 const ActClr = require("../color.action");
@@ -25322,12 +25323,33 @@ const patchColor = (cpy, bal, ste) => {
     return cpy;
 };
 exports.patchColor = patchColor;
+const cloudColor = async (cpy, bal, ste) => {
+    bit = await ste.bus(ActDsk.READ_DISK, { src: './work/004.color.js' });
+    var time = bit.dskBit.dat;
+    bit = await ste.bus(ActDsk.WRITE_DISK, { src: './cloud/004.color.js', dat: time });
+    bit = await ste.bus(ActDsk.COPY_DISK, { src: './cloud/', idx: '../../agent/004.color/' });
+    const { exec } = require('child_process');
+    process.chdir("../../agent/004.color");
+    exec('vrt.pub.bat', async (err, stdout, stderr) => {
+        if (err) {
+            console.error(`exec error: ${err}`);
+        }
+        //then open an address
+        var open = require('open');
+        open('https://001-time.beeing.workers.dev/');
+        process.chdir("../../packages/004.color");
+        if (bal.slv != null)
+            bal.slv({ spcBit: { idx: "cloud-time" } });
+    });
+    return cpy;
+};
+exports.cloudColor = cloudColor;
 
 }).call(this)}).call(this,require('_process'))
 },{"../../98.menu.unit/menu.action":58,"../../99.bus.unit/bus.action":63,"../../act/disk.action":71,"../../act/vurt.action":73,"../color.action":39,"_process":19,"child_process":undefined,"open":undefined}],39:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PatchColor = exports.PATCH_COLOR = exports.EditColor = exports.EDIT_COLOR = exports.RunColor = exports.RUN_COLOR = exports.OpenColor = exports.OPEN_COLOR = exports.UpdateColor = exports.UPDATE_COLOR = exports.InitColor = exports.INIT_COLOR = void 0;
+exports.CloudColor = exports.CLOUD_COLOR = exports.PatchColor = exports.PATCH_COLOR = exports.EditColor = exports.EDIT_COLOR = exports.RunColor = exports.RUN_COLOR = exports.OpenColor = exports.OPEN_COLOR = exports.UpdateColor = exports.UPDATE_COLOR = exports.InitColor = exports.INIT_COLOR = void 0;
 exports.INIT_COLOR = "[Color action] Init Color";
 class InitColor {
     constructor(bale) {
@@ -25376,11 +25398,19 @@ class PatchColor {
     }
 }
 exports.PatchColor = PatchColor;
+exports.CLOUD_COLOR = "[Patch action] Cloud Color";
+class CloudColor {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.CLOUD_COLOR;
+    }
+}
+exports.CloudColor = CloudColor;
 
 },{}],40:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.patchColor = exports.editColor = exports.runColor = exports.openColor = exports.updateColor = exports.initColor = void 0;
+exports.cloudColor = exports.patchColor = exports.editColor = exports.runColor = exports.openColor = exports.updateColor = exports.initColor = void 0;
 var color_buzz_1 = require("./buz/color.buzz");
 Object.defineProperty(exports, "initColor", { enumerable: true, get: function () { return color_buzz_1.initColor; } });
 var color_buzz_2 = require("./buz/color.buzz");
@@ -25393,6 +25423,8 @@ var color_buzz_5 = require("./buz/color.buzz");
 Object.defineProperty(exports, "editColor", { enumerable: true, get: function () { return color_buzz_5.editColor; } });
 var color_buzz_6 = require("./buz/color.buzz");
 Object.defineProperty(exports, "patchColor", { enumerable: true, get: function () { return color_buzz_6.patchColor; } });
+var color_buzz_7 = require("./buz/color.buzz");
+Object.defineProperty(exports, "cloudColor", { enumerable: true, get: function () { return color_buzz_7.cloudColor; } });
 
 },{"./buz/color.buzz":38}],41:[function(require,module,exports){
 "use strict";
@@ -25427,6 +25459,8 @@ function reducer(model = new color_model_1.ColorModel(), act, state) {
             return Buzz.editColor(clone(model), act.bale, state);
         case Act.PATCH_COLOR:
             return Buzz.patchColor(clone(model), act.bale, state);
+        case Act.CLOUD_COLOR:
+            return Buzz.cloudColor(clone(model), act.bale, state);
         default:
             return model;
     }
@@ -25458,12 +25492,13 @@ ColorUnit = __decorate([
 exports.default = ColorUnit;
 
 },{"../99.core/state":69,"typescript-ioc":35}],44:[function(require,module,exports){
-(function (global){(function (){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.setupSpectrum = exports.updateSpectrum = exports.mixSpectrum = exports.mapSpectrum = exports.matchSpectrum = exports.fetchSpectrum = exports.selectSpectrum = exports.createSpectrum = exports.readSpectrum = exports.initSpectrum = void 0;
+exports.setupSpectrum = exports.updateSpectrum = exports.mixSpectrum = exports.mapSpectrum = exports.matchSpectrum = exports.fetchSpectrum = exports.selectSpectrum = exports.createSpectrum = exports.readSpectrum = exports.loadSpectrum = exports.initSpectrum = void 0;
 //the colors we work from
 var fate, near, near0; //near0 is the master number
+const ActSpc = require("../spectrum.action");
+var bit;
 const initSpectrum = async (cpy, bal, ste) => {
     fate = new Fate("092125");
     //  var titleModel: TitleModel = ste.value.title;
@@ -25475,12 +25510,25 @@ const initSpectrum = async (cpy, bal, ste) => {
     //const promo0 =
     //  resolve = rslv;
     //});
-    cpy.promoInit = global.COLOR.fetchColornames();
+    //bit = await ste.hunt(  ActSpc.INIT_SPECTRUM, {})
+    //cpy.promoInit = global.COLOR.fetchColornames();
     //cpy.test = { idx: "init-spectrum" };
     //setTimeout(resolve, 333);
     return cpy;
 };
 exports.initSpectrum = initSpectrum;
+const loadSpectrum = async (cpy, bal, ste) => {
+    var url = 'https://www.fictiq.com/dat/color/colornames.json';
+    url = encodeURI(url);
+    //url = url.substring(0, url.length - 1);
+    console.log(url);
+    bit = await fetch(url, { mode: "no-cors", method: 'GET' });
+    var dat = await bit.json();
+    if (bal.slv != null)
+        bal.slv({ spkBit: { idx: "load-spectrum" } });
+    return cpy;
+};
+exports.loadSpectrum = loadSpectrum;
 const readSpectrum = (cpy, bal, ste) => {
     if (bal.val == null)
         bal.val = 0;
@@ -25512,7 +25560,11 @@ const selectSpectrum = (cpy, bal, ste) => {
     return cpy;
 };
 exports.selectSpectrum = selectSpectrum;
-const fetchSpectrum = (cpy, bal, ste) => {
+const fetchSpectrum = async (cpy, bal, ste) => {
+    if (fate == null) {
+        bit = await ste.hunt(ActSpc.INIT_SPECTRUM, {});
+        debugger;
+    }
     if (bal.val == null)
         bal.val = 1;
     var output = [];
@@ -25595,11 +25647,10 @@ const convert = require("color-convert");
 const S = require("string");
 const Fate = require("chance");
 
-}).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"chance":3,"color":10,"color-convert":6,"fs-extra":undefined,"nearest-color":18,"string":27}],45:[function(require,module,exports){
+},{"../spectrum.action":45,"chance":3,"color":10,"color-convert":6,"fs-extra":undefined,"nearest-color":18,"string":27}],45:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SetupSpectrum = exports.SETUP_SPECTRUM = exports.ReadSpectrum = exports.READ_SPECTRUM = exports.CreateSpectrum = exports.CREATE_SPECTRUM = exports.MixSpectrum = exports.MIX_SPECTRUM = exports.SelectSpectrum = exports.SELECT_SPECTRUM = exports.FetchSpectrum = exports.FETCH_SPECTRUM = exports.UpdateSpectrum = exports.UPDATE_SPECTRUM = exports.InitSpectrum = exports.INIT_SPECTRUM = void 0;
+exports.LoadSpectrum = exports.LOAD_SPECTRUM = exports.SetupSpectrum = exports.SETUP_SPECTRUM = exports.ReadSpectrum = exports.READ_SPECTRUM = exports.CreateSpectrum = exports.CREATE_SPECTRUM = exports.MixSpectrum = exports.MIX_SPECTRUM = exports.SelectSpectrum = exports.SELECT_SPECTRUM = exports.FetchSpectrum = exports.FETCH_SPECTRUM = exports.UpdateSpectrum = exports.UPDATE_SPECTRUM = exports.InitSpectrum = exports.INIT_SPECTRUM = void 0;
 // Spectrum actions
 exports.INIT_SPECTRUM = "[Spectrum action] Init Spectrum";
 class InitSpectrum {
@@ -25665,11 +25716,19 @@ class SetupSpectrum {
     }
 }
 exports.SetupSpectrum = SetupSpectrum;
+exports.LOAD_SPECTRUM = "[Load action] Load Spectrum";
+class LoadSpectrum {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.LOAD_SPECTRUM;
+    }
+}
+exports.LoadSpectrum = LoadSpectrum;
 
 },{}],46:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createSpectrum = exports.readSpectrum = exports.setupSpectrum = exports.fetchSpectrum = exports.mixSpectrum = exports.selectSpectrum = exports.updateSpectrum = exports.initSpectrum = void 0;
+exports.loadSpectrum = exports.createSpectrum = exports.readSpectrum = exports.setupSpectrum = exports.fetchSpectrum = exports.mixSpectrum = exports.selectSpectrum = exports.updateSpectrum = exports.initSpectrum = void 0;
 var spectrum_buzz_1 = require("./buz/spectrum.buzz");
 Object.defineProperty(exports, "initSpectrum", { enumerable: true, get: function () { return spectrum_buzz_1.initSpectrum; } });
 var spectrum_buzz_2 = require("./buz/spectrum.buzz");
@@ -25686,6 +25745,8 @@ var spectrum_buzz_7 = require("./buz/spectrum.buzz");
 Object.defineProperty(exports, "readSpectrum", { enumerable: true, get: function () { return spectrum_buzz_7.readSpectrum; } });
 var spectrum_buzz_8 = require("./buz/spectrum.buzz");
 Object.defineProperty(exports, "createSpectrum", { enumerable: true, get: function () { return spectrum_buzz_8.createSpectrum; } });
+var spectrum_buzz_9 = require("./buz/spectrum.buzz");
+Object.defineProperty(exports, "loadSpectrum", { enumerable: true, get: function () { return spectrum_buzz_9.loadSpectrum; } });
 
 },{"./buz/spectrum.buzz":44}],47:[function(require,module,exports){
 "use strict";
@@ -25740,6 +25801,8 @@ function reducer(model = new spectrum_model_1.SpectrumModel(), act, state) {
             return Buzz.readSpectrum(clone(model), act.bale, state);
         case Act.SETUP_SPECTRUM:
             return Buzz.setupSpectrum(clone(model), act.bale, state);
+        case Act.LOAD_SPECTRUM:
+            return Buzz.loadSpectrum(clone(model), act.bale, state);
         default:
             return model;
     }
@@ -26094,11 +26157,14 @@ const updateMenu = async (cpy, bal, ste) => {
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "-----------", bit: 'local' });
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "COLOR PIVOT V0", bit: 'local' });
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "-----------", bit: "local" });
-    var lst = [ActClr.UPDATE_COLOR, ActClr.OPEN_COLOR, ActClr.EDIT_COLOR, ActMnu.SPECTRUM_MENU];
+    var lst = [ActClr.CLOUD_COLOR, ActClr.UPDATE_COLOR, ActClr.OPEN_COLOR, ActClr.EDIT_COLOR, ActMnu.SPECTRUM_MENU];
     bit = await ste.bus(ActTrm.UPDATE_TERMINAL, { lst });
     bit = bit.trmBit;
     var idx = lst[bit.val];
     switch (idx) {
+        case ActClr.CLOUD_COLOR:
+            bit = await ste.hunt(ActClr.CLOUD_COLOR, {});
+            break;
         case ActMnu.SPECTRUM_MENU:
             bit = await ste.hunt(ActMnu.SPECTRUM_MENU, {});
             break;
@@ -26156,13 +26222,16 @@ const spectrumMenu = async (cpy, bal, ste) => {
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "-----------", bit: 'local' });
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "Spectrum Menu", bit: 'local' });
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "-----------", bit: "local" });
-    var lst = [ActSpk.CREATE_SPECTRUM, ActSpk.FETCH_SPECTRUM, ActSpk.INIT_SPECTRUM];
+    var lst = [ActSpk.FETCH_SPECTRUM, ActSpk.CREATE_SPECTRUM, ActSpk.LOAD_SPECTRUM, ActSpk.INIT_SPECTRUM];
     bit = await ste.bus(ActTrm.UPDATE_TERMINAL, { lst });
     bit = bit.trmBit;
     var idx = lst[bit.val];
     switch (idx) {
-        case ActClr.OPEN_COLOR:
-            bit = await ste.hunt(ActClr.OPEN_COLOR, {});
+        case ActSpk.FETCH_SPECTRUM:
+            bit = await ste.hunt(ActSpk.FETCH_SPECTRUM, {});
+            break;
+        case ActSpk.LOAD_SPECTRUM:
+            bit = await ste.hunt(ActSpk.LOAD_SPECTRUM, {});
             break;
         case ActClr.UPDATE_COLOR:
             bit = await ste.hunt(ActClr.UPDATE_COLOR, {});

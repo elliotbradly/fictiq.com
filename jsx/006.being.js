@@ -13589,6 +13589,7 @@ class ContainerBuildContext extends model_1.BuildContext {
 (function (global){(function (){
 global.BEING = require("../dist/006.being/hunt");
 global.BEING.ActBee = require("../dist/006.being/00.being.unit/being.action");
+global.BEING.ActAva = require("../dist/006.being/01.avas.unit/avas.action");
 
 
 
@@ -13596,10 +13597,10 @@ global.BEING.ActBee = require("../dist/006.being/00.being.unit/being.action");
 
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../dist/006.being/00.being.unit/being.action":23,"../dist/006.being/hunt":52}],23:[function(require,module,exports){
+},{"../dist/006.being/00.being.unit/being.action":23,"../dist/006.being/01.avas.unit/avas.action":29,"../dist/006.being/hunt":71}],23:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PatchBeing = exports.PATCH_BEING = exports.EditBeing = exports.EDIT_BEING = exports.RunBeing = exports.RUN_BEING = exports.OpenBeing = exports.OPEN_BEING = exports.UpdateBeing = exports.UPDATE_BEING = exports.InitBeing = exports.INIT_BEING = void 0;
+exports.CloudBeing = exports.CLOUD_BEING = exports.PatchBeing = exports.PATCH_BEING = exports.EditBeing = exports.EDIT_BEING = exports.RunBeing = exports.RUN_BEING = exports.OpenBeing = exports.OPEN_BEING = exports.UpdateBeing = exports.UPDATE_BEING = exports.InitBeing = exports.INIT_BEING = void 0;
 exports.INIT_BEING = "[Being action] Init Being";
 class InitBeing {
     constructor(bale) {
@@ -13648,11 +13649,19 @@ class PatchBeing {
     }
 }
 exports.PatchBeing = PatchBeing;
+exports.CLOUD_BEING = "[Cloud action] Cloud Being";
+class CloudBeing {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.CLOUD_BEING;
+    }
+}
+exports.CloudBeing = CloudBeing;
 
 },{}],24:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.patchBeing = exports.editBeing = exports.runBeing = exports.openBeing = exports.updateBeing = exports.initBeing = void 0;
+exports.cloudBeing = exports.patchBeing = exports.editBeing = exports.runBeing = exports.openBeing = exports.updateBeing = exports.initBeing = void 0;
 var being_buzz_1 = require("./buz/being.buzz");
 Object.defineProperty(exports, "initBeing", { enumerable: true, get: function () { return being_buzz_1.initBeing; } });
 var being_buzz_2 = require("./buz/being.buzz");
@@ -13665,6 +13674,8 @@ var being_buzz_5 = require("./buz/being.buzz");
 Object.defineProperty(exports, "editBeing", { enumerable: true, get: function () { return being_buzz_5.editBeing; } });
 var being_buzz_6 = require("./buz/being.buzz");
 Object.defineProperty(exports, "patchBeing", { enumerable: true, get: function () { return being_buzz_6.patchBeing; } });
+var being_buzz_7 = require("./buz/being.buzz");
+Object.defineProperty(exports, "cloudBeing", { enumerable: true, get: function () { return being_buzz_7.cloudBeing; } });
 
 },{"./buz/being.buzz":28}],25:[function(require,module,exports){
 "use strict";
@@ -13699,6 +13710,8 @@ function reducer(model = new being_model_1.BeingModel(), act, state) {
             return Buzz.editBeing(clone(model), act.bale, state);
         case Act.PATCH_BEING:
             return Buzz.patchBeing(clone(model), act.bale, state);
+        case Act.CLOUD_BEING:
+            return Buzz.cloudBeing(clone(model), act.bale, state);
         default:
             return model;
     }
@@ -13729,11 +13742,11 @@ BeingUnit = __decorate([
 ], BeingUnit);
 exports.default = BeingUnit;
 
-},{"../99.core/state":47,"typescript-ioc":21}],28:[function(require,module,exports){
+},{"../99.core/state":66,"typescript-ioc":21}],28:[function(require,module,exports){
 (function (process){(function (){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.patchBeing = exports.editBeing = exports.runBeing = exports.openBeing = exports.updateBeing = exports.initBeing = void 0;
+exports.patchBeing = exports.cloudBeing = exports.editBeing = exports.runBeing = exports.openBeing = exports.updateBeing = exports.initBeing = void 0;
 const ActMnu = require("../../98.menu.unit/menu.action");
 const ActBus = require("../../99.bus.unit/bus.action");
 const ActBee = require("../being.action");
@@ -13814,15 +13827,443 @@ const editBeing = (cpy, bal, ste) => {
     return cpy;
 };
 exports.editBeing = editBeing;
-var patch = (ste, type, bale) => ste.dispatch({ type, bale });
+const cloudBeing = async (cpy, bal, ste) => {
+    bit = await ste.bus(ActDsk.READ_DISK, { src: './work/006.being.js' });
+    var space = bit.dskBit.dat;
+    bit = await ste.bus(ActDsk.WRITE_DISK, { src: './cloud/006.being.js', dat: space });
+    bit = await ste.bus(ActDsk.COPY_DISK, { src: './cloud/', idx: '../../agent/006.being/' });
+    const { exec } = require('child_process');
+    process.chdir("../../agent/006.being");
+    exec('vrt.pub.bat', async (err, stdout, stderr) => {
+        if (err) {
+            console.error(`exec error: ${err}`);
+        }
+        //then open an address
+        var open = require('open');
+        open('https://006-being.beeing.workers.dev/reset');
+        process.chdir("../../packages/006.being");
+        if (bal.slv != null)
+            bal.slv({ spcBit: { idx: "cloud-being" } });
+    });
+    return cpy;
+};
+exports.cloudBeing = cloudBeing;
 const patchBeing = (cpy, bal, ste) => {
     debugger;
     return cpy;
 };
 exports.patchBeing = patchBeing;
+var patch = (ste, type, bale) => ste.dispatch({ type, bale });
 
 }).call(this)}).call(this,require('_process'))
-},{"../../98.menu.unit/menu.action":36,"../../99.bus.unit/bus.action":41,"../../act/disk.action":49,"../../act/vurt.action":51,"../being.action":23,"_process":10,"child_process":undefined,"open":undefined}],29:[function(require,module,exports){
+},{"../../98.menu.unit/menu.action":55,"../../99.bus.unit/bus.action":60,"../../act/disk.action":68,"../../act/vurt.action":70,"../being.action":23,"_process":10,"child_process":undefined,"open":undefined}],29:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.DeleteAvas = exports.DELETE_AVAS = exports.CreateAvas = exports.CREATE_AVAS = exports.RemoveAvas = exports.REMOVE_AVAS = exports.WriteAvas = exports.WRITE_AVAS = exports.ReadAvas = exports.READ_AVAS = exports.UpdateAvas = exports.UPDATE_AVAS = exports.InitAvas = exports.INIT_AVAS = void 0;
+// Avas actions
+exports.INIT_AVAS = "[Avas action] Init Avas";
+class InitAvas {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.INIT_AVAS;
+    }
+}
+exports.InitAvas = InitAvas;
+exports.UPDATE_AVAS = "[Avas action] Update Avas";
+class UpdateAvas {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.UPDATE_AVAS;
+    }
+}
+exports.UpdateAvas = UpdateAvas;
+exports.READ_AVAS = "[Read action] Read Avas";
+class ReadAvas {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.READ_AVAS;
+    }
+}
+exports.ReadAvas = ReadAvas;
+exports.WRITE_AVAS = "[Write action] Write Avas";
+class WriteAvas {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.WRITE_AVAS;
+    }
+}
+exports.WriteAvas = WriteAvas;
+exports.REMOVE_AVAS = "[Remove action] Remove Avas";
+class RemoveAvas {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.REMOVE_AVAS;
+    }
+}
+exports.RemoveAvas = RemoveAvas;
+exports.CREATE_AVAS = "[Create action] Create Avas";
+class CreateAvas {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.CREATE_AVAS;
+    }
+}
+exports.CreateAvas = CreateAvas;
+exports.DELETE_AVAS = "[Delete action] Delete Avas";
+class DeleteAvas {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.DELETE_AVAS;
+    }
+}
+exports.DeleteAvas = DeleteAvas;
+
+},{}],30:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.deleteAvas = exports.createAvas = exports.removeAvas = exports.writeAvas = exports.readAvas = exports.updateAvas = exports.initAvas = void 0;
+var avas_buzz_1 = require("./buz/avas.buzz");
+Object.defineProperty(exports, "initAvas", { enumerable: true, get: function () { return avas_buzz_1.initAvas; } });
+var avas_buzz_2 = require("./buz/avas.buzz");
+Object.defineProperty(exports, "updateAvas", { enumerable: true, get: function () { return avas_buzz_2.updateAvas; } });
+var avas_buzz_3 = require("./buz/avas.buzz");
+Object.defineProperty(exports, "readAvas", { enumerable: true, get: function () { return avas_buzz_3.readAvas; } });
+var avas_buzz_4 = require("./buz/avas.buzz");
+Object.defineProperty(exports, "writeAvas", { enumerable: true, get: function () { return avas_buzz_4.writeAvas; } });
+var avas_buzz_5 = require("./buz/avas.buzz");
+Object.defineProperty(exports, "removeAvas", { enumerable: true, get: function () { return avas_buzz_5.removeAvas; } });
+var avas_buzz_6 = require("./buz/avas.buzz");
+Object.defineProperty(exports, "createAvas", { enumerable: true, get: function () { return avas_buzz_6.createAvas; } });
+var avas_buzz_7 = require("./buz/avas.buzz");
+Object.defineProperty(exports, "deleteAvas", { enumerable: true, get: function () { return avas_buzz_7.deleteAvas; } });
+
+},{"./buz/avas.buzz":34}],31:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AvasModel = void 0;
+class AvasModel {
+}
+exports.AvasModel = AvasModel;
+
+},{}],32:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.reducer = void 0;
+const clone = require("clone-deep");
+const Act = require("./avas.action");
+const avas_model_1 = require("./avas.model");
+const Buzz = require("./avas.buzzer");
+function reducer(model = new avas_model_1.AvasModel(), act, state) {
+    switch (act.type) {
+        case Act.UPDATE_AVAS:
+            return Buzz.updateAvas(clone(model), act.bale, state);
+        case Act.INIT_AVAS:
+            return Buzz.initAvas(clone(model), act.bale, state);
+        case Act.READ_AVAS:
+            return Buzz.readAvas(clone(model), act.bale, state);
+        case Act.WRITE_AVAS:
+            return Buzz.writeAvas(clone(model), act.bale, state);
+        case Act.REMOVE_AVAS:
+            return Buzz.removeAvas(clone(model), act.bale, state);
+        case Act.CREATE_AVAS:
+            return Buzz.createAvas(clone(model), act.bale, state);
+        case Act.DELETE_AVAS:
+            return Buzz.deleteAvas(clone(model), act.bale, state);
+        default:
+            return model;
+    }
+}
+exports.reducer = reducer;
+
+},{"./avas.action":29,"./avas.buzzer":30,"./avas.model":31,"clone-deep":3}],33:[function(require,module,exports){
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const typescript_ioc_1 = require("typescript-ioc");
+const state_1 = require("../99.core/state");
+let AvasUnit = class AvasUnit {
+    constructor(state) {
+    }
+};
+AvasUnit = __decorate([
+    typescript_ioc_1.Singleton,
+    __metadata("design:paramtypes", [state_1.default])
+], AvasUnit);
+exports.default = AvasUnit;
+
+},{"../99.core/state":66,"typescript-ioc":21}],34:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.deleteAvas = exports.createAvas = exports.removeAvas = exports.writeAvas = exports.readAvas = exports.updateAvas = exports.initAvas = void 0;
+const ActCol = require("../../97.collect.unit/collect.action");
+const ActAva = require("../../01.avas.unit/avas.action");
+var bit, val, idx, dex, lst, dat;
+const initAvas = (cpy, bal, ste) => {
+    debugger;
+    return cpy;
+};
+exports.initAvas = initAvas;
+const updateAvas = (cpy, bal, ste) => {
+    return cpy;
+};
+exports.updateAvas = updateAvas;
+const readAvas = async (cpy, bal, ste) => {
+    var slv = bal.slv;
+    if (bal.idx == null)
+        bal.idx = 'ava00';
+    bit = await ste.hunt(ActCol.READ_COLLECT, { idx: bal.idx, bit: ActAva.CREATE_AVAS });
+    if (slv != null)
+        slv({ avaBit: { idx: "read-avas", dat: bit.clcBit.dat } });
+    return cpy;
+};
+exports.readAvas = readAvas;
+const writeAvas = async (cpy, bal, ste) => {
+    bit = await ste.hunt(ActCol.WRITE_COLLECT, { idx: bal.idx, src: bal.src, dat: bal.dat, bit: ActAva.CREATE_AVAS });
+    ste.hunt(ActAva.UPDATE_AVAS, { idx: bal.idx });
+    if (bal.slv != null)
+        bal.slv({ avaBit: { idx: "write-avas", dat: bit.clcBit.dat } });
+    return cpy;
+    debugger;
+    return cpy;
+};
+exports.writeAvas = writeAvas;
+const removeAvas = async (cpy, bal, ste) => {
+    bit = await ste.hunt(ActCol.REMOVE_COLLECT, { idx: bal.idx, src: bal.src, dat: bal.dat, bit: ActAva.DELETE_AVAS });
+    if (bal.slv != null)
+        bal.slv({ avaBit: { idx: "remove-avas", dat: bit.clcBit } });
+    return cpy;
+};
+exports.removeAvas = removeAvas;
+const createAvas = async (cpy, bal, ste) => {
+    //you have a source visage
+    //now you wish to update a bit of the source visage 
+    var dat = { idx: bal.idx, source: bal.src, context: 'ash', flavor: "red" };
+    for (var key in bal.dat) {
+        dat[key] = bal.dat[key];
+    }
+    if (dat.source == null)
+        dat.source = 'None';
+    dat;
+    if (bal.slv != null)
+        return bal.slv({ avaBit: { idx: "create-avas", dat } });
+    return cpy;
+};
+exports.createAvas = createAvas;
+const deleteAvas = async (cpy, bal, ste) => {
+    bit = await ste.hunt(ActAva.READ_AVAS, { idx: bal.idx });
+    var dat = bit.avaBit.dat;
+    //var container = dat.bit;
+    //container.destroy()
+    // dat.bit = null
+    if (bal.slv != null)
+        return bal.slv({ vsgBit: { idx: "delete-avas", dat } });
+    return cpy;
+};
+exports.deleteAvas = deleteAvas;
+
+},{"../../01.avas.unit/avas.action":29,"../../97.collect.unit/collect.action":48}],35:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.updatePastoral = exports.initPastoral = void 0;
+const initPastoral = (cpy, bal, ste) => {
+    debugger;
+    return cpy;
+};
+exports.initPastoral = initPastoral;
+const updatePastoral = (cpy, bal, ste) => {
+    return cpy;
+};
+exports.updatePastoral = updatePastoral;
+
+},{}],36:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.UpdatePastoral = exports.UPDATE_PASTORAL = exports.InitPastoral = exports.INIT_PASTORAL = void 0;
+// Pastoral actions
+exports.INIT_PASTORAL = "[Pastoral action] Init Pastoral";
+class InitPastoral {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.INIT_PASTORAL;
+    }
+}
+exports.InitPastoral = InitPastoral;
+exports.UPDATE_PASTORAL = "[Pastoral action] Update Pastoral";
+class UpdatePastoral {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.UPDATE_PASTORAL;
+    }
+}
+exports.UpdatePastoral = UpdatePastoral;
+
+},{}],37:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.updatePastoral = exports.initPastoral = void 0;
+var pastoral_buzz_1 = require("./buz/pastoral.buzz");
+Object.defineProperty(exports, "initPastoral", { enumerable: true, get: function () { return pastoral_buzz_1.initPastoral; } });
+var pastoral_buzz_2 = require("./buz/pastoral.buzz");
+Object.defineProperty(exports, "updatePastoral", { enumerable: true, get: function () { return pastoral_buzz_2.updatePastoral; } });
+
+},{"./buz/pastoral.buzz":35}],38:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PastoralModel = void 0;
+class PastoralModel {
+}
+exports.PastoralModel = PastoralModel;
+
+},{}],39:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.reducer = void 0;
+const clone = require("clone-deep");
+const Act = require("./pastoral.action");
+const pastoral_model_1 = require("./pastoral.model");
+const Buzz = require("./pastoral.buzzer");
+function reducer(model = new pastoral_model_1.PastoralModel(), act, state) {
+    switch (act.type) {
+        case Act.UPDATE_PASTORAL:
+            return Buzz.updatePastoral(clone(model), act.bale, state);
+        case Act.INIT_PASTORAL:
+            return Buzz.initPastoral(clone(model), act.bale, state);
+        default:
+            return model;
+    }
+}
+exports.reducer = reducer;
+
+},{"./pastoral.action":36,"./pastoral.buzzer":37,"./pastoral.model":38,"clone-deep":3}],40:[function(require,module,exports){
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const typescript_ioc_1 = require("typescript-ioc");
+const state_1 = require("../99.core/state");
+let PastoralUnit = class PastoralUnit {
+    constructor(state) {
+    }
+};
+PastoralUnit = __decorate([
+    typescript_ioc_1.Singleton,
+    __metadata("design:paramtypes", [state_1.default])
+], PastoralUnit);
+exports.default = PastoralUnit;
+
+},{"../99.core/state":66,"typescript-ioc":21}],41:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.updatePrimal = exports.initPrimal = void 0;
+const initPrimal = (cpy, bal, ste) => {
+    debugger;
+    return cpy;
+};
+exports.initPrimal = initPrimal;
+const updatePrimal = (cpy, bal, ste) => {
+    return cpy;
+};
+exports.updatePrimal = updatePrimal;
+
+},{}],42:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.UpdatePrimal = exports.UPDATE_PRIMAL = exports.InitPrimal = exports.INIT_PRIMAL = void 0;
+// Primal actions
+exports.INIT_PRIMAL = "[Primal action] Init Primal";
+class InitPrimal {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.INIT_PRIMAL;
+    }
+}
+exports.InitPrimal = InitPrimal;
+exports.UPDATE_PRIMAL = "[Primal action] Update Primal";
+class UpdatePrimal {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.UPDATE_PRIMAL;
+    }
+}
+exports.UpdatePrimal = UpdatePrimal;
+
+},{}],43:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.updatePrimal = exports.initPrimal = void 0;
+var primal_buzz_1 = require("./buz/primal.buzz");
+Object.defineProperty(exports, "initPrimal", { enumerable: true, get: function () { return primal_buzz_1.initPrimal; } });
+var primal_buzz_2 = require("./buz/primal.buzz");
+Object.defineProperty(exports, "updatePrimal", { enumerable: true, get: function () { return primal_buzz_2.updatePrimal; } });
+
+},{"./buz/primal.buzz":41}],44:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PrimalModel = void 0;
+class PrimalModel {
+}
+exports.PrimalModel = PrimalModel;
+
+},{}],45:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.reducer = void 0;
+const clone = require("clone-deep");
+const Act = require("./primal.action");
+const primal_model_1 = require("./primal.model");
+const Buzz = require("./primal.buzzer");
+function reducer(model = new primal_model_1.PrimalModel(), act, state) {
+    switch (act.type) {
+        case Act.UPDATE_PRIMAL:
+            return Buzz.updatePrimal(clone(model), act.bale, state);
+        case Act.INIT_PRIMAL:
+            return Buzz.initPrimal(clone(model), act.bale, state);
+        default:
+            return model;
+    }
+}
+exports.reducer = reducer;
+
+},{"./primal.action":42,"./primal.buzzer":43,"./primal.model":44,"clone-deep":3}],46:[function(require,module,exports){
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const typescript_ioc_1 = require("typescript-ioc");
+const state_1 = require("../99.core/state");
+let PrimalUnit = class PrimalUnit {
+    constructor(state) {
+    }
+};
+PrimalUnit = __decorate([
+    typescript_ioc_1.Singleton,
+    __metadata("design:paramtypes", [state_1.default])
+], PrimalUnit);
+exports.default = PrimalUnit;
+
+},{"../99.core/state":66,"typescript-ioc":21}],47:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.emptyCollect = exports.deleteCollect = exports.removeCollect = exports.createCollect = exports.writeCollect = exports.readCollect = exports.fetchCollect = exports.updateCollect = exports.initCollect = void 0;
@@ -13956,7 +14397,7 @@ const emptyCollect = (cpy, bal, ste) => {
 };
 exports.emptyCollect = emptyCollect;
 
-},{"../../97.collect.unit/collect.action":30}],30:[function(require,module,exports){
+},{"../../97.collect.unit/collect.action":48}],48:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EmptyCollect = exports.EMPTY_COLLECT = exports.DeleteCollect = exports.DELETE_COLLECT = exports.RemoveCollect = exports.REMOVE_COLLECT = exports.CreateCollect = exports.CREATE_COLLECT = exports.WriteCollect = exports.WRITE_COLLECT = exports.ReadCollect = exports.READ_COLLECT = exports.FetchCollect = exports.FETCH_COLLECT = exports.UpdateCollect = exports.UPDATE_COLLECT = exports.InitCollect = exports.INIT_COLLECT = void 0;
@@ -14034,7 +14475,7 @@ class EmptyCollect {
 }
 exports.EmptyCollect = EmptyCollect;
 
-},{}],31:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.removeCollect = exports.deleteCollect = exports.fetchCollect = exports.emptyCollect = exports.createCollect = exports.writeCollect = exports.readCollect = exports.updateCollect = exports.initCollect = void 0;
@@ -14057,7 +14498,7 @@ Object.defineProperty(exports, "deleteCollect", { enumerable: true, get: functio
 var collect_buzz_9 = require("./buz/collect.buzz");
 Object.defineProperty(exports, "removeCollect", { enumerable: true, get: function () { return collect_buzz_9.removeCollect; } });
 
-},{"./buz/collect.buzz":29}],32:[function(require,module,exports){
+},{"./buz/collect.buzz":47}],50:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CollectModel = void 0;
@@ -14069,7 +14510,7 @@ class CollectModel {
 }
 exports.CollectModel = CollectModel;
 
-},{}],33:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reducer = void 0;
@@ -14103,7 +14544,7 @@ function reducer(model = new collect_model_1.CollectModel(), act, state) {
 }
 exports.reducer = reducer;
 
-},{"./collect.action":30,"./collect.buzzer":31,"./collect.model":32,"clone-deep":3}],34:[function(require,module,exports){
+},{"./collect.action":48,"./collect.buzzer":49,"./collect.model":50,"clone-deep":3}],52:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -14127,10 +14568,11 @@ CollectUnit = __decorate([
 ], CollectUnit);
 exports.default = CollectUnit;
 
-},{"../99.core/state":47,"typescript-ioc":21}],35:[function(require,module,exports){
+},{"../99.core/state":66,"typescript-ioc":21}],53:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.visageMenu = exports.shadeMenu = exports.closeMenu = exports.testMenu = exports.updateMenu = exports.initMenu = void 0;
+const ActMnu = require("../menu.action");
 const ActBee = require("../../00.being.unit/being.action");
 const ActTrm = require("../../act/terminal.action");
 var bit, lst, dex;
@@ -14146,11 +14588,18 @@ const updateMenu = async (cpy, bal, ste) => {
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "-----------", bit: 'local' });
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "BEING PIVOT V0", bit: 'local' });
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "-----------", bit: "local" });
-    var lst = [ActBee.UPDATE_BEING, ActBee.OPEN_BEING, ActBee.EDIT_BEING];
+    var lst = [ActBee.CLOUD_BEING, ActBee.UPDATE_BEING, ActBee.OPEN_BEING, ActBee.EDIT_BEING, ActMnu.AVA_MENU];
     bit = await ste.bus(ActTrm.UPDATE_TERMINAL, { lst });
     bit = bit.trmBit;
     var idx = lst[bit.val];
     switch (idx) {
+        case ActMnu.AVA_MENU:
+            bit = await ste.hunt(ActMnu.AVA_MENU, {});
+            break;
+        case ActBee.CLOUD_BEING:
+            bit = await ste.hunt(ActBee.CLOUD_BEING, {});
+            bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "PATCHING..." + JSON.stringify(bit), val: 7, bit: 'local' });
+            break;
         case ActBee.OPEN_BEING:
             bit = await ste.hunt(ActBee.OPEN_BEING, {});
             break;
@@ -14193,10 +14642,46 @@ const visageMenu = (cpy, bal, ste) => {
 };
 exports.visageMenu = visageMenu;
 
-},{"../../00.being.unit/being.action":23,"../../act/terminal.action":50}],36:[function(require,module,exports){
+},{"../../00.being.unit/being.action":23,"../../act/terminal.action":69,"../menu.action":55}],54:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ContainerMenu = exports.CONTAINER_MENU = exports.VisageMenu = exports.VISAGE_MENU = exports.ShadeMenu = exports.SHADE_MENU = exports.CloseMenu = exports.CLOSE_MENU = exports.TestMenu = exports.TEST_MENU = exports.UpdateMenu = exports.UPDATE_MENU = exports.InitMenu = exports.INIT_MENU = void 0;
+exports.avaMenu = void 0;
+const ActAva = require("../../01.avas.unit/avas.action");
+const ActTrm = require("../../act/terminal.action");
+var bit, lst, dex;
+const avaMenu = async (cpy, bal, ste) => {
+    bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "-----------", bit: 'local' });
+    bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "AVA MENU V0", bit: 'local' });
+    bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "-----------", bit: "local" });
+    var lst = [ActAva.WRITE_AVAS, ActAva.READ_AVAS, ActAva.UPDATE_AVAS];
+    bit = await ste.bus(ActTrm.UPDATE_TERMINAL, { lst });
+    bit = bit.trmBit;
+    var idx = lst[bit.val];
+    switch (idx) {
+        case ActAva.READ_AVAS:
+            bit = await ste.hunt(ActAva.READ_AVAS, {});
+            break;
+        case ActAva.WRITE_AVAS:
+            bit = await ste.bus(ActTrm.INPUT_TERMINAL, { lst: ["", "IDX"] });
+            bit = await ste.hunt(ActAva.WRITE_AVAS, { idx: bit.trmBit.src });
+            bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: JSON.stringify(bit), val: 7, bit: "local" });
+            break;
+        case ActAva.UPDATE_AVAS:
+            bit = await ste.hunt(ActAva.UPDATE_AVAS, {});
+            break;
+        default:
+            bit = await await ste.bus(ActTrm.CLOSE_TERMINAL, {});
+            break;
+    }
+    return cpy;
+};
+exports.avaMenu = avaMenu;
+var patch = (ste, type, bale) => ste.dispatch({ type, bale });
+
+},{"../../01.avas.unit/avas.action":29,"../../act/terminal.action":69}],55:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ContainerMenu = exports.CONTAINER_MENU = exports.VisageMenu = exports.VISAGE_MENU = exports.AvaMenu = exports.AVA_MENU = exports.CloseMenu = exports.CLOSE_MENU = exports.TestMenu = exports.TEST_MENU = exports.UpdateMenu = exports.UPDATE_MENU = exports.InitMenu = exports.INIT_MENU = void 0;
 exports.INIT_MENU = "[Menu action] Init Menu";
 class InitMenu {
     constructor(bale) {
@@ -14229,14 +14714,14 @@ class CloseMenu {
     }
 }
 exports.CloseMenu = CloseMenu;
-exports.SHADE_MENU = "[Shade action] Shade Menu";
-class ShadeMenu {
+exports.AVA_MENU = "[Ava action] Ava Menu";
+class AvaMenu {
     constructor(bale) {
         this.bale = bale;
-        this.type = exports.SHADE_MENU;
+        this.type = exports.AVA_MENU;
     }
 }
-exports.ShadeMenu = ShadeMenu;
+exports.AvaMenu = AvaMenu;
 exports.VISAGE_MENU = "[Visage action] Visage Menu";
 class VisageMenu {
     constructor(bale) {
@@ -14254,10 +14739,10 @@ class ContainerMenu {
 }
 exports.ContainerMenu = ContainerMenu;
 
-},{}],37:[function(require,module,exports){
+},{}],56:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.shadeMenu = exports.closeMenu = exports.testMenu = exports.updateMenu = exports.initMenu = void 0;
+exports.avaMenu = exports.shadeMenu = exports.closeMenu = exports.testMenu = exports.updateMenu = exports.initMenu = void 0;
 var _00_menu_buzz_1 = require("./buz/00.menu.buzz");
 Object.defineProperty(exports, "initMenu", { enumerable: true, get: function () { return _00_menu_buzz_1.initMenu; } });
 var _00_menu_buzz_2 = require("./buz/00.menu.buzz");
@@ -14268,8 +14753,10 @@ var _00_menu_buzz_4 = require("./buz/00.menu.buzz");
 Object.defineProperty(exports, "closeMenu", { enumerable: true, get: function () { return _00_menu_buzz_4.closeMenu; } });
 var _00_menu_buzz_5 = require("./buz/00.menu.buzz");
 Object.defineProperty(exports, "shadeMenu", { enumerable: true, get: function () { return _00_menu_buzz_5.shadeMenu; } });
+var ava_menu_buzz_1 = require("./buz/ava-menu.buzz");
+Object.defineProperty(exports, "avaMenu", { enumerable: true, get: function () { return ava_menu_buzz_1.avaMenu; } });
 
-},{"./buz/00.menu.buzz":35}],38:[function(require,module,exports){
+},{"./buz/00.menu.buzz":53,"./buz/ava-menu.buzz":54}],57:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MenuModel = void 0;
@@ -14283,7 +14770,7 @@ class MenuModel {
 }
 exports.MenuModel = MenuModel;
 
-},{}],39:[function(require,module,exports){
+},{}],58:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reducer = void 0;
@@ -14301,15 +14788,15 @@ function reducer(model = new menu_model_1.MenuModel(), act, state) {
             return Buzz.testMenu(clone(model), act.bale, state);
         case Act.CLOSE_MENU:
             return Buzz.closeMenu(clone(model), act.bale, state);
-        case Act.SHADE_MENU:
-            return Buzz.shadeMenu(clone(model), act.bale, state);
+        case Act.AVA_MENU:
+            return Buzz.avaMenu(clone(model), act.bale, state);
         default:
             return model;
     }
 }
 exports.reducer = reducer;
 
-},{"./menu.action":36,"./menu.buzzer":37,"./menu.model":38,"clone-deep":3}],40:[function(require,module,exports){
+},{"./menu.action":55,"./menu.buzzer":56,"./menu.model":57,"clone-deep":3}],59:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -14333,7 +14820,7 @@ MenuUnit = __decorate([
 ], MenuUnit);
 exports.default = MenuUnit;
 
-},{"../99.core/state":47,"typescript-ioc":21}],41:[function(require,module,exports){
+},{"../99.core/state":66,"typescript-ioc":21}],60:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateBus = exports.CREATE_BUS = exports.UpdateBus = exports.UPDATE_BUS = exports.MessageBus = exports.MESSAGE_BUS = exports.ConnectBus = exports.CONNECT_BUS = exports.OpenBus = exports.OPEN_BUS = exports.InitBus = exports.INIT_BUS = void 0;
@@ -14387,7 +14874,7 @@ class CreateBus {
 }
 exports.CreateBus = CreateBus;
 
-},{}],42:[function(require,module,exports){
+},{}],61:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createBus = exports.messageBus = exports.connectBus = exports.updateBus = exports.openBus = exports.initBus = void 0;
@@ -14404,7 +14891,7 @@ Object.defineProperty(exports, "messageBus", { enumerable: true, get: function (
 var bus_buzz_6 = require("./buz/bus.buzz");
 Object.defineProperty(exports, "createBus", { enumerable: true, get: function () { return bus_buzz_6.createBus; } });
 
-},{"./buz/bus.buzz":46}],43:[function(require,module,exports){
+},{"./buz/bus.buzz":65}],62:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BusModel = void 0;
@@ -14417,7 +14904,7 @@ class BusModel {
 }
 exports.BusModel = BusModel;
 
-},{}],44:[function(require,module,exports){
+},{}],63:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reducer = void 0;
@@ -14445,7 +14932,7 @@ function reducer(model = new bus_model_1.BusModel(), act, state) {
 }
 exports.reducer = reducer;
 
-},{"./bus.action":41,"./bus.buzzer":42,"./bus.model":43,"clone-deep":3}],45:[function(require,module,exports){
+},{"./bus.action":60,"./bus.buzzer":61,"./bus.model":62,"clone-deep":3}],64:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -14469,7 +14956,7 @@ BusUnit = __decorate([
 ], BusUnit);
 exports.default = BusUnit;
 
-},{"../99.core/state":47,"typescript-ioc":21}],46:[function(require,module,exports){
+},{"../99.core/state":66,"typescript-ioc":21}],65:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateBus = exports.messageBus = exports.connectBus = exports.openBus = exports.createBus = exports.initBus = void 0;
@@ -14645,7 +15132,7 @@ exports.updateBus = updateBus;
 var patch = (ste, type, bale) => ste.dispatch({ type, bale });
 const clone = require("clone-deep");
 
-},{"../../97.collect.unit/collect.action":30,"../../98.menu.unit/menu.action":36,"../../99.bus.unit/bus.action":41,"clone-deep":3}],47:[function(require,module,exports){
+},{"../../97.collect.unit/collect.action":48,"../../98.menu.unit/menu.action":55,"../../99.bus.unit/bus.action":60,"clone-deep":3}],66:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const rx_lite_1 = require("rx-lite");
@@ -14680,25 +15167,37 @@ class State extends rx_lite_1.BehaviorSubject {
 }
 exports.default = State;
 
-},{"../BEE":48,"rx-lite":12}],48:[function(require,module,exports){
+},{"../BEE":67,"rx-lite":12}],67:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reducer = exports.list = void 0;
 const being_unit_1 = require("./00.being.unit/being.unit");
+const avas_unit_1 = require("./01.avas.unit/avas.unit");
+const pastoral_unit_1 = require("./02.pastoral.unit/pastoral.unit");
+const primal_unit_1 = require("./03.primal.unit/primal.unit");
 const collect_unit_1 = require("./97.collect.unit/collect.unit");
 const menu_unit_1 = require("./98.menu.unit/menu.unit");
 const bus_unit_1 = require("./99.bus.unit/bus.unit");
 const being_model_1 = require("./00.being.unit/being.model");
+const avas_model_1 = require("./01.avas.unit/avas.model");
+const pastoral_model_1 = require("./02.pastoral.unit/pastoral.model");
+const primal_model_1 = require("./03.primal.unit/primal.model");
 const collect_model_1 = require("./97.collect.unit/collect.model");
 const menu_model_1 = require("./98.menu.unit/menu.model");
 const bus_model_1 = require("./99.bus.unit/bus.model");
-exports.list = [being_unit_1.default, collect_unit_1.default, menu_unit_1.default, bus_unit_1.default];
+exports.list = [being_unit_1.default, avas_unit_1.default, pastoral_unit_1.default, primal_unit_1.default, collect_unit_1.default, menu_unit_1.default, bus_unit_1.default];
 const reduceFromBeing = require("./00.being.unit/being.reduce");
+const reduceFromAvas = require("./01.avas.unit/avas.reduce");
+const reduceFromPastoral = require("./02.pastoral.unit/pastoral.reduce");
+const reduceFromPrimal = require("./03.primal.unit/primal.reduce");
 const reduceFromCollect = require("./97.collect.unit/collect.reduce");
 const reduceFromMenu = require("./98.menu.unit/menu.reduce");
 const reduceFromBus = require("./99.bus.unit/bus.reduce");
 exports.reducer = {
     being: reduceFromBeing.reducer,
+    avas: reduceFromAvas.reducer,
+    pastoral: reduceFromPastoral.reducer,
+    primal: reduceFromPrimal.reducer,
     collect: reduceFromCollect.reducer,
     menu: reduceFromMenu.reducer,
     bus: reduceFromBus.reducer,
@@ -14706,6 +15205,9 @@ exports.reducer = {
 class UnitData {
     constructor() {
         this.being = new being_model_1.BeingModel();
+        this.avas = new avas_model_1.AvasModel();
+        this.pastoral = new pastoral_model_1.PastoralModel();
+        this.primal = new primal_model_1.PrimalModel();
         this.collect = new collect_model_1.CollectModel();
         this.menu = new menu_model_1.MenuModel();
         this.bus = new bus_model_1.BusModel();
@@ -14713,19 +15215,19 @@ class UnitData {
 }
 exports.default = UnitData;
 
-},{"./00.being.unit/being.model":25,"./00.being.unit/being.reduce":26,"./00.being.unit/being.unit":27,"./97.collect.unit/collect.model":32,"./97.collect.unit/collect.reduce":33,"./97.collect.unit/collect.unit":34,"./98.menu.unit/menu.model":38,"./98.menu.unit/menu.reduce":39,"./98.menu.unit/menu.unit":40,"./99.bus.unit/bus.model":43,"./99.bus.unit/bus.reduce":44,"./99.bus.unit/bus.unit":45}],49:[function(require,module,exports){
+},{"./00.being.unit/being.model":25,"./00.being.unit/being.reduce":26,"./00.being.unit/being.unit":27,"./01.avas.unit/avas.model":31,"./01.avas.unit/avas.reduce":32,"./01.avas.unit/avas.unit":33,"./02.pastoral.unit/pastoral.model":38,"./02.pastoral.unit/pastoral.reduce":39,"./02.pastoral.unit/pastoral.unit":40,"./03.primal.unit/primal.model":44,"./03.primal.unit/primal.reduce":45,"./03.primal.unit/primal.unit":46,"./97.collect.unit/collect.model":50,"./97.collect.unit/collect.reduce":51,"./97.collect.unit/collect.unit":52,"./98.menu.unit/menu.model":57,"./98.menu.unit/menu.reduce":58,"./98.menu.unit/menu.unit":59,"./99.bus.unit/bus.model":62,"./99.bus.unit/bus.reduce":63,"./99.bus.unit/bus.unit":64}],68:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.COPY_DISK = exports.LOAD_LIST_DISK = exports.LIST_DISK = exports.WRITE_DISK = exports.READ_DISK = exports.UPDATE_DISK = exports.INIT_DISK = void 0;
-exports.INIT_DISK = "[Disk action] Init Disk";
-exports.UPDATE_DISK = "[Disk action] Update Disk";
-exports.READ_DISK = "[Disk action] Read Disk";
-exports.WRITE_DISK = "[Disk action] Write Disk";
-exports.LIST_DISK = "[List action] List Disk";
-exports.LOAD_LIST_DISK = "[Load_list action] Load_list Disk";
-exports.COPY_DISK = "[Copy action] Copy Disk";
+exports.COPY_DISK = exports.LOAD_LIST_DISK = exports.INDEX_DISK = exports.WRITE_DISK = exports.READ_DISK = exports.UPDATE_DISK = exports.INIT_DISK = void 0;
+exports.INIT_DISK = '[Disk action] Init Disk';
+exports.UPDATE_DISK = '[Disk action] Update Disk';
+exports.READ_DISK = '[Disk action] Read Disk';
+exports.WRITE_DISK = '[Disk action] Write Disk';
+exports.INDEX_DISK = '[Index action] Index Disk';
+exports.LOAD_LIST_DISK = '[Load_list action] Load_list Disk';
+exports.COPY_DISK = '[Copy action] Copy Disk';
 
-},{}],50:[function(require,module,exports){
+},{}],69:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ADD_PORT = exports.CONTENT_TERMINAL = exports.ROOT_TERMINAL = exports.CLOSE_TERMINAL = exports.TABLE_TERMINAL = exports.INPUT_TERMINAL = exports.CLEAR_TERMINAL = exports.UPDATE_TERMINAL = exports.WRITE_TERMINAL = exports.FOCUS_TERMINAL = exports.OPEN_TERMINAL = exports.INIT_TERMINAL = void 0;
@@ -14743,7 +15245,7 @@ exports.ROOT_TERMINAL = "[Terminal action] Root Terminal";
 exports.CONTENT_TERMINAL = "[Terminal action] Content Terminal";
 exports.ADD_PORT = "[Terminal action] Add Port";
 
-},{}],51:[function(require,module,exports){
+},{}],70:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.VALUE_VURT = exports.BUNDLE_VURT = exports.CONTAINS_VURT = exports.LIST_UNIT_VURT = exports.LIST_PIVOT_VURT = exports.COUNT_VURT = exports.UNIT_VURT = exports.REPLACE_VURT = exports.UPDATE_VURT = exports.FETCH_VURT = exports.TEST_CLOUD_VURT = exports.DELAY_VURT = exports.INIT_VURT = void 0;
@@ -14761,7 +15263,7 @@ exports.CONTAINS_VURT = "[Contains action] Contains Vurt";
 exports.BUNDLE_VURT = "[Bundle action] Bundle Vurt";
 exports.VALUE_VURT = "[Value action] Value Vurt";
 
-},{}],52:[function(require,module,exports){
+},{}],71:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var sim = {
@@ -14793,4 +15295,4 @@ const Import = require("./BEE");
 const state_1 = require("./99.core/state");
 module.exports = sim;
 
-},{"./99.core/state":47,"./BEE":48}]},{},[22]);
+},{"./99.core/state":66,"./BEE":67}]},{},[22]);

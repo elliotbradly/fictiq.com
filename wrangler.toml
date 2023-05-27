@@ -1,0 +1,4 @@
+name = "555-tasus"
+account_id = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+main = "./_worker.js"
+compatibility_date = "2022-09-08"

@@ -21630,13 +21630,24 @@ exports.updatePlay = updatePlay;
 const openPlay = async (cpy, bal, ste) => {
     bit = await ste.bus(ActDsk.COPY_DISK, { src: './vue', idx: '../gillisse/src' });
     bit = await ste.hunt(ActPly.RUN_PLAY, {});
-    const open = require('open');
-    var loc = './vrt.opn.bat';
-    bit = await open(loc);
-    setTimeout(() => {
+    //const open = require('open')
+    //var loc = './vrt.opn.bat'
+    //bit = await open(loc)
+    const { exec } = require('child_process');
+    exec('vrt.opn.bat', async (err, stdout, stderr) => {
+        if (err) {
+            console.error(`exec error: ${err}`);
+        }
+    });
+    process.chdir("../../deploy/fictiq.com");
+    exec('vrt.dev.bat', async (err, stdout, stderr) => {
+        if (err) {
+            console.error(`exec error: ${err}`);
+        }
+        process.chdir("../../packages/000.play");
         if (bal.slv != null)
             bal.slv({ plyBit: { idx: "open-play" } });
-    }, 33);
+    });
     return cpy;
 };
 exports.openPlay = openPlay;
@@ -21829,7 +21840,7 @@ const initShow = async (cpy, bal, ste) => {
     var chance = require('chance');
     var Chance = new chance();
     var value = Chance.integer({ min: 0, max: 18260 });
-    var url = './auth/?val=' + value;
+    var url = 'http://127.0.0.1:8787/auth/?val=' + value;
     url = encodeURI(url);
     //url = url.substring(0, url.length - 1);
     console.log(url);
@@ -21858,13 +21869,13 @@ const updateShow = async (cpy, bal, ste) => {
 };
 exports.updateShow = updateShow;
 const openShow = async (cpy, bal, ste) => {
-    var url = './check/?idx=' + cpy.aware;
-    url = encodeURI(url);
+    var url = 'http://127.0.0.1:8787/check/?idx=' + cpy.aware;
+    //url = encodeURI(url);
     //url = url.substring(0, url.length - 1);
     console.log(url);
     bit = await fetch(url, { method: 'GET' });
     var dat = await bit.json();
-    console.log("all ways " + JSON.stringify(dat));
+    console.log("open show" + JSON.stringify(dat));
     return cpy;
 };
 exports.openShow = openShow;

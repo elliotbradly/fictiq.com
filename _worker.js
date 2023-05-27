@@ -31,34 +31,35 @@ export default {
             var jwt = require('@tsndr/cloudflare-worker-jwt')
             var token = await jwt.sign(
                 {
-                    name: 'John Doe',
-                    email: 'john.doe@gmail.com',
-                    nbf: Math.floor(Date.now() / 1000) + 60 * 1, // Not before: Now + 1min
-                    exp: Math.floor(Date.now() / 1000) + 2 * (60 * 2), // Expires: Now + 2min
+                    name: bit.name,
+                    email: bit.hex,
+
+                    exp: Math.floor(Date.now() / 1000) + 2 * (60 * 5), // Expires: Now + 2min
                 },
                 'albin0 alligat0r'
             )
 
             var fin = { idx: bit.hex, src: bit.name, dat: token }
-
-            //const token = await jwt.sign({ name: 'John Doe', email: 'john.doe@gmail.com' }, 'secret')
             return new Response(JSON.stringify(fin))
         } else if (url.pathname.startsWith('/check/')) {
+            //var fin = { idx: bit.hex, src: bit.name, dat: token }
+
             var token = idx
+
+            console.log('token ' + token)
+            ///return new Response(JSON.stringify(fin))
+            var jwt = require('@tsndr/cloudflare-worker-jwt')
+
             const isValid = await jwt.verify(token, 'albin0 alligat0r')
 
-            if ( isValid == true){
+            if (isValid == true) {
                 const { payload } = jwt.decode(token)
-                    return new Response("valid " + JSON.stringify(payload))
+                return new Response(
+                    JSON.stringify({ idx: 'valid', dat: payload })
+                )
+            } else {
+                return new Response(JSON.stringify({ idx: 'not-valid' }))
             }
-            else{
-                    return new Response("not valid")
-            }
-
-    // Check for validity
-    if (!isValid)
-
-
         } else if (url.pathname.startsWith('/api/')) {
             // TODO: Add your custom /api/* logic here.
 

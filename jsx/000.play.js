@@ -1933,7 +1933,7 @@ function numberIsNaN (obj) {
 }).call(this)}).call(this,require("buffer").Buffer)
 },{"base64-js":1,"buffer":2,"ieee754":5}],3:[function(require,module,exports){
 (function (Buffer){(function (){
-//  Chance.js 1.1.10
+//  Chance.js 1.1.11
 //  https://chancejs.com
 //  (c) 2013 Victor Quinn
 //  Chance may be freely distributed or modified under the MIT license.
@@ -2007,7 +2007,7 @@ function numberIsNaN (obj) {
         return this;
     }
 
-    Chance.prototype.VERSION = "1.1.10";
+    Chance.prototype.VERSION = "1.1.11";
 
     // Random helper functions
     function initOptions(options, defaults) {
@@ -21854,7 +21854,7 @@ var isElectron = () => {
 };
 const initShow = async (cpy, bal, ste) => {
     //if ( isElectron() == true ){
-    //  cpy.root = 'http://127.0.0.1:8787' 
+    cpy.root = 'https://fictiq.com/';
     // }
     var chance = require('chance');
     var Chance = new chance();
@@ -21874,6 +21874,7 @@ const initShow = async (cpy, bal, ste) => {
     console.log('idx:' + idx);
     console.log('src:' + src);
     console.log('dat:' + dat);
+    window.location.href = './gamepad-5000';
     //var dat = await rsp.json()
     //console.log( JSON.stringify(dat))
     //debugger
@@ -21886,6 +21887,27 @@ const initShow = async (cpy, bal, ste) => {
 };
 exports.initShow = initShow;
 const updateShow = async (cpy, bal, ste) => {
+    cpy.root = 'http://127.0.0.1:8787';
+    // }
+    var chance = require('chance');
+    var Chance = new chance();
+    var value = Chance.integer({ min: 0, max: 18260 });
+    //routers
+    //needed here
+    var url = cpy.root + '/auth/?val=' + value;
+    url = encodeURI(url);
+    //url = url.substring(0, url.length - 1);
+    console.log(url);
+    bit = await fetch(url, { method: 'GET' });
+    var dat = await bit.json();
+    idx = dat.idx;
+    src = dat.src;
+    dat = dat.dat;
+    cpy.aware = dat;
+    console.log('idx:' + idx);
+    console.log('src:' + src);
+    console.log('dat:' + dat);
+    console.log("open show" + JSON.stringify(dat));
     return cpy;
 };
 exports.updateShow = updateShow;
@@ -21896,7 +21918,6 @@ const openShow = async (cpy, bal, ste) => {
     console.log(url);
     bit = await fetch(url, { method: 'GET' });
     var dat = await bit.json();
-    console.log("open show" + JSON.stringify(dat));
     return cpy;
 };
 exports.openShow = openShow;

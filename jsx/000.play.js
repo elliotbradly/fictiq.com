@@ -21634,11 +21634,6 @@ const openPlay = async (cpy, bal, ste) => {
     var loc = './vrt.opn.bat';
     bit = await open(loc);
     const { exec } = require('child_process');
-    //exec('./vrt.opn.bat', async (err, stdout, stderr) => {
-    //    if (err) {
-    //        console.error(`exec error: ${err}`);
-    //    }
-    //});
     process.chdir("../../deploy/fictiq.com");
     exec('vrt.dev.bat', async (err, stdout, stderr) => {
         if (err) {
@@ -21854,14 +21849,14 @@ var isElectron = () => {
 };
 const initShow = async (cpy, bal, ste) => {
     //if ( isElectron() == true ){
-    cpy.root = 'https://fictiq.com/';
+    cpy.root = 'http://127.0.0.1:8787';
     // }
     var chance = require('chance');
     var Chance = new chance();
     var value = Chance.integer({ min: 0, max: 18260 });
     //routers
     //needed here
-    var url = cpy.root + '/auth/?val=' + value;
+    var url = cpy.root + '/ath/?val=' + value;
     url = encodeURI(url);
     //url = url.substring(0, url.length - 1);
     console.log(url);
@@ -21887,27 +21882,9 @@ const initShow = async (cpy, bal, ste) => {
 };
 exports.initShow = initShow;
 const updateShow = async (cpy, bal, ste) => {
-    cpy.root = 'http://127.0.0.1:8787';
-    // }
-    var chance = require('chance');
-    var Chance = new chance();
-    var value = Chance.integer({ min: 0, max: 18260 });
-    //routers
-    //needed here
-    var url = cpy.root + '/auth/?val=' + value;
-    url = encodeURI(url);
-    //url = url.substring(0, url.length - 1);
-    console.log(url);
-    bit = await fetch(url, { method: 'GET' });
-    var dat = await bit.json();
-    idx = dat.idx;
-    src = dat.src;
-    dat = dat.dat;
-    cpy.aware = dat;
-    console.log('idx:' + idx);
-    console.log('src:' + src);
-    console.log('dat:' + dat);
-    console.log("open show" + JSON.stringify(dat));
+    var panel = document.getElementById('sidebar');
+    panel.style.height = '900px';
+    console.log("show me the panel " + panel);
     return cpy;
 };
 exports.updateShow = updateShow;

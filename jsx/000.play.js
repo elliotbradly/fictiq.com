@@ -37346,7 +37346,7 @@ global.PLAY.ActShw = require("../dist/000.play/01.show.unit/show.action");
 
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../dist/000.play/00.play.unit/play.action":192,"../dist/000.play/01.show.unit/show.action":198,"../dist/000.play/hunt":226,"async-mqtt":1}],191:[function(require,module,exports){
+},{"../dist/000.play/00.play.unit/play.action":192,"../dist/000.play/01.show.unit/show.action":198,"../dist/000.play/hunt":227,"async-mqtt":1}],191:[function(require,module,exports){
 (function (process,global){(function (){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -37470,7 +37470,7 @@ const patchPlay = (cpy, bal, ste) => {
 exports.patchPlay = patchPlay;
 
 }).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../../98.menu.unit/menu.action":210,"../../99.bus.unit/bus.action":215,"../../act/disk.action":223,"../../act/vurt.action":225,"../play.action":192,"_process":120,"child_process":undefined,"open":undefined}],192:[function(require,module,exports){
+},{"../../98.menu.unit/menu.action":210,"../../99.bus.unit/bus.action":215,"../../act/disk.action":224,"../../act/vurt.action":226,"../play.action":192,"_process":120,"child_process":undefined,"open":undefined}],192:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.StartPlay = exports.START_PLAY = exports.PatchPlay = exports.PATCH_PLAY = exports.EditPlay = exports.EDIT_PLAY = exports.RunPlay = exports.RUN_PLAY = exports.OpenPlay = exports.OPEN_PLAY = exports.UpdatePlay = exports.UPDATE_PLAY = exports.InitPlay = exports.INIT_PLAY = void 0;
@@ -37621,6 +37621,7 @@ exports.default = PlayUnit;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.openShow = exports.updateShow = exports.initShow = void 0;
 var bit, dat, idx, src;
+const ActAmb = require("../../act/ambit.action");
 //var SPACE = global.SPACE 
 //var SHADE = global.SHADE 
 var isElectron = () => {
@@ -37639,7 +37640,11 @@ var isElectron = () => {
     return false;
 };
 const initShow = async (cpy, bal, ste) => {
-    window.location.href = './gamepad-5000';
+    //window.location.href ='./gamepad-5000'
+    console.log("above ");
+    bit = await ste.bus(ActAmb.INIT_AMBIT, {}, 'remote');
+    console.log("below ");
+    debugger;
     return;
     //if ( isElectron() == true ){
     cpy.root = 'http://127.0.0.1:8787';
@@ -37694,7 +37699,7 @@ const openShow = async (cpy, bal, ste) => {
 exports.openShow = openShow;
 
 }).call(this)}).call(this,require('_process'))
-},{"_process":120,"chance":9}],198:[function(require,module,exports){
+},{"../../act/ambit.action":223,"_process":120,"chance":9}],198:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OpenShow = exports.OPEN_SHOW = exports.UpdateShow = exports.UPDATE_SHOW = exports.InitShow = exports.INIT_SHOW = void 0;
@@ -38165,7 +38170,7 @@ const visageMenu = (cpy, bal, ste) => {
 };
 exports.visageMenu = visageMenu;
 
-},{"../../00.play.unit/play.action":192,"../../act/terminal.action":224}],210:[function(require,module,exports){
+},{"../../00.play.unit/play.action":192,"../../act/terminal.action":225}],210:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ContainerMenu = exports.CONTAINER_MENU = exports.VisageMenu = exports.VISAGE_MENU = exports.ShadeMenu = exports.SHADE_MENU = exports.CloseMenu = exports.CLOSE_MENU = exports.TestMenu = exports.TEST_MENU = exports.UpdateMenu = exports.UPDATE_MENU = exports.InitMenu = exports.INIT_MENU = void 0;
@@ -38693,6 +38698,14 @@ exports.default = UnitData;
 },{"./00.play.unit/play.model":194,"./00.play.unit/play.reduce":195,"./00.play.unit/play.unit":196,"./01.show.unit/show.model":200,"./01.show.unit/show.reduce":201,"./01.show.unit/show.unit":202,"./97.collect.unit/collect.model":206,"./97.collect.unit/collect.reduce":207,"./97.collect.unit/collect.unit":208,"./98.menu.unit/menu.model":212,"./98.menu.unit/menu.reduce":213,"./98.menu.unit/menu.unit":214,"./99.bus.unit/bus.model":217,"./99.bus.unit/bus.reduce":218,"./99.bus.unit/bus.unit":219}],223:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.OPEN_AMBIT = exports.UPDATE_AMBIT = exports.INIT_AMBIT = void 0;
+exports.INIT_AMBIT = "[Ambit action] Init Ambit";
+exports.UPDATE_AMBIT = "[Ambit action] Update Ambit";
+exports.OPEN_AMBIT = "[Open action] Open Ambit";
+
+},{}],224:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.COPY_DISK = exports.LOAD_LIST_DISK = exports.INDEX_DISK = exports.WRITE_DISK = exports.READ_DISK = exports.UPDATE_DISK = exports.INIT_DISK = void 0;
 exports.INIT_DISK = '[Disk action] Init Disk';
 exports.UPDATE_DISK = '[Disk action] Update Disk';
@@ -38702,7 +38715,7 @@ exports.INDEX_DISK = '[Index action] Index Disk';
 exports.LOAD_LIST_DISK = '[Load_list action] Load_list Disk';
 exports.COPY_DISK = '[Copy action] Copy Disk';
 
-},{}],224:[function(require,module,exports){
+},{}],225:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ADD_PORT = exports.CONTENT_TERMINAL = exports.ROOT_TERMINAL = exports.CLOSE_TERMINAL = exports.TABLE_TERMINAL = exports.INPUT_TERMINAL = exports.CLEAR_TERMINAL = exports.UPDATE_TERMINAL = exports.WRITE_TERMINAL = exports.FOCUS_TERMINAL = exports.OPEN_TERMINAL = exports.INIT_TERMINAL = void 0;
@@ -38720,7 +38733,7 @@ exports.ROOT_TERMINAL = "[Terminal action] Root Terminal";
 exports.CONTENT_TERMINAL = "[Terminal action] Content Terminal";
 exports.ADD_PORT = "[Terminal action] Add Port";
 
-},{}],225:[function(require,module,exports){
+},{}],226:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.VALUE_VURT = exports.BUNDLE_VURT = exports.CONTAINS_VURT = exports.LIST_UNIT_VURT = exports.LIST_PIVOT_VURT = exports.COUNT_VURT = exports.UNIT_VURT = exports.REPLACE_VURT = exports.UPDATE_VURT = exports.FETCH_VURT = exports.TEST_CLOUD_VURT = exports.DELAY_VURT = exports.INIT_VURT = void 0;
@@ -38738,7 +38751,7 @@ exports.CONTAINS_VURT = "[Contains action] Contains Vurt";
 exports.BUNDLE_VURT = "[Bundle action] Bundle Vurt";
 exports.VALUE_VURT = "[Value action] Value Vurt";
 
-},{}],226:[function(require,module,exports){
+},{}],227:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var sim = {

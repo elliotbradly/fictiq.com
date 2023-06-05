@@ -21634,15 +21634,15 @@ const openPlay = async (cpy, bal, ste) => {
     var loc = './vrt.opn.bat';
     bit = await open(loc);
     const { exec } = require('child_process');
-    process.chdir("../../deploy/fictiq.com");
-    exec('vrt.dev.bat', async (err, stdout, stderr) => {
-        if (err) {
-            console.error(`exec error: ${err}`);
-        }
-        process.chdir("../../packages/000.play");
-        if (bal.slv != null)
-            bal.slv({ plyBit: { idx: "open-play" } });
-    });
+    //process.chdir("../../deploy/fictiq.com");
+    //exec('vrt.dev.bat', async (err, stdout, stderr) => {
+    //   if (err) {
+    //       console.error(`exec error: ${err}`);
+    //   }
+    //   process.chdir("../../packages/000.play");
+    if (bal.slv != null)
+        bal.slv({ plyBit: { idx: "open-play" } });
+    //});
     return cpy;
 };
 exports.openPlay = openPlay;
@@ -21850,6 +21850,7 @@ var isElectron = () => {
 const initShow = async (cpy, bal, ste) => {
     //if ( isElectron() == true ){
     cpy.root = 'http://127.0.0.1:8787';
+    cpy.root = 'https://www.fictiq.com/';
     // }
     var chance = require('chance');
     var Chance = new chance();

@@ -21848,9 +21848,11 @@ var isElectron = () => {
     return false;
 };
 const initShow = async (cpy, bal, ste) => {
+    window.location.href = './gamepad-5000';
+    return;
     //if ( isElectron() == true ){
     cpy.root = 'http://127.0.0.1:8787';
-    cpy.root = 'https://www.fictiq.com/';
+    //cpy.root = 'https://www.fictiq.com/' 
     // }
     var chance = require('chance');
     var Chance = new chance();

@@ -1,5 +1,11 @@
 export default {
+
+
     async fetch(request, env) {
+
+        var light = require('./003.light.js')
+        var tasus = require('./015.tasus.js')
+
         const url = new URL(request.url)
 
         var idx = url.searchParams.get('idx')
@@ -10,83 +16,17 @@ export default {
         if (val == null) val = 0
 
         if (url.pathname.startsWith('/auth/')) {
-            var neo =
-                'https://003-light.beeing.workers.dev/fetchColor?val=' + val
-            neo = encodeURI(neo)
-            //url = url.substring(0, url.length - 1);
-            console.log(neo)
-            bit = await fetch(neo, { method: 'GET' })
-            var jsonBit = await bit.json()
 
-            var bit = jsonBit.bit.clrBit.dat
+            bit = await globalThis.LIGHT.hunt(globalThis.LIGHT.ActClr.FETCH_COLOR, { val })
 
-            console.log('name ' + bit.name)
-            console.log('hex ' + bit.hex)
+            return new Response(JSON.stringify({ idx: 'auth', dat: bit }))
+        }
+        else if (url.pathname.startsWith('/open/')) {
 
-            //nbf: Math.floor(Date.now() / 1000) + (60 * 60),      // Not before: Now + 1h
-            //exp: Math.floor(Date.now() / 1000) + (2 * (60 * 60)) // Expires: Now + 2h
+            bit = await globalThis.TASUS.hunt(globalThis.TASUS.ActSrv.OPEN_SERVICE, { idx });
 
-            //we get a color
-            // Creating a token
-            var jwt = require('@tsndr/cloudflare-worker-jwt')
-            var token = await jwt.sign(
-                {
-                    name: bit.name,
-                    email: bit.hex,
+            return new Response(JSON.stringify({ idx: 'open', dat: bit }))
 
-                    exp: Math.floor(Date.now() / 1000) + 2 * (60 * 5), // Expires: Now + 2min
-                },
-                'albin0 alligat0r'
-            )
-
-            var fin = { idx: bit.hex, src: bit.name, dat: token }
-            return new Response(JSON.stringify(fin))
-        } else if (url.pathname.startsWith('/check/')) {
-            //var fin = { idx: bit.hex, src: bit.name, dat: token }
-
-            var token = idx
-
-            console.log('token ' + token)
-            ///return new Response(JSON.stringify(fin))
-            var jwt = require('@tsndr/cloudflare-worker-jwt')
-
-            const isValid = await jwt.verify(token, 'albin0 alligat0r')
-
-            if (isValid == true) {
-                const { payload } = jwt.decode(token)
-                return new Response(
-                    JSON.stringify({ idx: 'valid', dat: payload })
-                )
-            } else {
-                return new Response(JSON.stringify({ idx: 'not-valid' }))
-            }
-        } else if (url.pathname.startsWith('/api/')) {
-            // TODO: Add your custom /api/* logic here.
-
-            var value = 'sweet'
-
-            switch (url.pathname) {
-                case '/openService':
-                    bit = await globalThis.TASUS.hunt(
-                        globalThis.TASUS.ActSrv.OPEN_SERVICE,
-                        { idx }
-                    )
-                    value = bit
-                    break
-                case '/update':
-                    value = Number(value) + 1
-                    break
-                case '/api/reset/':
-                    value = 555
-                    break
-                case '/':
-                    value = 'change'
-                    break
-                default:
-                    return new Response('Not found', { status: 404 })
-            }
-
-            return new Response(value)
         }
         // Otherwise, serve the static assets.
         // Without this, the Worker will error and no assets will be served.

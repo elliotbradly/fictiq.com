@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "@tsndr/cloudflare-worker-jwt": "^2.2.1"
+    "@tsndr/cloudflare-worker-jwt": "^2.2.1",
+    "wrangler": "^3.0.1"
   }
 }

@@ -37643,7 +37643,7 @@ const initShow = async (cpy, bal, ste) => {
     //console.log("above ")
     //if ( isElectron() == true ){
     //var root = 'http://127.0.0.1:8787'
-    var root = 'https://www.fictiq.com/';
+    var root = 'https://www.fictiq.com';
     // }
     var chance = require('chance');
     var Chance = new chance();

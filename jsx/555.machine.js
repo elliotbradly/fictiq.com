@@ -13596,16 +13596,13 @@ global.MACHINE.ActMec = require("../dist/555.machine/00.machine.unit/machine.act
 
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../dist/555.machine/00.machine.unit/machine.action":24,"../dist/555.machine/hunt":52}],23:[function(require,module,exports){
-(function (process){(function (){
+},{"../dist/555.machine/00.machine.unit/machine.action":24,"../dist/555.machine/hunt":58}],23:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.patchMachine = exports.editMachine = exports.runMachine = exports.openMachine = exports.updateMachine = exports.initMachine = void 0;
+exports.deleteMachine = exports.createMachine = exports.removeMachine = exports.writeMachine = exports.readMachine = exports.patchMachine = exports.editMachine = exports.runMachine = exports.openMachine = exports.updateMachine = exports.initMachine = void 0;
 const ActMnu = require("../../98.menu.unit/menu.action");
 const ActBus = require("../../99.bus.unit/bus.action");
 const ActMec = require("../machine.action");
-const ActVrt = require("../../act/vurt.action");
-const ActDsk = require("../../act/disk.action");
 var bit, val, idx, dex, lst, dat;
 const initMachine = async (cpy, bal, ste) => {
     if (bal.dat != null)
@@ -13618,81 +13615,65 @@ const initMachine = async (cpy, bal, ste) => {
 };
 exports.initMachine = initMachine;
 const updateMachine = (cpy, bal, ste) => {
-    const { exec } = require('child_process');
-    exec('tsc -b 555.machine', async (err, stdout, stderr) => {
-        if (err) {
-            console.error(`exec error: ${err}`);
-        }
-        process.chdir("../999.vurt");
-        bit = await ste.bus(ActVrt.BUNDLE_VURT, { src: "555.machine" });
-        process.chdir("../555.machine");
-        bit = await ste.bus(ActDsk.READ_DISK, { src: './work/555.machine.js' });
-        var machine = bit.dskBit.dat;
-        bit = await ste.bus(ActDsk.WRITE_DISK, { src: '../gillisse/public/jsx/555.machine.js', dat: machine });
-        bit = await ste.bus(ActDsk.READ_DISK, { src: './index.html' });
-        var html = bit.dskBit.dat;
-        bit = await ste.bus(ActDsk.READ_DISK, { src: './index.js' });
-        var index = bit.dskBit.dat;
-        bit = await ste.bus(ActDsk.WRITE_DISK, { src: '../gillisse/public/jsx/index.js', dat: index });
-        bit = await ste.bus(ActDsk.WRITE_DISK, { src: '../gillisse/index.html', dat: html });
-        setTimeout(() => {
-            if (bal.slv != null)
-                bal.slv({ mecBit: { idx: "update-machine" } });
-        }, 3);
-    });
+    if (bal.slv != null)
+        bal.slv({ mecBit: { idx: "update-machine" } });
     return cpy;
 };
 exports.updateMachine = updateMachine;
 const openMachine = async (cpy, bal, ste) => {
-    bit = await ste.bus(ActDsk.COPY_DISK, { src: './vue', idx: '../gillisse/src' });
-    bit = await ste.hunt(ActMec.RUN_MACHINE, {});
-    const open = require('open');
-    var loc = './vrt.opn.bat';
-    bit = await open(loc);
-    setTimeout(() => {
-        if (bal.slv != null)
-            bal.slv({ mecBit: { idx: "open-machine" } });
-    }, 33);
+    if (bal.slv != null)
+        bal.slv({ mecBit: { idx: "open-machine" } });
     return cpy;
 };
 exports.openMachine = openMachine;
 const runMachine = async (cpy, bal, ste) => {
-    const open = require('open');
-    var loc = './vrt.gil.bat';
-    bit = await open(loc);
-    setTimeout(() => {
-        if (bal.slv != null)
-            bal.slv({ mecBit: { idx: "run-machine" } });
-    });
+    if (bal.slv != null)
+        bal.slv({ mecBit: { idx: "run-machine" } });
     return cpy;
 };
 exports.runMachine = runMachine;
 const editMachine = (cpy, bal, ste) => {
-    const { exec } = require('child_process');
-    process.chdir("../../studio/");
-    exec('start Code.exe ../packages/gillisse', async (err, stdout, stderr) => {
-        if (err) {
-            console.error(`exec error: ${err}`);
-        }
-        process.chdir("../packages/555.machine");
-        if (bal.slv != null)
-            bal.slv({ mecBit: { idx: "edit-machine", dat: {} } });
-    });
+    if (bal.slv != null)
+        bal.slv({ mecBit: { idx: "edit-machine", dat: {} } });
     return cpy;
 };
 exports.editMachine = editMachine;
-var patch = (ste, type, bale) => ste.dispatch({ type, bale });
 const patchMachine = (cpy, bal, ste) => {
     debugger;
     return cpy;
 };
 exports.patchMachine = patchMachine;
+var patch = (ste, type, bale) => ste.dispatch({ type, bale });
+const readMachine = (cpy, bal, ste) => {
+    debugger;
+    return cpy;
+};
+exports.readMachine = readMachine;
+const writeMachine = (cpy, bal, ste) => {
+    debugger;
+    return cpy;
+};
+exports.writeMachine = writeMachine;
+const removeMachine = (cpy, bal, ste) => {
+    debugger;
+    return cpy;
+};
+exports.removeMachine = removeMachine;
+const createMachine = (cpy, bal, ste) => {
+    debugger;
+    return cpy;
+};
+exports.createMachine = createMachine;
+const deleteMachine = (cpy, bal, ste) => {
+    debugger;
+    return cpy;
+};
+exports.deleteMachine = deleteMachine;
 
-}).call(this)}).call(this,require('_process'))
-},{"../../98.menu.unit/menu.action":36,"../../99.bus.unit/bus.action":41,"../../act/disk.action":49,"../../act/vurt.action":51,"../machine.action":24,"_process":10,"child_process":undefined,"open":undefined}],24:[function(require,module,exports){
+},{"../../98.menu.unit/menu.action":42,"../../99.bus.unit/bus.action":47,"../machine.action":24}],24:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PatchMachine = exports.PATCH_MACHINE = exports.EditMachine = exports.EDIT_MACHINE = exports.RunMachine = exports.RUN_MACHINE = exports.OpenMachine = exports.OPEN_MACHINE = exports.UpdateMachine = exports.UPDATE_MACHINE = exports.InitMachine = exports.INIT_MACHINE = void 0;
+exports.DeleteMachine = exports.DELETE_MACHINE = exports.CreateMachine = exports.CREATE_MACHINE = exports.RemoveMachine = exports.REMOVE_MACHINE = exports.WriteMachine = exports.WRITE_MACHINE = exports.ReadMachine = exports.READ_MACHINE = exports.PatchMachine = exports.PATCH_MACHINE = exports.EditMachine = exports.EDIT_MACHINE = exports.RunMachine = exports.RUN_MACHINE = exports.OpenMachine = exports.OPEN_MACHINE = exports.UpdateMachine = exports.UPDATE_MACHINE = exports.InitMachine = exports.INIT_MACHINE = void 0;
 exports.INIT_MACHINE = "[Machine action] Init Machine";
 class InitMachine {
     constructor(bale) {
@@ -13741,11 +13722,51 @@ class PatchMachine {
     }
 }
 exports.PatchMachine = PatchMachine;
+exports.READ_MACHINE = "[Read action] Read Machine";
+class ReadMachine {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.READ_MACHINE;
+    }
+}
+exports.ReadMachine = ReadMachine;
+exports.WRITE_MACHINE = "[Write action] Write Machine";
+class WriteMachine {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.WRITE_MACHINE;
+    }
+}
+exports.WriteMachine = WriteMachine;
+exports.REMOVE_MACHINE = "[Remove action] Remove Machine";
+class RemoveMachine {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.REMOVE_MACHINE;
+    }
+}
+exports.RemoveMachine = RemoveMachine;
+exports.CREATE_MACHINE = "[Create action] Create Machine";
+class CreateMachine {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.CREATE_MACHINE;
+    }
+}
+exports.CreateMachine = CreateMachine;
+exports.DELETE_MACHINE = "[Delete action] Delete Machine";
+class DeleteMachine {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.DELETE_MACHINE;
+    }
+}
+exports.DeleteMachine = DeleteMachine;
 
 },{}],25:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.patchMachine = exports.editMachine = exports.runMachine = exports.openMachine = exports.updateMachine = exports.initMachine = void 0;
+exports.deleteMachine = exports.createMachine = exports.removeMachine = exports.writeMachine = exports.readMachine = exports.patchMachine = exports.editMachine = exports.runMachine = exports.openMachine = exports.updateMachine = exports.initMachine = void 0;
 var machine_buzz_1 = require("./buz/machine.buzz");
 Object.defineProperty(exports, "initMachine", { enumerable: true, get: function () { return machine_buzz_1.initMachine; } });
 var machine_buzz_2 = require("./buz/machine.buzz");
@@ -13758,6 +13779,16 @@ var machine_buzz_5 = require("./buz/machine.buzz");
 Object.defineProperty(exports, "editMachine", { enumerable: true, get: function () { return machine_buzz_5.editMachine; } });
 var machine_buzz_6 = require("./buz/machine.buzz");
 Object.defineProperty(exports, "patchMachine", { enumerable: true, get: function () { return machine_buzz_6.patchMachine; } });
+var machine_buzz_7 = require("./buz/machine.buzz");
+Object.defineProperty(exports, "readMachine", { enumerable: true, get: function () { return machine_buzz_7.readMachine; } });
+var machine_buzz_8 = require("./buz/machine.buzz");
+Object.defineProperty(exports, "writeMachine", { enumerable: true, get: function () { return machine_buzz_8.writeMachine; } });
+var machine_buzz_9 = require("./buz/machine.buzz");
+Object.defineProperty(exports, "removeMachine", { enumerable: true, get: function () { return machine_buzz_9.removeMachine; } });
+var machine_buzz_10 = require("./buz/machine.buzz");
+Object.defineProperty(exports, "createMachine", { enumerable: true, get: function () { return machine_buzz_10.createMachine; } });
+var machine_buzz_11 = require("./buz/machine.buzz");
+Object.defineProperty(exports, "deleteMachine", { enumerable: true, get: function () { return machine_buzz_11.deleteMachine; } });
 
 },{"./buz/machine.buzz":23}],26:[function(require,module,exports){
 "use strict";
@@ -13792,6 +13823,16 @@ function reducer(model = new machine_model_1.MachineModel(), act, state) {
             return Buzz.editMachine(clone(model), act.bale, state);
         case Act.PATCH_MACHINE:
             return Buzz.patchMachine(clone(model), act.bale, state);
+        case Act.READ_MACHINE:
+            return Buzz.readMachine(clone(model), act.bale, state);
+        case Act.WRITE_MACHINE:
+            return Buzz.writeMachine(clone(model), act.bale, state);
+        case Act.REMOVE_MACHINE:
+            return Buzz.removeMachine(clone(model), act.bale, state);
+        case Act.CREATE_MACHINE:
+            return Buzz.createMachine(clone(model), act.bale, state);
+        case Act.DELETE_MACHINE:
+            return Buzz.deleteMachine(clone(model), act.bale, state);
         default:
             return model;
     }
@@ -13822,7 +13863,236 @@ MachineUnit = __decorate([
 ], MachineUnit);
 exports.default = MachineUnit;
 
-},{"../99.core/state":47,"typescript-ioc":21}],29:[function(require,module,exports){
+},{"../99.core/state":53,"typescript-ioc":21}],29:[function(require,module,exports){
+(function (process){(function (){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.patchPivot = exports.editPivot = exports.runPivot = exports.openPivot = exports.updatePivot = exports.initPivot = void 0;
+const ActMnu = require("../../98.menu.unit/menu.action");
+const ActBus = require("../../99.bus.unit/bus.action");
+const ActMec = require("../../00.machine.unit/machine.action");
+const ActVrt = require("../../act/vurt.action");
+const ActDsk = require("../../act/disk.action");
+var bit, val, idx, dex, lst, dat;
+const initPivot = async (cpy, bal, ste) => {
+    if (bal.dat != null)
+        bit = await ste.hunt(ActBus.INIT_BUS, { idx: cpy.idx, lst: [ActMec], dat: bal.dat, src: bal.src });
+    if (bal.val == 1)
+        patch(ste, ActMnu.INIT_MENU, bal);
+    if (bal.slv != null)
+        bal.slv({ intBit: { idx: "init-machine" } });
+    return cpy;
+};
+exports.initPivot = initPivot;
+const updatePivot = (cpy, bal, ste) => {
+    const { exec } = require('child_process');
+    exec('tsc -b 555.machine', async (err, stdout, stderr) => {
+        if (err) {
+            console.error(`exec error: ${err}`);
+        }
+        process.chdir("../999.vurt");
+        bit = await ste.bus(ActVrt.BUNDLE_VURT, { src: "555.machine" });
+        process.chdir("../555.machine");
+        bit = await ste.bus(ActDsk.READ_DISK, { src: './work/555.machine.js' });
+        var machine = bit.dskBit.dat;
+        bit = await ste.bus(ActDsk.WRITE_DISK, { src: '../gillisse/public/jsx/555.machine.js', dat: machine });
+        bit = await ste.bus(ActDsk.READ_DISK, { src: './index.html' });
+        var html = bit.dskBit.dat;
+        bit = await ste.bus(ActDsk.READ_DISK, { src: './index.js' });
+        var index = bit.dskBit.dat;
+        bit = await ste.bus(ActDsk.WRITE_DISK, { src: '../gillisse/public/jsx/index.js', dat: index });
+        bit = await ste.bus(ActDsk.WRITE_DISK, { src: '../gillisse/index.html', dat: html });
+        setTimeout(() => {
+            if (bal.slv != null)
+                bal.slv({ mecBit: { idx: "update-machine" } });
+        }, 3);
+    });
+    return cpy;
+};
+exports.updatePivot = updatePivot;
+const openPivot = async (cpy, bal, ste) => {
+    bit = await ste.bus(ActDsk.COPY_DISK, { src: './vue', idx: '../gillisse/src' });
+    bit = await ste.hunt(ActMec.RUN_MACHINE, {});
+    const open = require('open');
+    var loc = './vrt.opn.bat';
+    bit = await open(loc);
+    setTimeout(() => {
+        if (bal.slv != null)
+            bal.slv({ mecBit: { idx: "open-machine" } });
+    }, 33);
+    return cpy;
+};
+exports.openPivot = openPivot;
+const runPivot = async (cpy, bal, ste) => {
+    const open = require('open');
+    var loc = './vrt.gil.bat';
+    bit = await open(loc);
+    setTimeout(() => {
+        if (bal.slv != null)
+            bal.slv({ mecBit: { idx: "run-machine" } });
+    });
+    return cpy;
+};
+exports.runPivot = runPivot;
+const editPivot = (cpy, bal, ste) => {
+    const { exec } = require('child_process');
+    process.chdir("../../studio/");
+    exec('start Code.exe ../packages/gillisse', async (err, stdout, stderr) => {
+        if (err) {
+            console.error(`exec error: ${err}`);
+        }
+        process.chdir("../packages/555.machine");
+        if (bal.slv != null)
+            bal.slv({ mecBit: { idx: "edit-machine", dat: {} } });
+    });
+    return cpy;
+};
+exports.editPivot = editPivot;
+const patchPivot = (cpy, bal, ste) => {
+    debugger;
+    return cpy;
+};
+exports.patchPivot = patchPivot;
+var patch = (ste, type, bale) => ste.dispatch({ type, bale });
+
+}).call(this)}).call(this,require('_process'))
+},{"../../00.machine.unit/machine.action":24,"../../98.menu.unit/menu.action":42,"../../99.bus.unit/bus.action":47,"../../act/disk.action":55,"../../act/vurt.action":57,"_process":10,"child_process":undefined,"open":undefined}],30:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PatchPivot = exports.PATCH_PIVOT = exports.EditPivot = exports.EDIT_PIVOT = exports.RunPivot = exports.RUN_PIVOT = exports.OpenPivot = exports.OPEN_PIVOT = exports.UpdatePivot = exports.UPDATE_PIVOT = exports.InitPivot = exports.INIT_PIVOT = void 0;
+// Pivot actions
+exports.INIT_PIVOT = "[Pivot action] Init Pivot";
+class InitPivot {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.INIT_PIVOT;
+    }
+}
+exports.InitPivot = InitPivot;
+exports.UPDATE_PIVOT = "[Pivot action] Update Pivot";
+class UpdatePivot {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.UPDATE_PIVOT;
+    }
+}
+exports.UpdatePivot = UpdatePivot;
+exports.OPEN_PIVOT = "[Pivot action] Open Pivot";
+class OpenPivot {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.OPEN_PIVOT;
+    }
+}
+exports.OpenPivot = OpenPivot;
+exports.RUN_PIVOT = "[Pivot action] Run Pivot";
+class RunPivot {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.RUN_PIVOT;
+    }
+}
+exports.RunPivot = RunPivot;
+exports.EDIT_PIVOT = "[Pivot action] Edit Pivot";
+class EditPivot {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.EDIT_PIVOT;
+    }
+}
+exports.EditPivot = EditPivot;
+exports.PATCH_PIVOT = "[Pivot action] Patch Pivot";
+class PatchPivot {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.PATCH_PIVOT;
+    }
+}
+exports.PatchPivot = PatchPivot;
+
+},{}],31:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.patchPivot = exports.runPivot = exports.editPivot = exports.openPivot = exports.updatePivot = exports.initPivot = void 0;
+var pivot_buzz_1 = require("./buz/pivot.buzz");
+Object.defineProperty(exports, "initPivot", { enumerable: true, get: function () { return pivot_buzz_1.initPivot; } });
+var pivot_buzz_2 = require("./buz/pivot.buzz");
+Object.defineProperty(exports, "updatePivot", { enumerable: true, get: function () { return pivot_buzz_2.updatePivot; } });
+var pivot_buzz_3 = require("./buz/pivot.buzz");
+Object.defineProperty(exports, "openPivot", { enumerable: true, get: function () { return pivot_buzz_3.openPivot; } });
+var pivot_buzz_4 = require("./buz/pivot.buzz");
+Object.defineProperty(exports, "editPivot", { enumerable: true, get: function () { return pivot_buzz_4.editPivot; } });
+var pivot_buzz_5 = require("./buz/pivot.buzz");
+Object.defineProperty(exports, "runPivot", { enumerable: true, get: function () { return pivot_buzz_5.runPivot; } });
+var pivot_buzz_6 = require("./buz/pivot.buzz");
+Object.defineProperty(exports, "patchPivot", { enumerable: true, get: function () { return pivot_buzz_6.patchPivot; } });
+
+},{"./buz/pivot.buzz":29}],32:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PivotModel = void 0;
+class PivotModel {
+    constructor() {
+        this.idx = '555.machine';
+        //pivotBitList: PivotBit[] = [];
+        //pivotBits: any = {};
+    }
+}
+exports.PivotModel = PivotModel;
+
+},{}],33:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.reducer = void 0;
+const clone = require("clone-deep");
+const Act = require("./pivot.action");
+const pivot_model_1 = require("./pivot.model");
+const Buzz = require("./pivot.buzzer");
+function reducer(model = new pivot_model_1.PivotModel(), act, state) {
+    switch (act.type) {
+        case Act.OPEN_PIVOT:
+            return Buzz.openPivot(clone(model), act.bale, state);
+        case Act.RUN_PIVOT:
+            return Buzz.runPivot(clone(model), act.bale, state);
+        case Act.EDIT_PIVOT:
+            return Buzz.runPivot(clone(model), act.bale, state);
+        case Act.PATCH_PIVOT:
+            return Buzz.patchPivot(clone(model), act.bale, state);
+        case Act.UPDATE_PIVOT:
+            return Buzz.updatePivot(clone(model), act.bale, state);
+        case Act.INIT_PIVOT:
+            return Buzz.initPivot(clone(model), act.bale, state);
+        default:
+            return model;
+    }
+}
+exports.reducer = reducer;
+
+},{"./pivot.action":30,"./pivot.buzzer":31,"./pivot.model":32,"clone-deep":3}],34:[function(require,module,exports){
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const typescript_ioc_1 = require("typescript-ioc");
+const state_1 = require("../99.core/state");
+let PivotUnit = class PivotUnit {
+    constructor(state) {
+    }
+};
+PivotUnit = __decorate([
+    typescript_ioc_1.Singleton,
+    __metadata("design:paramtypes", [state_1.default])
+], PivotUnit);
+exports.default = PivotUnit;
+
+},{"../99.core/state":53,"typescript-ioc":21}],35:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.emptyCollect = exports.deleteCollect = exports.removeCollect = exports.createCollect = exports.writeCollect = exports.readCollect = exports.fetchCollect = exports.updateCollect = exports.initCollect = void 0;
@@ -13956,7 +14226,7 @@ const emptyCollect = (cpy, bal, ste) => {
 };
 exports.emptyCollect = emptyCollect;
 
-},{"../../97.collect.unit/collect.action":30}],30:[function(require,module,exports){
+},{"../../97.collect.unit/collect.action":36}],36:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EmptyCollect = exports.EMPTY_COLLECT = exports.DeleteCollect = exports.DELETE_COLLECT = exports.RemoveCollect = exports.REMOVE_COLLECT = exports.CreateCollect = exports.CREATE_COLLECT = exports.WriteCollect = exports.WRITE_COLLECT = exports.ReadCollect = exports.READ_COLLECT = exports.FetchCollect = exports.FETCH_COLLECT = exports.UpdateCollect = exports.UPDATE_COLLECT = exports.InitCollect = exports.INIT_COLLECT = void 0;
@@ -14034,7 +14304,7 @@ class EmptyCollect {
 }
 exports.EmptyCollect = EmptyCollect;
 
-},{}],31:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.removeCollect = exports.deleteCollect = exports.fetchCollect = exports.emptyCollect = exports.createCollect = exports.writeCollect = exports.readCollect = exports.updateCollect = exports.initCollect = void 0;
@@ -14057,7 +14327,7 @@ Object.defineProperty(exports, "deleteCollect", { enumerable: true, get: functio
 var collect_buzz_9 = require("./buz/collect.buzz");
 Object.defineProperty(exports, "removeCollect", { enumerable: true, get: function () { return collect_buzz_9.removeCollect; } });
 
-},{"./buz/collect.buzz":29}],32:[function(require,module,exports){
+},{"./buz/collect.buzz":35}],38:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CollectModel = void 0;
@@ -14069,7 +14339,7 @@ class CollectModel {
 }
 exports.CollectModel = CollectModel;
 
-},{}],33:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reducer = void 0;
@@ -14103,7 +14373,7 @@ function reducer(model = new collect_model_1.CollectModel(), act, state) {
 }
 exports.reducer = reducer;
 
-},{"./collect.action":30,"./collect.buzzer":31,"./collect.model":32,"clone-deep":3}],34:[function(require,module,exports){
+},{"./collect.action":36,"./collect.buzzer":37,"./collect.model":38,"clone-deep":3}],40:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -14127,11 +14397,11 @@ CollectUnit = __decorate([
 ], CollectUnit);
 exports.default = CollectUnit;
 
-},{"../99.core/state":47,"typescript-ioc":21}],35:[function(require,module,exports){
+},{"../99.core/state":53,"typescript-ioc":21}],41:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.visageMenu = exports.shadeMenu = exports.closeMenu = exports.testMenu = exports.updateMenu = exports.initMenu = void 0;
-const ActMec = require("../../00.machine.unit/machine.action");
+const ActPvt = require("../../96.pivot.unit/pivot.action");
 const ActTrm = require("../../act/terminal.action");
 var bit, lst, dex;
 const initMenu = async (cpy, bal, ste) => {
@@ -14146,24 +14416,24 @@ const updateMenu = async (cpy, bal, ste) => {
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "-----------", bit: 'local' });
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "MACHINE PIVOT V0", bit: 'local' });
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "-----------", bit: "local" });
-    var lst = [ActMec.UPDATE_MACHINE, ActMec.OPEN_MACHINE, ActMec.EDIT_MACHINE];
+    var lst = [ActPvt.UPDATE_PIVOT, ActPvt.OPEN_PIVOT, ActPvt.EDIT_PIVOT];
     bit = await ste.bus(ActTrm.UPDATE_TERMINAL, { lst });
     bit = bit.trmBit;
     var idx = lst[bit.val];
     switch (idx) {
-        case ActMec.OPEN_MACHINE:
-            bit = await ste.hunt(ActMec.OPEN_MACHINE, {});
+        case ActPvt.OPEN_PIVOT:
+            bit = await ste.hunt(ActPvt.OPEN_PIVOT, {});
             break;
-        case ActMec.UPDATE_MACHINE:
-            bit = await ste.hunt(ActMec.UPDATE_MACHINE, {});
+        case ActPvt.UPDATE_PIVOT:
+            bit = await ste.hunt(ActPvt.UPDATE_PIVOT, {});
             break;
-        case ActMec.EDIT_MACHINE:
-            bit = await ste.hunt(ActMec.EDIT_MACHINE, {});
+        case ActPvt.EDIT_PIVOT:
+            bit = await ste.hunt(ActPvt.EDIT_PIVOT, {});
             bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "PATCHING...", bit: 'local' });
             bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "-----------", bit: "local" });
-            lst = [ActMec.PATCH_MACHINE];
+            lst = [ActPvt.PATCH_PIVOT];
             bit = await ste.bus(ActTrm.UPDATE_TERMINAL, { lst });
-            bit = await ste.hunt(ActMec.PATCH_MACHINE, {});
+            bit = await ste.hunt(ActPvt.PATCH_PIVOT, {});
             break;
         default:
             bit = await await ste.bus(ActTrm.CLOSE_TERMINAL, {});
@@ -14186,14 +14456,14 @@ const shadeMenu = async (cpy, bal, ste) => {
     return cpy;
 };
 exports.shadeMenu = shadeMenu;
-var patch = (ste, type, bale) => ste.dispatch({ type, bale });
 const visageMenu = (cpy, bal, ste) => {
     debugger;
     return cpy;
 };
 exports.visageMenu = visageMenu;
+var patch = (ste, type, bale) => ste.dispatch({ type, bale });
 
-},{"../../00.machine.unit/machine.action":24,"../../act/terminal.action":50}],36:[function(require,module,exports){
+},{"../../96.pivot.unit/pivot.action":30,"../../act/terminal.action":56}],42:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ContainerMenu = exports.CONTAINER_MENU = exports.VisageMenu = exports.VISAGE_MENU = exports.ShadeMenu = exports.SHADE_MENU = exports.CloseMenu = exports.CLOSE_MENU = exports.TestMenu = exports.TEST_MENU = exports.UpdateMenu = exports.UPDATE_MENU = exports.InitMenu = exports.INIT_MENU = void 0;
@@ -14254,7 +14524,7 @@ class ContainerMenu {
 }
 exports.ContainerMenu = ContainerMenu;
 
-},{}],37:[function(require,module,exports){
+},{}],43:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.shadeMenu = exports.closeMenu = exports.testMenu = exports.updateMenu = exports.initMenu = void 0;
@@ -14269,7 +14539,7 @@ Object.defineProperty(exports, "closeMenu", { enumerable: true, get: function ()
 var _00_menu_buzz_5 = require("./buz/00.menu.buzz");
 Object.defineProperty(exports, "shadeMenu", { enumerable: true, get: function () { return _00_menu_buzz_5.shadeMenu; } });
 
-},{"./buz/00.menu.buzz":35}],38:[function(require,module,exports){
+},{"./buz/00.menu.buzz":41}],44:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MenuModel = void 0;
@@ -14283,7 +14553,7 @@ class MenuModel {
 }
 exports.MenuModel = MenuModel;
 
-},{}],39:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reducer = void 0;
@@ -14309,7 +14579,7 @@ function reducer(model = new menu_model_1.MenuModel(), act, state) {
 }
 exports.reducer = reducer;
 
-},{"./menu.action":36,"./menu.buzzer":37,"./menu.model":38,"clone-deep":3}],40:[function(require,module,exports){
+},{"./menu.action":42,"./menu.buzzer":43,"./menu.model":44,"clone-deep":3}],46:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -14333,7 +14603,7 @@ MenuUnit = __decorate([
 ], MenuUnit);
 exports.default = MenuUnit;
 
-},{"../99.core/state":47,"typescript-ioc":21}],41:[function(require,module,exports){
+},{"../99.core/state":53,"typescript-ioc":21}],47:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateBus = exports.CREATE_BUS = exports.UpdateBus = exports.UPDATE_BUS = exports.MessageBus = exports.MESSAGE_BUS = exports.ConnectBus = exports.CONNECT_BUS = exports.OpenBus = exports.OPEN_BUS = exports.InitBus = exports.INIT_BUS = void 0;
@@ -14387,7 +14657,7 @@ class CreateBus {
 }
 exports.CreateBus = CreateBus;
 
-},{}],42:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createBus = exports.messageBus = exports.connectBus = exports.updateBus = exports.openBus = exports.initBus = void 0;
@@ -14404,7 +14674,7 @@ Object.defineProperty(exports, "messageBus", { enumerable: true, get: function (
 var bus_buzz_6 = require("./buz/bus.buzz");
 Object.defineProperty(exports, "createBus", { enumerable: true, get: function () { return bus_buzz_6.createBus; } });
 
-},{"./buz/bus.buzz":46}],43:[function(require,module,exports){
+},{"./buz/bus.buzz":52}],49:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BusModel = void 0;
@@ -14417,7 +14687,7 @@ class BusModel {
 }
 exports.BusModel = BusModel;
 
-},{}],44:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reducer = void 0;
@@ -14445,7 +14715,7 @@ function reducer(model = new bus_model_1.BusModel(), act, state) {
 }
 exports.reducer = reducer;
 
-},{"./bus.action":41,"./bus.buzzer":42,"./bus.model":43,"clone-deep":3}],45:[function(require,module,exports){
+},{"./bus.action":47,"./bus.buzzer":48,"./bus.model":49,"clone-deep":3}],51:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -14469,7 +14739,7 @@ BusUnit = __decorate([
 ], BusUnit);
 exports.default = BusUnit;
 
-},{"../99.core/state":47,"typescript-ioc":21}],46:[function(require,module,exports){
+},{"../99.core/state":53,"typescript-ioc":21}],52:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateBus = exports.messageBus = exports.connectBus = exports.openBus = exports.createBus = exports.initBus = void 0;
@@ -14645,7 +14915,7 @@ exports.updateBus = updateBus;
 var patch = (ste, type, bale) => ste.dispatch({ type, bale });
 const clone = require("clone-deep");
 
-},{"../../97.collect.unit/collect.action":30,"../../98.menu.unit/menu.action":36,"../../99.bus.unit/bus.action":41,"clone-deep":3}],47:[function(require,module,exports){
+},{"../../97.collect.unit/collect.action":36,"../../98.menu.unit/menu.action":42,"../../99.bus.unit/bus.action":47,"clone-deep":3}],53:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const rx_lite_1 = require("rx-lite");
@@ -14680,25 +14950,29 @@ class State extends rx_lite_1.BehaviorSubject {
 }
 exports.default = State;
 
-},{"../BEE":48,"rx-lite":12}],48:[function(require,module,exports){
+},{"../BEE":54,"rx-lite":12}],54:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reducer = exports.list = void 0;
 const machine_unit_1 = require("./00.machine.unit/machine.unit");
+const pivot_unit_1 = require("./96.pivot.unit/pivot.unit");
 const collect_unit_1 = require("./97.collect.unit/collect.unit");
 const menu_unit_1 = require("./98.menu.unit/menu.unit");
 const bus_unit_1 = require("./99.bus.unit/bus.unit");
 const machine_model_1 = require("./00.machine.unit/machine.model");
+const pivot_model_1 = require("./96.pivot.unit/pivot.model");
 const collect_model_1 = require("./97.collect.unit/collect.model");
 const menu_model_1 = require("./98.menu.unit/menu.model");
 const bus_model_1 = require("./99.bus.unit/bus.model");
-exports.list = [machine_unit_1.default, collect_unit_1.default, menu_unit_1.default, bus_unit_1.default];
+exports.list = [machine_unit_1.default, pivot_unit_1.default, collect_unit_1.default, menu_unit_1.default, bus_unit_1.default];
 const reduceFromMachine = require("./00.machine.unit/machine.reduce");
+const reduceFromPivot = require("./96.pivot.unit/pivot.reduce");
 const reduceFromCollect = require("./97.collect.unit/collect.reduce");
 const reduceFromMenu = require("./98.menu.unit/menu.reduce");
 const reduceFromBus = require("./99.bus.unit/bus.reduce");
 exports.reducer = {
     machine: reduceFromMachine.reducer,
+    pivot: reduceFromPivot.reducer,
     collect: reduceFromCollect.reducer,
     menu: reduceFromMenu.reducer,
     bus: reduceFromBus.reducer,
@@ -14706,6 +14980,7 @@ exports.reducer = {
 class UnitData {
     constructor() {
         this.machine = new machine_model_1.MachineModel();
+        this.pivot = new pivot_model_1.PivotModel();
         this.collect = new collect_model_1.CollectModel();
         this.menu = new menu_model_1.MenuModel();
         this.bus = new bus_model_1.BusModel();
@@ -14713,7 +14988,7 @@ class UnitData {
 }
 exports.default = UnitData;
 
-},{"./00.machine.unit/machine.model":26,"./00.machine.unit/machine.reduce":27,"./00.machine.unit/machine.unit":28,"./97.collect.unit/collect.model":32,"./97.collect.unit/collect.reduce":33,"./97.collect.unit/collect.unit":34,"./98.menu.unit/menu.model":38,"./98.menu.unit/menu.reduce":39,"./98.menu.unit/menu.unit":40,"./99.bus.unit/bus.model":43,"./99.bus.unit/bus.reduce":44,"./99.bus.unit/bus.unit":45}],49:[function(require,module,exports){
+},{"./00.machine.unit/machine.model":26,"./00.machine.unit/machine.reduce":27,"./00.machine.unit/machine.unit":28,"./96.pivot.unit/pivot.model":32,"./96.pivot.unit/pivot.reduce":33,"./96.pivot.unit/pivot.unit":34,"./97.collect.unit/collect.model":38,"./97.collect.unit/collect.reduce":39,"./97.collect.unit/collect.unit":40,"./98.menu.unit/menu.model":44,"./98.menu.unit/menu.reduce":45,"./98.menu.unit/menu.unit":46,"./99.bus.unit/bus.model":49,"./99.bus.unit/bus.reduce":50,"./99.bus.unit/bus.unit":51}],55:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.COPY_DISK = exports.LOAD_LIST_DISK = exports.LIST_DISK = exports.WRITE_DISK = exports.READ_DISK = exports.UPDATE_DISK = exports.INIT_DISK = void 0;
@@ -14725,7 +15000,7 @@ exports.LIST_DISK = "[List action] List Disk";
 exports.LOAD_LIST_DISK = "[Load_list action] Load_list Disk";
 exports.COPY_DISK = "[Copy action] Copy Disk";
 
-},{}],50:[function(require,module,exports){
+},{}],56:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ADD_PORT = exports.CONTENT_TERMINAL = exports.ROOT_TERMINAL = exports.CLOSE_TERMINAL = exports.TABLE_TERMINAL = exports.INPUT_TERMINAL = exports.CLEAR_TERMINAL = exports.UPDATE_TERMINAL = exports.WRITE_TERMINAL = exports.FOCUS_TERMINAL = exports.OPEN_TERMINAL = exports.INIT_TERMINAL = void 0;
@@ -14743,7 +15018,7 @@ exports.ROOT_TERMINAL = "[Terminal action] Root Terminal";
 exports.CONTENT_TERMINAL = "[Terminal action] Content Terminal";
 exports.ADD_PORT = "[Terminal action] Add Port";
 
-},{}],51:[function(require,module,exports){
+},{}],57:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.VALUE_VURT = exports.BUNDLE_VURT = exports.CONTAINS_VURT = exports.LIST_UNIT_VURT = exports.LIST_PIVOT_VURT = exports.COUNT_VURT = exports.UNIT_VURT = exports.REPLACE_VURT = exports.UPDATE_VURT = exports.FETCH_VURT = exports.TEST_CLOUD_VURT = exports.DELAY_VURT = exports.INIT_VURT = void 0;
@@ -14761,7 +15036,7 @@ exports.CONTAINS_VURT = "[Contains action] Contains Vurt";
 exports.BUNDLE_VURT = "[Bundle action] Bundle Vurt";
 exports.VALUE_VURT = "[Value action] Value Vurt";
 
-},{}],52:[function(require,module,exports){
+},{}],58:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var sim = {
@@ -14793,4 +15068,4 @@ const Import = require("./BEE");
 const state_1 = require("./99.core/state");
 module.exports = sim;
 
-},{"./99.core/state":47,"./BEE":48}]},{},[22]);
+},{"./99.core/state":53,"./BEE":54}]},{},[22]);

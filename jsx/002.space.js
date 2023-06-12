@@ -36562,8 +36562,8 @@ global.SPACE.ActFoc = require("../dist/002.space/01.focus.unit/focus.action");
 global.SPACE.ActMap = require("../dist/002.space/03.hexmap.unit/hexmap.action");
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../dist/002.space/00.space.unit/space.action":31,"../dist/002.space/01.focus.unit/focus.action":46,"../dist/002.space/03.hexmap.unit/hexmap.action":61,"../dist/002.space/hunt":97}],30:[function(require,module,exports){
-(function (process,global){(function (){
+},{"../dist/002.space/00.space.unit/space.action":31,"../dist/002.space/01.focus.unit/focus.action":46,"../dist/002.space/03.hexmap.unit/hexmap.action":61,"../dist/002.space/hunt":103}],30:[function(require,module,exports){
+(function (global){(function (){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.batchSpace = exports.cloudSpace = exports.testSpace = exports.mergeSpace = exports.patchSpace = exports.readySpace = exports.editSpace = exports.updateSpace = exports.runSpace = exports.openSpace = exports.initSpace = void 0;
@@ -36572,7 +36572,6 @@ const ActFoc = require("../../01.focus.unit/focus.action");
 const ActMap = require("../../03.hexmap.unit/hexmap.action");
 const ActSpc = require("../../00.space.unit/space.action");
 const ActBus = require("../../99.bus.unit/bus.action");
-const ActVrt = require("../../act/vurt.action");
 const ActDsk = require("../../act/disk.action");
 var SHADE = global.shade;
 var bit, val, idx, dex, lst, dat, src;
@@ -36587,67 +36586,18 @@ const initSpace = async (cpy, bal, ste) => {
 };
 exports.initSpace = initSpace;
 const openSpace = async (cpy, bal, ste) => {
-    bit = await ste.bus(ActDsk.COPY_DISK, { src: './vue', idx: '../gillisse/src' });
-    bit = await ste.hunt(ActSpc.RUN_SPACE, {});
-    const open = require('open');
-    var loc = './vrt.opn.bat';
-    bit = await open(loc);
-    setTimeout(() => {
-        if (bal.slv != null)
-            bal.slv({ spcBit: { idx: "open-space" } });
-    }, 33);
     return cpy;
 };
 exports.openSpace = openSpace;
 const runSpace = async (cpy, bal, ste) => {
-    const open = require('open');
-    var loc = './vrt.gil.bat';
-    bit = await open(loc);
-    setTimeout(() => {
-        if (bal.slv != null)
-            bal.slv({ shdBit: { idx: "run-shade" } });
-    });
     return cpy;
 };
 exports.runSpace = runSpace;
 const updateSpace = async (cpy, bal, ste) => {
-    const { exec } = require('child_process');
-    exec('tsc -b 002.space', async (err, stdout, stderr) => {
-        if (err) {
-            console.error(`exec error: ${err}`);
-        }
-        process.chdir("../999.vurt");
-        bit = await ste.bus(ActVrt.BUNDLE_VURT, { src: "002.space" });
-        process.chdir("../002.space");
-        bit = await ste.bus(ActDsk.READ_DISK, { src: './work/002.space.js' });
-        var space = bit.dskBit.dat;
-        bit = await ste.bus(ActDsk.WRITE_DISK, { src: '../gillisse/public/jsx/002.space.js', dat: space });
-        bit = await ste.bus(ActDsk.READ_DISK, { src: './index.html' });
-        var html = bit.dskBit.dat;
-        bit = await ste.bus(ActDsk.READ_DISK, { src: './index.js' });
-        var index = bit.dskBit.dat;
-        bit = await ste.bus(ActDsk.WRITE_DISK, { src: '../gillisse/public/jsx/index.js', dat: index });
-        bit = await ste.bus(ActDsk.WRITE_DISK, { src: '../gillisse/index.html', dat: html });
-        bit = await ste.bus(ActDsk.COPY_DISK, { src: './vue', idx: '../gillisse/src' });
-        setTimeout(() => {
-            if (bal.slv != null)
-                bal.slv({ shdBit: { idx: "update-space" } });
-        }, 3);
-    });
     return cpy;
 };
 exports.updateSpace = updateSpace;
 const editSpace = (cpy, bal, ste) => {
-    const { exec } = require('child_process');
-    process.chdir("../../studio/");
-    exec('start Code.exe ../packages/gillisse', async (err, stdout, stderr) => {
-        if (err) {
-            console.error(`exec error: ${err}`);
-        }
-        process.chdir("../packages/110.shade");
-        if (bal.slv != null)
-            bal.slv({ symBit: { idx: "edit-symbol", dat: {} } });
-    });
     return cpy;
 };
 exports.editSpace = editSpace;
@@ -36711,12 +36661,6 @@ const testSpace = async (cpy, bal, ste) => {
 };
 exports.testSpace = testSpace;
 const cloudSpace = async (cpy, bal, ste) => {
-    bit = await ste.bus(ActDsk.READ_DISK, { src: './work/002.space.js' });
-    var space = bit.dskBit.dat;
-    bit = await ste.bus(ActDsk.WRITE_DISK, { src: './cloud/002.space.js', dat: space });
-    bit = await ste.bus(ActDsk.COPY_DISK, { src: './cloud/', idx: '../../agent/002.space/' });
-    if (bal.slv != null)
-        bal.slv({ spcBit: { idx: "cloud-space" } });
     return cpy;
 };
 exports.cloudSpace = cloudSpace;
@@ -36743,8 +36687,8 @@ const batchSpace = async (cpy, bal, ste) => {
 exports.batchSpace = batchSpace;
 const S = require("string");
 
-}).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../../00.space.unit/space.action":31,"../../01.focus.unit/focus.action":46,"../../03.hexmap.unit/hexmap.action":61,"../../98.menu.unit/menu.action":79,"../../99.bus.unit/bus.action":84,"../../act/disk.action":92,"../../act/vurt.action":96,"_process":13,"child_process":undefined,"open":undefined,"string":20}],31:[function(require,module,exports){
+}).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"../../00.space.unit/space.action":31,"../../01.focus.unit/focus.action":46,"../../03.hexmap.unit/hexmap.action":61,"../../98.menu.unit/menu.action":85,"../../99.bus.unit/bus.action":90,"../../act/disk.action":98,"string":20}],31:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BatchSpace = exports.BATCH_SPACE = exports.CloudSpace = exports.CLOUD_SPACE = exports.TestSpace = exports.TEST_SPACE = exports.MergeSpace = exports.MERGE_SPACE = exports.PatchSpace = exports.PATCH_SPACE = exports.RunSpace = exports.RUN_SPACE = exports.OpenSpace = exports.OPEN_SPACE = exports.EditSpace = exports.EDIT_SPACE = exports.ReadySpace = exports.READY_SPACE = exports.UpdateSpace = exports.UPDATE_SPACE = exports.InitSpace = exports.INIT_SPACE = void 0;
@@ -36941,7 +36885,7 @@ SpaceUnit = __decorate([
 ], SpaceUnit);
 exports.default = SpaceUnit;
 
-},{"../99.core/state":90,"typescript-ioc":28}],36:[function(require,module,exports){
+},{"../99.core/state":96,"typescript-ioc":28}],36:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.modelFocus = exports.openFocus = exports.selectFocus = exports.locateFocus = exports.centerFocus = exports.cornerFocus = exports.listFocus = exports.deleteFocus = exports.removeFocus = exports.writeFocus = exports.readFocus = exports.initFocus = void 0;
@@ -37100,7 +37044,7 @@ const modelFocus = async (cpy, bal, ste) => {
 };
 exports.modelFocus = modelFocus;
 
-},{"../../03.hexmap.unit/hexmap.action":61,"../../97.collect.unit/collect.action":67,"../focus.action":46}],37:[function(require,module,exports){
+},{"../../03.hexmap.unit/hexmap.action":61,"../../97.collect.unit/collect.action":73,"../focus.action":46}],37:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.awakeFocus = void 0;
@@ -37164,7 +37108,7 @@ const backwardFocus = async (cpy, bal, ste) => {
 exports.backwardFocus = backwardFocus;
 const DIRECTION = require("../../val/direction");
 
-},{"../../val/direction":98,"../focus.action":46}],39:[function(require,module,exports){
+},{"../../val/direction":104,"../focus.action":46}],39:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.bondFocus = void 0;
@@ -37246,7 +37190,7 @@ const compassConvertor = (val) => {
 };
 const DIRECTION = require("../../val/direction");
 
-},{"../../03.hexmap.unit/hexmap.action":61,"../../val/direction":98,"../focus.action":46}],40:[function(require,module,exports){
+},{"../../03.hexmap.unit/hexmap.action":61,"../../val/direction":104,"../focus.action":46}],40:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createFocus = void 0;
@@ -37294,7 +37238,7 @@ exports.createFocus = createFocus;
 const SHAPE = require("../../val/shape");
 const SPACE = require("../../val/space");
 
-},{"../../val/shape":99,"../../val/space":100}],41:[function(require,module,exports){
+},{"../../val/shape":105,"../../val/space":106}],41:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.forwardFocus = void 0;
@@ -37374,7 +37318,7 @@ const spinLeftFocus = async (cpy, bal, ste) => {
 exports.spinLeftFocus = spinLeftFocus;
 const DIRECTION = require("../../val/direction");
 
-},{"../../val/direction":98,"../focus.action":46}],43:[function(require,module,exports){
+},{"../../val/direction":104,"../focus.action":46}],43:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.spinRightFocus = void 0;
@@ -37417,7 +37361,7 @@ const spinRightFocus = async (cpy, bal, ste) => {
 exports.spinRightFocus = spinRightFocus;
 const DIRECTION = require("../../val/direction");
 
-},{"../../val/direction":98,"../focus.action":46}],44:[function(require,module,exports){
+},{"../../val/direction":104,"../focus.action":46}],44:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateFocus = void 0;
@@ -37546,7 +37490,7 @@ const compassConvertor = (val) => {
 };
 const DIRECTION = require("../../val/direction");
 
-},{"../../03.hexmap.unit/hexmap.action":61,"../../val/direction":98,"../focus.action":46}],46:[function(require,module,exports){
+},{"../../03.hexmap.unit/hexmap.action":61,"../../val/direction":104,"../focus.action":46}],46:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ModelFocus = exports.MODEL_FOCUS = exports.SelectFocus = exports.SELECT_FOCUS = exports.VisionFocus = exports.VISION_FOCUS = exports.LocateFocus = exports.LOCATE_FOCUS = exports.BondFocus = exports.BOND_FOCUS = exports.CenterFocus = exports.CENTER_FOCUS = exports.BackwardFocus = exports.BACKWARD_FOCUS = exports.ForwardFocus = exports.FORWARD_FOCUS = exports.SpinLeftFocus = exports.SPIN_LEFT_FOCUS = exports.SpinRightFocus = exports.SPIN_RIGHT_FOCUS = exports.ListFocus = exports.LIST_FOCUS = exports.CornerFocus = exports.CORNER_FOCUS = exports.DeleteFocus = exports.DELETE_FOCUS = exports.RemoveFocus = exports.REMOVE_FOCUS = exports.WriteFocus = exports.WRITE_FOCUS = exports.ReadFocus = exports.READ_FOCUS = exports.CreateFocus = exports.CREATE_FOCUS = exports.OpenFocus = exports.OPEN_FOCUS = exports.UpdateFocus = exports.UPDATE_FOCUS = exports.AwakeFocus = exports.AWAKE_FOCUS = exports.InitFocus = exports.INIT_FOCUS = void 0;
@@ -37862,7 +37806,7 @@ FocusUnit = __decorate([
 ], FocusUnit);
 exports.default = FocusUnit;
 
-},{"../99.core/state":90,"typescript-ioc":28}],51:[function(require,module,exports){
+},{"../99.core/state":96,"typescript-ioc":28}],51:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.indexGeojson = exports.loadGeojson = exports.updateGeojson = exports.initGeojson = void 0;
@@ -37897,7 +37841,7 @@ const indexGeojson = async (cpy, bal, ste) => {
 };
 exports.indexGeojson = indexGeojson;
 
-},{"../../act/disk.action":92}],52:[function(require,module,exports){
+},{"../../act/disk.action":98}],52:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.IndexGeojson = exports.INDEX_GEOJSON = exports.LoadGeojson = exports.LOAD_GEOJSON = exports.UpdateGeojson = exports.UPDATE_GEOJSON = exports.InitGeojson = exports.INIT_GEOJSON = void 0;
@@ -38009,7 +37953,7 @@ GeojsonUnit = __decorate([
 ], GeojsonUnit);
 exports.default = GeojsonUnit;
 
-},{"../99.core/state":90,"typescript-ioc":28}],57:[function(require,module,exports){
+},{"../99.core/state":96,"typescript-ioc":28}],57:[function(require,module,exports){
 (function (process){(function (){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -38212,7 +38156,7 @@ exports.selectHexmap = selectHexmap;
 const S = require("string");
 
 }).call(this)}).call(this,require('_process'))
-},{"../../01.focus.unit/focus.action":46,"../../97.collect.unit/collect.action":67,"../../act/disk.action":92,"../hexmap.action":61,"_process":13,"chance":3,"open":undefined,"string":20}],58:[function(require,module,exports){
+},{"../../01.focus.unit/focus.action":46,"../../97.collect.unit/collect.action":73,"../../act/disk.action":98,"../hexmap.action":61,"_process":13,"chance":3,"open":undefined,"string":20}],58:[function(require,module,exports){
 (function (process){(function (){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -38562,7 +38506,7 @@ exports.createHexmap = createHexmap;
 const Honeycomb = require("honeycomb-grid");
 const SPACE = require("../../val/space");
 
-},{"../../val/space":100,"clone-deep":4,"honeycomb-grid":6}],60:[function(require,module,exports){
+},{"../../val/space":106,"clone-deep":4,"honeycomb-grid":6}],60:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.shapeHexmap = void 0;
@@ -38614,7 +38558,7 @@ exports.shapeHexmap = shapeHexmap;
 const SHAPE = require("../../val/shape");
 const Honeycomb = require("honeycomb-grid");
 
-},{"../../val/shape":99,"chance":3,"honeycomb-grid":6}],61:[function(require,module,exports){
+},{"../../val/shape":105,"chance":3,"honeycomb-grid":6}],61:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AddHexmap = exports.ADD_HEXMAP = exports.SelectHexmap = exports.SELECT_HEXMAP = exports.DefocusHexmap = exports.DEFOCUS_HEXMAP = exports.FocusingHexmap = exports.FOCUSING_HEXMAP = exports.SeekHexmap = exports.SEEK_HEXMAP = exports.NameHexmap = exports.NAME_HEXMAP = exports.ReplaceHexmap = exports.REPLACE_HEXMAP = exports.ListHexmap = exports.LIST_HEXMAP = exports.LoadHexmap = exports.LOAD_HEXMAP = exports.ShapeHexmap = exports.SHAPE_HEXMAP = exports.StoreHexmap = exports.STORE_HEXMAP = exports.SaveHexmap = exports.SAVE_HEXMAP = exports.ToolHexmap = exports.TOOL_HEXMAP = exports.GeojsonHexmap = exports.GEOJSON_HEXMAP = exports.AtlasHexmap = exports.ATLAS_HEXMAP = exports.CopyHexmap = exports.COPY_HEXMAP = exports.CreateHexmap = exports.CREATE_HEXMAP = exports.WriteHexmap = exports.WRITE_HEXMAP = exports.ReadHexmap = exports.READ_HEXMAP = exports.OpenHexmap = exports.OPEN_HEXMAP = exports.UpdateHexmap = exports.UPDATE_HEXMAP = exports.InitHexmap = exports.INIT_HEXMAP = void 0;
@@ -38959,7 +38903,270 @@ HexmapUnit = __decorate([
 ], HexmapUnit);
 exports.default = HexmapUnit;
 
-},{"../99.core/state":90,"typescript-ioc":28}],66:[function(require,module,exports){
+},{"../99.core/state":96,"typescript-ioc":28}],66:[function(require,module,exports){
+(function (process){(function (){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.patchPivot = exports.cloudPivot = exports.editPivot = exports.runPivot = exports.openPivot = exports.updatePivot = exports.initPivot = void 0;
+const ActMnu = require("../../98.menu.unit/menu.action");
+const ActBus = require("../../99.bus.unit/bus.action");
+const ActSpc = require("../../00.space.unit/space.action");
+const ActVrt = require("../../act/vurt.action");
+const ActDsk = require("../../act/disk.action");
+var bit, val, idx, dex, lst, dat;
+const initPivot = async (cpy, bal, ste) => {
+    if (bal.dat != null)
+        bit = await ste.hunt(ActBus.INIT_BUS, { idx: cpy.idx, lst: [ActSpc], dat: bal.dat, src: bal.src });
+    if (bal.val == 1)
+        patch(ste, ActMnu.INIT_MENU, bal);
+    if (bal.slv != null)
+        bal.slv({ intBit: { idx: "init-machine" } });
+    return cpy;
+};
+exports.initPivot = initPivot;
+const updatePivot = (cpy, bal, ste) => {
+    const { exec } = require('child_process');
+    exec('tsc -b 002.space', async (err, stdout, stderr) => {
+        if (err) {
+            console.error(`exec error: ${err}`);
+        }
+        process.chdir("../999.vurt");
+        bit = await ste.bus(ActVrt.BUNDLE_VURT, { src: "002.space" });
+        process.chdir("../002.space");
+        bit = await ste.bus(ActDsk.READ_DISK, { src: './work/002.space.js' });
+        var space = bit.dskBit.dat;
+        bit = await ste.bus(ActDsk.WRITE_DISK, { src: '../gillisse/public/jsx/002.space.js', dat: space });
+        bit = await ste.bus(ActDsk.READ_DISK, { src: './index.html' });
+        var html = bit.dskBit.dat;
+        bit = await ste.bus(ActDsk.READ_DISK, { src: './index.js' });
+        var index = bit.dskBit.dat;
+        bit = await ste.bus(ActDsk.WRITE_DISK, { src: '../gillisse/public/jsx/index.js', dat: index });
+        bit = await ste.bus(ActDsk.WRITE_DISK, { src: '../gillisse/index.html', dat: html });
+        bit = await ste.bus(ActDsk.COPY_DISK, { src: './vue', idx: '../gillisse/src' });
+        setTimeout(() => {
+            if (bal.slv != null)
+                bal.slv({ shdBit: { idx: "update-space" } });
+        }, 3);
+    });
+    return cpy;
+};
+exports.updatePivot = updatePivot;
+const openPivot = async (cpy, bal, ste) => {
+    bit = await ste.bus(ActDsk.COPY_DISK, { src: './vue', idx: '../gillisse/src' });
+    bit = await ste.hunt(ActSpc.RUN_SPACE, {});
+    const open = require('open');
+    var loc = './vrt.opn.bat';
+    bit = await open(loc);
+    setTimeout(() => {
+        if (bal.slv != null)
+            bal.slv({ spcBit: { idx: "open-space" } });
+    }, 33);
+    return cpy;
+};
+exports.openPivot = openPivot;
+const runPivot = async (cpy, bal, ste) => {
+    const open = require('open');
+    var loc = './vrt.gil.bat';
+    bit = await open(loc);
+    setTimeout(() => {
+        if (bal.slv != null)
+            bal.slv({ shdBit: { idx: "run-shade" } });
+    });
+    return cpy;
+};
+exports.runPivot = runPivot;
+const editPivot = (cpy, bal, ste) => {
+    const { exec } = require('child_process');
+    process.chdir("../../studio/");
+    exec('start Code.exe ../packages/gillisse', async (err, stdout, stderr) => {
+        if (err) {
+            console.error(`exec error: ${err}`);
+        }
+        process.chdir("../packages/110.shade");
+        if (bal.slv != null)
+            bal.slv({ symBit: { idx: "edit-symbol", dat: {} } });
+    });
+    return cpy;
+};
+exports.editPivot = editPivot;
+const cloudPivot = async (cpy, bal, ste) => {
+    bit = await ste.bus(ActDsk.READ_DISK, { src: './work/002.space.js' });
+    var time = bit.dskBit.dat;
+    bit = await ste.bus(ActDsk.WRITE_DISK, { src: './cloud/002.space.js', dat: time });
+    bit = await ste.bus(ActDsk.COPY_DISK, { src: './cloud/', idx: '../../agent/002.space/' });
+    const { exec } = require('child_process');
+    process.chdir("../../agent/002.space");
+    exec('vrt.pub.bat', async (err, stdout, stderr) => {
+        if (err) {
+            console.error(`exec error: ${err}`);
+        }
+        //then open an address
+        var open = require('open');
+        open('https://002-space.beeing.workers.dev/');
+        process.chdir("../../packages/002.space");
+        if (bal.slv != null)
+            bal.slv({ spcBit: { idx: "cloud-pivot" } });
+    });
+    return cpy;
+};
+exports.cloudPivot = cloudPivot;
+const patchPivot = (cpy, bal, ste) => {
+    debugger;
+    return cpy;
+};
+exports.patchPivot = patchPivot;
+var patch = (ste, type, bale) => ste.dispatch({ type, bale });
+
+}).call(this)}).call(this,require('_process'))
+},{"../../00.space.unit/space.action":31,"../../98.menu.unit/menu.action":85,"../../99.bus.unit/bus.action":90,"../../act/disk.action":98,"../../act/vurt.action":102,"_process":13,"child_process":undefined,"open":undefined}],67:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.CloudPivot = exports.CLOUD_PIVOT = exports.PatchPivot = exports.PATCH_PIVOT = exports.EditPivot = exports.EDIT_PIVOT = exports.RunPivot = exports.RUN_PIVOT = exports.OpenPivot = exports.OPEN_PIVOT = exports.UpdatePivot = exports.UPDATE_PIVOT = exports.InitPivot = exports.INIT_PIVOT = void 0;
+// Pivot actions
+exports.INIT_PIVOT = "[Pivot action] Init Pivot";
+class InitPivot {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.INIT_PIVOT;
+    }
+}
+exports.InitPivot = InitPivot;
+exports.UPDATE_PIVOT = "[Pivot action] Update Pivot";
+class UpdatePivot {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.UPDATE_PIVOT;
+    }
+}
+exports.UpdatePivot = UpdatePivot;
+exports.OPEN_PIVOT = "[Pivot action] Open Pivot";
+class OpenPivot {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.OPEN_PIVOT;
+    }
+}
+exports.OpenPivot = OpenPivot;
+exports.RUN_PIVOT = "[Pivot action] Run Pivot";
+class RunPivot {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.RUN_PIVOT;
+    }
+}
+exports.RunPivot = RunPivot;
+exports.EDIT_PIVOT = "[Pivot action] Edit Pivot";
+class EditPivot {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.EDIT_PIVOT;
+    }
+}
+exports.EditPivot = EditPivot;
+exports.PATCH_PIVOT = "[Pivot action] Patch Pivot";
+class PatchPivot {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.PATCH_PIVOT;
+    }
+}
+exports.PatchPivot = PatchPivot;
+exports.CLOUD_PIVOT = "[Pivot action] Cloud Pivot";
+class CloudPivot {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.CLOUD_PIVOT;
+    }
+}
+exports.CloudPivot = CloudPivot;
+
+},{}],68:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.cloudPivot = exports.patchPivot = exports.runPivot = exports.editPivot = exports.openPivot = exports.updatePivot = exports.initPivot = void 0;
+var pivot_buzz_1 = require("./buz/pivot.buzz");
+Object.defineProperty(exports, "initPivot", { enumerable: true, get: function () { return pivot_buzz_1.initPivot; } });
+var pivot_buzz_2 = require("./buz/pivot.buzz");
+Object.defineProperty(exports, "updatePivot", { enumerable: true, get: function () { return pivot_buzz_2.updatePivot; } });
+var pivot_buzz_3 = require("./buz/pivot.buzz");
+Object.defineProperty(exports, "openPivot", { enumerable: true, get: function () { return pivot_buzz_3.openPivot; } });
+var pivot_buzz_4 = require("./buz/pivot.buzz");
+Object.defineProperty(exports, "editPivot", { enumerable: true, get: function () { return pivot_buzz_4.editPivot; } });
+var pivot_buzz_5 = require("./buz/pivot.buzz");
+Object.defineProperty(exports, "runPivot", { enumerable: true, get: function () { return pivot_buzz_5.runPivot; } });
+var pivot_buzz_6 = require("./buz/pivot.buzz");
+Object.defineProperty(exports, "patchPivot", { enumerable: true, get: function () { return pivot_buzz_6.patchPivot; } });
+var pivot_buzz_7 = require("./buz/pivot.buzz");
+Object.defineProperty(exports, "cloudPivot", { enumerable: true, get: function () { return pivot_buzz_7.cloudPivot; } });
+
+},{"./buz/pivot.buzz":66}],69:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PivotModel = void 0;
+class PivotModel {
+    constructor() {
+        this.idx = '555.machine';
+        //pivotBitList: PivotBit[] = [];
+        //pivotBits: any = {};
+    }
+}
+exports.PivotModel = PivotModel;
+
+},{}],70:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.reducer = void 0;
+const clone = require("clone-deep");
+const Act = require("./pivot.action");
+const pivot_model_1 = require("./pivot.model");
+const Buzz = require("./pivot.buzzer");
+function reducer(model = new pivot_model_1.PivotModel(), act, state) {
+    switch (act.type) {
+        case Act.OPEN_PIVOT:
+            return Buzz.openPivot(clone(model), act.bale, state);
+        case Act.RUN_PIVOT:
+            return Buzz.runPivot(clone(model), act.bale, state);
+        case Act.EDIT_PIVOT:
+            return Buzz.runPivot(clone(model), act.bale, state);
+        case Act.PATCH_PIVOT:
+            return Buzz.patchPivot(clone(model), act.bale, state);
+        case Act.UPDATE_PIVOT:
+            return Buzz.updatePivot(clone(model), act.bale, state);
+        case Act.CLOUD_PIVOT:
+            return Buzz.cloudPivot(clone(model), act.bale, state);
+        case Act.INIT_PIVOT:
+            return Buzz.initPivot(clone(model), act.bale, state);
+        default:
+            return model;
+    }
+}
+exports.reducer = reducer;
+
+},{"./pivot.action":67,"./pivot.buzzer":68,"./pivot.model":69,"clone-deep":4}],71:[function(require,module,exports){
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const typescript_ioc_1 = require("typescript-ioc");
+const state_1 = require("../99.core/state");
+let PivotUnit = class PivotUnit {
+    constructor(state) {
+    }
+};
+PivotUnit = __decorate([
+    typescript_ioc_1.Singleton,
+    __metadata("design:paramtypes", [state_1.default])
+], PivotUnit);
+exports.default = PivotUnit;
+
+},{"../99.core/state":96,"typescript-ioc":28}],72:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.emptyCollect = exports.deleteCollect = exports.modelCollect = exports.getCollect = exports.putCollect = exports.removeCollect = exports.createCollect = exports.writeCollect = exports.readCollect = exports.fetchCollect = exports.updateCollect = exports.initCollect = void 0;
@@ -38998,7 +39205,7 @@ const readCollect = async (cpy, bal, ste) => {
         (0, exports.createCollect)(cpy, { idx: type }, ste);
     var cabBit = cpy.caboodleBitList[cpy.caboodleBits[type]];
     if (cabBit.bits[bal.idx] == null) {
-        bit = await ste.hunt(ActCol.WRITE_COLLECT, { idx: bal.idx, bit: bal.bit });
+        bit = await ste.hunt(ActCol.WRITE_COLLECT, { idx: bal.idx, src: bal.src, bit: bal.bit });
     }
     else {
         dat = cabBit.bitList[cabBit.bits[bal.idx]];
@@ -39118,7 +39325,7 @@ const emptyCollect = (cpy, bal, ste) => {
 };
 exports.emptyCollect = emptyCollect;
 
-},{"../../97.collect.unit/collect.action":67}],67:[function(require,module,exports){
+},{"../../97.collect.unit/collect.action":73}],73:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GetCollect = exports.GET_COLLECT = exports.PutCollect = exports.PUT_COLLECT = exports.ModelCollect = exports.MODEL_COLLECT = exports.EmptyCollect = exports.EMPTY_COLLECT = exports.DeleteCollect = exports.DELETE_COLLECT = exports.RemoveCollect = exports.REMOVE_COLLECT = exports.CreateCollect = exports.CREATE_COLLECT = exports.WriteCollect = exports.WRITE_COLLECT = exports.ReadCollect = exports.READ_COLLECT = exports.FetchCollect = exports.FETCH_COLLECT = exports.UpdateCollect = exports.UPDATE_COLLECT = exports.InitCollect = exports.INIT_COLLECT = void 0;
@@ -39220,7 +39427,7 @@ class GetCollect {
 }
 exports.GetCollect = GetCollect;
 
-},{}],68:[function(require,module,exports){
+},{}],74:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCollect = exports.putCollect = exports.modelCollect = exports.removeCollect = exports.deleteCollect = exports.fetchCollect = exports.emptyCollect = exports.createCollect = exports.writeCollect = exports.readCollect = exports.updateCollect = exports.initCollect = void 0;
@@ -39249,7 +39456,7 @@ Object.defineProperty(exports, "putCollect", { enumerable: true, get: function (
 var collect_buzz_12 = require("./buz/collect.buzz");
 Object.defineProperty(exports, "getCollect", { enumerable: true, get: function () { return collect_buzz_12.getCollect; } });
 
-},{"./buz/collect.buzz":66}],69:[function(require,module,exports){
+},{"./buz/collect.buzz":72}],75:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CollectModel = void 0;
@@ -39261,7 +39468,7 @@ class CollectModel {
 }
 exports.CollectModel = CollectModel;
 
-},{}],70:[function(require,module,exports){
+},{}],76:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reducer = void 0;
@@ -39301,7 +39508,7 @@ function reducer(model = new collect_model_1.CollectModel(), act, state) {
 }
 exports.reducer = reducer;
 
-},{"./collect.action":67,"./collect.buzzer":68,"./collect.model":69,"clone-deep":4}],71:[function(require,module,exports){
+},{"./collect.action":73,"./collect.buzzer":74,"./collect.model":75,"clone-deep":4}],77:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -39325,13 +39532,14 @@ CollectUnit = __decorate([
 ], CollectUnit);
 exports.default = CollectUnit;
 
-},{"../99.core/state":90,"typescript-ioc":28}],72:[function(require,module,exports){
+},{"../99.core/state":96,"typescript-ioc":28}],78:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createMenu = exports.closeMenu = exports.testMenu = exports.updateMenu = exports.initMenu = void 0;
 const ActMnu = require("../menu.action");
 const ActSpc = require("../../00.space.unit/space.action");
 const ActFoc = require("../../01.focus.unit/focus.action");
+const ActPvt = require("../../96.pivot.unit/pivot.action");
 const ActTrm = require("../../act/terminal.action");
 var bit, lst, dex, idx, dat;
 const initMenu = async (cpy, bal, ste) => {
@@ -39348,14 +39556,14 @@ const updateMenu = async (cpy, bal, ste) => {
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "-----------" });
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "Space PIVOT V0" });
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "-----------" });
-    var lst = [ActSpc.CLOUD_SPACE, ActSpc.UPDATE_SPACE, ActSpc.OPEN_SPACE, ActSpc.EDIT_SPACE, ActSpc.MERGE_SPACE, ActMnu.FOCUS_MENU, ActMnu.HEXMAP_MENU, ActMnu.YIELD_MENU, ActMnu.RENDER_MENU];
+    var lst = [ActPvt.CLOUD_PIVOT, ActPvt.UPDATE_PIVOT, ActPvt.OPEN_PIVOT, ActPvt.EDIT_PIVOT, ActSpc.MERGE_SPACE, ActMnu.FOCUS_MENU, ActMnu.HEXMAP_MENU, ActMnu.YIELD_MENU, ActMnu.RENDER_MENU];
     lst.push(ActFoc.MODEL_FOCUS);
     bit = await ste.bus(ActTrm.UPDATE_TERMINAL, { lst });
     bit = bit.trmBit;
     var idx = lst[bit.val];
     switch (idx) {
-        case ActSpc.CLOUD_SPACE:
-            bit = await ste.hunt(ActSpc.CLOUD_SPACE, {});
+        case ActPvt.CLOUD_PIVOT:
+            bit = await ste.hunt(ActPvt.CLOUD_PIVOT, {});
             break;
         case ActMnu.YIELD_MENU:
             bit = await ste.hunt(ActMnu.YIELD_MENU, {});
@@ -39371,13 +39579,13 @@ const updateMenu = async (cpy, bal, ste) => {
         case ActMnu.HEXMAP_MENU:
             bit = await ste.hunt(ActMnu.HEXMAP_MENU, {});
             break;
-        case ActSpc.EDIT_SPACE:
-            bit = await ste.hunt(ActSpc.EDIT_SPACE, {});
+        case ActPvt.EDIT_PIVOT:
+            bit = await ste.hunt(ActPvt.EDIT_PIVOT, {});
             bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "PATCHING...", bit: 'local' });
             bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "-----------", bit: "local" });
             lst = [ActSpc.PATCH_SPACE];
             bit = await ste.bus(ActTrm.UPDATE_TERMINAL, { lst });
-            bit = await ste.hunt(ActSpc.PATCH_SPACE, {});
+            bit = await ste.hunt(ActPvt.PATCH_PIVOT, {});
             break;
         case ActMnu.RENDER_MENU:
             bit = await ste.hunt(ActSpc.READY_SPACE, { src: ActMnu.RENDER_MENU });
@@ -39385,8 +39593,8 @@ const updateMenu = async (cpy, bal, ste) => {
             var loc = './vrt.vew.bat';
             bit = await open(loc);
             break;
-        case ActSpc.UPDATE_SPACE:
-            bit = await ste.hunt(ActSpc.UPDATE_SPACE, {});
+        case ActPvt.UPDATE_PIVOT:
+            bit = await ste.hunt(ActPvt.UPDATE_PIVOT, {});
             break;
         case ActSpc.MERGE_SPACE:
             bit = await ste.hunt(ActSpc.MERGE_SPACE, {});
@@ -39396,8 +39604,8 @@ const updateMenu = async (cpy, bal, ste) => {
                 bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "---" + a, val: 2, bit: "local" });
             });
             break;
-        case ActSpc.OPEN_SPACE:
-            bit = await ste.hunt(ActSpc.OPEN_SPACE, {});
+        case ActPvt.OPEN_PIVOT:
+            bit = await ste.hunt(ActPvt.OPEN_PIVOT, {});
             break;
         default:
             bit = await ste.bus(ActTrm.CLOSE_TERMINAL, {});
@@ -39423,7 +39631,7 @@ const createMenu = (cpy, bal, ste) => {
 exports.createMenu = createMenu;
 var patch = (ste, type, bale) => ste.dispatch({ type, bale });
 
-},{"../../00.space.unit/space.action":31,"../../01.focus.unit/focus.action":46,"../../act/terminal.action":94,"../menu.action":79,"open":undefined}],73:[function(require,module,exports){
+},{"../../00.space.unit/space.action":31,"../../01.focus.unit/focus.action":46,"../../96.pivot.unit/pivot.action":67,"../../act/terminal.action":100,"../menu.action":85,"open":undefined}],79:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createHexmapMenu = void 0;
@@ -39536,7 +39744,7 @@ const createHexmapMenu = async (cpy, bal, ste) => {
 exports.createHexmapMenu = createHexmapMenu;
 const SHAPE = require("../../val/shape");
 
-},{"../../03.hexmap.unit/hexmap.action":61,"../../act/disk.action":92,"../../act/terminal.action":94,"../../val/shape":99,"../menu.action":79}],74:[function(require,module,exports){
+},{"../../03.hexmap.unit/hexmap.action":61,"../../act/disk.action":98,"../../act/terminal.action":100,"../../val/shape":105,"../menu.action":85}],80:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.focusMenu = void 0;
@@ -39726,7 +39934,7 @@ const focusMenu = async (cpy, bal, ste) => {
 exports.focusMenu = focusMenu;
 var patch = (ste, type, bale) => ste.dispatch({ type, bale });
 
-},{"../../01.focus.unit/focus.action":46,"../../03.hexmap.unit/hexmap.action":61,"../../act/terminal.action":94,"../menu.action":79}],75:[function(require,module,exports){
+},{"../../01.focus.unit/focus.action":46,"../../03.hexmap.unit/hexmap.action":61,"../../act/terminal.action":100,"../menu.action":85}],81:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.focusPlayMenu = void 0;
@@ -39746,7 +39954,7 @@ const focusPlayMenu = async (cpy, bal, ste) => {
 exports.focusPlayMenu = focusPlayMenu;
 var patch = (ste, type, bale) => ste.dispatch({ type, bale });
 
-},{"../../act/terminal.action":94,"../menu.action":79}],76:[function(require,module,exports){
+},{"../../act/terminal.action":100,"../menu.action":85}],82:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.hexmapMenu = void 0;
@@ -39904,7 +40112,7 @@ const hexmapMenu = async (cpy, bal, ste) => {
 exports.hexmapMenu = hexmapMenu;
 const SHAPE = require("../../val/shape");
 
-},{"../../01.focus.unit/focus.action":46,"../../02.geojson.unit/geojson.action":52,"../../03.hexmap.unit/hexmap.action":61,"../../act/disk.action":92,"../../act/terminal.action":94,"../../val/shape":99,"../menu.action":79}],77:[function(require,module,exports){
+},{"../../01.focus.unit/focus.action":46,"../../02.geojson.unit/geojson.action":52,"../../03.hexmap.unit/hexmap.action":61,"../../act/disk.action":98,"../../act/terminal.action":100,"../../val/shape":105,"../menu.action":85}],83:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.renderMenu = void 0;
@@ -39926,7 +40134,7 @@ const renderMenu = async (cpy, bal, ste) => {
 exports.renderMenu = renderMenu;
 var patch = (ste, type, bale) => ste.dispatch({ type, bale });
 
-},{"../../act/hexagon.action":93,"../../act/terminal.action":94,"../../act/visage.action":95}],78:[function(require,module,exports){
+},{"../../act/hexagon.action":99,"../../act/terminal.action":100,"../../act/visage.action":101}],84:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.yieldMenu = void 0;
@@ -39956,7 +40164,7 @@ exports.yieldMenu = yieldMenu;
 var patch = (ste, type, bale) => ste.dispatch({ type, bale });
 const SHAPE = require("../../val/shape");
 
-},{"../../01.focus.unit/focus.action":46,"../../03.hexmap.unit/hexmap.action":61,"../../act/terminal.action":94,"../../val/shape":99}],79:[function(require,module,exports){
+},{"../../01.focus.unit/focus.action":46,"../../03.hexmap.unit/hexmap.action":61,"../../act/terminal.action":100,"../../val/shape":105}],85:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.YieldMenu = exports.YIELD_MENU = exports.RenderMenu = exports.RENDER_MENU = exports.CreateHexmapMenu = exports.CREATE_HEXMAP_MENU = exports.HexmapMenu = exports.HEXMAP_MENU = exports.CreateMenu = exports.CREATE_MENU = exports.FocusPlayMenu = exports.FOCUS_PLAY_MENU = exports.FocusMenu = exports.FOCUS_MENU = exports.TimeMenu = exports.TIME_MENU = exports.CloseMenu = exports.CLOSE_MENU = exports.TestMenu = exports.TEST_MENU = exports.UpdateMenu = exports.UPDATE_MENU = exports.InitMenu = exports.INIT_MENU = void 0;
@@ -40057,7 +40265,7 @@ class YieldMenu {
 }
 exports.YieldMenu = YieldMenu;
 
-},{}],80:[function(require,module,exports){
+},{}],86:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.renderMenu = exports.createHexmapMenu = exports.hexmapMenu = exports.yieldMenu = exports.createMenu = exports.focusPlayMenu = exports.focusMenu = exports.closeMenu = exports.testMenu = exports.updateMenu = exports.initMenu = void 0;
@@ -40084,7 +40292,7 @@ Object.defineProperty(exports, "createHexmapMenu", { enumerable: true, get: func
 var render_menu_buzz_1 = require("./buz/render-menu.buzz");
 Object.defineProperty(exports, "renderMenu", { enumerable: true, get: function () { return render_menu_buzz_1.renderMenu; } });
 
-},{"./buz/00.menu.buzz":72,"./buz/create-hexmap-menu.buzz":73,"./buz/focus-menu.buzz":74,"./buz/focus-play-menu.buzz":75,"./buz/hexmap-menu.buzz":76,"./buz/render-menu.buzz":77,"./buz/yield-menu.buzz":78}],81:[function(require,module,exports){
+},{"./buz/00.menu.buzz":78,"./buz/create-hexmap-menu.buzz":79,"./buz/focus-menu.buzz":80,"./buz/focus-play-menu.buzz":81,"./buz/hexmap-menu.buzz":82,"./buz/render-menu.buzz":83,"./buz/yield-menu.buzz":84}],87:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MenuModel = void 0;
@@ -40099,7 +40307,7 @@ class MenuModel {
 }
 exports.MenuModel = MenuModel;
 
-},{}],82:[function(require,module,exports){
+},{}],88:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reducer = void 0;
@@ -40137,7 +40345,7 @@ function reducer(model = new menu_model_1.MenuModel(), act, state) {
 }
 exports.reducer = reducer;
 
-},{"./menu.action":79,"./menu.buzzer":80,"./menu.model":81,"clone-deep":4}],83:[function(require,module,exports){
+},{"./menu.action":85,"./menu.buzzer":86,"./menu.model":87,"clone-deep":4}],89:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -40161,7 +40369,7 @@ MenuUnit = __decorate([
 ], MenuUnit);
 exports.default = MenuUnit;
 
-},{"../99.core/state":90,"typescript-ioc":28}],84:[function(require,module,exports){
+},{"../99.core/state":96,"typescript-ioc":28}],90:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateBus = exports.CREATE_BUS = exports.UpdateBus = exports.UPDATE_BUS = exports.MessageBus = exports.MESSAGE_BUS = exports.ConnectBus = exports.CONNECT_BUS = exports.OpenBus = exports.OPEN_BUS = exports.InitBus = exports.INIT_BUS = void 0;
@@ -40215,7 +40423,7 @@ class CreateBus {
 }
 exports.CreateBus = CreateBus;
 
-},{}],85:[function(require,module,exports){
+},{}],91:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createBus = exports.messageBus = exports.connectBus = exports.updateBus = exports.openBus = exports.initBus = void 0;
@@ -40232,7 +40440,7 @@ Object.defineProperty(exports, "messageBus", { enumerable: true, get: function (
 var bus_buzz_6 = require("./buz/bus.buzz");
 Object.defineProperty(exports, "createBus", { enumerable: true, get: function () { return bus_buzz_6.createBus; } });
 
-},{"./buz/bus.buzz":89}],86:[function(require,module,exports){
+},{"./buz/bus.buzz":95}],92:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BusModel = void 0;
@@ -40245,7 +40453,7 @@ class BusModel {
 }
 exports.BusModel = BusModel;
 
-},{}],87:[function(require,module,exports){
+},{}],93:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reducer = void 0;
@@ -40273,7 +40481,7 @@ function reducer(model = new bus_model_1.BusModel(), act, state) {
 }
 exports.reducer = reducer;
 
-},{"./bus.action":84,"./bus.buzzer":85,"./bus.model":86,"clone-deep":4}],88:[function(require,module,exports){
+},{"./bus.action":90,"./bus.buzzer":91,"./bus.model":92,"clone-deep":4}],94:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -40297,7 +40505,7 @@ BusUnit = __decorate([
 ], BusUnit);
 exports.default = BusUnit;
 
-},{"../99.core/state":90,"typescript-ioc":28}],89:[function(require,module,exports){
+},{"../99.core/state":96,"typescript-ioc":28}],95:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateBus = exports.messageBus = exports.connectBus = exports.openBus = exports.createBus = exports.initBus = void 0;
@@ -40473,7 +40681,7 @@ exports.updateBus = updateBus;
 var patch = (ste, type, bale) => ste.dispatch({ type, bale });
 const clone = require("clone-deep");
 
-},{"../../97.collect.unit/collect.action":67,"../../98.menu.unit/menu.action":79,"../../99.bus.unit/bus.action":84,"clone-deep":4}],90:[function(require,module,exports){
+},{"../../97.collect.unit/collect.action":73,"../../98.menu.unit/menu.action":85,"../../99.bus.unit/bus.action":90,"clone-deep":4}],96:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const rx_lite_1 = require("rx-lite");
@@ -40508,7 +40716,7 @@ class State extends rx_lite_1.BehaviorSubject {
 }
 exports.default = State;
 
-},{"../BEE":91,"rx-lite":15}],91:[function(require,module,exports){
+},{"../BEE":97,"rx-lite":15}],97:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reducer = exports.list = void 0;
@@ -40516,6 +40724,7 @@ const space_unit_1 = require("./00.space.unit/space.unit");
 const focus_unit_1 = require("./01.focus.unit/focus.unit");
 const geojson_unit_1 = require("./02.geojson.unit/geojson.unit");
 const hexmap_unit_1 = require("./03.hexmap.unit/hexmap.unit");
+const pivot_unit_1 = require("./96.pivot.unit/pivot.unit");
 const collect_unit_1 = require("./97.collect.unit/collect.unit");
 const menu_unit_1 = require("./98.menu.unit/menu.unit");
 const bus_unit_1 = require("./99.bus.unit/bus.unit");
@@ -40523,14 +40732,16 @@ const space_model_1 = require("./00.space.unit/space.model");
 const focus_model_1 = require("./01.focus.unit/focus.model");
 const geojson_model_1 = require("./02.geojson.unit/geojson.model");
 const hexmap_model_1 = require("./03.hexmap.unit/hexmap.model");
+const pivot_model_1 = require("./96.pivot.unit/pivot.model");
 const collect_model_1 = require("./97.collect.unit/collect.model");
 const menu_model_1 = require("./98.menu.unit/menu.model");
 const bus_model_1 = require("./99.bus.unit/bus.model");
-exports.list = [space_unit_1.default, focus_unit_1.default, geojson_unit_1.default, hexmap_unit_1.default, collect_unit_1.default, menu_unit_1.default, bus_unit_1.default];
+exports.list = [space_unit_1.default, focus_unit_1.default, geojson_unit_1.default, hexmap_unit_1.default, pivot_unit_1.default, collect_unit_1.default, menu_unit_1.default, bus_unit_1.default];
 const reduceFromSpace = require("./00.space.unit/space.reduce");
 const reduceFromFocus = require("./01.focus.unit/focus.reduce");
 const reduceFromGeojson = require("./02.geojson.unit/geojson.reduce");
 const reduceFromHexmap = require("./03.hexmap.unit/hexmap.reduce");
+const reduceFromPivot = require("./96.pivot.unit/pivot.reduce");
 const reduceFromCollect = require("./97.collect.unit/collect.reduce");
 const reduceFromMenu = require("./98.menu.unit/menu.reduce");
 const reduceFromBus = require("./99.bus.unit/bus.reduce");
@@ -40539,6 +40750,7 @@ exports.reducer = {
     focus: reduceFromFocus.reducer,
     geojson: reduceFromGeojson.reducer,
     hexmap: reduceFromHexmap.reducer,
+    pivot: reduceFromPivot.reducer,
     collect: reduceFromCollect.reducer,
     menu: reduceFromMenu.reducer,
     bus: reduceFromBus.reducer,
@@ -40549,6 +40761,7 @@ class UnitData {
         this.focus = new focus_model_1.FocusModel();
         this.geojson = new geojson_model_1.GeojsonModel();
         this.hexmap = new hexmap_model_1.HexmapModel();
+        this.pivot = new pivot_model_1.PivotModel();
         this.collect = new collect_model_1.CollectModel();
         this.menu = new menu_model_1.MenuModel();
         this.bus = new bus_model_1.BusModel();
@@ -40556,7 +40769,7 @@ class UnitData {
 }
 exports.default = UnitData;
 
-},{"./00.space.unit/space.model":33,"./00.space.unit/space.reduce":34,"./00.space.unit/space.unit":35,"./01.focus.unit/focus.model":48,"./01.focus.unit/focus.reduce":49,"./01.focus.unit/focus.unit":50,"./02.geojson.unit/geojson.model":54,"./02.geojson.unit/geojson.reduce":55,"./02.geojson.unit/geojson.unit":56,"./03.hexmap.unit/hexmap.model":63,"./03.hexmap.unit/hexmap.reduce":64,"./03.hexmap.unit/hexmap.unit":65,"./97.collect.unit/collect.model":69,"./97.collect.unit/collect.reduce":70,"./97.collect.unit/collect.unit":71,"./98.menu.unit/menu.model":81,"./98.menu.unit/menu.reduce":82,"./98.menu.unit/menu.unit":83,"./99.bus.unit/bus.model":86,"./99.bus.unit/bus.reduce":87,"./99.bus.unit/bus.unit":88}],92:[function(require,module,exports){
+},{"./00.space.unit/space.model":33,"./00.space.unit/space.reduce":34,"./00.space.unit/space.unit":35,"./01.focus.unit/focus.model":48,"./01.focus.unit/focus.reduce":49,"./01.focus.unit/focus.unit":50,"./02.geojson.unit/geojson.model":54,"./02.geojson.unit/geojson.reduce":55,"./02.geojson.unit/geojson.unit":56,"./03.hexmap.unit/hexmap.model":63,"./03.hexmap.unit/hexmap.reduce":64,"./03.hexmap.unit/hexmap.unit":65,"./96.pivot.unit/pivot.model":69,"./96.pivot.unit/pivot.reduce":70,"./96.pivot.unit/pivot.unit":71,"./97.collect.unit/collect.model":75,"./97.collect.unit/collect.reduce":76,"./97.collect.unit/collect.unit":77,"./98.menu.unit/menu.model":87,"./98.menu.unit/menu.reduce":88,"./98.menu.unit/menu.unit":89,"./99.bus.unit/bus.model":92,"./99.bus.unit/bus.reduce":93,"./99.bus.unit/bus.unit":94}],98:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DELETE_DISK = exports.ENSURE_DISK = exports.TRASH_DISK = exports.BATCH_DISK = exports.FRAME_DISK = exports.COPY_DISK = exports.LOAD_LIST_DISK = exports.INDEX_DISK = exports.WRITE_DISK = exports.READ_DISK = exports.UPDATE_DISK = exports.INIT_DISK = void 0;
@@ -40573,7 +40786,7 @@ exports.TRASH_DISK = '[Trash action] Trash Disk';
 exports.ENSURE_DISK = '[Ensure action] Ensure Disk';
 exports.DELETE_DISK = '[Delete action] Delete Disk';
 
-},{}],93:[function(require,module,exports){
+},{}],99:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CREATE_HEXAGON = exports.WRITE_HEXAGON = exports.READ_HEXAGON = exports.UPDATE_HEXAGON = exports.INIT_HEXAGON = void 0;
@@ -40583,7 +40796,7 @@ exports.READ_HEXAGON = "[Read action] Read Hexagon";
 exports.WRITE_HEXAGON = "[Write action] Write Hexagon";
 exports.CREATE_HEXAGON = "[Create action] Create Hexagon";
 
-},{}],94:[function(require,module,exports){
+},{}],100:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ADD_PORT = exports.CONTENT_TERMINAL = exports.ROOT_TERMINAL = exports.CLOSE_TERMINAL = exports.TABLE_TERMINAL = exports.INPUT_TERMINAL = exports.CLEAR_TERMINAL = exports.UPDATE_TERMINAL = exports.WRITE_TERMINAL = exports.FOCUS_TERMINAL = exports.OPEN_TERMINAL = exports.INIT_TERMINAL = void 0;
@@ -40601,7 +40814,7 @@ exports.ROOT_TERMINAL = "[Terminal action] Root Terminal";
 exports.CONTENT_TERMINAL = "[Terminal action] Content Terminal";
 exports.ADD_PORT = "[Terminal action] Add Port";
 
-},{}],95:[function(require,module,exports){
+},{}],101:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RENDER_VISAGE = exports.SIZE_VISAGE = exports.CREATE_VISAGE = exports.WRITE_VISAGE = exports.READ_VISAGE = exports.FULLSCREEN_VISAGE = exports.UPDATE_VISAGE = exports.INIT_VISAGE = void 0;
@@ -40614,7 +40827,7 @@ exports.CREATE_VISAGE = "[Create action] Create Visage";
 exports.SIZE_VISAGE = "[Size action] Size Visage";
 exports.RENDER_VISAGE = "[Render action] Render Visage";
 
-},{}],96:[function(require,module,exports){
+},{}],102:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.VALUE_VURT = exports.BUNDLE_VURT = exports.CONTAINS_VURT = exports.LIST_UNIT_VURT = exports.LIST_PIVOT_VURT = exports.COUNT_VURT = exports.UNIT_VURT = exports.REPLACE_VURT = exports.UPDATE_VURT = exports.FETCH_VURT = exports.TEST_CLOUD_VURT = exports.DELAY_VURT = exports.INIT_VURT = void 0;
@@ -40632,7 +40845,7 @@ exports.CONTAINS_VURT = "[Contains action] Contains Vurt";
 exports.BUNDLE_VURT = "[Bundle action] Bundle Vurt";
 exports.VALUE_VURT = "[Value action] Value Vurt";
 
-},{}],97:[function(require,module,exports){
+},{}],103:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var sim = {
@@ -40664,7 +40877,7 @@ const Import = require("./BEE");
 const state_1 = require("./99.core/state");
 module.exports = sim;
 
-},{"./99.core/state":90,"./BEE":91}],98:[function(require,module,exports){
+},{"./99.core/state":96,"./BEE":97}],104:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.WISE_NORTH_EAST = exports.WISE_NORTH = exports.WISE_NORTH_WEST = exports.WISE_WEST = exports.WISE_SOUTH_WEST = exports.WISE_SOUTH = exports.WISE_SOUTH_EAST = exports.WISE_EAST = exports.NORTH_EAST = exports.NORTH = exports.NORTH_WEST = exports.WEST = exports.SOUTH_WEST = exports.SOUTH = exports.SOUTH_EAST = exports.EAST = void 0;
@@ -40685,7 +40898,7 @@ exports.WISE_NORTH_WEST = "Wise NW";
 exports.WISE_NORTH = "Wise N";
 exports.WISE_NORTH_EAST = "Wise NE";
 
-},{}],99:[function(require,module,exports){
+},{}],105:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PARALLELOGRAM = exports.HEXAGON = exports.TRIANGLE = exports.RECTANGLE = exports.GEOJSON = void 0;
@@ -40695,7 +40908,7 @@ exports.TRIANGLE = "triangle";
 exports.HEXAGON = "hexagon";
 exports.PARALLELOGRAM = "parallelogram";
 
-},{}],100:[function(require,module,exports){
+},{}],106:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HEXMAP = exports.FOCUS = void 0;

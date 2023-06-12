@@ -21423,16 +21423,13 @@ global.TIME.ActClk = require("../dist/001.time/01.clock.unit/clock.action");
 
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../dist/001.time/00.time.unit/time.action":25,"../dist/001.time/01.clock.unit/clock.action":31,"../dist/001.time/hunt":60}],24:[function(require,module,exports){
-(function (process){(function (){
+},{"../dist/001.time/00.time.unit/time.action":25,"../dist/001.time/01.clock.unit/clock.action":31,"../dist/001.time/hunt":66}],24:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.patchTime = exports.cloudTime = exports.editTime = exports.runTime = exports.openTime = exports.updateTime = exports.initTime = void 0;
+exports.testTime = exports.patchTime = exports.cloudTime = exports.editTime = exports.runTime = exports.openTime = exports.updateTime = exports.initTime = void 0;
 const ActMnu = require("../../98.menu.unit/menu.action");
 const ActBus = require("../../99.bus.unit/bus.action");
 const ActTme = require("../time.action");
-const ActVrt = require("../../act/vurt.action");
-const ActDsk = require("../../act/disk.action");
 var bit, val, idx, dex, lst, dat;
 const initTime = async (cpy, bal, ste) => {
     if (bal.dat != null)
@@ -21450,100 +21447,22 @@ const initTime = async (cpy, bal, ste) => {
 };
 exports.initTime = initTime;
 const updateTime = (cpy, bal, ste) => {
-    const { exec } = require('child_process');
-    exec('tsc -b 001.time', async (err, stdout, stderr) => {
-        if (err) {
-            console.error(`exec error: ${err}`);
-        }
-        process.chdir('../999.vurt');
-        bit = await ste.bus(ActVrt.BUNDLE_VURT, { src: '001.time' });
-        process.chdir('../001.time');
-        bit = await ste.bus(ActDsk.READ_DISK, { src: './work/001.time.js' });
-        var time = bit.dskBit.dat;
-        bit = await ste.bus(ActDsk.WRITE_DISK, {
-            src: '../gillisse/public/jsx/001.time.js',
-            dat: time,
-        });
-        bit = await ste.bus(ActDsk.READ_DISK, { src: './index.html' });
-        var html = bit.dskBit.dat;
-        bit = await ste.bus(ActDsk.READ_DISK, { src: './index.js' });
-        var index = bit.dskBit.dat;
-        bit = await ste.bus(ActDsk.WRITE_DISK, {
-            src: '../gillisse/public/jsx/index.js',
-            dat: index,
-        });
-        bit = await ste.bus(ActDsk.WRITE_DISK, {
-            src: '../gillisse/index.html',
-            dat: html,
-        });
-        setTimeout(() => {
-            if (bal.slv != null)
-                bal.slv({ tmeBit: { idx: 'update-time' } });
-        }, 3);
-    });
     return cpy;
 };
 exports.updateTime = updateTime;
 const openTime = async (cpy, bal, ste) => {
-    bit = await ste.bus(ActDsk.COPY_DISK, {
-        src: './source',
-        idx: '../gillisse/vue',
-    });
-    bit = await ste.hunt(ActTme.RUN_TIME, {});
-    const open = require('open');
-    var loc = './vrt.opn.bat';
-    bit = await open(loc);
-    setTimeout(() => {
-        if (bal.slv != null)
-            bal.slv({ tmeBit: { idx: 'open-time' } });
-    }, 33);
     return cpy;
 };
 exports.openTime = openTime;
 const runTime = async (cpy, bal, ste) => {
-    const open = require('open');
-    var loc = './vrt.gil.bat';
-    bit = await open(loc);
-    setTimeout(() => {
-        if (bal.slv != null)
-            bal.slv({ tmeBit: { idx: 'run-time' } });
-    });
     return cpy;
 };
 exports.runTime = runTime;
 const editTime = (cpy, bal, ste) => {
-    const { exec } = require('child_process');
-    process.chdir('../../studio/');
-    exec('start Code.exe ../packages/gillisse', async (err, stdout, stderr) => {
-        if (err) {
-            console.error(`exec error: ${err}`);
-        }
-        process.chdir('../packages/001.time');
-        if (bal.slv != null)
-            bal.slv({ tmeBit: { idx: 'edit-time', dat: {} } });
-    });
     return cpy;
 };
 exports.editTime = editTime;
 const cloudTime = async (cpy, bal, ste) => {
-    bit = await ste.bus(ActDsk.READ_DISK, { src: './work/001.time.js' });
-    var time = bit.dskBit.dat;
-    bit = await ste.bus(ActDsk.WRITE_DISK, { src: './cloud/001.time.js', dat: time });
-    bit = await ste.bus(ActDsk.COPY_DISK, { src: './cloud/', idx: '../../agent/001.time/' });
-    const { exec } = require('child_process');
-    process.chdir("../../agent/001.time");
-    exec('vrt.pub.bat', async (err, stdout, stderr) => {
-        if (err) {
-            console.error(`exec error: ${err}`);
-        }
-        //then open an address
-        var open = require('open');
-        open('https://001-time.beeing.workers.dev/');
-        process.chdir("../../packages/001.time");
-        if (bal.slv != null)
-            bal.slv({ spcBit: { idx: "cloud-time" } });
-    });
-    return cpy;
 };
 exports.cloudTime = cloudTime;
 const patchTime = (cpy, bal, ste) => {
@@ -21551,13 +21470,18 @@ const patchTime = (cpy, bal, ste) => {
     return cpy;
 };
 exports.patchTime = patchTime;
+const testTime = (cpy, bal, ste) => {
+    if (bal.slv != null)
+        bal.slv({ tmeBit: { idx: 'test-time', val: 0 } });
+    return cpy;
+};
+exports.testTime = testTime;
 var patch = (ste, type, bale) => ste.dispatch({ type, bale });
 
-}).call(this)}).call(this,require('_process'))
-},{"../../98.menu.unit/menu.action":44,"../../99.bus.unit/bus.action":49,"../../act/disk.action":57,"../../act/vurt.action":59,"../time.action":25,"_process":11,"child_process":undefined,"open":undefined}],25:[function(require,module,exports){
+},{"../../98.menu.unit/menu.action":50,"../../99.bus.unit/bus.action":55,"../time.action":25}],25:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CloudTime = exports.CLOUD_TIME = exports.PatchTime = exports.PATCH_TIME = exports.EditTime = exports.EDIT_TIME = exports.RunTime = exports.RUN_TIME = exports.OpenTime = exports.OPEN_TIME = exports.UpdateTime = exports.UPDATE_TIME = exports.InitTime = exports.INIT_TIME = void 0;
+exports.TestTime = exports.TEST_TIME = exports.CloudTime = exports.CLOUD_TIME = exports.PatchTime = exports.PATCH_TIME = exports.EditTime = exports.EDIT_TIME = exports.RunTime = exports.RUN_TIME = exports.OpenTime = exports.OPEN_TIME = exports.UpdateTime = exports.UPDATE_TIME = exports.InitTime = exports.INIT_TIME = void 0;
 exports.INIT_TIME = "[Time action] Init Time";
 class InitTime {
     constructor(bale) {
@@ -21614,11 +21538,19 @@ class CloudTime {
     }
 }
 exports.CloudTime = CloudTime;
+exports.TEST_TIME = "[Test action] Test Time";
+class TestTime {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.TEST_TIME;
+    }
+}
+exports.TestTime = TestTime;
 
 },{}],26:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.cloudTime = exports.patchTime = exports.editTime = exports.runTime = exports.openTime = exports.updateTime = exports.initTime = void 0;
+exports.testTime = exports.cloudTime = exports.patchTime = exports.editTime = exports.runTime = exports.openTime = exports.updateTime = exports.initTime = void 0;
 var time_buzz_1 = require("./buz/time.buzz");
 Object.defineProperty(exports, "initTime", { enumerable: true, get: function () { return time_buzz_1.initTime; } });
 var time_buzz_2 = require("./buz/time.buzz");
@@ -21633,6 +21565,8 @@ var time_buzz_6 = require("./buz/time.buzz");
 Object.defineProperty(exports, "patchTime", { enumerable: true, get: function () { return time_buzz_6.patchTime; } });
 var time_buzz_7 = require("./buz/time.buzz");
 Object.defineProperty(exports, "cloudTime", { enumerable: true, get: function () { return time_buzz_7.cloudTime; } });
+var time_buzz_8 = require("./buz/time.buzz");
+Object.defineProperty(exports, "testTime", { enumerable: true, get: function () { return time_buzz_8.testTime; } });
 
 },{"./buz/time.buzz":24}],27:[function(require,module,exports){
 "use strict";
@@ -21669,6 +21603,8 @@ function reducer(model = new time_model_1.TimeModel(), act, state) {
             return Buzz.patchTime(clone(model), act.bale, state);
         case Act.CLOUD_TIME:
             return Buzz.cloudTime(clone(model), act.bale, state);
+        case Act.TEST_TIME:
+            return Buzz.testTime(clone(model), act.bale, state);
         default:
             return model;
     }
@@ -21699,7 +21635,7 @@ TimeUnit = __decorate([
 ], TimeUnit);
 exports.default = TimeUnit;
 
-},{"../99.core/state":55,"typescript-ioc":22}],30:[function(require,module,exports){
+},{"../99.core/state":61,"typescript-ioc":22}],30:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.blockClock = exports.pushClock = exports.deleteClock = exports.createClock = exports.removeClock = exports.writeClock = exports.readClock = exports.updateClock = exports.initClock = void 0;
@@ -21821,7 +21757,8 @@ const blockClock = async (cpy, bal, ste) => {
         }
         val = cpy.tick;
         dex = cpy.slot;
-        return bal.slv({ clkBit: { idx: "block-clock", val, dex } });
+        dat = JSON.stringify(rsp);
+        return bal.slv({ clkBit: { idx: "block-clock", val, dex, dat } });
     })
         .catch(err => {
         val = cpy.tick;
@@ -21834,7 +21771,7 @@ const blockClock = async (cpy, bal, ste) => {
 exports.blockClock = blockClock;
 const luxon_1 = require("luxon");
 
-},{"../../01.clock.unit/clock.action":31,"../../97.collect.unit/collect.action":37,"luxon":10}],31:[function(require,module,exports){
+},{"../../01.clock.unit/clock.action":31,"../../97.collect.unit/collect.action":43,"luxon":10}],31:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BlockClock = exports.BLOCK_CLOCK = exports.DeleteClock = exports.DELETE_CLOCK = exports.CreateClock = exports.CREATE_CLOCK = exports.RemoveClock = exports.REMOVE_CLOCK = exports.WriteClock = exports.WRITE_CLOCK = exports.ReadClock = exports.READ_CLOCK = exports.UpdateClock = exports.UPDATE_CLOCK = exports.InitClock = exports.INIT_CLOCK = void 0;
@@ -21996,7 +21933,282 @@ ClockUnit = __decorate([
 ], ClockUnit);
 exports.default = ClockUnit;
 
-},{"../99.core/state":55,"typescript-ioc":22}],36:[function(require,module,exports){
+},{"../99.core/state":61,"typescript-ioc":22}],36:[function(require,module,exports){
+(function (process){(function (){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.patchPivot = exports.cloudPivot = exports.editPivot = exports.runPivot = exports.openPivot = exports.updatePivot = exports.initPivot = void 0;
+const ActMnu = require("../../98.menu.unit/menu.action");
+const ActBus = require("../../99.bus.unit/bus.action");
+const ActTme = require("../../00.time.unit/time.action");
+const ActVrt = require("../../act/vurt.action");
+const ActDsk = require("../../act/disk.action");
+var bit, val, idx, dex, lst, dat;
+const initPivot = async (cpy, bal, ste) => {
+    if (bal.dat != null)
+        bit = await ste.hunt(ActBus.INIT_BUS, { idx: cpy.idx, lst: [ActTme], dat: bal.dat, src: bal.src });
+    if (bal.val == 1)
+        patch(ste, ActMnu.INIT_MENU, bal);
+    if (bal.slv != null)
+        bal.slv({ intBit: { idx: "init-machine" } });
+    return cpy;
+};
+exports.initPivot = initPivot;
+const updatePivot = (cpy, bal, ste) => {
+    const { exec } = require('child_process');
+    exec('tsc -b 001.time', async (err, stdout, stderr) => {
+        if (err) {
+            console.error(`exec error: ${err}`);
+        }
+        process.chdir('../999.vurt');
+        bit = await ste.bus(ActVrt.BUNDLE_VURT, { src: '001.time' });
+        process.chdir('../001.time');
+        bit = await ste.bus(ActDsk.READ_DISK, { src: './work/001.time.js' });
+        var time = bit.dskBit.dat;
+        bit = await ste.bus(ActDsk.WRITE_DISK, {
+            src: '../gillisse/public/jsx/001.time.js',
+            dat: time,
+        });
+        bit = await ste.bus(ActDsk.READ_DISK, { src: './index.html' });
+        var html = bit.dskBit.dat;
+        bit = await ste.bus(ActDsk.READ_DISK, { src: './index.js' });
+        var index = bit.dskBit.dat;
+        bit = await ste.bus(ActDsk.WRITE_DISK, {
+            src: '../gillisse/public/jsx/index.js',
+            dat: index,
+        });
+        bit = await ste.bus(ActDsk.WRITE_DISK, {
+            src: '../gillisse/index.html',
+            dat: html,
+        });
+        setTimeout(() => {
+            if (bal.slv != null)
+                bal.slv({ tmeBit: { idx: 'update-time' } });
+        }, 3);
+    });
+    return cpy;
+};
+exports.updatePivot = updatePivot;
+const openPivot = async (cpy, bal, ste) => {
+    bit = await ste.bus(ActDsk.COPY_DISK, {
+        src: './source',
+        idx: '../gillisse/vue',
+    });
+    bit = await ste.hunt(ActTme.RUN_TIME, {});
+    const open = require('open');
+    var loc = './vrt.opn.bat';
+    bit = await open(loc);
+    setTimeout(() => {
+        if (bal.slv != null)
+            bal.slv({ tmeBit: { idx: 'open-time' } });
+    }, 33);
+    //});
+    return cpy;
+};
+exports.openPivot = openPivot;
+const runPivot = async (cpy, bal, ste) => {
+    const open = require('open');
+    var loc = './vrt.gil.bat';
+    bit = await open(loc);
+    setTimeout(() => {
+        if (bal.slv != null)
+            bal.slv({ tmeBit: { idx: 'run-time' } });
+    });
+    return cpy;
+};
+exports.runPivot = runPivot;
+const editPivot = (cpy, bal, ste) => {
+    const { exec } = require('child_process');
+    process.chdir('../../studio/');
+    exec('start Code.exe ../packages/gillisse', async (err, stdout, stderr) => {
+        if (err) {
+            console.error(`exec error: ${err}`);
+        }
+        process.chdir('../packages/001.time');
+        if (bal.slv != null)
+            bal.slv({ tmeBit: { idx: 'edit-time', dat: {} } });
+    });
+    return cpy;
+};
+exports.editPivot = editPivot;
+const cloudPivot = async (cpy, bal, ste) => {
+    bit = await ste.bus(ActDsk.READ_DISK, { src: './work/001.time.js' });
+    var time = bit.dskBit.dat;
+    bit = await ste.bus(ActDsk.WRITE_DISK, { src: './cloud/001.time.js', dat: time });
+    bit = await ste.bus(ActDsk.COPY_DISK, { src: './cloud/', idx: '../../agent/001.time/' });
+    const { exec } = require('child_process');
+    process.chdir("../../agent/001.time");
+    exec('vrt.pub.bat', async (err, stdout, stderr) => {
+        if (err) {
+            console.error(`exec error: ${err}`);
+        }
+        //then open an address
+        var open = require('open');
+        open('https://001-time.beeing.workers.dev/');
+        process.chdir("../../packages/001.time");
+        if (bal.slv != null)
+            bal.slv({ spcBit: { idx: "cloud-time" } });
+    });
+    return cpy;
+};
+exports.cloudPivot = cloudPivot;
+const patchPivot = (cpy, bal, ste) => {
+    debugger;
+    return cpy;
+};
+exports.patchPivot = patchPivot;
+var patch = (ste, type, bale) => ste.dispatch({ type, bale });
+
+}).call(this)}).call(this,require('_process'))
+},{"../../00.time.unit/time.action":25,"../../98.menu.unit/menu.action":50,"../../99.bus.unit/bus.action":55,"../../act/disk.action":63,"../../act/vurt.action":65,"_process":11,"child_process":undefined,"open":undefined}],37:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.CloudPivot = exports.CLOUD_PIVOT = exports.PatchPivot = exports.PATCH_PIVOT = exports.EditPivot = exports.EDIT_PIVOT = exports.RunPivot = exports.RUN_PIVOT = exports.OpenPivot = exports.OPEN_PIVOT = exports.UpdatePivot = exports.UPDATE_PIVOT = exports.InitPivot = exports.INIT_PIVOT = void 0;
+// Pivot actions
+exports.INIT_PIVOT = "[Pivot action] Init Pivot";
+class InitPivot {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.INIT_PIVOT;
+    }
+}
+exports.InitPivot = InitPivot;
+exports.UPDATE_PIVOT = "[Pivot action] Update Pivot";
+class UpdatePivot {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.UPDATE_PIVOT;
+    }
+}
+exports.UpdatePivot = UpdatePivot;
+exports.OPEN_PIVOT = "[Pivot action] Open Pivot";
+class OpenPivot {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.OPEN_PIVOT;
+    }
+}
+exports.OpenPivot = OpenPivot;
+exports.RUN_PIVOT = "[Pivot action] Run Pivot";
+class RunPivot {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.RUN_PIVOT;
+    }
+}
+exports.RunPivot = RunPivot;
+exports.EDIT_PIVOT = "[Pivot action] Edit Pivot";
+class EditPivot {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.EDIT_PIVOT;
+    }
+}
+exports.EditPivot = EditPivot;
+exports.PATCH_PIVOT = "[Pivot action] Patch Pivot";
+class PatchPivot {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.PATCH_PIVOT;
+    }
+}
+exports.PatchPivot = PatchPivot;
+exports.CLOUD_PIVOT = "[Pivot action] Cloud Pivot";
+class CloudPivot {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.CLOUD_PIVOT;
+    }
+}
+exports.CloudPivot = CloudPivot;
+
+},{}],38:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.cloudPivot = exports.patchPivot = exports.runPivot = exports.editPivot = exports.openPivot = exports.updatePivot = exports.initPivot = void 0;
+var pivot_buzz_1 = require("./buz/pivot.buzz");
+Object.defineProperty(exports, "initPivot", { enumerable: true, get: function () { return pivot_buzz_1.initPivot; } });
+var pivot_buzz_2 = require("./buz/pivot.buzz");
+Object.defineProperty(exports, "updatePivot", { enumerable: true, get: function () { return pivot_buzz_2.updatePivot; } });
+var pivot_buzz_3 = require("./buz/pivot.buzz");
+Object.defineProperty(exports, "openPivot", { enumerable: true, get: function () { return pivot_buzz_3.openPivot; } });
+var pivot_buzz_4 = require("./buz/pivot.buzz");
+Object.defineProperty(exports, "editPivot", { enumerable: true, get: function () { return pivot_buzz_4.editPivot; } });
+var pivot_buzz_5 = require("./buz/pivot.buzz");
+Object.defineProperty(exports, "runPivot", { enumerable: true, get: function () { return pivot_buzz_5.runPivot; } });
+var pivot_buzz_6 = require("./buz/pivot.buzz");
+Object.defineProperty(exports, "patchPivot", { enumerable: true, get: function () { return pivot_buzz_6.patchPivot; } });
+var pivot_buzz_7 = require("./buz/pivot.buzz");
+Object.defineProperty(exports, "cloudPivot", { enumerable: true, get: function () { return pivot_buzz_7.cloudPivot; } });
+
+},{"./buz/pivot.buzz":36}],39:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PivotModel = void 0;
+class PivotModel {
+    constructor() {
+        this.idx = '555.machine';
+        //pivotBitList: PivotBit[] = [];
+        //pivotBits: any = {};
+    }
+}
+exports.PivotModel = PivotModel;
+
+},{}],40:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.reducer = void 0;
+const clone = require("clone-deep");
+const Act = require("./pivot.action");
+const pivot_model_1 = require("./pivot.model");
+const Buzz = require("./pivot.buzzer");
+function reducer(model = new pivot_model_1.PivotModel(), act, state) {
+    switch (act.type) {
+        case Act.OPEN_PIVOT:
+            return Buzz.openPivot(clone(model), act.bale, state);
+        case Act.RUN_PIVOT:
+            return Buzz.runPivot(clone(model), act.bale, state);
+        case Act.EDIT_PIVOT:
+            return Buzz.runPivot(clone(model), act.bale, state);
+        case Act.PATCH_PIVOT:
+            return Buzz.patchPivot(clone(model), act.bale, state);
+        case Act.UPDATE_PIVOT:
+            return Buzz.updatePivot(clone(model), act.bale, state);
+        case Act.CLOUD_PIVOT:
+            return Buzz.cloudPivot(clone(model), act.bale, state);
+        case Act.INIT_PIVOT:
+            return Buzz.initPivot(clone(model), act.bale, state);
+        default:
+            return model;
+    }
+}
+exports.reducer = reducer;
+
+},{"./pivot.action":37,"./pivot.buzzer":38,"./pivot.model":39,"clone-deep":3}],41:[function(require,module,exports){
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const typescript_ioc_1 = require("typescript-ioc");
+const state_1 = require("../99.core/state");
+let PivotUnit = class PivotUnit {
+    constructor(state) {
+    }
+};
+PivotUnit = __decorate([
+    typescript_ioc_1.Singleton,
+    __metadata("design:paramtypes", [state_1.default])
+], PivotUnit);
+exports.default = PivotUnit;
+
+},{"../99.core/state":61,"typescript-ioc":22}],42:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.emptyCollect = exports.deleteCollect = exports.modelCollect = exports.getCollect = exports.putCollect = exports.removeCollect = exports.createCollect = exports.writeCollect = exports.readCollect = exports.fetchCollect = exports.updateCollect = exports.initCollect = void 0;
@@ -22155,7 +22367,7 @@ const emptyCollect = (cpy, bal, ste) => {
 };
 exports.emptyCollect = emptyCollect;
 
-},{"../../97.collect.unit/collect.action":37}],37:[function(require,module,exports){
+},{"../../97.collect.unit/collect.action":43}],43:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GetCollect = exports.GET_COLLECT = exports.PutCollect = exports.PUT_COLLECT = exports.ModelCollect = exports.MODEL_COLLECT = exports.EmptyCollect = exports.EMPTY_COLLECT = exports.DeleteCollect = exports.DELETE_COLLECT = exports.RemoveCollect = exports.REMOVE_COLLECT = exports.CreateCollect = exports.CREATE_COLLECT = exports.WriteCollect = exports.WRITE_COLLECT = exports.ReadCollect = exports.READ_COLLECT = exports.FetchCollect = exports.FETCH_COLLECT = exports.UpdateCollect = exports.UPDATE_COLLECT = exports.InitCollect = exports.INIT_COLLECT = void 0;
@@ -22257,7 +22469,7 @@ class GetCollect {
 }
 exports.GetCollect = GetCollect;
 
-},{}],38:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCollect = exports.putCollect = exports.modelCollect = exports.removeCollect = exports.deleteCollect = exports.fetchCollect = exports.emptyCollect = exports.createCollect = exports.writeCollect = exports.readCollect = exports.updateCollect = exports.initCollect = void 0;
@@ -22286,7 +22498,7 @@ Object.defineProperty(exports, "putCollect", { enumerable: true, get: function (
 var collect_buzz_12 = require("./buz/collect.buzz");
 Object.defineProperty(exports, "getCollect", { enumerable: true, get: function () { return collect_buzz_12.getCollect; } });
 
-},{"./buz/collect.buzz":36}],39:[function(require,module,exports){
+},{"./buz/collect.buzz":42}],45:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CollectModel = void 0;
@@ -22298,7 +22510,7 @@ class CollectModel {
 }
 exports.CollectModel = CollectModel;
 
-},{}],40:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reducer = void 0;
@@ -22338,7 +22550,7 @@ function reducer(model = new collect_model_1.CollectModel(), act, state) {
 }
 exports.reducer = reducer;
 
-},{"./collect.action":37,"./collect.buzzer":38,"./collect.model":39,"clone-deep":3}],41:[function(require,module,exports){
+},{"./collect.action":43,"./collect.buzzer":44,"./collect.model":45,"clone-deep":3}],47:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -22362,12 +22574,13 @@ CollectUnit = __decorate([
 ], CollectUnit);
 exports.default = CollectUnit;
 
-},{"../99.core/state":55,"typescript-ioc":22}],42:[function(require,module,exports){
+},{"../99.core/state":61,"typescript-ioc":22}],48:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.closeMenu = exports.testMenu = exports.updateMenu = exports.initMenu = void 0;
 const ActMnu = require("../menu.action");
 const ActTme = require("../../00.time.unit/time.action");
+const ActPvt = require("../../96.pivot.unit/pivot.action");
 const ActTrm = require("../../act/terminal.action");
 var bit, lst, dex;
 const initMenu = async (cpy, bal, ste) => {
@@ -22382,7 +22595,7 @@ const updateMenu = async (cpy, bal, ste) => {
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "-----------", bit: 'local' });
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "TIME PIVOT V0", bit: 'local' });
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "-----------", bit: "local" });
-    var lst = [ActTme.CLOUD_TIME, ActTme.UPDATE_TIME, ActTme.OPEN_TIME, ActTme.EDIT_TIME, ActMnu.CLOCK_MENU];
+    var lst = [ActPvt.CLOUD_PIVOT, ActPvt.UPDATE_PIVOT, ActPvt.OPEN_PIVOT, ActPvt.EDIT_PIVOT, ActMnu.CLOCK_MENU];
     bit = await ste.bus(ActTrm.UPDATE_TERMINAL, { lst });
     bit = bit.trmBit;
     var idx = lst[bit.val];
@@ -22390,22 +22603,22 @@ const updateMenu = async (cpy, bal, ste) => {
         case ActMnu.CLOCK_MENU:
             bit = await ste.hunt(ActMnu.CLOCK_MENU, {});
             break;
-        case ActTme.CLOUD_TIME:
-            bit = await ste.hunt(ActTme.CLOUD_TIME, {});
+        case ActPvt.CLOUD_PIVOT:
+            bit = await ste.hunt(ActPvt.CLOUD_PIVOT, {});
             break;
-        case ActTme.OPEN_TIME:
-            bit = await ste.hunt(ActTme.OPEN_TIME, {});
+        case ActPvt.UPDATE_PIVOT:
+            bit = await ste.hunt(ActPvt.UPDATE_PIVOT, {});
             break;
-        case ActTme.UPDATE_TIME:
-            bit = await ste.hunt(ActTme.UPDATE_TIME, {});
+        case ActPvt.OPEN_PIVOT:
+            bit = await ste.hunt(ActPvt.OPEN_PIVOT, {});
             break;
-        case ActTme.EDIT_TIME:
+        case ActPvt.EDIT_PIVOT:
             bit = await ste.hunt(ActTme.EDIT_TIME, {});
             bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "PATCHING...", bit: 'local' });
             bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "-----------", bit: "local" });
-            lst = [ActTme.PATCH_TIME];
+            lst = [ActPvt.PATCH_PIVOT];
             bit = await ste.bus(ActTrm.UPDATE_TERMINAL, { lst });
-            bit = await ste.hunt(ActTme.PATCH_TIME, {});
+            bit = await ste.hunt(ActPvt.PATCH_PIVOT, {});
             break;
         default:
             bit = await await ste.bus(ActTrm.CLOSE_TERMINAL, {});
@@ -22426,7 +22639,7 @@ const closeMenu = async (cpy, bal, ste) => {
 exports.closeMenu = closeMenu;
 var patch = (ste, type, bale) => ste.dispatch({ type, bale });
 
-},{"../../00.time.unit/time.action":25,"../../act/terminal.action":58,"../menu.action":44}],43:[function(require,module,exports){
+},{"../../00.time.unit/time.action":25,"../../96.pivot.unit/pivot.action":37,"../../act/terminal.action":64,"../menu.action":50}],49:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.clockMenu = void 0;
@@ -22456,7 +22669,7 @@ const clockMenu = async (cpy, bal, ste) => {
 exports.clockMenu = clockMenu;
 var patch = (ste, type, bale) => ste.dispatch({ type, bale });
 
-},{"../../01.clock.unit/clock.action":31,"../../act/terminal.action":58}],44:[function(require,module,exports){
+},{"../../01.clock.unit/clock.action":31,"../../act/terminal.action":64}],50:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ClockMenu = exports.CLOCK_MENU = exports.CloseMenu = exports.CLOSE_MENU = exports.TestMenu = exports.TEST_MENU = exports.UpdateMenu = exports.UPDATE_MENU = exports.InitMenu = exports.INIT_MENU = void 0;
@@ -22501,7 +22714,7 @@ class ClockMenu {
 }
 exports.ClockMenu = ClockMenu;
 
-},{}],45:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.clockMenu = exports.closeMenu = exports.testMenu = exports.updateMenu = exports.initMenu = void 0;
@@ -22516,7 +22729,7 @@ Object.defineProperty(exports, "closeMenu", { enumerable: true, get: function ()
 var clock_menu_buzz_1 = require("./buz/clock-menu.buzz");
 Object.defineProperty(exports, "clockMenu", { enumerable: true, get: function () { return clock_menu_buzz_1.clockMenu; } });
 
-},{"./buz/00.menu.buzz":42,"./buz/clock-menu.buzz":43}],46:[function(require,module,exports){
+},{"./buz/00.menu.buzz":48,"./buz/clock-menu.buzz":49}],52:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MenuModel = void 0;
@@ -22530,7 +22743,7 @@ class MenuModel {
 }
 exports.MenuModel = MenuModel;
 
-},{}],47:[function(require,module,exports){
+},{}],53:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reducer = void 0;
@@ -22556,7 +22769,7 @@ function reducer(model = new menu_model_1.MenuModel(), act, state) {
 }
 exports.reducer = reducer;
 
-},{"./menu.action":44,"./menu.buzzer":45,"./menu.model":46,"clone-deep":3}],48:[function(require,module,exports){
+},{"./menu.action":50,"./menu.buzzer":51,"./menu.model":52,"clone-deep":3}],54:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -22580,7 +22793,7 @@ MenuUnit = __decorate([
 ], MenuUnit);
 exports.default = MenuUnit;
 
-},{"../99.core/state":55,"typescript-ioc":22}],49:[function(require,module,exports){
+},{"../99.core/state":61,"typescript-ioc":22}],55:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateBus = exports.CREATE_BUS = exports.UpdateBus = exports.UPDATE_BUS = exports.MessageBus = exports.MESSAGE_BUS = exports.ConnectBus = exports.CONNECT_BUS = exports.OpenBus = exports.OPEN_BUS = exports.InitBus = exports.INIT_BUS = void 0;
@@ -22634,7 +22847,7 @@ class CreateBus {
 }
 exports.CreateBus = CreateBus;
 
-},{}],50:[function(require,module,exports){
+},{}],56:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createBus = exports.messageBus = exports.connectBus = exports.updateBus = exports.openBus = exports.initBus = void 0;
@@ -22651,7 +22864,7 @@ Object.defineProperty(exports, "messageBus", { enumerable: true, get: function (
 var bus_buzz_6 = require("./buz/bus.buzz");
 Object.defineProperty(exports, "createBus", { enumerable: true, get: function () { return bus_buzz_6.createBus; } });
 
-},{"./buz/bus.buzz":54}],51:[function(require,module,exports){
+},{"./buz/bus.buzz":60}],57:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BusModel = void 0;
@@ -22664,7 +22877,7 @@ class BusModel {
 }
 exports.BusModel = BusModel;
 
-},{}],52:[function(require,module,exports){
+},{}],58:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reducer = void 0;
@@ -22692,7 +22905,7 @@ function reducer(model = new bus_model_1.BusModel(), act, state) {
 }
 exports.reducer = reducer;
 
-},{"./bus.action":49,"./bus.buzzer":50,"./bus.model":51,"clone-deep":3}],53:[function(require,module,exports){
+},{"./bus.action":55,"./bus.buzzer":56,"./bus.model":57,"clone-deep":3}],59:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -22716,7 +22929,7 @@ BusUnit = __decorate([
 ], BusUnit);
 exports.default = BusUnit;
 
-},{"../99.core/state":55,"typescript-ioc":22}],54:[function(require,module,exports){
+},{"../99.core/state":61,"typescript-ioc":22}],60:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateBus = exports.messageBus = exports.connectBus = exports.openBus = exports.createBus = exports.initBus = void 0;
@@ -22892,7 +23105,7 @@ exports.updateBus = updateBus;
 var patch = (ste, type, bale) => ste.dispatch({ type, bale });
 const clone = require("clone-deep");
 
-},{"../../97.collect.unit/collect.action":37,"../../98.menu.unit/menu.action":44,"../../99.bus.unit/bus.action":49,"clone-deep":3}],55:[function(require,module,exports){
+},{"../../97.collect.unit/collect.action":43,"../../98.menu.unit/menu.action":50,"../../99.bus.unit/bus.action":55,"clone-deep":3}],61:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const rx_lite_1 = require("rx-lite");
@@ -22927,29 +23140,33 @@ class State extends rx_lite_1.BehaviorSubject {
 }
 exports.default = State;
 
-},{"../BEE":56,"rx-lite":13}],56:[function(require,module,exports){
+},{"../BEE":62,"rx-lite":13}],62:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reducer = exports.list = void 0;
 const time_unit_1 = require("./00.time.unit/time.unit");
 const clock_unit_1 = require("./01.clock.unit/clock.unit");
+const pivot_unit_1 = require("./96.pivot.unit/pivot.unit");
 const collect_unit_1 = require("./97.collect.unit/collect.unit");
 const menu_unit_1 = require("./98.menu.unit/menu.unit");
 const bus_unit_1 = require("./99.bus.unit/bus.unit");
 const time_model_1 = require("./00.time.unit/time.model");
 const clock_model_1 = require("./01.clock.unit/clock.model");
+const pivot_model_1 = require("./96.pivot.unit/pivot.model");
 const collect_model_1 = require("./97.collect.unit/collect.model");
 const menu_model_1 = require("./98.menu.unit/menu.model");
 const bus_model_1 = require("./99.bus.unit/bus.model");
-exports.list = [time_unit_1.default, clock_unit_1.default, collect_unit_1.default, menu_unit_1.default, bus_unit_1.default];
+exports.list = [time_unit_1.default, clock_unit_1.default, pivot_unit_1.default, collect_unit_1.default, menu_unit_1.default, bus_unit_1.default];
 const reduceFromTime = require("./00.time.unit/time.reduce");
 const reduceFromClock = require("./01.clock.unit/clock.reduce");
+const reduceFromPivot = require("./96.pivot.unit/pivot.reduce");
 const reduceFromCollect = require("./97.collect.unit/collect.reduce");
 const reduceFromMenu = require("./98.menu.unit/menu.reduce");
 const reduceFromBus = require("./99.bus.unit/bus.reduce");
 exports.reducer = {
     time: reduceFromTime.reducer,
     clock: reduceFromClock.reducer,
+    pivot: reduceFromPivot.reducer,
     collect: reduceFromCollect.reducer,
     menu: reduceFromMenu.reducer,
     bus: reduceFromBus.reducer,
@@ -22958,6 +23175,7 @@ class UnitData {
     constructor() {
         this.time = new time_model_1.TimeModel();
         this.clock = new clock_model_1.ClockModel();
+        this.pivot = new pivot_model_1.PivotModel();
         this.collect = new collect_model_1.CollectModel();
         this.menu = new menu_model_1.MenuModel();
         this.bus = new bus_model_1.BusModel();
@@ -22965,7 +23183,7 @@ class UnitData {
 }
 exports.default = UnitData;
 
-},{"./00.time.unit/time.model":27,"./00.time.unit/time.reduce":28,"./00.time.unit/time.unit":29,"./01.clock.unit/clock.model":33,"./01.clock.unit/clock.reduce":34,"./01.clock.unit/clock.unit":35,"./97.collect.unit/collect.model":39,"./97.collect.unit/collect.reduce":40,"./97.collect.unit/collect.unit":41,"./98.menu.unit/menu.model":46,"./98.menu.unit/menu.reduce":47,"./98.menu.unit/menu.unit":48,"./99.bus.unit/bus.model":51,"./99.bus.unit/bus.reduce":52,"./99.bus.unit/bus.unit":53}],57:[function(require,module,exports){
+},{"./00.time.unit/time.model":27,"./00.time.unit/time.reduce":28,"./00.time.unit/time.unit":29,"./01.clock.unit/clock.model":33,"./01.clock.unit/clock.reduce":34,"./01.clock.unit/clock.unit":35,"./96.pivot.unit/pivot.model":39,"./96.pivot.unit/pivot.reduce":40,"./96.pivot.unit/pivot.unit":41,"./97.collect.unit/collect.model":45,"./97.collect.unit/collect.reduce":46,"./97.collect.unit/collect.unit":47,"./98.menu.unit/menu.model":52,"./98.menu.unit/menu.reduce":53,"./98.menu.unit/menu.unit":54,"./99.bus.unit/bus.model":57,"./99.bus.unit/bus.reduce":58,"./99.bus.unit/bus.unit":59}],63:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.COPY_DISK = exports.LOAD_LIST_DISK = exports.INDEX_DISK = exports.WRITE_DISK = exports.READ_DISK = exports.UPDATE_DISK = exports.INIT_DISK = void 0;
@@ -22977,7 +23195,7 @@ exports.INDEX_DISK = '[Index action] Index Disk';
 exports.LOAD_LIST_DISK = '[Load_list action] Load_list Disk';
 exports.COPY_DISK = '[Copy action] Copy Disk';
 
-},{}],58:[function(require,module,exports){
+},{}],64:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ADD_PORT = exports.CONTENT_TERMINAL = exports.ROOT_TERMINAL = exports.CLOSE_TERMINAL = exports.TABLE_TERMINAL = exports.INPUT_TERMINAL = exports.CLEAR_TERMINAL = exports.UPDATE_TERMINAL = exports.WRITE_TERMINAL = exports.FOCUS_TERMINAL = exports.OPEN_TERMINAL = exports.INIT_TERMINAL = void 0;
@@ -22995,7 +23213,7 @@ exports.ROOT_TERMINAL = "[Terminal action] Root Terminal";
 exports.CONTENT_TERMINAL = "[Terminal action] Content Terminal";
 exports.ADD_PORT = "[Terminal action] Add Port";
 
-},{}],59:[function(require,module,exports){
+},{}],65:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.VALUE_VURT = exports.BUNDLE_VURT = exports.CONTAINS_VURT = exports.LIST_UNIT_VURT = exports.LIST_PIVOT_VURT = exports.COUNT_VURT = exports.UNIT_VURT = exports.REPLACE_VURT = exports.UPDATE_VURT = exports.FETCH_VURT = exports.TEST_CLOUD_VURT = exports.DELAY_VURT = exports.INIT_VURT = void 0;
@@ -23013,7 +23231,7 @@ exports.CONTAINS_VURT = "[Contains action] Contains Vurt";
 exports.BUNDLE_VURT = "[Bundle action] Bundle Vurt";
 exports.VALUE_VURT = "[Value action] Value Vurt";
 
-},{}],60:[function(require,module,exports){
+},{}],66:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var sim = {
@@ -23045,4 +23263,4 @@ const Import = require("./BEE");
 const state_1 = require("./99.core/state");
 module.exports = sim;
 
-},{"./99.core/state":55,"./BEE":56}]},{},[23]);
+},{"./99.core/state":61,"./BEE":62}]},{},[23]);

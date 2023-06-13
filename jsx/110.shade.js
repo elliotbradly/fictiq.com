@@ -45891,13 +45891,14 @@ global.SHADE.ActLop = require("../dist/110.shade/09.loop.unit/loop.action");
 global.SHADE.ActTun = require("../dist/110.shade/10.toon.unit/toon.action");
 global.SHADE.ActVid = require("../dist/110.shade/11.video.unit/video.action");
 global.SHADE.ActFme = require("../dist/110.shade/12.frame.unit/frame.action");
+global.SHADE.ActTst = require("../dist/110.shade/95.test.unit/test.action");
+
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../dist/110.shade/00.shade.unit/shade.action":435,"../dist/110.shade/01.visage.unit/visage.action":441,"../dist/110.shade/03.container.unit/container.action":453,"../dist/110.shade/04.graphic.unit/graphic.action":459,"../dist/110.shade/05.text.unit/text.action":465,"../dist/110.shade/06.sprite.unit/sprite.action":471,"../dist/110.shade/07.hexagon.unit/hexagon.action":477,"../dist/110.shade/08.focigon.unit/focigon.action":483,"../dist/110.shade/09.loop.unit/loop.action":489,"../dist/110.shade/10.toon.unit/toon.action":495,"../dist/110.shade/11.video.unit/video.action":501,"../dist/110.shade/12.frame.unit/frame.action":507,"../dist/110.shade/hunt":538}],434:[function(require,module,exports){
-(function (process,global){(function (){
+},{"../dist/110.shade/00.shade.unit/shade.action":435,"../dist/110.shade/01.visage.unit/visage.action":441,"../dist/110.shade/03.container.unit/container.action":453,"../dist/110.shade/04.graphic.unit/graphic.action":459,"../dist/110.shade/05.text.unit/text.action":465,"../dist/110.shade/06.sprite.unit/sprite.action":471,"../dist/110.shade/07.hexagon.unit/hexagon.action":477,"../dist/110.shade/08.focigon.unit/focigon.action":483,"../dist/110.shade/09.loop.unit/loop.action":489,"../dist/110.shade/10.toon.unit/toon.action":495,"../dist/110.shade/11.video.unit/video.action":501,"../dist/110.shade/12.frame.unit/frame.action":507,"../dist/110.shade/95.test.unit/test.action":513,"../dist/110.shade/hunt":550}],434:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.testShade = exports.patchShade = exports.editShade = exports.bodyShade = exports.updateShade = exports.browserShade = exports.runShade = exports.openShade = exports.initShade = void 0;
+exports.runShade = exports.openShade = exports.updateShade = exports.testShade = exports.patchShade = exports.editShade = exports.bodyShade = exports.browserShade = exports.initShade = void 0;
 const ActMnu = require("../../98.menu.unit/menu.action");
 const ActBus = require("../../99.bus.unit/bus.action");
 const ActShd = require("../../00.shade.unit/shade.action");
@@ -45911,10 +45912,6 @@ const ActHex = require("../../07.hexagon.unit/hexagon.action");
 const ActVid = require("../../11.video.unit/video.action");
 const ActTun = require("../../10.toon.unit/toon.action");
 const ActSpc = require("../../act/space.action");
-const ActVrt = require("../../act/vurt.action");
-const ActDsk = require("../../act/disk.action");
-var SHADE = global.SHADE;
-var SPACE = global.SPACE;
 var bit, val, idx, dex, lst, dat;
 const initShade = async (cpy, bal, ste) => {
     if (bal.dat != null)
@@ -45927,31 +45924,6 @@ const initShade = async (cpy, bal, ste) => {
     return cpy;
 };
 exports.initShade = initShade;
-const openShade = async (cpy, bal, ste) => {
-    //we need to move a whole directory over
-    bit = await ste.bus(ActDsk.COPY_DISK, { src: './vue', idx: '../gillisse/src' });
-    bit = await ste.hunt(ActShd.RUN_SHADE, {});
-    const open = require('open');
-    var loc = './vrt.opn.bat';
-    bit = await open(loc);
-    setTimeout(() => {
-        if (bal.slv != null)
-            bal.slv({ shdBit: { idx: "open-shade" } });
-    }, 33);
-    return cpy;
-};
-exports.openShade = openShade;
-const runShade = async (cpy, bal, ste) => {
-    const open = require('open');
-    var loc = './vrt.gil.bat';
-    bit = await open(loc);
-    setTimeout(() => {
-        if (bal.slv != null)
-            bal.slv({ shdBit: { idx: "run-shade" } });
-    });
-    return cpy;
-};
-exports.runShade = runShade;
 const browserShade = async (cpy, bal, ste) => {
     const open = require('open');
     var loc = 'http://localhost:3333/';
@@ -45963,33 +45935,6 @@ const browserShade = async (cpy, bal, ste) => {
     return cpy;
 };
 exports.browserShade = browserShade;
-const updateShade = async (cpy, bal, ste) => {
-    const { exec } = require('child_process');
-    exec('tsc -b 110.shade', async (err, stdout, stderr) => {
-        if (err) {
-            console.error(`exec error: ${err}`);
-        }
-        process.chdir("../999.vurt");
-        bit = await ste.bus(ActVrt.BUNDLE_VURT, { src: "110.shade" });
-        process.chdir("../110.shade");
-        bit = await ste.bus(ActDsk.READ_DISK, { src: './work/110.shade.js' });
-        var shade = bit.dskBit.dat;
-        bit = await ste.bus(ActDsk.WRITE_DISK, { src: '../gillisse/public/jsx/110.shade.js', dat: shade });
-        bit = await ste.bus(ActDsk.READ_DISK, { src: './index.html' });
-        var html = bit.dskBit.dat;
-        bit = await ste.bus(ActDsk.READ_DISK, { src: './index.js' });
-        var index = bit.dskBit.dat;
-        bit = await ste.bus(ActDsk.WRITE_DISK, { src: '../gillisse/public/jsx/index.js', dat: index });
-        bit = await ste.bus(ActDsk.WRITE_DISK, { src: '../gillisse/index.html', dat: html });
-        bit = await ste.bus(ActDsk.COPY_DISK, { src: './vue', idx: '../gillisse/src' });
-        setTimeout(() => {
-            if (bal.slv != null)
-                bal.slv({ shdBit: { idx: "update-shade" } });
-        }, 3);
-    });
-    return cpy;
-};
-exports.updateShade = updateShade;
 const bodyShade = (cpy, bal, ste) => {
     var gel = bal.dat;
     var out = [];
@@ -46006,57 +45951,33 @@ const bodyShade = (cpy, bal, ste) => {
 };
 exports.bodyShade = bodyShade;
 const editShade = async (cpy, bal, ste) => {
-    const { exec } = require('child_process');
-    process.chdir("../../studio/");
-    exec('start Code.exe ../packages/gillisse', async (err, stdout, stderr) => {
-        if (err) {
-            console.error(`exec error: ${err}`);
-        }
-        process.chdir("../packages/110.shade");
-        if (bal.slv != null)
-            bal.slv({ symBit: { idx: "edit-symbol", dat: {} } });
-    });
     return cpy;
 };
 exports.editShade = editShade;
 const patchShade = async (cpy, bal, ste) => {
-    bit = await ste.bus(ActDsk.COPY_DISK, { src: '../gillisse/src', idx: './source' });
-    if (bal.slv != null)
-        bal.slv({ symBit: { idx: "edit-symbol", dat: {} } });
     return cpy;
 };
 exports.patchShade = patchShade;
 const testShade = async (cpy, bal, ste) => {
-    //bit = await ste.hunt( ActCan.ADD_CONTAINER, { idx: 'fce-can-00', dat: bit.fmeBit.dat });
-    bit = await ste.hunt(ActGph.WRITE_GRAPHIC, { idx: 'gph00', src: 'vsg00' });
-    bit = await ste.hunt(ActCan.ADD_CONTAINER, { idx: 'fce-can-00', dat: bit.gphBit.dat });
-    //bit = await ste.hunt(ActGph.WRITE_GRAPHIC, { idx: 'gph01', src: 'vsg00' });
-    //bit = await ste.hunt(ActCan.ADD_CONTAINER, { idx: 'fce-can-00', dat: bit.gphBit.dat });
-    const response = await fetch("./dat/hexmap/000.swamp.json");
-    const jsonData = await response.json();
-    bit = await SPACE.hunt(SPACE.ActMap.ADD_HEXMAP, { idx: 'map00', dat: { gph: 'gph00', dat: jsonData } });
-    dat = bit.mapBit.dat;
-    bit = await ste.hunt(ActHex.WRITE_HEXAGON, { idx: 'hex00', src: 'vsg00', dat });
-    //bit = await SHADE.hunt(SHADE.ActTxt.WRITE_TEXT, { idx: 'txt00', src: 'vsg00', dat: { txt: "feel the love", y: 100 } });
-    //bit = await SHADE.hunt(SHADE.ActCan.ADD_CONTAINER, { idx: 'fce-can-00', dat: bit.txtBit.dat });
-    //bit = await SHADE.hunt(SHADE.ActTxt.WRITE_TEXT, { idx: 'txt01', src: 'vsg00', dat: { txt: "thank you", y: 110 } });
-    //bit = await SHADE.hunt(SHADE.ActCan.ADD_CONTAINER, { idx: 'fce-can-00', dat: bit.txtBit.dat });
-    //bit = await SHADE.hunt(SHADE.ActTxt.WRITE_TEXT, { idx: 'txt02', src: 'vsg00', dat: { txt: "looks really nice", y: 120 } });
-    //bit = await SHADE.hunt(SHADE.ActCan.ADD_CONTAINER, { idx: 'fce-can-00', dat: bit.txtBit.dat });
-    //bit = await SHADE.hunt(SHADE.ActSpr.WRITE_SPRITE, { idx: 'spr00', src: 'vsg00', dat: { src: "./img/000.png", y: 130 } });
-    //bit = await SHADE.hunt(SHADE.ActCan.ADD_CONTAINER, { idx: 'fce-can-00', dat: bit.sprBit.dat });
-    //var hexmap = bit.mapBit.dat;
-    //bit = await ste.hunt( ActFcg.WRITE_FOCIGON, { idx: 'fcg01', src: 'vsg00', dat: {dat:bit.focBit.dat}   });
-    if (bal.slv != null)
-        bal.slv({ symBit: { idx: "test-shade", dat: {} } });
     return cpy;
 };
 exports.testShade = testShade;
+const updateShade = async (cpy, bal, ste) => {
+    return cpy;
+};
+exports.updateShade = updateShade;
+const openShade = async (cpy, bal, ste) => {
+    return cpy;
+};
+exports.openShade = openShade;
+const runShade = async (cpy, bal, ste) => {
+    return cpy;
+};
+exports.runShade = runShade;
 var patch = (ste, type, bale) => ste.dispatch({ type, bale });
 const doT = require("dot");
 
-}).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../../00.shade.unit/shade.action":435,"../../01.visage.unit/visage.action":441,"../../02.surface.unit/surface.action":447,"../../03.container.unit/container.action":453,"../../04.graphic.unit/graphic.action":459,"../../05.text.unit/text.action":465,"../../06.sprite.unit/sprite.action":471,"../../07.hexagon.unit/hexagon.action":477,"../../10.toon.unit/toon.action":495,"../../11.video.unit/video.action":501,"../../98.menu.unit/menu.action":521,"../../99.bus.unit/bus.action":526,"../../act/disk.action":534,"../../act/space.action":535,"../../act/vurt.action":537,"_process":415,"child_process":undefined,"dot":400,"open":undefined}],435:[function(require,module,exports){
+},{"../../00.shade.unit/shade.action":435,"../../01.visage.unit/visage.action":441,"../../02.surface.unit/surface.action":447,"../../03.container.unit/container.action":453,"../../04.graphic.unit/graphic.action":459,"../../05.text.unit/text.action":465,"../../06.sprite.unit/sprite.action":471,"../../07.hexagon.unit/hexagon.action":477,"../../10.toon.unit/toon.action":495,"../../11.video.unit/video.action":501,"../../98.menu.unit/menu.action":533,"../../99.bus.unit/bus.action":538,"../../act/space.action":547,"dot":400,"open":undefined}],435:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TestShade = exports.TEST_SHADE = exports.PatchShade = exports.PATCH_SHADE = exports.EditShade = exports.EDIT_SHADE = exports.RunShade = exports.RUN_SHADE = exports.BrowserShade = exports.BROWSER_SHADE = exports.BodyShade = exports.BODY_SHADE = exports.OpenShade = exports.OPEN_SHADE = exports.UpdateShade = exports.UPDATE_SHADE = exports.InitShade = exports.INIT_SHADE = void 0;
@@ -46228,7 +46149,7 @@ ShadeUnit = __decorate([
 ], ShadeUnit);
 exports.default = ShadeUnit;
 
-},{"../99.core/state":532,"typescript-ioc":430}],440:[function(require,module,exports){
+},{"../99.core/state":544,"typescript-ioc":430}],440:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.nestVisage = exports.listVisage = exports.clearVisage = exports.mainVisage = exports.fullscreenVisage = exports.dimensionVisage = exports.renderVisage = exports.sizeVisage = exports.deleteVisage = exports.createVisage = exports.removeVisage = exports.writeVisage = exports.readVisage = exports.screenVisage = exports.mountVisage = exports.updateVisage = exports.initVisage = void 0;
@@ -46538,7 +46459,7 @@ exports.nestVisage = nestVisage;
 const VISAGE = require("../../val/visage");
 const SHADE = require("../../val/shade");
 
-},{"../../01.visage.unit/visage.action":441,"../../02.surface.unit/surface.action":447,"../../03.container.unit/container.action":453,"../../04.graphic.unit/graphic.action":459,"../../05.text.unit/text.action":465,"../../06.sprite.unit/sprite.action":471,"../../07.hexagon.unit/hexagon.action":477,"../../09.loop.unit/loop.action":489,"../../11.video.unit/video.action":501,"../../97.collect.unit/collect.action":513,"../../val/shade":542,"../../val/visage":543,"electron":undefined,"fs-extra":undefined}],441:[function(require,module,exports){
+},{"../../01.visage.unit/visage.action":441,"../../02.surface.unit/surface.action":447,"../../03.container.unit/container.action":453,"../../04.graphic.unit/graphic.action":459,"../../05.text.unit/text.action":465,"../../06.sprite.unit/sprite.action":471,"../../07.hexagon.unit/hexagon.action":477,"../../09.loop.unit/loop.action":489,"../../11.video.unit/video.action":501,"../../97.collect.unit/collect.action":525,"../../val/shade":554,"../../val/visage":555,"electron":undefined,"fs-extra":undefined}],441:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.NestVisage = exports.NEST_VISAGE = exports.ListVisage = exports.LIST_VISAGE = exports.DeleteVisage = exports.DELETE_VISAGE = exports.ClearVisage = exports.CLEAR_VISAGE = exports.MainVisage = exports.MAIN_VISAGE = exports.MountVisage = exports.MOUNT_VISAGE = exports.ScreenVisage = exports.SCREEN_VISAGE = exports.DimensionVisage = exports.DIMENSION_VISAGE = exports.RenderVisage = exports.RENDER_VISAGE = exports.SizeVisage = exports.SIZE_VISAGE = exports.CreateVisage = exports.CREATE_VISAGE = exports.RemoveVisage = exports.REMOVE_VISAGE = exports.WriteVisage = exports.WRITE_VISAGE = exports.ReadVisage = exports.READ_VISAGE = exports.FullscreenVisage = exports.FULLSCREEN_VISAGE = exports.UpdateVisage = exports.UPDATE_VISAGE = exports.InitVisage = exports.INIT_VISAGE = void 0;
@@ -46801,7 +46722,7 @@ VisageUnit = __decorate([
 ], VisageUnit);
 exports.default = VisageUnit;
 
-},{"../99.core/state":532,"typescript-ioc":430}],446:[function(require,module,exports){
+},{"../99.core/state":544,"typescript-ioc":430}],446:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.dimensionSurface = exports.deleteSurface = exports.createSurface = exports.removeSurface = exports.writeSurface = exports.readSurface = exports.updateSurface = exports.initSurface = void 0;
@@ -46941,7 +46862,7 @@ const dimensionSurface = async (cpy, bal, ste) => {
 exports.dimensionSurface = dimensionSurface;
 const PIXI = require("pixi.js-legacy");
 
-},{"../../02.surface.unit/surface.action":447,"../../97.collect.unit/collect.action":513,"pixi.js-legacy":412}],447:[function(require,module,exports){
+},{"../../02.surface.unit/surface.action":447,"../../97.collect.unit/collect.action":525,"pixi.js-legacy":412}],447:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DeleteSurface = exports.DELETE_SURFACE = exports.DimensionSurface = exports.DIMENSION_SURFACE = exports.CreateSurface = exports.CREATE_SURFACE = exports.RemoveSurface = exports.REMOVE_SURFACE = exports.WriteSurface = exports.WRITE_SURFACE = exports.ReadSurface = exports.READ_SURFACE = exports.UpdateSurface = exports.UPDATE_SURFACE = exports.InitSurface = exports.INIT_SURFACE = void 0;
@@ -47102,10 +47023,10 @@ SurfaceUnit = __decorate([
 ], SurfaceUnit);
 exports.default = SurfaceUnit;
 
-},{"../99.core/state":532,"typescript-ioc":430}],452:[function(require,module,exports){
+},{"../99.core/state":544,"typescript-ioc":430}],452:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addContainer = exports.surfaceContainer = exports.deleteContainer = exports.createContainer = exports.removeContainer = exports.writeContainer = exports.readContainer = exports.updateContainer = exports.initContainer = void 0;
+exports.reflexiveContainer = exports.addContainer = exports.surfaceContainer = exports.deleteContainer = exports.createContainer = exports.removeContainer = exports.writeContainer = exports.readContainer = exports.updateContainer = exports.initContainer = void 0;
 const ActCol = require("../../97.collect.unit/collect.action");
 const ActFce = require("../../02.surface.unit/surface.action");
 const ActCan = require("../../03.container.unit/container.action");
@@ -47124,6 +47045,9 @@ const updateContainer = async (cpy, bal, ste) => {
     if (dat.s == null)
         dat.s = 1;
     can.scale = { x: dat.s, y: dat.s };
+    if (dat.reflex == true) {
+        bit = await ste.hunt(ActCan.REFLEXIVE_CONTAINER, { idx: bal.idx });
+    }
     if (bal.slv != null)
         return bal.slv({ canBit: { idx: "update-container", dat } });
     return cpy;
@@ -47158,6 +47082,8 @@ const createContainer = async (cpy, bal, ste) => {
     //you have a source visage
     //now you wish to update a bit of the source visage 
     var dat = { idx: bal.idx, src: bal.src, typ: SHADE.CONTAINER, x: 0, y: 0, s: 1 };
+    if (dat.reflex == null)
+        dat.reflex = false;
     for (var key in bal.dat) {
         dat[key] = bal.dat[key];
     }
@@ -47211,6 +47137,7 @@ const addContainer = async (cpy, bal, ste) => {
     bit = await ste.hunt(ActCan.READ_CONTAINER, { idx: bal.idx });
     var can = bit.canBit.dat.bit;
     can.addChild(content);
+    lst = can.children;
     //var graphic = new PIXI.Graphics();
     //graphic.lineStyle(3, 0x00FF00);
     //graphic.drawRect(0, 720, 720, 1080);
@@ -47220,13 +47147,27 @@ const addContainer = async (cpy, bal, ste) => {
     return cpy;
 };
 exports.addContainer = addContainer;
+const reflexiveContainer = async (cpy, bal, ste) => {
+    bit = await ste.hunt(ActCan.READ_CONTAINER, { idx: bal.idx });
+    dat = bit.canBit.dat;
+    var x = window.innerWidth || document.body.clientWidth;
+    var y = window.innerHeight || document.body.clientHeight;
+    var can = dat.bit;
+    var width = can.width;
+    lst = can.children;
+    debugger;
+    if (bal.slv != null)
+        return bal.slv({ canBit: { idx: "reflexive-container", dat: null } });
+    return cpy;
+};
+exports.reflexiveContainer = reflexiveContainer;
 const SHADE = require("../../val/shade");
 const PIXI = require("pixi.js-legacy");
 
-},{"../../01.visage.unit/visage.action":441,"../../02.surface.unit/surface.action":447,"../../03.container.unit/container.action":453,"../../97.collect.unit/collect.action":513,"../../val/shade":542,"pixi.js-legacy":412}],453:[function(require,module,exports){
+},{"../../01.visage.unit/visage.action":441,"../../02.surface.unit/surface.action":447,"../../03.container.unit/container.action":453,"../../97.collect.unit/collect.action":525,"../../val/shade":554,"pixi.js-legacy":412}],453:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DeleteContainer = exports.DELETE_CONTAINER = exports.RemoveContainer = exports.REMOVE_CONTAINER = exports.AddContainer = exports.ADD_CONTAINER = exports.SurfaceContainer = exports.SURFACE_CONTAINER = exports.CreateContainer = exports.CREATE_CONTAINER = exports.WriteContainer = exports.WRITE_CONTAINER = exports.ReadContainer = exports.READ_CONTAINER = exports.UpdateContainer = exports.UPDATE_CONTAINER = exports.InitContainer = exports.INIT_CONTAINER = void 0;
+exports.DeleteContainer = exports.DELETE_CONTAINER = exports.RemoveContainer = exports.REMOVE_CONTAINER = exports.AddContainer = exports.ADD_CONTAINER = exports.SurfaceContainer = exports.SURFACE_CONTAINER = exports.CreateContainer = exports.CREATE_CONTAINER = exports.WriteContainer = exports.WRITE_CONTAINER = exports.ReadContainer = exports.READ_CONTAINER = exports.UpdateContainer = exports.UPDATE_CONTAINER = exports.ReflexiveContainer = exports.REFLEXIVE_CONTAINER = exports.InitContainer = exports.INIT_CONTAINER = void 0;
 // Container actions
 exports.INIT_CONTAINER = "[Container action] Init Container";
 class InitContainer {
@@ -47236,6 +47177,14 @@ class InitContainer {
     }
 }
 exports.InitContainer = InitContainer;
+exports.REFLEXIVE_CONTAINER = "[Container action] Reflexive Container";
+class ReflexiveContainer {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.REFLEXIVE_CONTAINER;
+    }
+}
+exports.ReflexiveContainer = ReflexiveContainer;
 exports.UPDATE_CONTAINER = "[Container action] Update Container";
 class UpdateContainer {
     constructor(bale) {
@@ -47304,7 +47253,7 @@ exports.DeleteContainer = DeleteContainer;
 },{}],454:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteContainer = exports.removeContainer = exports.addContainer = exports.surfaceContainer = exports.createContainer = exports.writeContainer = exports.readContainer = exports.updateContainer = exports.initContainer = void 0;
+exports.reflexiveContainer = exports.deleteContainer = exports.removeContainer = exports.addContainer = exports.surfaceContainer = exports.createContainer = exports.writeContainer = exports.readContainer = exports.updateContainer = exports.initContainer = void 0;
 var container_buzz_1 = require("./buz/container.buzz");
 Object.defineProperty(exports, "initContainer", { enumerable: true, get: function () { return container_buzz_1.initContainer; } });
 var container_buzz_2 = require("./buz/container.buzz");
@@ -47323,6 +47272,8 @@ var container_buzz_8 = require("./buz/container.buzz");
 Object.defineProperty(exports, "removeContainer", { enumerable: true, get: function () { return container_buzz_8.removeContainer; } });
 var container_buzz_9 = require("./buz/container.buzz");
 Object.defineProperty(exports, "deleteContainer", { enumerable: true, get: function () { return container_buzz_9.deleteContainer; } });
+var container_buzz_10 = require("./buz/container.buzz");
+Object.defineProperty(exports, "reflexiveContainer", { enumerable: true, get: function () { return container_buzz_10.reflexiveContainer; } });
 
 },{"./buz/container.buzz":452}],455:[function(require,module,exports){
 "use strict";
@@ -47360,6 +47311,8 @@ function reducer(model = new container_model_1.ContainerModel(), act, state) {
             return Buzz.removeContainer(clone(model), act.bale, state);
         case Act.DELETE_CONTAINER:
             return Buzz.deleteContainer(clone(model), act.bale, state);
+        case Act.REFLEXIVE_CONTAINER:
+            return Buzz.reflexiveContainer(clone(model), act.bale, state);
         default:
             return model;
     }
@@ -47390,7 +47343,7 @@ ContainerUnit = __decorate([
 ], ContainerUnit);
 exports.default = ContainerUnit;
 
-},{"../99.core/state":532,"typescript-ioc":430}],458:[function(require,module,exports){
+},{"../99.core/state":544,"typescript-ioc":430}],458:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteGraphic = exports.createGraphic = exports.removeGraphic = exports.writeGraphic = exports.readGraphic = exports.updateGraphic = exports.initGraphic = void 0;
@@ -47507,7 +47460,7 @@ const PIXI = require("pixi.js-legacy");
 const GRAPHIC = require("../../val/graphic");
 const SHADE = require("../../val/shade");
 
-},{"../../01.visage.unit/visage.action":441,"../../04.graphic.unit/graphic.action":459,"../../97.collect.unit/collect.action":513,"../../val/graphic":540,"../../val/shade":542,"pixi.js-legacy":412}],459:[function(require,module,exports){
+},{"../../01.visage.unit/visage.action":441,"../../04.graphic.unit/graphic.action":459,"../../97.collect.unit/collect.action":525,"../../val/graphic":552,"../../val/shade":554,"pixi.js-legacy":412}],459:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DeleteGraphic = exports.DELETE_GRAPHIC = exports.RemoveGraphic = exports.REMOVE_GRAPHIC = exports.CreateGraphic = exports.CREATE_GRAPHIC = exports.WriteGraphic = exports.WRITE_GRAPHIC = exports.ReadGraphic = exports.READ_GRAPHIC = exports.UpdateGraphic = exports.UPDATE_GRAPHIC = exports.InitGraphic = exports.INIT_GRAPHIC = void 0;
@@ -47650,7 +47603,7 @@ GraphicUnit = __decorate([
 ], GraphicUnit);
 exports.default = GraphicUnit;
 
-},{"../99.core/state":532,"typescript-ioc":430}],464:[function(require,module,exports){
+},{"../99.core/state":544,"typescript-ioc":430}],464:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteText = exports.createText = exports.removeText = exports.writeText = exports.readText = exports.updateText = exports.initText = void 0;
@@ -47757,7 +47710,7 @@ exports.deleteText = deleteText;
 const PIXI = require("pixi.js-legacy");
 const SHADE = require("../../val/shade");
 
-},{"../../01.visage.unit/visage.action":441,"../../05.text.unit/text.action":465,"../../97.collect.unit/collect.action":513,"../../val/shade":542,"pixi.js-legacy":412}],465:[function(require,module,exports){
+},{"../../01.visage.unit/visage.action":441,"../../05.text.unit/text.action":465,"../../97.collect.unit/collect.action":525,"../../val/shade":554,"pixi.js-legacy":412}],465:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DeleteText = exports.DELETE_TEXT = exports.RemoveText = exports.REMOVE_TEXT = exports.CreateText = exports.CREATE_TEXT = exports.WriteText = exports.WRITE_TEXT = exports.ReadText = exports.READ_TEXT = exports.UpdateText = exports.UPDATE_TEXT = exports.InitText = exports.INIT_TEXT = void 0;
@@ -47900,7 +47853,7 @@ TextUnit = __decorate([
 ], TextUnit);
 exports.default = TextUnit;
 
-},{"../99.core/state":532,"typescript-ioc":430}],470:[function(require,module,exports){
+},{"../99.core/state":544,"typescript-ioc":430}],470:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteSprite = exports.createSprite = exports.removeSprite = exports.writeSprite = exports.readSprite = exports.updateSprite = exports.initSprite = void 0;
@@ -47994,7 +47947,7 @@ exports.deleteSprite = deleteSprite;
 const PIXI = require("pixi.js-legacy");
 const SHADE = require("../../val/shade");
 
-},{"../../01.visage.unit/visage.action":441,"../../06.sprite.unit/sprite.action":471,"../../97.collect.unit/collect.action":513,"../../val/shade":542,"pixi.js-legacy":412}],471:[function(require,module,exports){
+},{"../../01.visage.unit/visage.action":441,"../../06.sprite.unit/sprite.action":471,"../../97.collect.unit/collect.action":525,"../../val/shade":554,"pixi.js-legacy":412}],471:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DeleteSprite = exports.DELETE_SPRITE = exports.RemoveSprite = exports.REMOVE_SPRITE = exports.CreateSprite = exports.CREATE_SPRITE = exports.WriteSprite = exports.WRITE_SPRITE = exports.ReadSprite = exports.READ_SPRITE = exports.UpdateSprite = exports.UPDATE_SPRITE = exports.InitSprite = exports.INIT_SPRITE = void 0;
@@ -48137,7 +48090,7 @@ SpriteUnit = __decorate([
 ], SpriteUnit);
 exports.default = SpriteUnit;
 
-},{"../99.core/state":532,"typescript-ioc":430}],476:[function(require,module,exports){
+},{"../99.core/state":544,"typescript-ioc":430}],476:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteHexagon = exports.createHexagon = exports.removeHexagon = exports.writeHexagon = exports.readHexagon = exports.updateHexagon = exports.initHexagon = void 0;
@@ -48248,7 +48201,7 @@ exports.deleteHexagon = deleteHexagon;
 const Honeycomb = require("honeycomb-grid");
 const HEXAGON = require("../../val/hexagon");
 
-},{"../../01.visage.unit/visage.action":441,"../../04.graphic.unit/graphic.action":459,"../../07.hexagon.unit/hexagon.action":477,"../../97.collect.unit/collect.action":513,"../../val/hexagon":541,"honeycomb-grid":403}],477:[function(require,module,exports){
+},{"../../01.visage.unit/visage.action":441,"../../04.graphic.unit/graphic.action":459,"../../07.hexagon.unit/hexagon.action":477,"../../97.collect.unit/collect.action":525,"../../val/hexagon":553,"honeycomb-grid":403}],477:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HexmapHexagon = exports.HEXMAP_HEXAGON = exports.FocusHexagon = exports.FOCUS_HEXAGON = exports.DeleteHexagon = exports.DELETE_HEXAGON = exports.RemoveHexagon = exports.REMOVE_HEXAGON = exports.CreateHexagon = exports.CREATE_HEXAGON = exports.WriteHexagon = exports.WRITE_HEXAGON = exports.ReadHexagon = exports.READ_HEXAGON = exports.UpdateHexagon = exports.UPDATE_HEXAGON = exports.InitHexagon = exports.INIT_HEXAGON = void 0;
@@ -48407,7 +48360,7 @@ HexagonUnit = __decorate([
 ], HexagonUnit);
 exports.default = HexagonUnit;
 
-},{"../99.core/state":532,"typescript-ioc":430}],482:[function(require,module,exports){
+},{"../99.core/state":544,"typescript-ioc":430}],482:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteFocigon = exports.createFocigon = exports.removeFocigon = exports.writeFocigon = exports.readFocigon = exports.updateFocigon = exports.initFocigon = void 0;
@@ -48549,7 +48502,7 @@ const deleteFocigon = (cpy, bal, ste) => {
 exports.deleteFocigon = deleteFocigon;
 const DIRECTION = require("../../val/direction");
 
-},{"../../01.visage.unit/visage.action":441,"../../04.graphic.unit/graphic.action":459,"../../08.focigon.unit/focigon.action":483,"../../97.collect.unit/collect.action":513,"../../val/direction":539}],483:[function(require,module,exports){
+},{"../../01.visage.unit/visage.action":441,"../../04.graphic.unit/graphic.action":459,"../../08.focigon.unit/focigon.action":483,"../../97.collect.unit/collect.action":525,"../../val/direction":551}],483:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DeleteFocigon = exports.DELETE_FOCIGON = exports.CreateFocigon = exports.CREATE_FOCIGON = exports.RemoveFocigon = exports.REMOVE_FOCIGON = exports.WriteFocigon = exports.WRITE_FOCIGON = exports.ReadFocigon = exports.READ_FOCIGON = exports.UpdateFocigon = exports.UPDATE_FOCIGON = exports.InitFocigon = exports.INIT_FOCIGON = void 0;
@@ -48692,7 +48645,7 @@ FocigonUnit = __decorate([
 ], FocigonUnit);
 exports.default = FocigonUnit;
 
-},{"../99.core/state":532,"typescript-ioc":430}],488:[function(require,module,exports){
+},{"../99.core/state":544,"typescript-ioc":430}],488:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteLoop = exports.removeLoop = exports.updateLoop = exports.initLoop = void 0;
@@ -48822,7 +48775,7 @@ LoopUnit = __decorate([
 ], LoopUnit);
 exports.default = LoopUnit;
 
-},{"../99.core/state":532,"typescript-ioc":430}],494:[function(require,module,exports){
+},{"../99.core/state":544,"typescript-ioc":430}],494:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateToon = exports.initToon = void 0;
@@ -48918,7 +48871,7 @@ ToonUnit = __decorate([
 ], ToonUnit);
 exports.default = ToonUnit;
 
-},{"../99.core/state":532,"typescript-ioc":430}],500:[function(require,module,exports){
+},{"../99.core/state":544,"typescript-ioc":430}],500:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteVideo = exports.removeVideo = exports.updateVideo = exports.initVideo = void 0;
@@ -49048,7 +49001,7 @@ VideoUnit = __decorate([
 ], VideoUnit);
 exports.default = VideoUnit;
 
-},{"../99.core/state":532,"typescript-ioc":430}],506:[function(require,module,exports){
+},{"../99.core/state":544,"typescript-ioc":430}],506:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteFrame = exports.createFrame = exports.removeFrame = exports.writeFrame = exports.readFrame = exports.updateFrame = exports.initFrame = void 0;
@@ -49158,7 +49111,7 @@ exports.deleteFrame = deleteFrame;
 const PIXI = require("pixi.js-legacy");
 const GRAPHIC = require("../../val/graphic");
 
-},{"../../01.visage.unit/visage.action":441,"../../04.graphic.unit/graphic.action":459,"../../97.collect.unit/collect.action":513,"../../val/graphic":540,"../frame.action":507,"pixi.js-legacy":412}],507:[function(require,module,exports){
+},{"../../01.visage.unit/visage.action":441,"../../04.graphic.unit/graphic.action":459,"../../97.collect.unit/collect.action":525,"../../val/graphic":552,"../frame.action":507,"pixi.js-legacy":412}],507:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DeleteFrame = exports.DELETE_FRAME = exports.CreateFrame = exports.CREATE_FRAME = exports.RemoveFrame = exports.REMOVE_FRAME = exports.WriteFrame = exports.WRITE_FRAME = exports.ReadFrame = exports.READ_FRAME = exports.UpdateFrame = exports.UPDATE_FRAME = exports.InitFrame = exports.INIT_FRAME = void 0;
@@ -49301,7 +49254,434 @@ FrameUnit = __decorate([
 ], FrameUnit);
 exports.default = FrameUnit;
 
-},{"../99.core/state":532,"typescript-ioc":430}],512:[function(require,module,exports){
+},{"../99.core/state":544,"typescript-ioc":430}],512:[function(require,module,exports){
+(function (global){(function (){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.graphicTest = exports.reflexiveTest = exports.basicTest = exports.updateTest = exports.initTest = void 0;
+const ActVsg = require("../../01.visage.unit/visage.action");
+const ActCan = require("../../03.container.unit/container.action");
+const ActGph = require("../../04.graphic.unit/graphic.action");
+const ActHex = require("../../07.hexagon.unit/hexagon.action");
+var SHADE = global.SHADE;
+var SPACE = global.SPACE;
+var bit, val, idx, dex, lst, dat;
+const initTest = (cpy, bal, ste) => {
+    debugger;
+    return cpy;
+};
+exports.initTest = initTest;
+const updateTest = (cpy, bal, ste) => {
+    return cpy;
+};
+exports.updateTest = updateTest;
+const basicTest = async (cpy, bal, ste) => {
+    bit = await ste.hunt(ActVsg.REMOVE_VISAGE, { idx: "vsg00" });
+    bit = await ste.hunt(ActVsg.MOUNT_VISAGE, { idx: "vsg00", src: "indexCanvas", dat: { height: 720 } });
+    bit = await ste.hunt(ActVsg.READ_VISAGE, { idx: "vsg00" });
+    bit = await ste.hunt(ActCan.WRITE_CONTAINER, { idx: "can00", src: 'vsg00' });
+    bit = await ste.hunt(ActCan.SURFACE_CONTAINER, { idx: 'fce-can-00', src: "vsg00" });
+    bit = await ste.hunt(ActGph.WRITE_GRAPHIC, { idx: 'gph00', src: 'vsg00' });
+    bit = await ste.hunt(ActCan.ADD_CONTAINER, { idx: 'fce-can-00', dat: bit.gphBit.dat });
+    const response = await fetch("./dat/hexmap/000.swamp.json");
+    const jsonData = await response.json();
+    bit = await SPACE.hunt(SPACE.ActMap.ADD_HEXMAP, { idx: 'map00', dat: { gph: 'gph00', dat: jsonData } });
+    dat = bit.mapBit.dat;
+    bit = await ste.hunt(ActHex.WRITE_HEXAGON, { idx: 'hex00', src: 'vsg00', dat });
+    if (bal.slv != null)
+        bal.slv({ tstBit: { idx: "basic-test", dat: {} } });
+    return cpy;
+};
+exports.basicTest = basicTest;
+const reflexiveTest = async (cpy, bal, ste) => {
+    bit = await ste.hunt(ActVsg.REMOVE_VISAGE, { idx: "vsg00" });
+    bit = await ste.hunt(ActVsg.MOUNT_VISAGE, { idx: "vsg00", src: "indexCanvas", dat: { height: 720 } });
+    bit = await ste.hunt(ActVsg.READ_VISAGE, { idx: "vsg00" });
+    bit = await ste.hunt(ActCan.WRITE_CONTAINER, { idx: "can00", src: 'vsg00' });
+    bit = await ste.hunt(ActCan.SURFACE_CONTAINER, { idx: 'fce-can-00', src: "vsg00" });
+    bit = await ste.hunt(ActGph.WRITE_GRAPHIC, { idx: 'gph00', src: 'vsg00' });
+    bit = await ste.hunt(ActCan.ADD_CONTAINER, { idx: 'fce-can-00', dat: bit.gphBit.dat });
+    const response = await fetch("./dat/hexmap/000.swamp.json");
+    const jsonData = await response.json();
+    bit = await SPACE.hunt(SPACE.ActMap.ADD_HEXMAP, { idx: 'map00', dat: { gph: 'gph00', dat: jsonData } });
+    dat = bit.mapBit.dat;
+    bit = await ste.hunt(ActHex.WRITE_HEXAGON, { idx: 'hex00', src: 'vsg00', dat });
+    if (bal.slv != null)
+        bal.slv({ tstBit: { idx: "reflexive-test", dat: {} } });
+    return cpy;
+};
+exports.reflexiveTest = reflexiveTest;
+const graphicTest = async (cpy, bal, ste) => {
+    bit = await ste.hunt(ActVsg.REMOVE_VISAGE, { idx: "vsg00" });
+    bit = await ste.hunt(ActVsg.MOUNT_VISAGE, { idx: "vsg00", src: "indexCanvas", dat: { height: 720 } });
+    bit = await ste.hunt(ActVsg.READ_VISAGE, { idx: "vsg00" });
+    //are the above even needed
+    bit = await ste.hunt(ActCan.SURFACE_CONTAINER, { idx: 'fce-can-00', src: "vsg00" });
+    bit = await ste.hunt(ActCan.WRITE_CONTAINER, { idx: "can00", src: 'vsg00' });
+    bit = await ste.hunt(ActCan.ADD_CONTAINER, { idx: 'can-00', dat: bit.canBit.dat });
+    bit = await ste.hunt(ActGph.WRITE_GRAPHIC, { idx: 'gph00', src: 'vsg00' });
+    bit = await ste.hunt(ActCan.ADD_CONTAINER, { idx: 'can-00', dat: bit.gphBit.dat });
+    bit = await ste.hunt(ActGph.WRITE_GRAPHIC, { idx: 'gph01', src: 'vsg00', dat: { x: 111, y: 111 } });
+    bit = await ste.hunt(ActCan.ADD_CONTAINER, { idx: 'can-00', dat: bit.gphBit.dat });
+    return cpy;
+};
+exports.graphicTest = graphicTest;
+
+}).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"../../01.visage.unit/visage.action":441,"../../03.container.unit/container.action":453,"../../04.graphic.unit/graphic.action":459,"../../07.hexagon.unit/hexagon.action":477}],513:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.GraphicTest = exports.GRAPHIC_TEST = exports.ReflexiveTest = exports.REFLEXIVE_TEST = exports.BasicTest = exports.BASIC_TEST = exports.UpdateTest = exports.UPDATE_TEST = exports.InitTest = exports.INIT_TEST = void 0;
+// Test actions
+exports.INIT_TEST = "[Test action] Init Test";
+class InitTest {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.INIT_TEST;
+    }
+}
+exports.InitTest = InitTest;
+exports.UPDATE_TEST = "[Test action] Update Test";
+class UpdateTest {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.UPDATE_TEST;
+    }
+}
+exports.UpdateTest = UpdateTest;
+exports.BASIC_TEST = "[Basic action] Basic Test";
+class BasicTest {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.BASIC_TEST;
+    }
+}
+exports.BasicTest = BasicTest;
+exports.REFLEXIVE_TEST = "[Reflexive action] Reflexive Test";
+class ReflexiveTest {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.REFLEXIVE_TEST;
+    }
+}
+exports.ReflexiveTest = ReflexiveTest;
+exports.GRAPHIC_TEST = "[Graphic action] Graphic Test";
+class GraphicTest {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.GRAPHIC_TEST;
+    }
+}
+exports.GraphicTest = GraphicTest;
+
+},{}],514:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.graphicTest = exports.reflexiveTest = exports.basicTest = exports.updateTest = exports.initTest = void 0;
+var test_buzz_1 = require("./buz/test.buzz");
+Object.defineProperty(exports, "initTest", { enumerable: true, get: function () { return test_buzz_1.initTest; } });
+var test_buzz_2 = require("./buz/test.buzz");
+Object.defineProperty(exports, "updateTest", { enumerable: true, get: function () { return test_buzz_2.updateTest; } });
+var test_buzz_3 = require("./buz/test.buzz");
+Object.defineProperty(exports, "basicTest", { enumerable: true, get: function () { return test_buzz_3.basicTest; } });
+var test_buzz_4 = require("./buz/test.buzz");
+Object.defineProperty(exports, "reflexiveTest", { enumerable: true, get: function () { return test_buzz_4.reflexiveTest; } });
+var test_buzz_5 = require("./buz/test.buzz");
+Object.defineProperty(exports, "graphicTest", { enumerable: true, get: function () { return test_buzz_5.graphicTest; } });
+
+},{"./buz/test.buzz":512}],515:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.TestModel = void 0;
+class TestModel {
+}
+exports.TestModel = TestModel;
+
+},{}],516:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.reducer = void 0;
+const clone = require("clone-deep");
+const Act = require("./test.action");
+const test_model_1 = require("./test.model");
+const Buzz = require("./test.buzzer");
+function reducer(model = new test_model_1.TestModel(), act, state) {
+    switch (act.type) {
+        case Act.UPDATE_TEST:
+            return Buzz.updateTest(clone(model), act.bale, state);
+        case Act.INIT_TEST:
+            return Buzz.initTest(clone(model), act.bale, state);
+        case Act.BASIC_TEST:
+            return Buzz.basicTest(clone(model), act.bale, state);
+        case Act.REFLEXIVE_TEST:
+            return Buzz.reflexiveTest(clone(model), act.bale, state);
+        case Act.GRAPHIC_TEST:
+            return Buzz.graphicTest(clone(model), act.bale, state);
+        default:
+            return model;
+    }
+}
+exports.reducer = reducer;
+
+},{"./test.action":513,"./test.buzzer":514,"./test.model":515,"clone-deep":397}],517:[function(require,module,exports){
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const typescript_ioc_1 = require("typescript-ioc");
+const state_1 = require("../99.core/state");
+let TestUnit = class TestUnit {
+    constructor(state) {
+    }
+};
+TestUnit = __decorate([
+    typescript_ioc_1.Singleton,
+    __metadata("design:paramtypes", [state_1.default])
+], TestUnit);
+exports.default = TestUnit;
+
+},{"../99.core/state":544,"typescript-ioc":430}],518:[function(require,module,exports){
+(function (process){(function (){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.patchPivot = exports.editPivot = exports.runPivot = exports.openPivot = exports.updatePivot = exports.initPivot = void 0;
+const ActMnu = require("../../98.menu.unit/menu.action");
+const ActBus = require("../../99.bus.unit/bus.action");
+const ActShd = require("../../00.shade.unit/shade.action");
+const ActPvt = require("../../96.pivot.unit/pivot.action");
+const ActVrt = require("../../act/vurt.action");
+const ActDsk = require("../../act/disk.action");
+var bit, val, idx, dex, lst, dat;
+const initPivot = async (cpy, bal, ste) => {
+    if (bal.dat != null)
+        bit = await ste.hunt(ActBus.INIT_BUS, { idx: cpy.idx, lst: [ActShd], dat: bal.dat, src: bal.src });
+    if (bal.val == 1)
+        patch(ste, ActMnu.INIT_MENU, bal);
+    if (bal.slv != null)
+        bal.slv({ intBit: { idx: "init-machine" } });
+    return cpy;
+};
+exports.initPivot = initPivot;
+const updatePivot = (cpy, bal, ste) => {
+    const { exec } = require('child_process');
+    exec('tsc -b 110.shade', async (err, stdout, stderr) => {
+        if (err) {
+            console.error(`exec error: ${err}`);
+        }
+        process.chdir("../999.vurt");
+        bit = await ste.bus(ActVrt.BUNDLE_VURT, { src: "110.shade" });
+        process.chdir("../110.shade");
+        bit = await ste.bus(ActDsk.READ_DISK, { src: './work/110.shade.js' });
+        var shade = bit.dskBit.dat;
+        bit = await ste.bus(ActDsk.WRITE_DISK, { src: '../gillisse/public/jsx/110.shade.js', dat: shade });
+        bit = await ste.bus(ActDsk.READ_DISK, { src: './index.html' });
+        var html = bit.dskBit.dat;
+        bit = await ste.bus(ActDsk.READ_DISK, { src: './index.js' });
+        var index = bit.dskBit.dat;
+        bit = await ste.bus(ActDsk.WRITE_DISK, { src: '../gillisse/public/jsx/index.js', dat: index });
+        bit = await ste.bus(ActDsk.WRITE_DISK, { src: '../gillisse/index.html', dat: html });
+        bit = await ste.bus(ActDsk.COPY_DISK, { src: './vue', idx: '../gillisse/src' });
+        setTimeout(() => {
+            if (bal.slv != null)
+                bal.slv({ shdBit: { idx: "update-shade" } });
+        }, 3);
+    });
+    return cpy;
+};
+exports.updatePivot = updatePivot;
+const openPivot = async (cpy, bal, ste) => {
+    //we need to move a whole directory over
+    bit = await ste.bus(ActDsk.COPY_DISK, { src: './vue', idx: '../gillisse/src' });
+    bit = await ste.hunt(ActPvt.RUN_PIVOT, {});
+    const open = require('open');
+    var loc = './vrt.opn.bat';
+    bit = await open(loc);
+    setTimeout(() => {
+        if (bal.slv != null)
+            bal.slv({ pvtBit: { idx: "open-pivot" } });
+    }, 33);
+    return cpy;
+};
+exports.openPivot = openPivot;
+const runPivot = async (cpy, bal, ste) => {
+    const open = require('open');
+    var loc = './vrt.gil.bat';
+    bit = await open(loc);
+    setTimeout(() => {
+        if (bal.slv != null)
+            bal.slv({ shdBit: { idx: "run-shade" } });
+    });
+    return cpy;
+};
+exports.runPivot = runPivot;
+const editPivot = (cpy, bal, ste) => {
+    const { exec } = require('child_process');
+    process.chdir("../../studio/");
+    exec('start Code.exe ../packages/gillisse', async (err, stdout, stderr) => {
+        if (err) {
+            console.error(`exec error: ${err}`);
+        }
+        process.chdir("../packages/110.shade");
+        if (bal.slv != null)
+            bal.slv({ symBit: { idx: "edit-symbol", dat: {} } });
+    });
+    return cpy;
+};
+exports.editPivot = editPivot;
+const patchPivot = async (cpy, bal, ste) => {
+    bit = await ste.bus(ActDsk.COPY_DISK, { src: '../gillisse/src', idx: './source' });
+    if (bal.slv != null)
+        bal.slv({ symBit: { idx: "edit-symbol", dat: {} } });
+    return cpy;
+};
+exports.patchPivot = patchPivot;
+var patch = (ste, type, bale) => ste.dispatch({ type, bale });
+
+}).call(this)}).call(this,require('_process'))
+},{"../../00.shade.unit/shade.action":435,"../../96.pivot.unit/pivot.action":519,"../../98.menu.unit/menu.action":533,"../../99.bus.unit/bus.action":538,"../../act/disk.action":546,"../../act/vurt.action":549,"_process":415,"child_process":undefined,"open":undefined}],519:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PatchPivot = exports.PATCH_PIVOT = exports.EditPivot = exports.EDIT_PIVOT = exports.RunPivot = exports.RUN_PIVOT = exports.OpenPivot = exports.OPEN_PIVOT = exports.UpdatePivot = exports.UPDATE_PIVOT = exports.InitPivot = exports.INIT_PIVOT = void 0;
+// Pivot actions
+exports.INIT_PIVOT = "[Pivot action] Init Pivot";
+class InitPivot {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.INIT_PIVOT;
+    }
+}
+exports.InitPivot = InitPivot;
+exports.UPDATE_PIVOT = "[Pivot action] Update Pivot";
+class UpdatePivot {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.UPDATE_PIVOT;
+    }
+}
+exports.UpdatePivot = UpdatePivot;
+exports.OPEN_PIVOT = "[Pivot action] Open Pivot";
+class OpenPivot {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.OPEN_PIVOT;
+    }
+}
+exports.OpenPivot = OpenPivot;
+exports.RUN_PIVOT = "[Pivot action] Run Pivot";
+class RunPivot {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.RUN_PIVOT;
+    }
+}
+exports.RunPivot = RunPivot;
+exports.EDIT_PIVOT = "[Pivot action] Edit Pivot";
+class EditPivot {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.EDIT_PIVOT;
+    }
+}
+exports.EditPivot = EditPivot;
+exports.PATCH_PIVOT = "[Pivot action] Patch Pivot";
+class PatchPivot {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.PATCH_PIVOT;
+    }
+}
+exports.PatchPivot = PatchPivot;
+
+},{}],520:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.patchPivot = exports.runPivot = exports.editPivot = exports.openPivot = exports.updatePivot = exports.initPivot = void 0;
+var pivot_buzz_1 = require("./buz/pivot.buzz");
+Object.defineProperty(exports, "initPivot", { enumerable: true, get: function () { return pivot_buzz_1.initPivot; } });
+var pivot_buzz_2 = require("./buz/pivot.buzz");
+Object.defineProperty(exports, "updatePivot", { enumerable: true, get: function () { return pivot_buzz_2.updatePivot; } });
+var pivot_buzz_3 = require("./buz/pivot.buzz");
+Object.defineProperty(exports, "openPivot", { enumerable: true, get: function () { return pivot_buzz_3.openPivot; } });
+var pivot_buzz_4 = require("./buz/pivot.buzz");
+Object.defineProperty(exports, "editPivot", { enumerable: true, get: function () { return pivot_buzz_4.editPivot; } });
+var pivot_buzz_5 = require("./buz/pivot.buzz");
+Object.defineProperty(exports, "runPivot", { enumerable: true, get: function () { return pivot_buzz_5.runPivot; } });
+var pivot_buzz_6 = require("./buz/pivot.buzz");
+Object.defineProperty(exports, "patchPivot", { enumerable: true, get: function () { return pivot_buzz_6.patchPivot; } });
+
+},{"./buz/pivot.buzz":518}],521:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PivotModel = void 0;
+class PivotModel {
+    constructor() {
+        this.idx = '555.machine';
+        //pivotBitList: PivotBit[] = [];
+        //pivotBits: any = {};
+    }
+}
+exports.PivotModel = PivotModel;
+
+},{}],522:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.reducer = void 0;
+const clone = require("clone-deep");
+const Act = require("./pivot.action");
+const pivot_model_1 = require("./pivot.model");
+const Buzz = require("./pivot.buzzer");
+function reducer(model = new pivot_model_1.PivotModel(), act, state) {
+    switch (act.type) {
+        case Act.OPEN_PIVOT:
+            return Buzz.openPivot(clone(model), act.bale, state);
+        case Act.RUN_PIVOT:
+            return Buzz.runPivot(clone(model), act.bale, state);
+        case Act.EDIT_PIVOT:
+            return Buzz.runPivot(clone(model), act.bale, state);
+        case Act.PATCH_PIVOT:
+            return Buzz.patchPivot(clone(model), act.bale, state);
+        case Act.UPDATE_PIVOT:
+            return Buzz.updatePivot(clone(model), act.bale, state);
+        case Act.INIT_PIVOT:
+            return Buzz.initPivot(clone(model), act.bale, state);
+        default:
+            return model;
+    }
+}
+exports.reducer = reducer;
+
+},{"./pivot.action":519,"./pivot.buzzer":520,"./pivot.model":521,"clone-deep":397}],523:[function(require,module,exports){
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const typescript_ioc_1 = require("typescript-ioc");
+const state_1 = require("../99.core/state");
+let PivotUnit = class PivotUnit {
+    constructor(state) {
+    }
+};
+PivotUnit = __decorate([
+    typescript_ioc_1.Singleton,
+    __metadata("design:paramtypes", [state_1.default])
+], PivotUnit);
+exports.default = PivotUnit;
+
+},{"../99.core/state":544,"typescript-ioc":430}],524:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.emptyCollect = exports.deleteCollect = exports.modelCollect = exports.getCollect = exports.putCollect = exports.removeCollect = exports.createCollect = exports.writeCollect = exports.readCollect = exports.fetchCollect = exports.updateCollect = exports.initCollect = void 0;
@@ -49460,7 +49840,7 @@ const emptyCollect = (cpy, bal, ste) => {
 };
 exports.emptyCollect = emptyCollect;
 
-},{"../../97.collect.unit/collect.action":513}],513:[function(require,module,exports){
+},{"../../97.collect.unit/collect.action":525}],525:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GetCollect = exports.GET_COLLECT = exports.PutCollect = exports.PUT_COLLECT = exports.ModelCollect = exports.MODEL_COLLECT = exports.EmptyCollect = exports.EMPTY_COLLECT = exports.DeleteCollect = exports.DELETE_COLLECT = exports.RemoveCollect = exports.REMOVE_COLLECT = exports.CreateCollect = exports.CREATE_COLLECT = exports.WriteCollect = exports.WRITE_COLLECT = exports.ReadCollect = exports.READ_COLLECT = exports.FetchCollect = exports.FETCH_COLLECT = exports.UpdateCollect = exports.UPDATE_COLLECT = exports.InitCollect = exports.INIT_COLLECT = void 0;
@@ -49562,7 +49942,7 @@ class GetCollect {
 }
 exports.GetCollect = GetCollect;
 
-},{}],514:[function(require,module,exports){
+},{}],526:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCollect = exports.putCollect = exports.modelCollect = exports.removeCollect = exports.deleteCollect = exports.fetchCollect = exports.emptyCollect = exports.createCollect = exports.writeCollect = exports.readCollect = exports.updateCollect = exports.initCollect = void 0;
@@ -49591,7 +49971,7 @@ Object.defineProperty(exports, "putCollect", { enumerable: true, get: function (
 var collect_buzz_12 = require("./buz/collect.buzz");
 Object.defineProperty(exports, "getCollect", { enumerable: true, get: function () { return collect_buzz_12.getCollect; } });
 
-},{"./buz/collect.buzz":512}],515:[function(require,module,exports){
+},{"./buz/collect.buzz":524}],527:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CollectModel = void 0;
@@ -49603,7 +49983,7 @@ class CollectModel {
 }
 exports.CollectModel = CollectModel;
 
-},{}],516:[function(require,module,exports){
+},{}],528:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reducer = void 0;
@@ -49643,7 +50023,7 @@ function reducer(model = new collect_model_1.CollectModel(), act, state) {
 }
 exports.reducer = reducer;
 
-},{"./collect.action":513,"./collect.buzzer":514,"./collect.model":515,"clone-deep":397}],517:[function(require,module,exports){
+},{"./collect.action":525,"./collect.buzzer":526,"./collect.model":527,"clone-deep":397}],529:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -49667,12 +50047,13 @@ CollectUnit = __decorate([
 ], CollectUnit);
 exports.default = CollectUnit;
 
-},{"../99.core/state":532,"typescript-ioc":430}],518:[function(require,module,exports){
+},{"../99.core/state":544,"typescript-ioc":430}],530:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.visageMenu = exports.shadeMenu = exports.closeMenu = exports.testMenu = exports.updateMenu = exports.initMenu = void 0;
 const ActMnu = require("../menu.action");
 const ActShd = require("../../00.shade.unit/shade.action");
+const ActPvt = require("../../96.pivot.unit/pivot.action");
 const ActTrm = require("../../act/terminal.action");
 var bit, lst, dex;
 const initMenu = async (cpy, bal, ste) => {
@@ -49687,7 +50068,7 @@ const updateMenu = async (cpy, bal, ste) => {
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "-----------", bit: 'local' });
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "SHADE PIVOT V0", bit: 'local' });
     bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "-----------", bit: "local" });
-    var lst = [ActShd.UPDATE_SHADE, ActShd.OPEN_SHADE, ActShd.RUN_SHADE, ActShd.EDIT_SHADE, ActMnu.CONTAINER_MENU, ActMnu.VISAGE_MENU];
+    var lst = [ActPvt.UPDATE_PIVOT, ActPvt.OPEN_PIVOT, ActPvt.RUN_PIVOT, ActPvt.EDIT_PIVOT, ActMnu.CONTAINER_MENU, ActMnu.VISAGE_MENU];
     bit = await ste.bus(ActTrm.UPDATE_TERMINAL, { lst });
     bit = bit.trmBit;
     var idx = lst[bit.val];
@@ -49701,26 +50082,26 @@ const updateMenu = async (cpy, bal, ste) => {
         case ActMnu.SHADE_MENU:
             bit = await ste.hunt(ActMnu.SHADE_MENU, {});
             break;
-        case ActShd.OPEN_SHADE:
-            bit = await ste.hunt(ActShd.OPEN_SHADE, {});
+        case ActPvt.OPEN_PIVOT:
+            bit = await ste.hunt(ActPvt.OPEN_PIVOT, {});
             break;
         case ActShd.BROWSER_SHADE:
             bit = await ste.hunt(ActShd.BROWSER_SHADE, {});
             break;
-        case ActShd.RUN_SHADE:
-            bit = await ste.hunt(ActShd.RUN_SHADE, {});
+        case ActPvt.RUN_PIVOT:
+            bit = await ste.hunt(ActPvt.RUN_PIVOT, {});
             break;
-        case ActShd.UPDATE_SHADE:
-            bit = await ste.hunt(ActShd.UPDATE_SHADE, {});
+        case ActPvt.UPDATE_PIVOT:
+            bit = await ste.hunt(ActPvt.UPDATE_PIVOT, {});
             //bit = await ste.hunt(ActShd.OPEN_SHADE, {})
             break;
-        case ActShd.EDIT_SHADE:
-            bit = await ste.hunt(ActShd.EDIT_SHADE, {});
+        case ActPvt.EDIT_PIVOT:
+            bit = await ste.hunt(ActPvt.EDIT_PIVOT, {});
             bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "PATCHING...", bit: 'local' });
             bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "-----------", bit: "local" });
-            lst = [ActShd.PATCH_SHADE];
+            lst = [ActPvt.PATCH_PIVOT];
             bit = await ste.bus(ActTrm.UPDATE_TERMINAL, { lst });
-            bit = await ste.hunt(ActShd.PATCH_SHADE, {});
+            bit = await ste.hunt(ActPvt.PATCH_PIVOT, {});
             break;
         default:
             bit = await await ste.bus(ActTrm.CLOSE_TERMINAL, {});
@@ -49766,7 +50147,7 @@ const visageMenu = (cpy, bal, ste) => {
 };
 exports.visageMenu = visageMenu;
 
-},{"../../00.shade.unit/shade.action":435,"../../act/terminal.action":536,"../menu.action":521}],519:[function(require,module,exports){
+},{"../../00.shade.unit/shade.action":435,"../../96.pivot.unit/pivot.action":519,"../../act/terminal.action":548,"../menu.action":533}],531:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.containerMenu = void 0;
@@ -49816,7 +50197,7 @@ const containerMenu = async (cpy, bal, ste) => {
 exports.containerMenu = containerMenu;
 var patch = (ste, type, bale) => ste.dispatch({ type, bale });
 
-},{"../../01.visage.unit/visage.action":441,"../../03.container.unit/container.action":453,"../../act/terminal.action":536,"../menu.action":521}],520:[function(require,module,exports){
+},{"../../01.visage.unit/visage.action":441,"../../03.container.unit/container.action":453,"../../act/terminal.action":548,"../menu.action":533}],532:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.visageMenu = void 0;
@@ -49877,7 +50258,7 @@ const visageMenu = async (cpy, bal, ste) => {
 exports.visageMenu = visageMenu;
 var patch = (ste, type, bale) => ste.dispatch({ type, bale });
 
-},{"../../01.visage.unit/visage.action":441,"../../act/terminal.action":536,"../menu.action":521}],521:[function(require,module,exports){
+},{"../../01.visage.unit/visage.action":441,"../../act/terminal.action":548,"../menu.action":533}],533:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ContainerMenu = exports.CONTAINER_MENU = exports.VisageMenu = exports.VISAGE_MENU = exports.ShadeMenu = exports.SHADE_MENU = exports.CloseMenu = exports.CLOSE_MENU = exports.TestMenu = exports.TEST_MENU = exports.UpdateMenu = exports.UPDATE_MENU = exports.InitMenu = exports.INIT_MENU = void 0;
@@ -49938,7 +50319,7 @@ class ContainerMenu {
 }
 exports.ContainerMenu = ContainerMenu;
 
-},{}],522:[function(require,module,exports){
+},{}],534:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.containerMenu = exports.visageMenu = exports.shadeMenu = exports.closeMenu = exports.testMenu = exports.updateMenu = exports.initMenu = void 0;
@@ -49957,7 +50338,7 @@ Object.defineProperty(exports, "visageMenu", { enumerable: true, get: function (
 var container_menu_buzz_1 = require("./buz/container-menu.buzz");
 Object.defineProperty(exports, "containerMenu", { enumerable: true, get: function () { return container_menu_buzz_1.containerMenu; } });
 
-},{"./buz/00.menu.buzz":518,"./buz/container-menu.buzz":519,"./buz/visage-menu.buzz":520}],523:[function(require,module,exports){
+},{"./buz/00.menu.buzz":530,"./buz/container-menu.buzz":531,"./buz/visage-menu.buzz":532}],535:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MenuModel = void 0;
@@ -49971,7 +50352,7 @@ class MenuModel {
 }
 exports.MenuModel = MenuModel;
 
-},{}],524:[function(require,module,exports){
+},{}],536:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reducer = void 0;
@@ -50001,7 +50382,7 @@ function reducer(model = new menu_model_1.MenuModel(), act, state) {
 }
 exports.reducer = reducer;
 
-},{"./menu.action":521,"./menu.buzzer":522,"./menu.model":523,"clone-deep":397}],525:[function(require,module,exports){
+},{"./menu.action":533,"./menu.buzzer":534,"./menu.model":535,"clone-deep":397}],537:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -50025,7 +50406,7 @@ MenuUnit = __decorate([
 ], MenuUnit);
 exports.default = MenuUnit;
 
-},{"../99.core/state":532,"typescript-ioc":430}],526:[function(require,module,exports){
+},{"../99.core/state":544,"typescript-ioc":430}],538:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateBus = exports.CREATE_BUS = exports.UpdateBus = exports.UPDATE_BUS = exports.MessageBus = exports.MESSAGE_BUS = exports.ConnectBus = exports.CONNECT_BUS = exports.OpenBus = exports.OPEN_BUS = exports.InitBus = exports.INIT_BUS = void 0;
@@ -50079,7 +50460,7 @@ class CreateBus {
 }
 exports.CreateBus = CreateBus;
 
-},{}],527:[function(require,module,exports){
+},{}],539:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createBus = exports.messageBus = exports.connectBus = exports.updateBus = exports.openBus = exports.initBus = void 0;
@@ -50096,7 +50477,7 @@ Object.defineProperty(exports, "messageBus", { enumerable: true, get: function (
 var bus_buzz_6 = require("./buz/bus.buzz");
 Object.defineProperty(exports, "createBus", { enumerable: true, get: function () { return bus_buzz_6.createBus; } });
 
-},{"./buz/bus.buzz":531}],528:[function(require,module,exports){
+},{"./buz/bus.buzz":543}],540:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BusModel = void 0;
@@ -50109,7 +50490,7 @@ class BusModel {
 }
 exports.BusModel = BusModel;
 
-},{}],529:[function(require,module,exports){
+},{}],541:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reducer = void 0;
@@ -50137,7 +50518,7 @@ function reducer(model = new bus_model_1.BusModel(), act, state) {
 }
 exports.reducer = reducer;
 
-},{"./bus.action":526,"./bus.buzzer":527,"./bus.model":528,"clone-deep":397}],530:[function(require,module,exports){
+},{"./bus.action":538,"./bus.buzzer":539,"./bus.model":540,"clone-deep":397}],542:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -50161,7 +50542,7 @@ BusUnit = __decorate([
 ], BusUnit);
 exports.default = BusUnit;
 
-},{"../99.core/state":532,"typescript-ioc":430}],531:[function(require,module,exports){
+},{"../99.core/state":544,"typescript-ioc":430}],543:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateBus = exports.messageBus = exports.connectBus = exports.openBus = exports.createBus = exports.initBus = void 0;
@@ -50337,7 +50718,7 @@ exports.updateBus = updateBus;
 var patch = (ste, type, bale) => ste.dispatch({ type, bale });
 const clone = require("clone-deep");
 
-},{"../../97.collect.unit/collect.action":513,"../../98.menu.unit/menu.action":521,"../../99.bus.unit/bus.action":526,"clone-deep":397}],532:[function(require,module,exports){
+},{"../../97.collect.unit/collect.action":525,"../../98.menu.unit/menu.action":533,"../../99.bus.unit/bus.action":538,"clone-deep":397}],544:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const rx_lite_1 = require("rx-lite");
@@ -50372,7 +50753,7 @@ class State extends rx_lite_1.BehaviorSubject {
 }
 exports.default = State;
 
-},{"../BEE":533,"rx-lite":421}],533:[function(require,module,exports){
+},{"../BEE":545,"rx-lite":421}],545:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reducer = exports.list = void 0;
@@ -50389,6 +50770,8 @@ const loop_unit_1 = require("./09.loop.unit/loop.unit");
 const toon_unit_1 = require("./10.toon.unit/toon.unit");
 const video_unit_1 = require("./11.video.unit/video.unit");
 const frame_unit_1 = require("./12.frame.unit/frame.unit");
+const test_unit_1 = require("./95.test.unit/test.unit");
+const pivot_unit_1 = require("./96.pivot.unit/pivot.unit");
 const collect_unit_1 = require("./97.collect.unit/collect.unit");
 const menu_unit_1 = require("./98.menu.unit/menu.unit");
 const bus_unit_1 = require("./99.bus.unit/bus.unit");
@@ -50405,10 +50788,12 @@ const loop_model_1 = require("./09.loop.unit/loop.model");
 const toon_model_1 = require("./10.toon.unit/toon.model");
 const video_model_1 = require("./11.video.unit/video.model");
 const frame_model_1 = require("./12.frame.unit/frame.model");
+const test_model_1 = require("./95.test.unit/test.model");
+const pivot_model_1 = require("./96.pivot.unit/pivot.model");
 const collect_model_1 = require("./97.collect.unit/collect.model");
 const menu_model_1 = require("./98.menu.unit/menu.model");
 const bus_model_1 = require("./99.bus.unit/bus.model");
-exports.list = [shade_unit_1.default, visage_unit_1.default, surface_unit_1.default, container_unit_1.default, graphic_unit_1.default, text_unit_1.default, sprite_unit_1.default, hexagon_unit_1.default, focigon_unit_1.default, loop_unit_1.default, toon_unit_1.default, video_unit_1.default, frame_unit_1.default, collect_unit_1.default, menu_unit_1.default, bus_unit_1.default];
+exports.list = [shade_unit_1.default, visage_unit_1.default, surface_unit_1.default, container_unit_1.default, graphic_unit_1.default, text_unit_1.default, sprite_unit_1.default, hexagon_unit_1.default, focigon_unit_1.default, loop_unit_1.default, toon_unit_1.default, video_unit_1.default, frame_unit_1.default, test_unit_1.default, pivot_unit_1.default, collect_unit_1.default, menu_unit_1.default, bus_unit_1.default];
 const reduceFromShade = require("./00.shade.unit/shade.reduce");
 const reduceFromVisage = require("./01.visage.unit/visage.reduce");
 const reduceFromSurface = require("./02.surface.unit/surface.reduce");
@@ -50422,6 +50807,8 @@ const reduceFromLoop = require("./09.loop.unit/loop.reduce");
 const reduceFromToon = require("./10.toon.unit/toon.reduce");
 const reduceFromVideo = require("./11.video.unit/video.reduce");
 const reduceFromFrame = require("./12.frame.unit/frame.reduce");
+const reduceFromTest = require("./95.test.unit/test.reduce");
+const reduceFromPivot = require("./96.pivot.unit/pivot.reduce");
 const reduceFromCollect = require("./97.collect.unit/collect.reduce");
 const reduceFromMenu = require("./98.menu.unit/menu.reduce");
 const reduceFromBus = require("./99.bus.unit/bus.reduce");
@@ -50439,6 +50826,8 @@ exports.reducer = {
     toon: reduceFromToon.reducer,
     video: reduceFromVideo.reducer,
     frame: reduceFromFrame.reducer,
+    test: reduceFromTest.reducer,
+    pivot: reduceFromPivot.reducer,
     collect: reduceFromCollect.reducer,
     menu: reduceFromMenu.reducer,
     bus: reduceFromBus.reducer,
@@ -50458,6 +50847,8 @@ class UnitData {
         this.toon = new toon_model_1.ToonModel();
         this.video = new video_model_1.VideoModel();
         this.frame = new frame_model_1.FrameModel();
+        this.test = new test_model_1.TestModel();
+        this.pivot = new pivot_model_1.PivotModel();
         this.collect = new collect_model_1.CollectModel();
         this.menu = new menu_model_1.MenuModel();
         this.bus = new bus_model_1.BusModel();
@@ -50465,7 +50856,7 @@ class UnitData {
 }
 exports.default = UnitData;
 
-},{"./00.shade.unit/shade.model":437,"./00.shade.unit/shade.reduce":438,"./00.shade.unit/shade.unit":439,"./01.visage.unit/visage.model":443,"./01.visage.unit/visage.reduce":444,"./01.visage.unit/visage.unit":445,"./02.surface.unit/surface.model":449,"./02.surface.unit/surface.reduce":450,"./02.surface.unit/surface.unit":451,"./03.container.unit/container.model":455,"./03.container.unit/container.reduce":456,"./03.container.unit/container.unit":457,"./04.graphic.unit/graphic.model":461,"./04.graphic.unit/graphic.reduce":462,"./04.graphic.unit/graphic.unit":463,"./05.text.unit/text.model":467,"./05.text.unit/text.reduce":468,"./05.text.unit/text.unit":469,"./06.sprite.unit/sprite.model":473,"./06.sprite.unit/sprite.reduce":474,"./06.sprite.unit/sprite.unit":475,"./07.hexagon.unit/hexagon.model":479,"./07.hexagon.unit/hexagon.reduce":480,"./07.hexagon.unit/hexagon.unit":481,"./08.focigon.unit/focigon.model":485,"./08.focigon.unit/focigon.reduce":486,"./08.focigon.unit/focigon.unit":487,"./09.loop.unit/loop.model":491,"./09.loop.unit/loop.reduce":492,"./09.loop.unit/loop.unit":493,"./10.toon.unit/toon.model":497,"./10.toon.unit/toon.reduce":498,"./10.toon.unit/toon.unit":499,"./11.video.unit/video.model":503,"./11.video.unit/video.reduce":504,"./11.video.unit/video.unit":505,"./12.frame.unit/frame.model":509,"./12.frame.unit/frame.reduce":510,"./12.frame.unit/frame.unit":511,"./97.collect.unit/collect.model":515,"./97.collect.unit/collect.reduce":516,"./97.collect.unit/collect.unit":517,"./98.menu.unit/menu.model":523,"./98.menu.unit/menu.reduce":524,"./98.menu.unit/menu.unit":525,"./99.bus.unit/bus.model":528,"./99.bus.unit/bus.reduce":529,"./99.bus.unit/bus.unit":530}],534:[function(require,module,exports){
+},{"./00.shade.unit/shade.model":437,"./00.shade.unit/shade.reduce":438,"./00.shade.unit/shade.unit":439,"./01.visage.unit/visage.model":443,"./01.visage.unit/visage.reduce":444,"./01.visage.unit/visage.unit":445,"./02.surface.unit/surface.model":449,"./02.surface.unit/surface.reduce":450,"./02.surface.unit/surface.unit":451,"./03.container.unit/container.model":455,"./03.container.unit/container.reduce":456,"./03.container.unit/container.unit":457,"./04.graphic.unit/graphic.model":461,"./04.graphic.unit/graphic.reduce":462,"./04.graphic.unit/graphic.unit":463,"./05.text.unit/text.model":467,"./05.text.unit/text.reduce":468,"./05.text.unit/text.unit":469,"./06.sprite.unit/sprite.model":473,"./06.sprite.unit/sprite.reduce":474,"./06.sprite.unit/sprite.unit":475,"./07.hexagon.unit/hexagon.model":479,"./07.hexagon.unit/hexagon.reduce":480,"./07.hexagon.unit/hexagon.unit":481,"./08.focigon.unit/focigon.model":485,"./08.focigon.unit/focigon.reduce":486,"./08.focigon.unit/focigon.unit":487,"./09.loop.unit/loop.model":491,"./09.loop.unit/loop.reduce":492,"./09.loop.unit/loop.unit":493,"./10.toon.unit/toon.model":497,"./10.toon.unit/toon.reduce":498,"./10.toon.unit/toon.unit":499,"./11.video.unit/video.model":503,"./11.video.unit/video.reduce":504,"./11.video.unit/video.unit":505,"./12.frame.unit/frame.model":509,"./12.frame.unit/frame.reduce":510,"./12.frame.unit/frame.unit":511,"./95.test.unit/test.model":515,"./95.test.unit/test.reduce":516,"./95.test.unit/test.unit":517,"./96.pivot.unit/pivot.model":521,"./96.pivot.unit/pivot.reduce":522,"./96.pivot.unit/pivot.unit":523,"./97.collect.unit/collect.model":527,"./97.collect.unit/collect.reduce":528,"./97.collect.unit/collect.unit":529,"./98.menu.unit/menu.model":535,"./98.menu.unit/menu.reduce":536,"./98.menu.unit/menu.unit":537,"./99.bus.unit/bus.model":540,"./99.bus.unit/bus.reduce":541,"./99.bus.unit/bus.unit":542}],546:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.COPY_DISK = exports.LOAD_LIST_DISK = exports.LIST_DISK = exports.WRITE_DISK = exports.READ_DISK = exports.UPDATE_DISK = exports.INIT_DISK = void 0;
@@ -50477,7 +50868,7 @@ exports.LIST_DISK = "[List action] List Disk";
 exports.LOAD_LIST_DISK = "[Load_list action] Load_list Disk";
 exports.COPY_DISK = "[Copy action] Copy Disk";
 
-},{}],535:[function(require,module,exports){
+},{}],547:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.READY_SPACE = exports.UPDATE_SPACE = exports.INIT_SPACE = void 0;
@@ -50485,7 +50876,7 @@ exports.INIT_SPACE = "[Space action] Init Space";
 exports.UPDATE_SPACE = "[Space action] Update Space";
 exports.READY_SPACE = "[Ready action] Ready Space";
 
-},{}],536:[function(require,module,exports){
+},{}],548:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ADD_PORT = exports.CONTENT_TERMINAL = exports.ROOT_TERMINAL = exports.CLOSE_TERMINAL = exports.TABLE_TERMINAL = exports.INPUT_TERMINAL = exports.CLEAR_TERMINAL = exports.UPDATE_TERMINAL = exports.WRITE_TERMINAL = exports.FOCUS_TERMINAL = exports.OPEN_TERMINAL = exports.INIT_TERMINAL = void 0;
@@ -50503,7 +50894,7 @@ exports.ROOT_TERMINAL = "[Terminal action] Root Terminal";
 exports.CONTENT_TERMINAL = "[Terminal action] Content Terminal";
 exports.ADD_PORT = "[Terminal action] Add Port";
 
-},{}],537:[function(require,module,exports){
+},{}],549:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.VALUE_VURT = exports.BUNDLE_VURT = exports.CONTAINS_VURT = exports.LIST_UNIT_VURT = exports.LIST_PIVOT_VURT = exports.COUNT_VURT = exports.UNIT_VURT = exports.REPLACE_VURT = exports.UPDATE_VURT = exports.FETCH_VURT = exports.TEST_CLOUD_VURT = exports.DELAY_VURT = exports.INIT_VURT = void 0;
@@ -50521,7 +50912,7 @@ exports.CONTAINS_VURT = "[Contains action] Contains Vurt";
 exports.BUNDLE_VURT = "[Bundle action] Bundle Vurt";
 exports.VALUE_VURT = "[Value action] Value Vurt";
 
-},{}],538:[function(require,module,exports){
+},{}],550:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var sim = {
@@ -50553,7 +50944,7 @@ const Import = require("./BEE");
 const state_1 = require("./99.core/state");
 module.exports = sim;
 
-},{"./99.core/state":532,"./BEE":533}],539:[function(require,module,exports){
+},{"./99.core/state":544,"./BEE":545}],551:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.WISE_NORTH_EAST = exports.WISE_NORTH = exports.WISE_NORTH_WEST = exports.WISE_WEST = exports.WISE_SOUTH_WEST = exports.WISE_SOUTH = exports.WISE_SOUTH_EAST = exports.WISE_EAST = exports.NORTH_EAST = exports.NORTH = exports.NORTH_WEST = exports.WEST = exports.SOUTH_WEST = exports.SOUTH = exports.SOUTH_EAST = exports.EAST = void 0;
@@ -50574,7 +50965,7 @@ exports.WISE_NORTH_WEST = "Wise NW";
 exports.WISE_NORTH = "Wise N";
 exports.WISE_NORTH_EAST = "Wise NE";
 
-},{}],540:[function(require,module,exports){
+},{}],552:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CIRCLE = exports.ROUNDED_RECTANGLE = exports.RECTANGLE = void 0;
@@ -50582,14 +50973,14 @@ exports.RECTANGLE = "rectangle";
 exports.ROUNDED_RECTANGLE = "rounded-rectangle";
 exports.CIRCLE = "circle";
 
-},{}],541:[function(require,module,exports){
+},{}],553:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HEXMAP = exports.FOCUS = void 0;
 exports.FOCUS = "focus";
 exports.HEXMAP = "hexmap";
 
-},{}],542:[function(require,module,exports){
+},{}],554:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LOOP = exports.VIDEO = exports.HEXAGON = exports.SPRITE = exports.TEXT = exports.GRAPHIC = exports.CONTAINER = exports.SURFACE = exports.VISAGE = void 0;
@@ -50603,7 +50994,7 @@ exports.HEXAGON = "hexagon";
 exports.VIDEO = "video";
 exports.LOOP = "loop";
 
-},{}],543:[function(require,module,exports){
+},{}],555:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MOUNT_WIDTH = exports.MOUNT_HEIGHT = exports.MOUNT_PART = exports.MOUNT_FULL = exports.SCREEN = void 0;

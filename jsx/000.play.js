@@ -31401,6 +31401,15 @@ const openGardenex = async (cpy, bal, ste) => {
     var codebase = bal.dat.codebase;
     bit = await SHADE.hunt(SHADE.ActVsg.MOUNT_VISAGE, { idx: "vsg00", src: "indexCanvas", dat: { height: height } });
     bit = await PLAY.hunt(PLAY.ActPly.WRITE_PLAY, { idx: title + '-by-' + author, src: codebase });
+    bit = await SHADE.hunt(SHADE.ActVsg.REMOVE_VISAGE, { idx: "vsg00" });
+    bit = await SHADE.hunt(SHADE.ActVsg.MOUNT_VISAGE, { idx: "vsg00", src: "indexCanvas", dat: { height: height } });
+    bit = await SHADE.hunt(SHADE.ActVsg.READ_VISAGE, { idx: "vsg00" });
+    bit = await SHADE.hunt(SHADE.ActCan.SURFACE_CONTAINER, { idx: 'fce-can-00', src: "vsg00" });
+    bit = await SHADE.hunt(SHADE.ActCan.WRITE_CONTAINER, { idx: "can00", src: 'vsg00', dat: { s: 1.5, reflex: true } });
+    var container = bit.canBit.dat.bit;
+    bit = await SHADE.hunt(SHADE.ActCan.ADD_CONTAINER, { idx: 'fce-can-00', dat: { bit: container } });
+    bit = await SHADE.hunt(SHADE.ActSpr.WRITE_SPRITE, { idx: 'spr00', src: 'vsg00', dat: { src: "./img/karth/00000.png", y: -300 } });
+    bit = await SHADE.hunt(SHADE.ActCan.ADD_CONTAINER, { idx: 'can00', dat: bit.sprBit.dat });
     return cpy;
 };
 exports.openGardenex = openGardenex;
@@ -31408,15 +31417,7 @@ const updateGardenex = async (cpy, bal, ste) => {
     if (bal.dat == null)
         bal.dat = {};
     var height = 1080;
-    bit = await SHADE.hunt(SHADE.ActVsg.REMOVE_VISAGE, { idx: "vsg00" });
-    bit = await SHADE.hunt(SHADE.ActVsg.MOUNT_VISAGE, { idx: "vsg00", src: "indexCanvas", dat: { height: height } });
-    bit = await SHADE.hunt(SHADE.ActVsg.READ_VISAGE, { idx: "vsg00" });
-    bit = await SHADE.hunt(SHADE.ActCan.SURFACE_CONTAINER, { idx: 'fce-can-00', src: "vsg00" });
-    bit = await SHADE.hunt(SHADE.ActCan.WRITE_CONTAINER, { idx: "can00", src: 'vsg00', dat: { s: 1.5 } });
-    var container = bit.canBit.dat.bit;
-    bit = await SHADE.hunt(SHADE.ActCan.ADD_CONTAINER, { idx: 'fce-can-00', dat: { bit: container } });
-    bit = await SHADE.hunt(SHADE.ActSpr.WRITE_SPRITE, { idx: 'spr00', src: 'vsg00', dat: { src: "./img/karth/00000.png", y: -300 } });
-    bit = await SHADE.hunt(SHADE.ActCan.ADD_CONTAINER, { idx: 'can00', dat: bit.sprBit.dat });
+    bit = await SHADE.hunt(SHADE.ActCan.WRITE_CONTAINER, { idx: "can00", src: 'vsg00', dat: { s: 1.5, reflex: true } });
     return cpy;
 };
 exports.updateGardenex = updateGardenex;

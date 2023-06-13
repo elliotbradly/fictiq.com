@@ -47031,6 +47031,7 @@ const ActCol = require("../../97.collect.unit/collect.action");
 const ActFce = require("../../02.surface.unit/surface.action");
 const ActCan = require("../../03.container.unit/container.action");
 const ActVsg = require("../../01.visage.unit/visage.action");
+const ActGph = require("../../04.graphic.unit/graphic.action");
 var bit, val, idx, dex, lst, dat;
 const initContainer = (cpy, bal, ste) => {
     return cpy;
@@ -47147,15 +47148,45 @@ const addContainer = async (cpy, bal, ste) => {
     return cpy;
 };
 exports.addContainer = addContainer;
+var flag = false;
+var mask;
 const reflexiveContainer = async (cpy, bal, ste) => {
     bit = await ste.hunt(ActCan.READ_CONTAINER, { idx: bal.idx });
+    var parent = bit.canBit.dat.bit;
+    bit = await ste.hunt(ActCan.READ_CONTAINER, { idx: bal.idx });
     dat = bit.canBit.dat;
+    var stageW = 1920;
+    var stageH = 1080;
+    var imageW = 2048;
+    var imageH = 1984;
+    var scaleW = stageW / imageW;
+    var scaleH = stageH / imageH;
+    var scale = scaleW;
+    if (scaleH < scale)
+        scale = scaleH;
     var x = window.innerWidth || document.body.clientWidth;
     var y = window.innerHeight || document.body.clientHeight;
     var can = dat.bit;
+    if (flag == false) {
+        bit = await ste.hunt(ActGph.WRITE_GRAPHIC, { idx: 'msk00', src: 'vsg00', dat: { w: stageW, h: stageH } });
+        mask = bit.gphBit.dat.bit;
+        bit = await ste.hunt(ActCan.ADD_CONTAINER, { idx: 'can00', dat: { bit: mask } });
+        can.mask = mask;
+        flag = true;
+    }
     var width = can.width;
-    lst = can.children;
-    debugger;
+    console.log("reflexive space " + width);
+    if (width == 0)
+        return bal.slv({ canBit: { idx: "reflexive-container-empty", dat: null } });
+    //parent.x = x * .5 - imageW * .25;
+    can.children.forEach((a) => {
+        a.x = x * .5 - a['width'] * .5;
+        if (a['height'] > stageH) {
+            var scale = stageH / a['height'];
+            a.scale = { x: scale, y: scale };
+        }
+    });
+    //can.scale = { x: scale, y: scale }
     if (bal.slv != null)
         return bal.slv({ canBit: { idx: "reflexive-container", dat: null } });
     return cpy;
@@ -47164,7 +47195,7 @@ exports.reflexiveContainer = reflexiveContainer;
 const SHADE = require("../../val/shade");
 const PIXI = require("pixi.js-legacy");
 
-},{"../../01.visage.unit/visage.action":441,"../../02.surface.unit/surface.action":447,"../../03.container.unit/container.action":453,"../../97.collect.unit/collect.action":525,"../../val/shade":554,"pixi.js-legacy":412}],453:[function(require,module,exports){
+},{"../../01.visage.unit/visage.action":441,"../../02.surface.unit/surface.action":447,"../../03.container.unit/container.action":453,"../../04.graphic.unit/graphic.action":459,"../../97.collect.unit/collect.action":525,"../../val/shade":554,"pixi.js-legacy":412}],453:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DeleteContainer = exports.DELETE_CONTAINER = exports.RemoveContainer = exports.REMOVE_CONTAINER = exports.AddContainer = exports.ADD_CONTAINER = exports.SurfaceContainer = exports.SURFACE_CONTAINER = exports.CreateContainer = exports.CREATE_CONTAINER = exports.WriteContainer = exports.WRITE_CONTAINER = exports.ReadContainer = exports.READ_CONTAINER = exports.UpdateContainer = exports.UPDATE_CONTAINER = exports.ReflexiveContainer = exports.REFLEXIVE_CONTAINER = exports.InitContainer = exports.INIT_CONTAINER = void 0;
@@ -47871,6 +47902,9 @@ const updateSprite = async (cpy, bal, ste) => {
     var sprite = dat.bit;
     sprite.x = dat.x;
     sprite.y = dat.y;
+    if (dat.s == null)
+        dat.s = 1;
+    sprite.scale = { x: dat.s, y: dat.s };
     if (bal.slv != null)
         return bal.slv({ sprBit: { idx: "update-sprite", dat: dat } });
     return cpy;
@@ -49262,6 +49296,8 @@ exports.graphicTest = exports.reflexiveTest = exports.basicTest = exports.update
 const ActVsg = require("../../01.visage.unit/visage.action");
 const ActCan = require("../../03.container.unit/container.action");
 const ActGph = require("../../04.graphic.unit/graphic.action");
+const ActTxt = require("../../05.text.unit/text.action");
+const ActSpr = require("../../06.sprite.unit/sprite.action");
 const ActHex = require("../../07.hexagon.unit/hexagon.action");
 var SHADE = global.SHADE;
 var SPACE = global.SPACE;
@@ -49297,15 +49333,30 @@ const reflexiveTest = async (cpy, bal, ste) => {
     bit = await ste.hunt(ActVsg.REMOVE_VISAGE, { idx: "vsg00" });
     bit = await ste.hunt(ActVsg.MOUNT_VISAGE, { idx: "vsg00", src: "indexCanvas", dat: { height: 720 } });
     bit = await ste.hunt(ActVsg.READ_VISAGE, { idx: "vsg00" });
-    bit = await ste.hunt(ActCan.WRITE_CONTAINER, { idx: "can00", src: 'vsg00' });
     bit = await ste.hunt(ActCan.SURFACE_CONTAINER, { idx: 'fce-can-00', src: "vsg00" });
+    //reflexive parent
+    bit = await ste.hunt(ActCan.WRITE_CONTAINER, { idx: "can00", src: 'vsg00', dat: { reflex: true } });
+    var container = bit.canBit.dat.bit;
+    bit = await ste.hunt(ActCan.ADD_CONTAINER, { idx: 'fce-can-00', dat: { bit: container } });
+    bit = await ste.hunt(ActCan.WRITE_CONTAINER, { idx: "can01", src: 'vsg00', dat: { reflex: true } });
+    var container = bit.canBit.dat.bit;
+    bit = await ste.hunt(ActCan.ADD_CONTAINER, { idx: 'can00', dat: { bit: container } });
     bit = await ste.hunt(ActGph.WRITE_GRAPHIC, { idx: 'gph00', src: 'vsg00' });
-    bit = await ste.hunt(ActCan.ADD_CONTAINER, { idx: 'fce-can-00', dat: bit.gphBit.dat });
-    const response = await fetch("./dat/hexmap/000.swamp.json");
-    const jsonData = await response.json();
-    bit = await SPACE.hunt(SPACE.ActMap.ADD_HEXMAP, { idx: 'map00', dat: { gph: 'gph00', dat: jsonData } });
-    dat = bit.mapBit.dat;
-    bit = await ste.hunt(ActHex.WRITE_HEXAGON, { idx: 'hex00', src: 'vsg00', dat });
+    bit = await ste.hunt(ActCan.ADD_CONTAINER, { idx: 'can01', dat: bit.gphBit.dat });
+    bit = await ste.hunt(ActTxt.WRITE_TEXT, { idx: 'txt00', src: 'vsg00', dat: { txt: 'waiting for the call' } });
+    bit = await ste.hunt(ActCan.ADD_CONTAINER, { idx: 'can01', dat: bit.txtBit.dat });
+    //we need to give this back to the people who know how to build things
+    bit = await ste.hunt(ActGph.WRITE_GRAPHIC, { idx: 'gph01', src: 'vsg00', dat: { x: 100, y: 100 } });
+    bit = await ste.hunt(ActCan.ADD_CONTAINER, { idx: 'can01', dat: bit.gphBit.dat });
+    bit = await ste.hunt(ActGph.WRITE_GRAPHIC, { idx: 'gph02', src: 'vsg00', dat: { x: 0, y: 0, h: 1984, w: 2048, clr: 0xFF0000 } });
+    bit = await ste.hunt(ActCan.ADD_CONTAINER, { idx: 'can01', dat: bit.gphBit.dat });
+    bit = await ste.hunt(ActGph.WRITE_GRAPHIC, { idx: 'gph03', src: 'vsg00', dat: { x: 0, y: 0, h: 1080, w: 1920, clr: 0x00FF00 } });
+    bit = await ste.hunt(ActCan.ADD_CONTAINER, { idx: 'can01', dat: bit.gphBit.dat });
+    bit = await ste.hunt(ActSpr.WRITE_SPRITE, { idx: 'spr00', src: 'vsg00', dat: { y: -311, src: "./img/karth/00000.png" } });
+    bit = await ste.hunt(ActCan.ADD_CONTAINER, { idx: 'can01', dat: bit.sprBit.dat });
+    setInterval(async () => {
+        bit = await ste.hunt(ActCan.REFLEXIVE_CONTAINER, { idx: 'can00' });
+    }, 1111);
     if (bal.slv != null)
         bal.slv({ tstBit: { idx: "reflexive-test", dat: {} } });
     return cpy;
@@ -49315,20 +49366,23 @@ const graphicTest = async (cpy, bal, ste) => {
     bit = await ste.hunt(ActVsg.REMOVE_VISAGE, { idx: "vsg00" });
     bit = await ste.hunt(ActVsg.MOUNT_VISAGE, { idx: "vsg00", src: "indexCanvas", dat: { height: 720 } });
     bit = await ste.hunt(ActVsg.READ_VISAGE, { idx: "vsg00" });
-    //are the above even needed
     bit = await ste.hunt(ActCan.SURFACE_CONTAINER, { idx: 'fce-can-00', src: "vsg00" });
     bit = await ste.hunt(ActCan.WRITE_CONTAINER, { idx: "can00", src: 'vsg00' });
-    bit = await ste.hunt(ActCan.ADD_CONTAINER, { idx: 'can-00', dat: bit.canBit.dat });
+    var container = bit.canBit.dat.bit;
+    bit = await ste.hunt(ActCan.ADD_CONTAINER, { idx: 'fce-can-00', dat: { bit: container } });
     bit = await ste.hunt(ActGph.WRITE_GRAPHIC, { idx: 'gph00', src: 'vsg00' });
-    bit = await ste.hunt(ActCan.ADD_CONTAINER, { idx: 'can-00', dat: bit.gphBit.dat });
-    bit = await ste.hunt(ActGph.WRITE_GRAPHIC, { idx: 'gph01', src: 'vsg00', dat: { x: 111, y: 111 } });
-    bit = await ste.hunt(ActCan.ADD_CONTAINER, { idx: 'can-00', dat: bit.gphBit.dat });
+    bit = await ste.hunt(ActCan.ADD_CONTAINER, { idx: 'fce-can-00', dat: bit.gphBit.dat });
+    //we need to give this back to the people who know how to build things
+    bit = await ste.hunt(ActGph.WRITE_GRAPHIC, { idx: 'gph01', src: 'vsg00', dat: { x: 100, y: 100 } });
+    bit = await ste.hunt(ActCan.ADD_CONTAINER, { idx: 'can00', dat: bit.gphBit.dat });
+    if (bal.slv != null)
+        bal.slv({ tstBit: { idx: "graphic-test", dat: {} } });
     return cpy;
 };
 exports.graphicTest = graphicTest;
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../../01.visage.unit/visage.action":441,"../../03.container.unit/container.action":453,"../../04.graphic.unit/graphic.action":459,"../../07.hexagon.unit/hexagon.action":477}],513:[function(require,module,exports){
+},{"../../01.visage.unit/visage.action":441,"../../03.container.unit/container.action":453,"../../04.graphic.unit/graphic.action":459,"../../05.text.unit/text.action":465,"../../06.sprite.unit/sprite.action":471,"../../07.hexagon.unit/hexagon.action":477}],513:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GraphicTest = exports.GRAPHIC_TEST = exports.ReflexiveTest = exports.REFLEXIVE_TEST = exports.BasicTest = exports.BASIC_TEST = exports.UpdateTest = exports.UPDATE_TEST = exports.InitTest = exports.INIT_TEST = void 0;

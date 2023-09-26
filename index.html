@@ -58,7 +58,8 @@
 
 <script>
 
-    alert('on---' + TERMINAL)
+    let trmBit =  await TERMINAL.hunt(TERMINAL.ActTrm.INIT_TERMINAL, { val: 1 });
+    console.log( JSON.stringify(trmBit ))
 
 </script>
 

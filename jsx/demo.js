@@ -82,6 +82,8 @@ $(function () {
       term.write('\r\n$ ');
     };
 
+    alert('terminal' + global.TERMINAL)
+
     // TODO: Use a nicer default font
     term.writeln([
       '    LAB MIRROR component which powers many surfaces including',

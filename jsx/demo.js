@@ -53,6 +53,8 @@ $(function () {
   });
   term.open(document.querySelector('.demo .inner'));
 
+  globalThis.TERM = term
+
   var isWebglEnabled = false;
   try {
     const webgl = new window.WebglAddon.WebglAddon();

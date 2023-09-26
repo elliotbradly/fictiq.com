@@ -84,7 +84,7 @@ $(function () {
 
     // TODO: Use a nicer default font
     term.writeln([
-      '    Xterm.js is the frontend component that powers many terminals including',
+      '    LAB MIRROR component which powers many surfaces including',
       '                           \x1b[3mVS Code\x1b[0m, \x1b[3mHyper\x1b[0m and \x1b[3mTheia\x1b[0m!',
       '',
       ' ┌ \x1b[1mFeatures\x1b[0m ──────────────────────────────────────────────────────────────────┐',

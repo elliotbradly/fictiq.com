@@ -1,0 +1,1 @@
+import{b as p}from"./index.7cd7a2fb.js";var c=p(async o=>{var t=window;o.app.provide("SHADE",t.SHADE),o.app.provide("MQTT",t.MQTT);const a="mqtt://localhost:"+8883;await t.SHADE.hunt(t.SHADE.ActShd.INIT_SHADE,{val:0,src:a})});export{c as default};

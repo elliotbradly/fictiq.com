@@ -221,7 +221,7 @@ exports.default = MarketUnit;
 },{"../99.core/state":32,"typescript-ioc":64}],8:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.pollWallet = exports.updateWallet = exports.initWallet = void 0;
+exports.openWallet = exports.pollWallet = exports.updateWallet = exports.initWallet = void 0;
 const initWallet = (cpy, bal, ste) => {
     debugger;
     return cpy;
@@ -261,11 +261,36 @@ const pollWallet = (cpy, bal, ste) => {
     return cpy;
 };
 exports.pollWallet = pollWallet;
+const openWallet = async (cpy, bal, ste) => {
+    var mrkMod = ste.value.market;
+    const walletKey = bal.src;
+    try {
+        cpy.api = await window['cardano'][walletKey].enable();
+    }
+    catch (err) {
+        console.log(err);
+        bal.slv({ walBit: { idx: "open-wallet-error", src: walletKey } });
+        return cpy;
+    }
+    let walletIsEnabled = false;
+    try {
+        const walletName = bal.src;
+        walletIsEnabled = await window['cardano'][walletKey].isEnabled();
+    }
+    catch (err) {
+        console.log(err);
+        bal.slv({ walBit: { idx: "open-wallet-error", val: walletIsEnabled } });
+        return cpy;
+    }
+    bal.slv({ walBit: { idx: "open-wallet", val: walletIsEnabled } });
+    return cpy;
+};
+exports.openWallet = openWallet;
 
 },{}],9:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PollWallet = exports.POLL_WALLET = exports.UpdateWallet = exports.UPDATE_WALLET = exports.InitWallet = exports.INIT_WALLET = void 0;
+exports.OpenWallet = exports.OPEN_WALLET = exports.PollWallet = exports.POLL_WALLET = exports.UpdateWallet = exports.UPDATE_WALLET = exports.InitWallet = exports.INIT_WALLET = void 0;
 // Wallet actions
 exports.INIT_WALLET = "[Wallet action] Init Wallet";
 class InitWallet {
@@ -291,17 +316,27 @@ class PollWallet {
     }
 }
 exports.PollWallet = PollWallet;
+exports.OPEN_WALLET = "[Open action] Open Wallet";
+class OpenWallet {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.OPEN_WALLET;
+    }
+}
+exports.OpenWallet = OpenWallet;
 
 },{}],10:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.pollWallet = exports.updateWallet = exports.initWallet = void 0;
+exports.openWallet = exports.pollWallet = exports.updateWallet = exports.initWallet = void 0;
 var wallet_buzz_1 = require("./buz/wallet.buzz");
 Object.defineProperty(exports, "initWallet", { enumerable: true, get: function () { return wallet_buzz_1.initWallet; } });
 var wallet_buzz_2 = require("./buz/wallet.buzz");
 Object.defineProperty(exports, "updateWallet", { enumerable: true, get: function () { return wallet_buzz_2.updateWallet; } });
 var wallet_buzz_3 = require("./buz/wallet.buzz");
 Object.defineProperty(exports, "pollWallet", { enumerable: true, get: function () { return wallet_buzz_3.pollWallet; } });
+var wallet_buzz_4 = require("./buz/wallet.buzz");
+Object.defineProperty(exports, "openWallet", { enumerable: true, get: function () { return wallet_buzz_4.openWallet; } });
 
 },{"./buz/wallet.buzz":8}],11:[function(require,module,exports){
 "use strict";
@@ -327,6 +362,8 @@ function reducer(model = new wallet_model_1.WalletModel(), act, state) {
             return Buzz.initWallet(clone(model), act.bale, state);
         case Act.POLL_WALLET:
             return Buzz.pollWallet(clone(model), act.bale, state);
+        case Act.OPEN_WALLET:
+            return Buzz.openWallet(clone(model), act.bale, state);
         default:
             return model;
     }

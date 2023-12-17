@@ -1,4 +1,1473 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
+(function (global){(function (){
+global.MARKET = require("../dist/888.market/hunt");
+global.MARKET.ActMrk = require("../dist/888.market/00.market.unit/market.action");
+
+
+
+
+
+
+}).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"../dist/888.market/00.market.unit/market.action":3,"../dist/888.market/hunt":41}],2:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.testMarket = exports.createMarket = exports.deployMarket = exports.updateMarket = exports.openMarket = exports.initMarket = void 0;
+const ActMnu = require("../../98.menu.unit/menu.action");
+const ActMrk = require("../../00.market.unit/market.action");
+const ActWal = require("../../01.wallet.unit/wallet.action");
+const ActBus = require("../../99.bus.unit/bus.action");
+const ActDsk = require("../../act/disk.action");
+const ActPvt = require("../../act/pivot.action");
+var bit, val, idx, dex, lst, dat, src;
+const initMarket = async (cpy, bal, ste) => {
+    if (bal.dat != null)
+        bit = await ste.hunt(ActBus.INIT_BUS, { idx: cpy.idx, lst: [ActMrk, ActWal], dat: bal.dat, src: bal.src });
+    if (bal.val == 1)
+        patch(ste, ActMnu.INIT_MENU, bal);
+    if (bal.slv != null)
+        bal.slv({ intBit: { idx: "init-market" } });
+    return cpy;
+};
+exports.initMarket = initMarket;
+const openMarket = (cpy, bal, ste) => {
+    const { exec } = require('child_process');
+    exec('npx quasar dev -m electron', async (err, stdout, stderr) => {
+        if (bal.slv != null)
+            bal.slv({ mrkBit: { idx: "open-market", dat: stdout } });
+    });
+    return cpy;
+};
+exports.openMarket = openMarket;
+const updateMarket = (cpy, bal, ste) => {
+    const { exec } = require('child_process');
+    exec('tsc -b 888.market', async (err, stdout, stderr) => {
+        if (err) {
+            console.error(`exec error: ${err}`);
+        }
+        bit = await ste.bus(ActPvt.BUNDLE_PIVOT, { src: "888.market" });
+        bit = await ste.bus(ActDsk.READ_DISK, { src: './work/888.market.js' });
+        var shade = bit.dskBit.dat;
+        var writeBit = await ste.bus(ActDsk.WRITE_DISK, { src: './public/jsx/888.market.js', dat: shade });
+        setTimeout(() => {
+            if (bal.slv != null)
+                bal.slv({ mrkBit: { idx: "update-market", dat: { lst: [writeBit] } } });
+        }, 3);
+    });
+    return cpy;
+};
+exports.updateMarket = updateMarket;
+const deployMarket = async (cpy, bal, ste) => {
+    bit = await ste.bus(ActDsk.COPY_DISK, { src: './dist/spa', idx: '../reptiq.com', val: 1 });
+    const { exec } = require('child_process');
+    exec('npm run deploy', async (err, stdout, stderr) => {
+        if (bal.slv != null)
+            bal.slv({ mrkBit: { idx: "deploy-market", dat: stdout } });
+    });
+    return cpy;
+};
+exports.deployMarket = deployMarket;
+const createMarket = (cpy, bal, ste) => {
+    const { exec } = require('child_process');
+    exec('npx quasar build', async (err, stdout, stderr) => {
+        bal.slv({ mrkBit: { idx: "create-market", dat: { src: '888.market' } } });
+    });
+    return cpy;
+};
+exports.createMarket = createMarket;
+const testMarket = (cpy, bal, ste) => {
+    bal.slv({ mrkBit: { idx: "test-market", dat: { src: '888.market' } } });
+    return cpy;
+};
+exports.testMarket = testMarket;
+var patch = (ste, type, bale) => ste.dispatch({ type, bale });
+
+},{"../../00.market.unit/market.action":3,"../../01.wallet.unit/wallet.action":9,"../../98.menu.unit/menu.action":21,"../../99.bus.unit/bus.action":26,"../../act/disk.action":37,"../../act/pivot.action":39,"child_process":undefined}],3:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.TestMarket = exports.TEST_MARKET = exports.CreateMarket = exports.CREATE_MARKET = exports.OpenMarket = exports.OPEN_MARKET = exports.DeployMarket = exports.DEPLOY_MARKET = exports.UpdateMarket = exports.UPDATE_MARKET = exports.InitMarket = exports.INIT_MARKET = void 0;
+// Market actions
+exports.INIT_MARKET = "[Market action] Init Market";
+class InitMarket {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.INIT_MARKET;
+    }
+}
+exports.InitMarket = InitMarket;
+exports.UPDATE_MARKET = "[Market action] Update Market";
+class UpdateMarket {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.UPDATE_MARKET;
+    }
+}
+exports.UpdateMarket = UpdateMarket;
+exports.DEPLOY_MARKET = "[Deploy action] Deploy Market";
+class DeployMarket {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.DEPLOY_MARKET;
+    }
+}
+exports.DeployMarket = DeployMarket;
+exports.OPEN_MARKET = "[Open action] Open Market";
+class OpenMarket {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.OPEN_MARKET;
+    }
+}
+exports.OpenMarket = OpenMarket;
+exports.CREATE_MARKET = "[Create action] Create Market";
+class CreateMarket {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.CREATE_MARKET;
+    }
+}
+exports.CreateMarket = CreateMarket;
+exports.TEST_MARKET = "[Test action] Test Market";
+class TestMarket {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.TEST_MARKET;
+    }
+}
+exports.TestMarket = TestMarket;
+
+},{}],4:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.testMarket = exports.createMarket = exports.openMarket = exports.deployMarket = exports.updateMarket = exports.initMarket = void 0;
+var market_buzz_1 = require("./buz/market.buzz");
+Object.defineProperty(exports, "initMarket", { enumerable: true, get: function () { return market_buzz_1.initMarket; } });
+var market_buzz_2 = require("./buz/market.buzz");
+Object.defineProperty(exports, "updateMarket", { enumerable: true, get: function () { return market_buzz_2.updateMarket; } });
+var market_buzz_3 = require("./buz/market.buzz");
+Object.defineProperty(exports, "deployMarket", { enumerable: true, get: function () { return market_buzz_3.deployMarket; } });
+var market_buzz_4 = require("./buz/market.buzz");
+Object.defineProperty(exports, "openMarket", { enumerable: true, get: function () { return market_buzz_4.openMarket; } });
+var market_buzz_5 = require("./buz/market.buzz");
+Object.defineProperty(exports, "createMarket", { enumerable: true, get: function () { return market_buzz_5.createMarket; } });
+var market_buzz_6 = require("./buz/market.buzz");
+Object.defineProperty(exports, "testMarket", { enumerable: true, get: function () { return market_buzz_6.testMarket; } });
+
+},{"./buz/market.buzz":2}],5:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.MarketModel = void 0;
+class MarketModel {
+    constructor() {
+        this.idx = '888.market';
+        //marketBitList: MarketBit[] = [];
+        //marketBits: any = {};
+    }
+}
+exports.MarketModel = MarketModel;
+
+},{}],6:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.reducer = void 0;
+const clone = require("clone-deep");
+const Act = require("./market.action");
+const market_model_1 = require("./market.model");
+const Buzz = require("./market.buzzer");
+function reducer(model = new market_model_1.MarketModel(), act, state) {
+    switch (act.type) {
+        case Act.UPDATE_MARKET:
+            return Buzz.updateMarket(clone(model), act.bale, state);
+        case Act.INIT_MARKET:
+            return Buzz.initMarket(clone(model), act.bale, state);
+        case Act.DEPLOY_MARKET:
+            return Buzz.deployMarket(clone(model), act.bale, state);
+        case Act.OPEN_MARKET:
+            return Buzz.openMarket(clone(model), act.bale, state);
+        case Act.CREATE_MARKET:
+            return Buzz.createMarket(clone(model), act.bale, state);
+        case Act.TEST_MARKET:
+            return Buzz.testMarket(clone(model), act.bale, state);
+        default:
+            return model;
+    }
+}
+exports.reducer = reducer;
+
+},{"./market.action":3,"./market.buzzer":4,"./market.model":5,"clone-deep":46}],7:[function(require,module,exports){
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const typescript_ioc_1 = require("typescript-ioc");
+const state_1 = require("../99.core/state");
+let MarketUnit = class MarketUnit {
+    constructor(state) {
+    }
+};
+MarketUnit = __decorate([
+    typescript_ioc_1.Singleton,
+    __metadata("design:paramtypes", [state_1.default])
+], MarketUnit);
+exports.default = MarketUnit;
+
+},{"../99.core/state":32,"typescript-ioc":64}],8:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.openWallet = exports.pollWallet = exports.updateWallet = exports.initWallet = void 0;
+const initWallet = (cpy, bal, ste) => {
+    debugger;
+    return cpy;
+};
+exports.initWallet = initWallet;
+const updateWallet = (cpy, bal, ste) => {
+    return cpy;
+};
+exports.updateWallet = updateWallet;
+const pollWallet = (cpy, bal, ste) => {
+    const wallets = [];
+    var count;
+    if (window['cardano'] == null) {
+        bal.slv({ walBit: { idx: "poll-wallet", src: 'wallet-not-present', lst: wallets } });
+        return cpy;
+    }
+    for (const key in window['cardano']) {
+        if (window['cardano'][key].enable && wallets.indexOf(key) === -1) {
+            wallets.push(key);
+        }
+    }
+    wallets;
+    bal.slv({ walBit: { idx: "poll-wallet", src: 'wallet-not-present', lst: wallets } });
+    //debugger
+    //if (wallets.length === 0 && count < 3) {
+    //    setTimeout(() => {
+    //this.pollWallets(count + 1);
+    //    }, 1000);
+    //   return;
+    // }
+    //  this.setState({
+    //      wallets,
+    //      whichWalletSelected: wallets[0]
+    //  }, () => {
+    //      this.refreshData()
+    // });
+    return cpy;
+};
+exports.pollWallet = pollWallet;
+const openWallet = async (cpy, bal, ste) => {
+    var mrkMod = ste.value.market;
+    const walletKey = bal.src;
+    try {
+        cpy.api = await window['cardano'][walletKey].enable();
+    }
+    catch (err) {
+        console.log(err);
+        bal.slv({ walBit: { idx: "open-wallet-error", src: walletKey } });
+        return cpy;
+    }
+    let walletIsEnabled = false;
+    try {
+        const walletName = bal.src;
+        walletIsEnabled = await window['cardano'][walletKey].isEnabled();
+    }
+    catch (err) {
+        console.log(err);
+        bal.slv({ walBit: { idx: "open-wallet-error", val: walletIsEnabled } });
+        return cpy;
+    }
+    bal.slv({ walBit: { idx: "open-wallet", val: walletIsEnabled } });
+    return cpy;
+};
+exports.openWallet = openWallet;
+
+},{}],9:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.OpenWallet = exports.OPEN_WALLET = exports.PollWallet = exports.POLL_WALLET = exports.UpdateWallet = exports.UPDATE_WALLET = exports.InitWallet = exports.INIT_WALLET = void 0;
+// Wallet actions
+exports.INIT_WALLET = "[Wallet action] Init Wallet";
+class InitWallet {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.INIT_WALLET;
+    }
+}
+exports.InitWallet = InitWallet;
+exports.UPDATE_WALLET = "[Wallet action] Update Wallet";
+class UpdateWallet {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.UPDATE_WALLET;
+    }
+}
+exports.UpdateWallet = UpdateWallet;
+exports.POLL_WALLET = "[Poll action] Poll Wallet";
+class PollWallet {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.POLL_WALLET;
+    }
+}
+exports.PollWallet = PollWallet;
+exports.OPEN_WALLET = "[Open action] Open Wallet";
+class OpenWallet {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.OPEN_WALLET;
+    }
+}
+exports.OpenWallet = OpenWallet;
+
+},{}],10:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.openWallet = exports.pollWallet = exports.updateWallet = exports.initWallet = void 0;
+var wallet_buzz_1 = require("./buz/wallet.buzz");
+Object.defineProperty(exports, "initWallet", { enumerable: true, get: function () { return wallet_buzz_1.initWallet; } });
+var wallet_buzz_2 = require("./buz/wallet.buzz");
+Object.defineProperty(exports, "updateWallet", { enumerable: true, get: function () { return wallet_buzz_2.updateWallet; } });
+var wallet_buzz_3 = require("./buz/wallet.buzz");
+Object.defineProperty(exports, "pollWallet", { enumerable: true, get: function () { return wallet_buzz_3.pollWallet; } });
+var wallet_buzz_4 = require("./buz/wallet.buzz");
+Object.defineProperty(exports, "openWallet", { enumerable: true, get: function () { return wallet_buzz_4.openWallet; } });
+
+},{"./buz/wallet.buzz":8}],11:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.WalletModel = void 0;
+class WalletModel {
+}
+exports.WalletModel = WalletModel;
+
+},{}],12:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.reducer = void 0;
+const clone = require("clone-deep");
+const Act = require("./wallet.action");
+const wallet_model_1 = require("./wallet.model");
+const Buzz = require("./wallet.buzzer");
+function reducer(model = new wallet_model_1.WalletModel(), act, state) {
+    switch (act.type) {
+        case Act.UPDATE_WALLET:
+            return Buzz.updateWallet(clone(model), act.bale, state);
+        case Act.INIT_WALLET:
+            return Buzz.initWallet(clone(model), act.bale, state);
+        case Act.POLL_WALLET:
+            return Buzz.pollWallet(clone(model), act.bale, state);
+        case Act.OPEN_WALLET:
+            return Buzz.openWallet(clone(model), act.bale, state);
+        default:
+            return model;
+    }
+}
+exports.reducer = reducer;
+
+},{"./wallet.action":9,"./wallet.buzzer":10,"./wallet.model":11,"clone-deep":46}],13:[function(require,module,exports){
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const typescript_ioc_1 = require("typescript-ioc");
+const state_1 = require("../99.core/state");
+let WalletUnit = class WalletUnit {
+    constructor(state) {
+    }
+};
+WalletUnit = __decorate([
+    typescript_ioc_1.Singleton,
+    __metadata("design:paramtypes", [state_1.default])
+], WalletUnit);
+exports.default = WalletUnit;
+
+},{"../99.core/state":32,"typescript-ioc":64}],14:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.emptyCollect = exports.deleteCollect = exports.removeCollect = exports.createCollect = exports.writeCollect = exports.readCollect = exports.fetchCollect = exports.updateCollect = exports.initCollect = void 0;
+const ActCol = require("../../97.collect.unit/collect.action");
+var bit, lst, dat, idx, val, src, dex;
+const initCollect = (cpy, bal, ste) => {
+    return cpy;
+};
+exports.initCollect = initCollect;
+const updateCollect = (cpy, bal, ste) => {
+    return cpy;
+};
+exports.updateCollect = updateCollect;
+//return the first item in a collection
+const fetchCollect = (cpy, bal, ste) => {
+    if (bal.val == null)
+        bal.val = 1;
+    if ((bal.bit == null))
+        bal.slv({ clcBit: { idx: "fetch-collect-err", src: 'no-bit' } });
+    var type = bal.bit.split(' ').slice(-1).pop().toLowerCase();
+    var cabBit = cpy.caboodleBitList[cpy.caboodleBits[type]];
+    if (bal.val == 1)
+        bit = cabBit.bitList[0];
+    else
+        bit = cabBit;
+    if (bal.slv != null)
+        bal.slv({ clcBit: { idx: "fetch-collect", dat: bit } });
+    return cpy;
+};
+exports.fetchCollect = fetchCollect;
+const readCollect = async (cpy, bal, ste) => {
+    if ((bal.bit == null))
+        bal.slv({ clcBit: { idx: "read-collect-err", src: 'no-bit' } });
+    var type = bal.bit.split(' ').slice(-1).pop().toLowerCase();
+    if (cpy.caboodleBits[type] == null)
+        (0, exports.createCollect)(cpy, { idx: type }, ste);
+    var cabBit = cpy.caboodleBitList[cpy.caboodleBits[type]];
+    if (cabBit.bits[bal.idx] == null) {
+        bit = await ste.hunt(ActCol.WRITE_COLLECT, { idx: bal.idx, bit: bal.bit });
+    }
+    else {
+        dat = cabBit.bitList[cabBit.bits[bal.idx]];
+    }
+    if (bal.slv != null)
+        bal.slv({ clcBit: { idx: "read-collect", dat } });
+    return cpy;
+};
+exports.readCollect = readCollect;
+const writeCollect = async (cpy, bal, ste) => {
+    //let us check see if it exists 
+    var type = bal.bit.split(' ').slice(-1).pop().toLowerCase();
+    if (cpy.caboodleBits[type] == null)
+        (0, exports.createCollect)(cpy, { idx: type }, ste);
+    if ((bal.bit == null))
+        bal.slv({ rskBit: { idx: "write-collect-err", src: 'no-bit' } });
+    var cabBit = cpy.caboodleBitList[cpy.caboodleBits[type]];
+    if (cabBit.bits[bal.idx] == null) {
+        bit = await ste.hunt(bal.bit, { idx: bal.idx, src: bal.src, dat: bal.dat });
+        var objDat = bit[Object.keys(bit)[0]];
+        dat = objDat.dat;
+        dat.dex = cabBit.bitList.length;
+        cabBit.bitList.push(dat);
+        var idx = bal.idx;
+        if (idx == null)
+            idx = dat.idx;
+        if (idx == null)
+            throw new Error("write collect has no idx");
+        cabBit.bits[idx] = dat.dex;
+    }
+    else {
+        var cabDat = cabBit.bitList[cabBit.bits[bal.idx]];
+        bal.dat;
+        for (var key in bal.dat) {
+            if (cabDat == null)
+                cabDat = {};
+            cabDat[key] = bal.dat[key];
+        }
+        cabBit.bitList[cabBit.bits[bal.idx]] = cabDat;
+    }
+    if ((dat == null) && (bal.slv != null))
+        bal.slv({ rskBit: { idx: "write-collect-err", src: 'no-dat' } });
+    if (bal.slv != null)
+        bal.slv({ clcBit: { idx: "write-collect", dat } });
+    return cpy;
+};
+exports.writeCollect = writeCollect;
+const createCollect = (cpy, bal, ste) => {
+    var cabBit = { idx: bal.idx, dex: 0, bits: {}, bitList: [] };
+    cabBit.dex = cpy.caboodleBitList.length;
+    cpy.caboodleBitList.push(cabBit);
+    cpy.caboodleBits[cabBit.idx] = cabBit.dex;
+    if (bal.slv != null)
+        bal.slv({ rskBit: { idx: "create-collect", dat: cabBit } });
+    return cpy;
+};
+exports.createCollect = createCollect;
+const removeCollect = async (cpy, bal, ste) => {
+    var type = bal.bit.split(' ').slice(-1).pop().toLowerCase();
+    if (cpy.caboodleBits[type] == null)
+        return bal.slv({ rskBit: { idx: "remove-collect-not-present" } });
+    var cabBit = cpy.caboodleBitList[cpy.caboodleBits[type]];
+    if (cabBit.bits[bal.idx] == null)
+        return bal.slv({ rskBit: { idx: "remove-collect-idx-not-present" } });
+    bit = await ste.hunt(bal.bit, { idx: bal.idx, src: bal.src, dat: bal.dat });
+    var objDat = bit[Object.keys(bit)[0]];
+    dat = objDat.dat;
+    dex = dat.dex;
+    for (var i = dex; i < cabBit.bitList.length - 1; i++) {
+        var update = cabBit.bitList[i];
+        update.dex -= 1;
+    }
+    for (var key in dat) {
+        dat[key] = null;
+    }
+    delete cabBit.bits[bal.idx];
+    var itm = cabBit.bitList.splice(dex, 1);
+    cabBit.dex -= 1;
+    if (bal.slv != null)
+        bal.slv({ rskBit: { idx: "remove-collect", dat: cabBit } });
+    return cpy;
+};
+exports.removeCollect = removeCollect;
+const deleteCollect = (cpy, bal, ste) => {
+    //debugger
+    return cpy;
+};
+exports.deleteCollect = deleteCollect;
+const emptyCollect = (cpy, bal, ste) => {
+    //debugger
+    return cpy;
+};
+exports.emptyCollect = emptyCollect;
+
+},{"../../97.collect.unit/collect.action":15}],15:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.EmptyCollect = exports.EMPTY_COLLECT = exports.DeleteCollect = exports.DELETE_COLLECT = exports.RemoveCollect = exports.REMOVE_COLLECT = exports.CreateCollect = exports.CREATE_COLLECT = exports.WriteCollect = exports.WRITE_COLLECT = exports.ReadCollect = exports.READ_COLLECT = exports.FetchCollect = exports.FETCH_COLLECT = exports.UpdateCollect = exports.UPDATE_COLLECT = exports.InitCollect = exports.INIT_COLLECT = void 0;
+// Collect actions
+exports.INIT_COLLECT = "[Collect action] Init Collect";
+class InitCollect {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.INIT_COLLECT;
+    }
+}
+exports.InitCollect = InitCollect;
+exports.UPDATE_COLLECT = "[Collect action] Update Collect";
+class UpdateCollect {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.UPDATE_COLLECT;
+    }
+}
+exports.UpdateCollect = UpdateCollect;
+exports.FETCH_COLLECT = "[Collect action] Fetch Collect";
+class FetchCollect {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.FETCH_COLLECT;
+    }
+}
+exports.FetchCollect = FetchCollect;
+exports.READ_COLLECT = "[Read action] Read Collect";
+class ReadCollect {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.READ_COLLECT;
+    }
+}
+exports.ReadCollect = ReadCollect;
+exports.WRITE_COLLECT = "[Write action] Write Collect";
+class WriteCollect {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.WRITE_COLLECT;
+    }
+}
+exports.WriteCollect = WriteCollect;
+exports.CREATE_COLLECT = "[Create action] Create Collect";
+class CreateCollect {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.CREATE_COLLECT;
+    }
+}
+exports.CreateCollect = CreateCollect;
+exports.REMOVE_COLLECT = "[Create action] Remove Collect";
+class RemoveCollect {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.REMOVE_COLLECT;
+    }
+}
+exports.RemoveCollect = RemoveCollect;
+exports.DELETE_COLLECT = "[Create action] Delete Collect";
+class DeleteCollect {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.DELETE_COLLECT;
+    }
+}
+exports.DeleteCollect = DeleteCollect;
+exports.EMPTY_COLLECT = "[Empty action] Empty Collect";
+class EmptyCollect {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.EMPTY_COLLECT;
+    }
+}
+exports.EmptyCollect = EmptyCollect;
+
+},{}],16:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.removeCollect = exports.deleteCollect = exports.fetchCollect = exports.emptyCollect = exports.createCollect = exports.writeCollect = exports.readCollect = exports.updateCollect = exports.initCollect = void 0;
+var collect_buzz_1 = require("./buz/collect.buzz");
+Object.defineProperty(exports, "initCollect", { enumerable: true, get: function () { return collect_buzz_1.initCollect; } });
+var collect_buzz_2 = require("./buz/collect.buzz");
+Object.defineProperty(exports, "updateCollect", { enumerable: true, get: function () { return collect_buzz_2.updateCollect; } });
+var collect_buzz_3 = require("./buz/collect.buzz");
+Object.defineProperty(exports, "readCollect", { enumerable: true, get: function () { return collect_buzz_3.readCollect; } });
+var collect_buzz_4 = require("./buz/collect.buzz");
+Object.defineProperty(exports, "writeCollect", { enumerable: true, get: function () { return collect_buzz_4.writeCollect; } });
+var collect_buzz_5 = require("./buz/collect.buzz");
+Object.defineProperty(exports, "createCollect", { enumerable: true, get: function () { return collect_buzz_5.createCollect; } });
+var collect_buzz_6 = require("./buz/collect.buzz");
+Object.defineProperty(exports, "emptyCollect", { enumerable: true, get: function () { return collect_buzz_6.emptyCollect; } });
+var collect_buzz_7 = require("./buz/collect.buzz");
+Object.defineProperty(exports, "fetchCollect", { enumerable: true, get: function () { return collect_buzz_7.fetchCollect; } });
+var collect_buzz_8 = require("./buz/collect.buzz");
+Object.defineProperty(exports, "deleteCollect", { enumerable: true, get: function () { return collect_buzz_8.deleteCollect; } });
+var collect_buzz_9 = require("./buz/collect.buzz");
+Object.defineProperty(exports, "removeCollect", { enumerable: true, get: function () { return collect_buzz_9.removeCollect; } });
+
+},{"./buz/collect.buzz":14}],17:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.CollectModel = void 0;
+class CollectModel {
+    constructor() {
+        this.caboodleBitList = [];
+        this.caboodleBits = {};
+    }
+}
+exports.CollectModel = CollectModel;
+
+},{}],18:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.reducer = void 0;
+const clone = require("clone-deep");
+const Act = require("./collect.action");
+const collect_model_1 = require("./collect.model");
+const Buzz = require("./collect.buzzer");
+function reducer(model = new collect_model_1.CollectModel(), act, state) {
+    switch (act.type) {
+        case Act.UPDATE_COLLECT:
+            return Buzz.updateCollect(clone(model), act.bale, state);
+        case Act.INIT_COLLECT:
+            return Buzz.initCollect(clone(model), act.bale, state);
+        case Act.READ_COLLECT:
+            return Buzz.readCollect(clone(model), act.bale, state);
+        case Act.WRITE_COLLECT:
+            return Buzz.writeCollect(clone(model), act.bale, state);
+        case Act.CREATE_COLLECT:
+            return Buzz.createCollect(clone(model), act.bale, state);
+        case Act.DELETE_COLLECT:
+            return Buzz.deleteCollect(clone(model), act.bale, state);
+        case Act.REMOVE_COLLECT:
+            return Buzz.removeCollect(clone(model), act.bale, state);
+        case Act.EMPTY_COLLECT:
+            return Buzz.emptyCollect(clone(model), act.bale, state);
+        case Act.FETCH_COLLECT:
+            return Buzz.fetchCollect(clone(model), act.bale, state);
+        default:
+            return model;
+    }
+}
+exports.reducer = reducer;
+
+},{"./collect.action":15,"./collect.buzzer":16,"./collect.model":17,"clone-deep":46}],19:[function(require,module,exports){
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const typescript_ioc_1 = require("typescript-ioc");
+const state_1 = require("../99.core/state");
+let CollectUnit = class CollectUnit {
+    constructor(state) {
+    }
+};
+CollectUnit = __decorate([
+    typescript_ioc_1.Singleton,
+    __metadata("design:paramtypes", [state_1.default])
+], CollectUnit);
+exports.default = CollectUnit;
+
+},{"../99.core/state":32,"typescript-ioc":64}],20:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.createMenu = exports.closeMenu = exports.testMenu = exports.updateMenu = exports.initMenu = void 0;
+const ActMrk = require("../../00.market.unit/market.action");
+//import * as ActFoc from "../../01.focus.unit/focus.action";
+//import * as ActPvt from "../../96.pivot.unit/pivot.action";
+//import * as ActMap from "../../03.hexmap.unit/hexmap.action"
+const ActTrm = require("../../act/terminal.action");
+const ActChc = require("../../act/choice.action");
+111;
+const ActGrd = require("../../act/grid.action");
+const ActCvs = require("../../act/canvas.action");
+const ActCns = require("../../act/console.action");
+var bit, lst, dex, idx, dat, src;
+const initMenu = async (cpy, bal, ste) => {
+    if (bal == null)
+        bal = { idx: null };
+    bit = await ste.bus(ActGrd.UPDATE_GRID, { x: 3, y: 0, xSpan: 1, ySpan: 12 });
+    bit = await ste.bus(ActCvs.WRITE_CANVAS, { idx: 'cvs1', dat: { clr: Color.CYAN, net: bit.grdBit.dat }, });
+    bit = await ste.bus(ActGrd.UPDATE_GRID, { x: 4, y: 0, xSpan: 8, ySpan: 12 });
+    bit = await ste.bus(ActCns.WRITE_CONSOLE, { idx: 'cns00', src: "", dat: { net: bit.grdBit.dat, src: "alligaor0" } });
+    bit = await ste.bus(ActCns.UPDATE_CONSOLE, { idx: 'cns00', src: "-----------" });
+    bit = await ste.bus(ActCns.UPDATE_CONSOLE, { idx: 'cns00', src: "Market PIVOT V0" });
+    bit = await ste.bus(ActCns.UPDATE_CONSOLE, { idx: 'cns00', src: "-----------" });
+    (0, exports.updateMenu)(cpy, bal, ste);
+    return cpy;
+};
+exports.initMenu = initMenu;
+const updateMenu = async (cpy, bal, ste) => {
+    lst = [ActMrk.OPEN_MARKET, ActMrk.UPDATE_MARKET, ActMrk.CREATE_MARKET];
+    bit = await ste.bus(ActGrd.UPDATE_GRID, { x: 0, y: 4, xSpan: 3, ySpan: 12 });
+    bit = await ste.bus(ActChc.OPEN_CHOICE, { dat: { clr0: Color.BLACK, clr1: Color.YELLOW }, src: Align.VERTICAL, lst, net: bit.grdBit.dat });
+    src = bit.chcBit.src;
+    switch (src) {
+        case ActMrk.OPEN_MARKET:
+            bit = await ste.hunt(ActMrk.OPEN_MARKET, {});
+            lst = bit.mrkBit.dat.split('\n');
+            var dex = lst.length;
+            var next = async () => {
+                if (dex == 0) {
+                    //updateMenu(cpy, bal, ste);
+                    bit = await ste.bus(ActCns.UPDATE_CONSOLE, { idx: 'cns00', src: '... open complete' });
+                    bit = await ste.bus(ActCns.UPDATE_CONSOLE, { idx: 'cns00', src: '..' });
+                    bit = await ste.bus(ActCns.UPDATE_CONSOLE, { idx: 'cns00', src: '.' });
+                    return;
+                }
+                var itm = lst.shift();
+                dex -= 1;
+                bit = await ste.bus(ActCns.UPDATE_CONSOLE, { idx: 'cns00', src: '...' + itm });
+                await next();
+            };
+            await next();
+            break;
+        case ActMrk.UPDATE_MARKET:
+            bit = await ste.hunt(ActMrk.UPDATE_MARKET, {});
+            dat = bit.mrkBit;
+            if (dat == null)
+                break;
+            var itm = JSON.stringify(dat);
+            lst = itm.split(',');
+            lst.forEach((a) => ste.bus(ActCns.UPDATE_CONSOLE, { idx: 'cns00', src: a }));
+            ste.bus(ActCns.UPDATE_CONSOLE, { idx: 'cns00', src: '------------' });
+            bit = await ste.bus(ActCns.UPDATE_CONSOLE, { idx: 'cns00', src: 'update market....' });
+            break;
+        case ActMrk.CREATE_MARKET:
+            bit = await ste.hunt(ActMrk.CREATE_MARKET, {});
+            dat = bit.mrkBit;
+            if (dat == null)
+                break;
+            var itm = JSON.stringify(dat);
+            lst = itm.split(',');
+            lst.forEach((a) => ste.bus(ActCns.UPDATE_CONSOLE, { idx: 'cns00', src: a }));
+            ste.bus(ActCns.UPDATE_CONSOLE, { idx: 'cns00', src: '------------' });
+            bit = await ste.bus(ActCns.UPDATE_CONSOLE, { idx: 'cns00', src: 'create market....' });
+            break;
+        default:
+            bit = await ste.bus(ActTrm.CLOSE_TERMINAL, {});
+            break;
+    }
+    (0, exports.updateMenu)(cpy, bal, ste);
+    return cpy;
+};
+exports.updateMenu = updateMenu;
+const testMenu = async (cpy, bal, ste) => {
+    return cpy;
+};
+exports.testMenu = testMenu;
+const closeMenu = async (cpy, bal, ste) => {
+    await ste.bus(ActTrm.CLOSE_TERMINAL, {});
+    return cpy;
+};
+exports.closeMenu = closeMenu;
+const createMenu = (cpy, bal, ste) => {
+    debugger;
+    return cpy;
+};
+exports.createMenu = createMenu;
+var patch = (ste, type, bale) => ste.dispatch({ type, bale });
+const Align = require("../../val/align");
+const Color = require("../../val/console-color");
+
+},{"../../00.market.unit/market.action":3,"../../act/canvas.action":34,"../../act/choice.action":35,"../../act/console.action":36,"../../act/grid.action":38,"../../act/terminal.action":40,"../../val/align":42,"../../val/console-color":43}],21:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ContainerMenu = exports.CONTAINER_MENU = exports.VisageMenu = exports.VISAGE_MENU = exports.ShadeMenu = exports.SHADE_MENU = exports.CloseMenu = exports.CLOSE_MENU = exports.TestMenu = exports.TEST_MENU = exports.UpdateMenu = exports.UPDATE_MENU = exports.InitMenu = exports.INIT_MENU = void 0;
+exports.INIT_MENU = "[Menu action] Init Menu";
+class InitMenu {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.INIT_MENU;
+    }
+}
+exports.InitMenu = InitMenu;
+exports.UPDATE_MENU = "[Menu action] Update Menu";
+class UpdateMenu {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.UPDATE_MENU;
+    }
+}
+exports.UpdateMenu = UpdateMenu;
+exports.TEST_MENU = "[Menu action] Test Menu";
+class TestMenu {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.TEST_MENU;
+    }
+}
+exports.TestMenu = TestMenu;
+exports.CLOSE_MENU = "[Menu action] Close Menu";
+class CloseMenu {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.CLOSE_MENU;
+    }
+}
+exports.CloseMenu = CloseMenu;
+exports.SHADE_MENU = "[Shade action] Shade Menu";
+class ShadeMenu {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.SHADE_MENU;
+    }
+}
+exports.ShadeMenu = ShadeMenu;
+exports.VISAGE_MENU = "[Visage action] Visage Menu";
+class VisageMenu {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.VISAGE_MENU;
+    }
+}
+exports.VisageMenu = VisageMenu;
+exports.CONTAINER_MENU = "[Visage action] Container Menu";
+class ContainerMenu {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.CONTAINER_MENU;
+    }
+}
+exports.ContainerMenu = ContainerMenu;
+
+},{}],22:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.closeMenu = exports.testMenu = exports.updateMenu = exports.initMenu = void 0;
+var _00_menu_buzz_1 = require("./buz/00.menu.buzz");
+Object.defineProperty(exports, "initMenu", { enumerable: true, get: function () { return _00_menu_buzz_1.initMenu; } });
+var _00_menu_buzz_2 = require("./buz/00.menu.buzz");
+Object.defineProperty(exports, "updateMenu", { enumerable: true, get: function () { return _00_menu_buzz_2.updateMenu; } });
+var _00_menu_buzz_3 = require("./buz/00.menu.buzz");
+Object.defineProperty(exports, "testMenu", { enumerable: true, get: function () { return _00_menu_buzz_3.testMenu; } });
+var _00_menu_buzz_4 = require("./buz/00.menu.buzz");
+Object.defineProperty(exports, "closeMenu", { enumerable: true, get: function () { return _00_menu_buzz_4.closeMenu; } });
+
+},{"./buz/00.menu.buzz":20}],23:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.MenuModel = void 0;
+class MenuModel {
+    constructor() {
+        this.lst = [];
+        //idx:string;
+        //menuBitList: MenuBit[] = [];
+        //menuBits: any = {};
+    }
+}
+exports.MenuModel = MenuModel;
+
+},{}],24:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.reducer = void 0;
+const clone = require("clone-deep");
+const Act = require("./menu.action");
+const menu_model_1 = require("./menu.model");
+const Buzz = require("./menu.buzzer");
+function reducer(model = new menu_model_1.MenuModel(), act, state) {
+    switch (act.type) {
+        case Act.UPDATE_MENU:
+            return Buzz.updateMenu(clone(model), act.bale, state);
+        case Act.INIT_MENU:
+            return Buzz.initMenu(clone(model), act.bale, state);
+        case Act.TEST_MENU:
+            return Buzz.testMenu(clone(model), act.bale, state);
+        case Act.CLOSE_MENU:
+            return Buzz.closeMenu(clone(model), act.bale, state);
+        default:
+            return model;
+    }
+}
+exports.reducer = reducer;
+
+},{"./menu.action":21,"./menu.buzzer":22,"./menu.model":23,"clone-deep":46}],25:[function(require,module,exports){
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const typescript_ioc_1 = require("typescript-ioc");
+const state_1 = require("../99.core/state");
+let MenuUnit = class MenuUnit {
+    constructor(state) {
+    }
+};
+MenuUnit = __decorate([
+    typescript_ioc_1.Singleton,
+    __metadata("design:paramtypes", [state_1.default])
+], MenuUnit);
+exports.default = MenuUnit;
+
+},{"../99.core/state":32,"typescript-ioc":64}],26:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.CreateBus = exports.CREATE_BUS = exports.UpdateBus = exports.UPDATE_BUS = exports.MessageBus = exports.MESSAGE_BUS = exports.ConnectBus = exports.CONNECT_BUS = exports.OpenBus = exports.OPEN_BUS = exports.InitBus = exports.INIT_BUS = void 0;
+// Bus actions
+exports.INIT_BUS = "[Bus action] Init Bus";
+class InitBus {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.INIT_BUS;
+    }
+}
+exports.InitBus = InitBus;
+exports.OPEN_BUS = "[Bus action] Open Bus";
+class OpenBus {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.OPEN_BUS;
+    }
+}
+exports.OpenBus = OpenBus;
+exports.CONNECT_BUS = "[Bus action] Connect Bus";
+class ConnectBus {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.CONNECT_BUS;
+    }
+}
+exports.ConnectBus = ConnectBus;
+exports.MESSAGE_BUS = "[Bus action] Message Bus";
+class MessageBus {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.MESSAGE_BUS;
+    }
+}
+exports.MessageBus = MessageBus;
+exports.UPDATE_BUS = "[Bus action] Update Bus";
+class UpdateBus {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.UPDATE_BUS;
+    }
+}
+exports.UpdateBus = UpdateBus;
+exports.CREATE_BUS = "[Bus action] Create Bus";
+class CreateBus {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.CREATE_BUS;
+    }
+}
+exports.CreateBus = CreateBus;
+
+},{}],27:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.createBus = exports.messageBus = exports.connectBus = exports.updateBus = exports.openBus = exports.initBus = void 0;
+var bus_buzz_1 = require("./buz/bus.buzz");
+Object.defineProperty(exports, "initBus", { enumerable: true, get: function () { return bus_buzz_1.initBus; } });
+var bus_buzz_2 = require("./buz/bus.buzz");
+Object.defineProperty(exports, "openBus", { enumerable: true, get: function () { return bus_buzz_2.openBus; } });
+var bus_buzz_3 = require("./buz/bus.buzz");
+Object.defineProperty(exports, "updateBus", { enumerable: true, get: function () { return bus_buzz_3.updateBus; } });
+var bus_buzz_4 = require("./buz/bus.buzz");
+Object.defineProperty(exports, "connectBus", { enumerable: true, get: function () { return bus_buzz_4.connectBus; } });
+var bus_buzz_5 = require("./buz/bus.buzz");
+Object.defineProperty(exports, "messageBus", { enumerable: true, get: function () { return bus_buzz_5.messageBus; } });
+var bus_buzz_6 = require("./buz/bus.buzz");
+Object.defineProperty(exports, "createBus", { enumerable: true, get: function () { return bus_buzz_6.createBus; } });
+
+},{"./buz/bus.buzz":31}],28:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.BusModel = void 0;
+class BusModel {
+    constructor() {
+        this.host = "mqtt://localhost:1883";
+        this.responseSuffix = '-response';
+        this.promises = {};
+    }
+}
+exports.BusModel = BusModel;
+
+},{}],29:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.reducer = void 0;
+const clone = require("clone-deep");
+const Act = require("./bus.action");
+const bus_model_1 = require("./bus.model");
+const Buzz = require("./bus.buzzer");
+function reducer(model = new bus_model_1.BusModel(), act, state) {
+    switch (act.type) {
+        case Act.UPDATE_BUS:
+            return Buzz.updateBus(clone(model), act.bale, state);
+        case Act.OPEN_BUS:
+            return Buzz.openBus(clone(model), act.bale, state);
+        case Act.CONNECT_BUS:
+            return Buzz.connectBus(clone(model), act.bale, state);
+        case Act.CREATE_BUS:
+            return Buzz.createBus(clone(model), act.bale, state);
+        case Act.MESSAGE_BUS:
+            return Buzz.connectBus(clone(model), act.bale, state);
+        case Act.INIT_BUS:
+            return Buzz.initBus(clone(model), act.bale, state);
+        default:
+            return model;
+    }
+}
+exports.reducer = reducer;
+
+},{"./bus.action":26,"./bus.buzzer":27,"./bus.model":28,"clone-deep":46}],30:[function(require,module,exports){
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const typescript_ioc_1 = require("typescript-ioc");
+const state_1 = require("../99.core/state");
+let BusUnit = class BusUnit {
+    constructor(state) {
+    }
+};
+BusUnit = __decorate([
+    typescript_ioc_1.Singleton,
+    __metadata("design:paramtypes", [state_1.default])
+], BusUnit);
+exports.default = BusUnit;
+
+},{"../99.core/state":32,"typescript-ioc":64}],31:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.updateBus = exports.messageBus = exports.connectBus = exports.openBus = exports.createBus = exports.initBus = void 0;
+const ActMnu = require("../../98.menu.unit/menu.action");
+const ActBus = require("../../99.bus.unit/bus.action");
+const ActCol = require("../../97.collect.unit/collect.action");
+var lst, idx, bit, src, dat, dex;
+const initBus = (cpy, bal, ste) => {
+    cpy.actList = [];
+    if (bal == null)
+        bal = { idx: null };
+    if (bal.lst == null)
+        bal.lst = [];
+    if ((bal.src != null) && (bal.src.constructor == Array))
+        lst = bal.src;
+    bal.lst.forEach((a) => {
+        for (var key in a) {
+            cpy.actList.push(a[key]);
+        }
+    });
+    ste.bus = (idx, dat, bit) => (0, exports.updateBus)(cpy, { idx, dat, bit }, ste);
+    if (bal.dat != null) {
+        cpy.MQTT = bal.dat;
+    }
+    else {
+        console.log("return promise");
+    }
+    if (lst == null) {
+        if (bal.src != null)
+            cpy.host = bal.src;
+        cpy.client = cpy.MQTT.connect(cpy.host);
+        cpy.client.on('message', (tpc, msg) => { (0, exports.messageBus)(cpy, { idx: tpc, src: msg }, ste); });
+        cpy.client.on('connect', () => {
+            console.log(bal.idx + " connected " + cpy.host);
+            (0, exports.openBus)(cpy, { idx: 'init-bus', lst: cpy.actList }, ste);
+            if (bal.slv != null)
+                bal.slv({ intBit: { idx: "init-bus" } });
+        });
+    }
+    else {
+        var complete = (lst) => {
+            lst.shift();
+            if (lst.length != 0)
+                return;
+            if (bal.slv != null)
+                bal.slv({ intBit: { idx: "init-bus" } });
+        };
+        lst.forEach(async (a) => {
+            bit = await ste.hunt(ActCol.WRITE_COLLECT, { idx: a.idx, src: a.src, bit: ActBus.CREATE_BUS });
+            var client = bit.clcBit.dat;
+            client.on('message', (tpc, msg) => { (0, exports.messageBus)(cpy, { idx: tpc, src: msg, bit: a.idx }, ste); });
+            client.on('connect', () => {
+                console.log(a.idx + " connected " + a.src);
+                (0, exports.openBus)(cpy, { idx: 'init-bus', lst: cpy.actList, bit: a.idx }, ste);
+                complete(lst);
+            });
+        });
+    }
+    return cpy;
+};
+exports.initBus = initBus;
+const createBus = (cpy, bal, ste) => {
+    var client = cpy.MQTT.connect(bal.src);
+    if (bal.slv != null)
+        bal.slv({ busBit: { idx: "create-bus", dat: client } });
+    //client.on('message', (tpc, msg) => { messageBus(cpy, { idx: tpc, src: msg, bit:bal.idx }, ste) })
+    //client.on('connect', () => {
+    //console.log(bal.idx + " connected " + bal.src)
+    //openBus(cpy, { idx: 'init-bus', lst: cpy.actList, bit:bal.idx }, ste)  
+    //})
+    return cpy;
+};
+exports.createBus = createBus;
+const openBus = async (cpy, bal, ste) => {
+    var out = [];
+    bal.lst.forEach((a) => {
+        if (a == null)
+            return;
+        if (a.includes == null)
+            return;
+        if (a.includes('[') && a.includes(']') == false)
+            return;
+        out.push(a);
+    });
+    var client = cpy.client;
+    if (bal.bit != null) {
+        bit = await ste.hunt(ActCol.READ_COLLECT, { idx: bal.bit, bit: ActBus.CREATE_BUS });
+        client = bit.clcBit.dat;
+    }
+    out.forEach((a) => {
+        client.subscribe(a, (err) => {
+            if (!err) {
+                console.log('subscribing ' + a);
+            }
+        });
+    });
+    return cpy;
+};
+exports.openBus = openBus;
+const connectBus = (cpy, bal, ste) => {
+    var lst = [];
+    if (bal.val == 1)
+        patch(ste, ActMnu.INIT_MENU, { lst });
+};
+exports.connectBus = connectBus;
+const messageBus = async (cpy, bal, ste) => {
+    if (bal.src != null)
+        dat = bal.src.toString();
+    idx = bal.idx;
+    dat = JSON.parse(dat);
+    var client = cpy.client;
+    if (bal.bit != null) {
+        bit = await ste.hunt(ActCol.READ_COLLECT, { idx: bal.bit, bit: ActBus.CREATE_BUS });
+        client = bit.clcBit.dat;
+    }
+    if (idx.includes(cpy.responseSuffix) == true) {
+        var responseIDX = bal.idx;
+        var obj = cpy.promises[responseIDX];
+        if (obj.slv != null)
+            obj.slv(dat);
+        client.unsubscribe(responseIDX, (err) => {
+            if (!err) {
+                //console.log('hitting ' + responseIDX)
+            }
+        });
+    }
+    else {
+        var bit = await ste.hunt(idx, dat);
+        var cloneBit = clone(bit);
+        for (var key in cloneBit) {
+            var itm = cloneBit[key];
+            if (itm.dat != null) {
+                if (itm.dat.bit != null)
+                    itm.dat.bit = null;
+            }
+        }
+        cloneBit;
+        client.publish(bal.idx + cpy.responseSuffix, JSON.stringify(cloneBit));
+    }
+    return cpy;
+};
+exports.messageBus = messageBus;
+//has to return a promise
+const updateBus = async (cpy, bal, ste) => {
+    //how does one create an error message here when bit should be used
+    var client = cpy.client;
+    if (bal.bit != null) {
+        bit = await ste.hunt(ActCol.READ_COLLECT, { idx: bal.bit, bit: ActBus.CREATE_BUS });
+        client = bit.clcBit.dat;
+    }
+    if ((client == null) && (bal.bit == null)) {
+        bit = await ste.hunt(ActCol.FETCH_COLLECT, { bit: ActBus.CREATE_BUS });
+        client = bit.clcBit.dat;
+    }
+    var responseIDX = bal.idx + cpy.responseSuffix;
+    var slv;
+    const promo = new Promise((rslv, rjct) => (slv = rslv));
+    var obj = { slv: (val0) => slv(val0) };
+    cpy.promises[responseIDX] = obj;
+    client.subscribe(responseIDX, (err) => {
+        if (!err) {
+            //console.log('hitting ' + responseIDX)
+        }
+    });
+    //03.10.23
+    //bit throws errors since sometimes it is not a primitive
+    //if (bal.dat == null) bal.dat = {}
+    //if (bal.dat.bit != null) bal.dat.bit = null;
+    client.publish(bal.idx, JSON.stringify(bal.dat));
+    return promo;
+};
+exports.updateBus = updateBus;
+var patch = (ste, type, bale) => ste.dispatch({ type, bale });
+const clone = require("clone-deep");
+
+},{"../../97.collect.unit/collect.action":15,"../../98.menu.unit/menu.action":21,"../../99.bus.unit/bus.action":26,"clone-deep":46}],32:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const rx_lite_1 = require("rx-lite");
+const rx_lite_2 = require("rx-lite");
+const BEE_1 = require("../BEE");
+const Effect = require("../BEE");
+class State extends rx_lite_1.BehaviorSubject {
+    constructor(init = new BEE_1.default()) {
+        super(init);
+        this.dispatcher = new rx_lite_2.Subject();
+        this.dispatcher
+            .scan((state, action) => this.reducedApp(state, action), init)
+            .subscribe((state) => {
+            super.onNext(state);
+        });
+    }
+    reducedApp(nextState, key) {
+        for (var k in Effect.reducer)
+            Effect.reducer[k](nextState[k], key, this);
+        return nextState;
+    }
+    dispatch(value) {
+        var result = this.dispatcher.onNext(value);
+        return result;
+    }
+    pat(value) {
+        this.dispatch(value);
+    }
+    next(value) {
+        this.dispatcher.onNext(value);
+    }
+}
+exports.default = State;
+
+},{"../BEE":33,"rx-lite":55}],33:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.reducer = exports.list = void 0;
+const market_unit_1 = require("./00.market.unit/market.unit");
+const wallet_unit_1 = require("./01.wallet.unit/wallet.unit");
+const collect_unit_1 = require("./97.collect.unit/collect.unit");
+const menu_unit_1 = require("./98.menu.unit/menu.unit");
+const bus_unit_1 = require("./99.bus.unit/bus.unit");
+const market_model_1 = require("./00.market.unit/market.model");
+const wallet_model_1 = require("./01.wallet.unit/wallet.model");
+const collect_model_1 = require("./97.collect.unit/collect.model");
+const menu_model_1 = require("./98.menu.unit/menu.model");
+const bus_model_1 = require("./99.bus.unit/bus.model");
+exports.list = [market_unit_1.default, wallet_unit_1.default, collect_unit_1.default, menu_unit_1.default, bus_unit_1.default];
+const reduceFromMarket = require("./00.market.unit/market.reduce");
+const reduceFromWallet = require("./01.wallet.unit/wallet.reduce");
+const reduceFromCollect = require("./97.collect.unit/collect.reduce");
+const reduceFromMenu = require("./98.menu.unit/menu.reduce");
+const reduceFromBus = require("./99.bus.unit/bus.reduce");
+exports.reducer = {
+    market: reduceFromMarket.reducer,
+    wallet: reduceFromWallet.reducer,
+    collect: reduceFromCollect.reducer,
+    menu: reduceFromMenu.reducer,
+    bus: reduceFromBus.reducer,
+};
+class UnitData {
+    constructor() {
+        this.market = new market_model_1.MarketModel();
+        this.wallet = new wallet_model_1.WalletModel();
+        this.collect = new collect_model_1.CollectModel();
+        this.menu = new menu_model_1.MenuModel();
+        this.bus = new bus_model_1.BusModel();
+    }
+}
+exports.default = UnitData;
+
+},{"./00.market.unit/market.model":5,"./00.market.unit/market.reduce":6,"./00.market.unit/market.unit":7,"./01.wallet.unit/wallet.model":11,"./01.wallet.unit/wallet.reduce":12,"./01.wallet.unit/wallet.unit":13,"./97.collect.unit/collect.model":17,"./97.collect.unit/collect.reduce":18,"./97.collect.unit/collect.unit":19,"./98.menu.unit/menu.model":23,"./98.menu.unit/menu.reduce":24,"./98.menu.unit/menu.unit":25,"./99.bus.unit/bus.model":28,"./99.bus.unit/bus.reduce":29,"./99.bus.unit/bus.unit":30}],34:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.NEST_CANVAS = exports.CREATE_CANVAS = exports.REMOVE_CANVAS = exports.DELETE_CANVAS = exports.WRITE_CANVAS = exports.READ_CANVAS = exports.UPDATE_CANVAS = exports.INIT_CANVAS = void 0;
+exports.INIT_CANVAS = "[Canvas action] Init Canvas";
+exports.UPDATE_CANVAS = "[Canvas action] Update Canvas";
+exports.READ_CANVAS = "[Read action] Read Canvas";
+exports.WRITE_CANVAS = "[Write action] Write Canvas";
+exports.DELETE_CANVAS = "[Delete action] Delete Canvas";
+exports.REMOVE_CANVAS = "[Remove action] Remove Canvas";
+exports.CREATE_CANVAS = "[Create action] Create Canvas";
+exports.NEST_CANVAS = "[Nest action] Nest Canvas";
+
+},{}],35:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.TOWER_CHOICE = exports.KEY_CHOICE = exports.OPEN_CHOICE = exports.UPDATE_CHOICE = exports.INIT_CHOICE = void 0;
+exports.INIT_CHOICE = "[Choice action] Init Choice";
+exports.UPDATE_CHOICE = "[Choice action] Update Choice";
+exports.OPEN_CHOICE = "[Open action] Open Choice";
+exports.KEY_CHOICE = "[Key action] Key Choice";
+exports.TOWER_CHOICE = "[Tower action] Tower Choice";
+
+},{}],36:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.CREATE_CONSOLE = exports.DELETE_CONSOLE = exports.REMOVE_CONSOLE = exports.WRITE_CONSOLE = exports.READ_CONSOLE = exports.UPDATE_CONSOLE = exports.INIT_CONSOLE = void 0;
+exports.INIT_CONSOLE = "[Console action] Init Console";
+exports.UPDATE_CONSOLE = "[Console action] Update Console";
+exports.READ_CONSOLE = "[Read action] Read Console";
+exports.WRITE_CONSOLE = "[Write action] Write Console";
+exports.REMOVE_CONSOLE = "[Remove action] Remove Console";
+exports.DELETE_CONSOLE = "[Delete action] Delete Console";
+exports.CREATE_CONSOLE = "[Create action] Create Console";
+
+},{}],37:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.DELETE_DISK = exports.ENSURE_DISK = exports.TRASH_DISK = exports.BATCH_DISK = exports.FRAME_DISK = exports.COPY_DISK = exports.LOAD_LIST_DISK = exports.INDEX_DISK = exports.WRITE_DISK = exports.READ_DISK = exports.UPDATE_DISK = exports.INIT_DISK = void 0;
+exports.INIT_DISK = '[Disk action] Init Disk';
+exports.UPDATE_DISK = '[Disk action] Update Disk';
+exports.READ_DISK = '[Disk action] Read Disk';
+exports.WRITE_DISK = '[Disk action] Write Disk';
+exports.INDEX_DISK = '[Index action] Index Disk';
+exports.LOAD_LIST_DISK = '[Load_list action] Load_list Disk';
+exports.COPY_DISK = '[Copy action] Copy Disk';
+exports.FRAME_DISK = '[Frame action] Frame Disk';
+exports.BATCH_DISK = '[Batch action] Batch Disk';
+exports.TRASH_DISK = '[Trash action] Trash Disk';
+exports.ENSURE_DISK = '[Ensure action] Ensure Disk';
+exports.DELETE_DISK = '[Delete action] Delete Disk';
+
+},{}],38:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.UPDATE_GRID = exports.INIT_GRID = void 0;
+exports.INIT_GRID = "[Grid action] Init Grid";
+exports.UPDATE_GRID = "[Grid action] Update Grid";
+
+},{}],39:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.BUNDLE_PIVOT = exports.CONTAINS_PIVOT = exports.CREATE_PIVOT = exports.LIST_PIVOT = exports.COUNT_PIVOT = exports.PATCH_PIVOT = exports.EDIT_PIVOT = exports.RUN_PIVOT = exports.OPEN_PIVOT = exports.UPDATE_PIVOT = exports.INIT_PIVOT = void 0;
+exports.INIT_PIVOT = "[Pivot action] Init Pivot";
+exports.UPDATE_PIVOT = "[Pivot action] Update Pivot";
+exports.OPEN_PIVOT = "[Open action] Open Pivot";
+exports.RUN_PIVOT = "[Run action] Run Pivot";
+exports.EDIT_PIVOT = "[Edit action] Edit Pivot";
+exports.PATCH_PIVOT = "[Patch action] Patch Pivot";
+exports.COUNT_PIVOT = "[Patch action] Count Pivot";
+exports.LIST_PIVOT = "[Patch action] List Pivot";
+exports.CREATE_PIVOT = "[Patch action] Create Pivot";
+exports.CONTAINS_PIVOT = "[Patch action] Contains Pivot";
+exports.BUNDLE_PIVOT = "[Patch action] Bundle Pivot";
+
+},{}],40:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ADD_PORT = exports.CONTENT_TERMINAL = exports.ROOT_TERMINAL = exports.CLOSE_TERMINAL = exports.TABLE_TERMINAL = exports.INPUT_TERMINAL = exports.CLEAR_TERMINAL = exports.UPDATE_TERMINAL = exports.WRITE_TERMINAL = exports.FOCUS_TERMINAL = exports.OPEN_TERMINAL = exports.INIT_TERMINAL = void 0;
+// Terminal actions
+exports.INIT_TERMINAL = "[Terminal action] Init Terminal";
+exports.OPEN_TERMINAL = "[Terminal action] Open Terminal";
+exports.FOCUS_TERMINAL = "[Terminal action] Focus Terminal";
+exports.WRITE_TERMINAL = "[Terminal action] Write Terminal";
+exports.UPDATE_TERMINAL = "[Terminal action] Update Terminal";
+exports.CLEAR_TERMINAL = "[Terminal action] Clear Terminal";
+exports.INPUT_TERMINAL = "[Terminal action] Input Terminal";
+exports.TABLE_TERMINAL = "[Terminal action] Table Terminal";
+exports.CLOSE_TERMINAL = "[Terminal action] Close Terminal";
+exports.ROOT_TERMINAL = "[Terminal action] Root Terminal";
+exports.CONTENT_TERMINAL = "[Terminal action] Content Terminal";
+exports.ADD_PORT = "[Terminal action] Add Port";
+
+},{}],41:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var sim = {
+    hunt: null,
+    state: null
+};
+sim.hunt = (typ, obj) => { return host(obj, typ); };
+var host = (obj, typ) => {
+    init();
+    var slv;
+    const promo = new Promise((rslv, rjct) => (slv = rslv));
+    if (obj == null)
+        obj = {};
+    if (obj.slv == null)
+        obj.slv = (val0) => slv(val0);
+    sim.state.dispatch({ type: typ, bale: obj });
+    return promo;
+};
+var init = () => {
+    if (sim.state != null)
+        return;
+    sim.state = new state_1.default();
+    sim.state.pivot = sim;
+    sim.state.hunt = sim.hunt;
+    for (var k in Import.list)
+        new Import.list[k](sim.state);
+};
+const Import = require("./BEE");
+const state_1 = require("./99.core/state");
+module.exports = sim;
+
+},{"./99.core/state":32,"./BEE":33}],42:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.HORIZONTAL = exports.VERTICAL = void 0;
+exports.VERTICAL = "vertical";
+exports.HORIZONTAL = "horizontal";
+
+},{}],43:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.BLUE = exports.WHITE = exports.CYAN = exports.MAGENTA = exports.YELLOW = exports.GREEN = exports.RED = exports.BLACK = void 0;
+exports.BLACK = "black";
+exports.RED = "red";
+exports.GREEN = "green";
+exports.YELLOW = "yellow";
+exports.MAGENTA = "magenta";
+exports.CYAN = "cyan";
+exports.WHITE = "white";
+exports.BLUE = "blue";
+
+},{}],44:[function(require,module,exports){
 'use strict'
 
 exports.byteLength = byteLength
@@ -150,7 +1619,7 @@ function fromByteArray (uint8) {
   return parts.join('')
 }
 
-},{}],2:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
 (function (Buffer){(function (){
 /*!
  * The buffer module from node.js, for the browser.
@@ -1931,7 +3400,7 @@ function numberIsNaN (obj) {
 }
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"base64-js":1,"buffer":2,"ieee754":4}],3:[function(require,module,exports){
+},{"base64-js":44,"buffer":45,"ieee754":47}],46:[function(require,module,exports){
 'use strict';
 
 /**
@@ -1982,7 +3451,7 @@ function cloneArrayDeep(val, instanceClone) {
 
 module.exports = cloneDeep;
 
-},{"is-plain-object":5,"kind-of":7,"shallow-clone":13}],4:[function(require,module,exports){
+},{"is-plain-object":48,"kind-of":50,"shallow-clone":56}],47:[function(require,module,exports){
 /*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
   var e, m
@@ -2069,7 +3538,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128
 }
 
-},{}],5:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 /*!
  * is-plain-object <https://github.com/jonschlinkert/is-plain-object>
  *
@@ -2108,7 +3577,7 @@ module.exports = function isPlainObject(o) {
   return true;
 };
 
-},{"isobject":6}],6:[function(require,module,exports){
+},{"isobject":49}],49:[function(require,module,exports){
 /*!
  * isobject <https://github.com/jonschlinkert/isobject>
  *
@@ -2122,7 +3591,7 @@ module.exports = function isObject(val) {
   return val != null && typeof val === 'object' && Array.isArray(val) === false;
 };
 
-},{}],7:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 var toString = Object.prototype.toString;
 
 module.exports = function kindOf(val) {
@@ -2253,7 +3722,7 @@ function isBuffer(val) {
   return false;
 }
 
-},{}],8:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 (function (global){(function (){
 /**
  * lodash (Custom Build) <https://lodash.com/>
@@ -3188,7 +4657,7 @@ function get(object, path, defaultValue) {
 module.exports = get;
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],9:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 (function (global){(function (){
 /**
  * lodash (Custom Build) <https://lodash.com/>
@@ -4182,7 +5651,7 @@ function set(object, path, value) {
 module.exports = set;
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],10:[function(require,module,exports){
+},{}],53:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -4368,7 +5837,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],11:[function(require,module,exports){
+},{}],54:[function(require,module,exports){
 (function (process,global){(function (){
 /*! *****************************************************************************
 Copyright (C) Microsoft. All rights reserved.
@@ -5503,7 +6972,7 @@ var Reflect;
 })(Reflect || (Reflect = {}));
 
 }).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":10}],12:[function(require,module,exports){
+},{"_process":53}],55:[function(require,module,exports){
 (function (process,global){(function (){
 // Copyright (c) Microsoft, All rights reserved. See License.txt in the project root for license information.
 
@@ -12561,7 +14030,7 @@ Observable.fromNodeCallback = function (fn, ctx, selector) {
 }.call(this));
 
 }).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":10}],13:[function(require,module,exports){
+},{"_process":53}],56:[function(require,module,exports){
 (function (Buffer){(function (){
 /*!
  * shallow-clone <https://github.com/jonschlinkert/shallow-clone>
@@ -12648,7 +14117,7 @@ function cloneSymbol(val) {
 module.exports = clone;
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"buffer":2,"kind-of":7}],14:[function(require,module,exports){
+},{"buffer":45,"kind-of":50}],57:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const injection_handler_1 = require("./injection-handler");
@@ -12792,7 +14261,7 @@ class PropertyPath {
 }
 exports.PropertyPath = PropertyPath;
 
-},{"../model":19,"./injection-handler":17,"lodash.get":8,"lodash.set":9}],15:[function(require,module,exports){
+},{"../model":62,"./injection-handler":60,"lodash.get":51,"lodash.set":52}],58:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class ContainerNamespaces {
@@ -12880,7 +14349,7 @@ class NamespaceBindings {
     }
 }
 
-},{}],16:[function(require,module,exports){
+},{}],59:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const injection_handler_1 = require("./injection-handler");
@@ -12976,7 +14445,7 @@ exports.IoCContainer = IoCContainer;
 IoCContainer.namespaces = new container_namespaces_1.ContainerNamespaces();
 IoCContainer.snapshotsCount = 0;
 
-},{"./container-binding-config":14,"./container-namespaces":15,"./injection-handler":17}],17:[function(require,module,exports){
+},{"./container-binding-config":57,"./container-namespaces":58,"./injection-handler":60}],60:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const BUILD_CONTEXT_KEY = '__BuildContext';
@@ -13088,7 +14557,7 @@ exports.InjectorHandler = InjectorHandler;
 InjectorHandler.constructorNameRegEx = /function (\w*)/;
 InjectorHandler.instantiationsBlocked = true;
 
-},{}],18:[function(require,module,exports){
+},{}],61:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
@@ -13323,7 +14792,7 @@ function InjectValueParamDecorator(target, propertyKey, _parameterIndex, value) 
     }
 }
 
-},{"./container/container":16,"./model":19,"reflect-metadata":11}],19:[function(require,module,exports){
+},{"./container/container":59,"./model":62,"reflect-metadata":54}],62:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
@@ -13360,7 +14829,7 @@ class BuildContext {
 }
 exports.BuildContext = BuildContext;
 
-},{}],20:[function(require,module,exports){
+},{}],63:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const injection_handler_1 = require("./container/injection-handler");
@@ -13413,7 +14882,7 @@ class RequestScope extends model_1.Scope {
 }
 exports.RequestScope = RequestScope;
 
-},{"./container/injection-handler":17,"./model":19}],21:[function(require,module,exports){
+},{"./container/injection-handler":60,"./model":62}],64:[function(require,module,exports){
 "use strict";
 /**
  * This is a lightweight annotation-based dependency injection container for typescript.
@@ -13585,1212 +15054,4 @@ class ContainerBuildContext extends model_1.BuildContext {
     }
 }
 
-},{"./container/container":16,"./decorators":18,"./model":19,"./scopes":20,"reflect-metadata":11}],22:[function(require,module,exports){
-(function (global){(function (){
-global.MARKET = require("../dist/888.market/hunt");
-global.MARKET.ActMrk = require("../dist/888.market/00.market.unit/market.action");
-
-
-
-
-
-
-}).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../dist/888.market/00.market.unit/market.action":24,"../dist/888.market/hunt":52}],23:[function(require,module,exports){
-(function (process){(function (){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.patchMarket = exports.editMarket = exports.runMarket = exports.openMarket = exports.updateMarket = exports.initMarket = void 0;
-const ActMnu = require("../../98.menu.unit/menu.action");
-const ActBus = require("../../99.bus.unit/bus.action");
-const ActMrk = require("../market.action");
-const ActVrt = require("../../act/vurt.action");
-const ActDsk = require("../../act/disk.action");
-var bit, val, idx, dex, lst, dat;
-const initMarket = async (cpy, bal, ste) => {
-    if (bal.dat != null)
-        bit = await ste.hunt(ActBus.INIT_BUS, { idx: cpy.idx, lst: [ActMrk], dat: bal.dat, src: bal.src });
-    if (bal.val == 1)
-        patch(ste, ActMnu.INIT_MENU, bal);
-    if (bal.slv != null)
-        bal.slv({ intBit: { idx: "init-market" } });
-    return cpy;
-};
-exports.initMarket = initMarket;
-const updateMarket = (cpy, bal, ste) => {
-    const { exec } = require('child_process');
-    exec('tsc -b 888.market', async (err, stdout, stderr) => {
-        if (err) {
-            console.error(`exec error: ${err}`);
-        }
-        process.chdir("../999.vurt");
-        bit = await ste.bus(ActVrt.BUNDLE_VURT, { src: "888.market" });
-        process.chdir("../888.market");
-        bit = await ste.bus(ActDsk.READ_DISK, { src: './work/888.market.js' });
-        var market = bit.dskBit.dat;
-        bit = await ste.bus(ActDsk.WRITE_DISK, { src: '../gillisse/public/jsx/888.market.js', dat: market });
-        bit = await ste.bus(ActDsk.READ_DISK, { src: './index.html' });
-        var html = bit.dskBit.dat;
-        bit = await ste.bus(ActDsk.READ_DISK, { src: './index.js' });
-        var index = bit.dskBit.dat;
-        bit = await ste.bus(ActDsk.WRITE_DISK, { src: '../gillisse/public/jsx/index.js', dat: index });
-        bit = await ste.bus(ActDsk.WRITE_DISK, { src: '../gillisse/index.html', dat: html });
-        setTimeout(() => {
-            if (bal.slv != null)
-                bal.slv({ mrkBit: { idx: "update-market" } });
-        }, 3);
-    });
-    return cpy;
-};
-exports.updateMarket = updateMarket;
-const openMarket = async (cpy, bal, ste) => {
-    bit = await ste.bus(ActDsk.COPY_DISK, { src: './vue', idx: '../gillisse/src' });
-    bit = await ste.hunt(ActMrk.RUN_MARKET, {});
-    const open = require('open');
-    var loc = './vrt.opn.bat';
-    bit = await open(loc);
-    setTimeout(() => {
-        if (bal.slv != null)
-            bal.slv({ mrkBit: { idx: "open-market" } });
-    }, 33);
-    return cpy;
-};
-exports.openMarket = openMarket;
-const runMarket = async (cpy, bal, ste) => {
-    const open = require('open');
-    var loc = './vrt.gil.bat';
-    bit = await open(loc);
-    setTimeout(() => {
-        if (bal.slv != null)
-            bal.slv({ mrkBit: { idx: "run-market" } });
-    });
-    return cpy;
-};
-exports.runMarket = runMarket;
-const editMarket = (cpy, bal, ste) => {
-    const { exec } = require('child_process');
-    process.chdir("../../studio/");
-    exec('start Code.exe ../packages/gillisse', async (err, stdout, stderr) => {
-        if (err) {
-            console.error(`exec error: ${err}`);
-        }
-        process.chdir("../packages/888.market");
-        if (bal.slv != null)
-            bal.slv({ mrkBit: { idx: "edit-market", dat: {} } });
-    });
-    return cpy;
-};
-exports.editMarket = editMarket;
-var patch = (ste, type, bale) => ste.dispatch({ type, bale });
-const patchMarket = (cpy, bal, ste) => {
-    debugger;
-    return cpy;
-};
-exports.patchMarket = patchMarket;
-
-}).call(this)}).call(this,require('_process'))
-},{"../../98.menu.unit/menu.action":36,"../../99.bus.unit/bus.action":41,"../../act/disk.action":49,"../../act/vurt.action":51,"../market.action":24,"_process":10,"child_process":undefined,"open":undefined}],24:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.PatchMarket = exports.PATCH_MARKET = exports.EditMarket = exports.EDIT_MARKET = exports.RunMarket = exports.RUN_MARKET = exports.OpenMarket = exports.OPEN_MARKET = exports.UpdateMarket = exports.UPDATE_MARKET = exports.InitMarket = exports.INIT_MARKET = void 0;
-exports.INIT_MARKET = "[Market action] Init Market";
-class InitMarket {
-    constructor(bale) {
-        this.bale = bale;
-        this.type = exports.INIT_MARKET;
-    }
-}
-exports.InitMarket = InitMarket;
-exports.UPDATE_MARKET = "[Market action] Update Market";
-class UpdateMarket {
-    constructor(bale) {
-        this.bale = bale;
-        this.type = exports.UPDATE_MARKET;
-    }
-}
-exports.UpdateMarket = UpdateMarket;
-exports.OPEN_MARKET = "[Open action] Open Market";
-class OpenMarket {
-    constructor(bale) {
-        this.bale = bale;
-        this.type = exports.OPEN_MARKET;
-    }
-}
-exports.OpenMarket = OpenMarket;
-exports.RUN_MARKET = "[Run action] Run Market";
-class RunMarket {
-    constructor(bale) {
-        this.bale = bale;
-        this.type = exports.RUN_MARKET;
-    }
-}
-exports.RunMarket = RunMarket;
-exports.EDIT_MARKET = "[Edit action] Edit Market";
-class EditMarket {
-    constructor(bale) {
-        this.bale = bale;
-        this.type = exports.EDIT_MARKET;
-    }
-}
-exports.EditMarket = EditMarket;
-exports.PATCH_MARKET = "[Patch action] Patch Market";
-class PatchMarket {
-    constructor(bale) {
-        this.bale = bale;
-        this.type = exports.PATCH_MARKET;
-    }
-}
-exports.PatchMarket = PatchMarket;
-
-},{}],25:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.patchMarket = exports.editMarket = exports.runMarket = exports.openMarket = exports.updateMarket = exports.initMarket = void 0;
-var market_buzz_1 = require("./buz/market.buzz");
-Object.defineProperty(exports, "initMarket", { enumerable: true, get: function () { return market_buzz_1.initMarket; } });
-var market_buzz_2 = require("./buz/market.buzz");
-Object.defineProperty(exports, "updateMarket", { enumerable: true, get: function () { return market_buzz_2.updateMarket; } });
-var market_buzz_3 = require("./buz/market.buzz");
-Object.defineProperty(exports, "openMarket", { enumerable: true, get: function () { return market_buzz_3.openMarket; } });
-var market_buzz_4 = require("./buz/market.buzz");
-Object.defineProperty(exports, "runMarket", { enumerable: true, get: function () { return market_buzz_4.runMarket; } });
-var market_buzz_5 = require("./buz/market.buzz");
-Object.defineProperty(exports, "editMarket", { enumerable: true, get: function () { return market_buzz_5.editMarket; } });
-var market_buzz_6 = require("./buz/market.buzz");
-Object.defineProperty(exports, "patchMarket", { enumerable: true, get: function () { return market_buzz_6.patchMarket; } });
-
-},{"./buz/market.buzz":23}],26:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.MarketModel = void 0;
-class MarketModel {
-    constructor() {
-        this.idx = '888.market';
-    }
-}
-exports.MarketModel = MarketModel;
-
-},{}],27:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.reducer = void 0;
-const clone = require("clone-deep");
-const Act = require("./market.action");
-const market_model_1 = require("./market.model");
-const Buzz = require("./market.buzzer");
-function reducer(model = new market_model_1.MarketModel(), act, state) {
-    switch (act.type) {
-        case Act.UPDATE_MARKET:
-            return Buzz.updateMarket(clone(model), act.bale, state);
-        case Act.INIT_MARKET:
-            return Buzz.initMarket(clone(model), act.bale, state);
-        case Act.OPEN_MARKET:
-            return Buzz.openMarket(clone(model), act.bale, state);
-        case Act.RUN_MARKET:
-            return Buzz.runMarket(clone(model), act.bale, state);
-        case Act.EDIT_MARKET:
-            return Buzz.editMarket(clone(model), act.bale, state);
-        case Act.PATCH_MARKET:
-            return Buzz.patchMarket(clone(model), act.bale, state);
-        default:
-            return model;
-    }
-}
-exports.reducer = reducer;
-
-},{"./market.action":24,"./market.buzzer":25,"./market.model":26,"clone-deep":3}],28:[function(require,module,exports){
-"use strict";
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const typescript_ioc_1 = require("typescript-ioc");
-const state_1 = require("../99.core/state");
-let MarketUnit = class MarketUnit {
-    constructor(state) {
-    }
-};
-MarketUnit = __decorate([
-    typescript_ioc_1.Singleton,
-    __metadata("design:paramtypes", [state_1.default])
-], MarketUnit);
-exports.default = MarketUnit;
-
-},{"../99.core/state":47,"typescript-ioc":21}],29:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.emptyCollect = exports.deleteCollect = exports.removeCollect = exports.createCollect = exports.writeCollect = exports.readCollect = exports.fetchCollect = exports.updateCollect = exports.initCollect = void 0;
-const ActCol = require("../../97.collect.unit/collect.action");
-var bit, lst, dat, idx, val, src, dex;
-const initCollect = (cpy, bal, ste) => {
-    return cpy;
-};
-exports.initCollect = initCollect;
-const updateCollect = (cpy, bal, ste) => {
-    return cpy;
-};
-exports.updateCollect = updateCollect;
-//return the first item in a collection
-const fetchCollect = (cpy, bal, ste) => {
-    if (bal.val == null)
-        bal.val = 1;
-    if ((bal.bit == null))
-        bal.slv({ clcBit: { idx: "fetch-collect-err", src: 'no-bit' } });
-    var type = bal.bit.split(' ').slice(-1).pop().toLowerCase();
-    var cabBit = cpy.caboodleBitList[cpy.caboodleBits[type]];
-    if (bal.val == 1)
-        bit = cabBit.bitList[0];
-    else
-        bit = cabBit;
-    if (bal.slv != null)
-        bal.slv({ clcBit: { idx: "fetch-collect", dat: bit } });
-    return cpy;
-};
-exports.fetchCollect = fetchCollect;
-const readCollect = async (cpy, bal, ste) => {
-    if ((bal.bit == null))
-        bal.slv({ clcBit: { idx: "read-collect-err", src: 'no-bit' } });
-    var type = bal.bit.split(' ').slice(-1).pop().toLowerCase();
-    if (cpy.caboodleBits[type] == null)
-        (0, exports.createCollect)(cpy, { idx: type }, ste);
-    var cabBit = cpy.caboodleBitList[cpy.caboodleBits[type]];
-    if (cabBit.bits[bal.idx] == null) {
-        bit = await ste.hunt(ActCol.WRITE_COLLECT, { idx: bal.idx, bit: bal.bit });
-    }
-    else {
-        dat = cabBit.bitList[cabBit.bits[bal.idx]];
-    }
-    if (bal.slv != null)
-        bal.slv({ clcBit: { idx: "read-collect", dat } });
-    return cpy;
-};
-exports.readCollect = readCollect;
-const writeCollect = async (cpy, bal, ste) => {
-    //let us check see if it exists 
-    var type = bal.bit.split(' ').slice(-1).pop().toLowerCase();
-    if (cpy.caboodleBits[type] == null)
-        (0, exports.createCollect)(cpy, { idx: type }, ste);
-    if ((bal.bit == null))
-        bal.slv({ rskBit: { idx: "write-collect-err", src: 'no-bit' } });
-    var cabBit = cpy.caboodleBitList[cpy.caboodleBits[type]];
-    if (cabBit.bits[bal.idx] == null) {
-        bit = await ste.hunt(bal.bit, { idx: bal.idx, src: bal.src, dat: bal.dat });
-        var objDat = bit[Object.keys(bit)[0]];
-        dat = objDat.dat;
-        dat.dex = cabBit.bitList.length;
-        cabBit.bitList.push(dat);
-        var idx = bal.idx;
-        if (idx == null)
-            idx = dat.idx;
-        if (idx == null)
-            throw new Error("write collect has no idx");
-        cabBit.bits[idx] = dat.dex;
-    }
-    else {
-        var cabDat = cabBit.bitList[cabBit.bits[bal.idx]];
-        bal.dat;
-        for (var key in bal.dat) {
-            if (cabDat == null)
-                cabDat = {};
-            cabDat[key] = bal.dat[key];
-        }
-        cabBit.bitList[cabBit.bits[bal.idx]] = cabDat;
-    }
-    if ((dat == null) && (bal.slv != null))
-        bal.slv({ rskBit: { idx: "write-collect-err", src: 'no-dat' } });
-    if (bal.slv != null)
-        bal.slv({ clcBit: { idx: "write-collect", dat } });
-    return cpy;
-};
-exports.writeCollect = writeCollect;
-const createCollect = (cpy, bal, ste) => {
-    var cabBit = { idx: bal.idx, dex: 0, bits: {}, bitList: [] };
-    cabBit.dex = cpy.caboodleBitList.length;
-    cpy.caboodleBitList.push(cabBit);
-    cpy.caboodleBits[cabBit.idx] = cabBit.dex;
-    if (bal.slv != null)
-        bal.slv({ rskBit: { idx: "create-collect", dat: cabBit } });
-    return cpy;
-};
-exports.createCollect = createCollect;
-const removeCollect = async (cpy, bal, ste) => {
-    var type = bal.bit.split(' ').slice(-1).pop().toLowerCase();
-    if (cpy.caboodleBits[type] == null)
-        return bal.slv({ rskBit: { idx: "remove-collect-not-present" } });
-    var cabBit = cpy.caboodleBitList[cpy.caboodleBits[type]];
-    if (cabBit.bits[bal.idx] == null)
-        return bal.slv({ rskBit: { idx: "remove-collect-idx-not-present" } });
-    bit = await ste.hunt(bal.bit, { idx: bal.idx, src: bal.src, dat: bal.dat });
-    var objDat = bit[Object.keys(bit)[0]];
-    dat = objDat.dat;
-    dex = dat.dex;
-    for (var i = dex; i < cabBit.bitList.length - 1; i++) {
-        var update = cabBit.bitList[i];
-        update.dex -= 1;
-    }
-    for (var key in dat) {
-        dat[key] = null;
-    }
-    delete cabBit.bits[bal.idx];
-    var itm = cabBit.bitList.splice(dex, 1);
-    cabBit.dex -= 1;
-    if (bal.slv != null)
-        bal.slv({ rskBit: { idx: "remove-collect", dat: cabBit } });
-    return cpy;
-};
-exports.removeCollect = removeCollect;
-const deleteCollect = (cpy, bal, ste) => {
-    //debugger
-    return cpy;
-};
-exports.deleteCollect = deleteCollect;
-const emptyCollect = (cpy, bal, ste) => {
-    //debugger
-    return cpy;
-};
-exports.emptyCollect = emptyCollect;
-
-},{"../../97.collect.unit/collect.action":30}],30:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.EmptyCollect = exports.EMPTY_COLLECT = exports.DeleteCollect = exports.DELETE_COLLECT = exports.RemoveCollect = exports.REMOVE_COLLECT = exports.CreateCollect = exports.CREATE_COLLECT = exports.WriteCollect = exports.WRITE_COLLECT = exports.ReadCollect = exports.READ_COLLECT = exports.FetchCollect = exports.FETCH_COLLECT = exports.UpdateCollect = exports.UPDATE_COLLECT = exports.InitCollect = exports.INIT_COLLECT = void 0;
-// Collect actions
-exports.INIT_COLLECT = "[Collect action] Init Collect";
-class InitCollect {
-    constructor(bale) {
-        this.bale = bale;
-        this.type = exports.INIT_COLLECT;
-    }
-}
-exports.InitCollect = InitCollect;
-exports.UPDATE_COLLECT = "[Collect action] Update Collect";
-class UpdateCollect {
-    constructor(bale) {
-        this.bale = bale;
-        this.type = exports.UPDATE_COLLECT;
-    }
-}
-exports.UpdateCollect = UpdateCollect;
-exports.FETCH_COLLECT = "[Collect action] Fetch Collect";
-class FetchCollect {
-    constructor(bale) {
-        this.bale = bale;
-        this.type = exports.FETCH_COLLECT;
-    }
-}
-exports.FetchCollect = FetchCollect;
-exports.READ_COLLECT = "[Read action] Read Collect";
-class ReadCollect {
-    constructor(bale) {
-        this.bale = bale;
-        this.type = exports.READ_COLLECT;
-    }
-}
-exports.ReadCollect = ReadCollect;
-exports.WRITE_COLLECT = "[Write action] Write Collect";
-class WriteCollect {
-    constructor(bale) {
-        this.bale = bale;
-        this.type = exports.WRITE_COLLECT;
-    }
-}
-exports.WriteCollect = WriteCollect;
-exports.CREATE_COLLECT = "[Create action] Create Collect";
-class CreateCollect {
-    constructor(bale) {
-        this.bale = bale;
-        this.type = exports.CREATE_COLLECT;
-    }
-}
-exports.CreateCollect = CreateCollect;
-exports.REMOVE_COLLECT = "[Create action] Remove Collect";
-class RemoveCollect {
-    constructor(bale) {
-        this.bale = bale;
-        this.type = exports.REMOVE_COLLECT;
-    }
-}
-exports.RemoveCollect = RemoveCollect;
-exports.DELETE_COLLECT = "[Create action] Delete Collect";
-class DeleteCollect {
-    constructor(bale) {
-        this.bale = bale;
-        this.type = exports.DELETE_COLLECT;
-    }
-}
-exports.DeleteCollect = DeleteCollect;
-exports.EMPTY_COLLECT = "[Empty action] Empty Collect";
-class EmptyCollect {
-    constructor(bale) {
-        this.bale = bale;
-        this.type = exports.EMPTY_COLLECT;
-    }
-}
-exports.EmptyCollect = EmptyCollect;
-
-},{}],31:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.removeCollect = exports.deleteCollect = exports.fetchCollect = exports.emptyCollect = exports.createCollect = exports.writeCollect = exports.readCollect = exports.updateCollect = exports.initCollect = void 0;
-var collect_buzz_1 = require("./buz/collect.buzz");
-Object.defineProperty(exports, "initCollect", { enumerable: true, get: function () { return collect_buzz_1.initCollect; } });
-var collect_buzz_2 = require("./buz/collect.buzz");
-Object.defineProperty(exports, "updateCollect", { enumerable: true, get: function () { return collect_buzz_2.updateCollect; } });
-var collect_buzz_3 = require("./buz/collect.buzz");
-Object.defineProperty(exports, "readCollect", { enumerable: true, get: function () { return collect_buzz_3.readCollect; } });
-var collect_buzz_4 = require("./buz/collect.buzz");
-Object.defineProperty(exports, "writeCollect", { enumerable: true, get: function () { return collect_buzz_4.writeCollect; } });
-var collect_buzz_5 = require("./buz/collect.buzz");
-Object.defineProperty(exports, "createCollect", { enumerable: true, get: function () { return collect_buzz_5.createCollect; } });
-var collect_buzz_6 = require("./buz/collect.buzz");
-Object.defineProperty(exports, "emptyCollect", { enumerable: true, get: function () { return collect_buzz_6.emptyCollect; } });
-var collect_buzz_7 = require("./buz/collect.buzz");
-Object.defineProperty(exports, "fetchCollect", { enumerable: true, get: function () { return collect_buzz_7.fetchCollect; } });
-var collect_buzz_8 = require("./buz/collect.buzz");
-Object.defineProperty(exports, "deleteCollect", { enumerable: true, get: function () { return collect_buzz_8.deleteCollect; } });
-var collect_buzz_9 = require("./buz/collect.buzz");
-Object.defineProperty(exports, "removeCollect", { enumerable: true, get: function () { return collect_buzz_9.removeCollect; } });
-
-},{"./buz/collect.buzz":29}],32:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.CollectModel = void 0;
-class CollectModel {
-    constructor() {
-        this.caboodleBitList = [];
-        this.caboodleBits = {};
-    }
-}
-exports.CollectModel = CollectModel;
-
-},{}],33:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.reducer = void 0;
-const clone = require("clone-deep");
-const Act = require("./collect.action");
-const collect_model_1 = require("./collect.model");
-const Buzz = require("./collect.buzzer");
-function reducer(model = new collect_model_1.CollectModel(), act, state) {
-    switch (act.type) {
-        case Act.UPDATE_COLLECT:
-            return Buzz.updateCollect(clone(model), act.bale, state);
-        case Act.INIT_COLLECT:
-            return Buzz.initCollect(clone(model), act.bale, state);
-        case Act.READ_COLLECT:
-            return Buzz.readCollect(clone(model), act.bale, state);
-        case Act.WRITE_COLLECT:
-            return Buzz.writeCollect(clone(model), act.bale, state);
-        case Act.CREATE_COLLECT:
-            return Buzz.createCollect(clone(model), act.bale, state);
-        case Act.DELETE_COLLECT:
-            return Buzz.deleteCollect(clone(model), act.bale, state);
-        case Act.REMOVE_COLLECT:
-            return Buzz.removeCollect(clone(model), act.bale, state);
-        case Act.EMPTY_COLLECT:
-            return Buzz.emptyCollect(clone(model), act.bale, state);
-        case Act.FETCH_COLLECT:
-            return Buzz.fetchCollect(clone(model), act.bale, state);
-        default:
-            return model;
-    }
-}
-exports.reducer = reducer;
-
-},{"./collect.action":30,"./collect.buzzer":31,"./collect.model":32,"clone-deep":3}],34:[function(require,module,exports){
-"use strict";
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const typescript_ioc_1 = require("typescript-ioc");
-const state_1 = require("../99.core/state");
-let CollectUnit = class CollectUnit {
-    constructor(state) {
-    }
-};
-CollectUnit = __decorate([
-    typescript_ioc_1.Singleton,
-    __metadata("design:paramtypes", [state_1.default])
-], CollectUnit);
-exports.default = CollectUnit;
-
-},{"../99.core/state":47,"typescript-ioc":21}],35:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.visageMenu = exports.shadeMenu = exports.closeMenu = exports.testMenu = exports.updateMenu = exports.initMenu = void 0;
-const ActMrk = require("../../00.market.unit/market.action");
-const ActTrm = require("../../act/terminal.action");
-var bit, lst, dex;
-const initMenu = async (cpy, bal, ste) => {
-    if (bal == null)
-        bal = { idx: null };
-    bit = await ste.bus(ActTrm.INIT_TERMINAL, {});
-    (0, exports.updateMenu)(cpy, bal, ste);
-    return cpy;
-};
-exports.initMenu = initMenu;
-const updateMenu = async (cpy, bal, ste) => {
-    bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "-----------", bit: 'local' });
-    bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "MARKET PIVOT V0", bit: 'local' });
-    bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "-----------", bit: "local" });
-    var lst = [ActMrk.UPDATE_MARKET, ActMrk.OPEN_MARKET, ActMrk.EDIT_MARKET];
-    bit = await ste.bus(ActTrm.UPDATE_TERMINAL, { lst });
-    bit = bit.trmBit;
-    var idx = lst[bit.val];
-    switch (idx) {
-        case ActMrk.OPEN_MARKET:
-            bit = await ste.hunt(ActMrk.OPEN_MARKET, {});
-            break;
-        case ActMrk.UPDATE_MARKET:
-            bit = await ste.hunt(ActMrk.UPDATE_MARKET, {});
-            break;
-        case ActMrk.EDIT_MARKET:
-            bit = await ste.hunt(ActMrk.EDIT_MARKET, {});
-            bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "PATCHING...", bit: 'local' });
-            bit = await ste.bus(ActTrm.WRITE_TERMINAL, { src: "-----------", bit: "local" });
-            lst = [ActMrk.PATCH_MARKET];
-            bit = await ste.bus(ActTrm.UPDATE_TERMINAL, { lst });
-            bit = await ste.hunt(ActMrk.PATCH_MARKET, {});
-            break;
-        default:
-            bit = await await ste.bus(ActTrm.CLOSE_TERMINAL, {});
-            break;
-    }
-    (0, exports.updateMenu)(cpy, bal, ste);
-    return cpy;
-};
-exports.updateMenu = updateMenu;
-const testMenu = async (cpy, bal, ste) => {
-    return cpy;
-};
-exports.testMenu = testMenu;
-const closeMenu = async (cpy, bal, ste) => {
-    await ste.bus(ActTrm.CLOSE_TERMINAL, {});
-    return cpy;
-};
-exports.closeMenu = closeMenu;
-const shadeMenu = async (cpy, bal, ste) => {
-    return cpy;
-};
-exports.shadeMenu = shadeMenu;
-var patch = (ste, type, bale) => ste.dispatch({ type, bale });
-const visageMenu = (cpy, bal, ste) => {
-    debugger;
-    return cpy;
-};
-exports.visageMenu = visageMenu;
-
-},{"../../00.market.unit/market.action":24,"../../act/terminal.action":50}],36:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ContainerMenu = exports.CONTAINER_MENU = exports.VisageMenu = exports.VISAGE_MENU = exports.ShadeMenu = exports.SHADE_MENU = exports.CloseMenu = exports.CLOSE_MENU = exports.TestMenu = exports.TEST_MENU = exports.UpdateMenu = exports.UPDATE_MENU = exports.InitMenu = exports.INIT_MENU = void 0;
-exports.INIT_MENU = "[Menu action] Init Menu";
-class InitMenu {
-    constructor(bale) {
-        this.bale = bale;
-        this.type = exports.INIT_MENU;
-    }
-}
-exports.InitMenu = InitMenu;
-exports.UPDATE_MENU = "[Menu action] Update Menu";
-class UpdateMenu {
-    constructor(bale) {
-        this.bale = bale;
-        this.type = exports.UPDATE_MENU;
-    }
-}
-exports.UpdateMenu = UpdateMenu;
-exports.TEST_MENU = "[Menu action] Test Menu";
-class TestMenu {
-    constructor(bale) {
-        this.bale = bale;
-        this.type = exports.TEST_MENU;
-    }
-}
-exports.TestMenu = TestMenu;
-exports.CLOSE_MENU = "[Menu action] Close Menu";
-class CloseMenu {
-    constructor(bale) {
-        this.bale = bale;
-        this.type = exports.CLOSE_MENU;
-    }
-}
-exports.CloseMenu = CloseMenu;
-exports.SHADE_MENU = "[Shade action] Shade Menu";
-class ShadeMenu {
-    constructor(bale) {
-        this.bale = bale;
-        this.type = exports.SHADE_MENU;
-    }
-}
-exports.ShadeMenu = ShadeMenu;
-exports.VISAGE_MENU = "[Visage action] Visage Menu";
-class VisageMenu {
-    constructor(bale) {
-        this.bale = bale;
-        this.type = exports.VISAGE_MENU;
-    }
-}
-exports.VisageMenu = VisageMenu;
-exports.CONTAINER_MENU = "[Visage action] Container Menu";
-class ContainerMenu {
-    constructor(bale) {
-        this.bale = bale;
-        this.type = exports.CONTAINER_MENU;
-    }
-}
-exports.ContainerMenu = ContainerMenu;
-
-},{}],37:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.shadeMenu = exports.closeMenu = exports.testMenu = exports.updateMenu = exports.initMenu = void 0;
-var _00_menu_buzz_1 = require("./buz/00.menu.buzz");
-Object.defineProperty(exports, "initMenu", { enumerable: true, get: function () { return _00_menu_buzz_1.initMenu; } });
-var _00_menu_buzz_2 = require("./buz/00.menu.buzz");
-Object.defineProperty(exports, "updateMenu", { enumerable: true, get: function () { return _00_menu_buzz_2.updateMenu; } });
-var _00_menu_buzz_3 = require("./buz/00.menu.buzz");
-Object.defineProperty(exports, "testMenu", { enumerable: true, get: function () { return _00_menu_buzz_3.testMenu; } });
-var _00_menu_buzz_4 = require("./buz/00.menu.buzz");
-Object.defineProperty(exports, "closeMenu", { enumerable: true, get: function () { return _00_menu_buzz_4.closeMenu; } });
-var _00_menu_buzz_5 = require("./buz/00.menu.buzz");
-Object.defineProperty(exports, "shadeMenu", { enumerable: true, get: function () { return _00_menu_buzz_5.shadeMenu; } });
-
-},{"./buz/00.menu.buzz":35}],38:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.MenuModel = void 0;
-class MenuModel {
-    constructor() {
-        this.lst = [];
-        //idx:string;
-        //menuBitList: MenuBit[] = [];
-        //menuBits: any = {};
-    }
-}
-exports.MenuModel = MenuModel;
-
-},{}],39:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.reducer = void 0;
-const clone = require("clone-deep");
-const Act = require("./menu.action");
-const menu_model_1 = require("./menu.model");
-const Buzz = require("./menu.buzzer");
-function reducer(model = new menu_model_1.MenuModel(), act, state) {
-    switch (act.type) {
-        case Act.UPDATE_MENU:
-            return Buzz.updateMenu(clone(model), act.bale, state);
-        case Act.INIT_MENU:
-            return Buzz.initMenu(clone(model), act.bale, state);
-        case Act.TEST_MENU:
-            return Buzz.testMenu(clone(model), act.bale, state);
-        case Act.CLOSE_MENU:
-            return Buzz.closeMenu(clone(model), act.bale, state);
-        case Act.SHADE_MENU:
-            return Buzz.shadeMenu(clone(model), act.bale, state);
-        default:
-            return model;
-    }
-}
-exports.reducer = reducer;
-
-},{"./menu.action":36,"./menu.buzzer":37,"./menu.model":38,"clone-deep":3}],40:[function(require,module,exports){
-"use strict";
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const typescript_ioc_1 = require("typescript-ioc");
-const state_1 = require("../99.core/state");
-let MenuUnit = class MenuUnit {
-    constructor(state) {
-    }
-};
-MenuUnit = __decorate([
-    typescript_ioc_1.Singleton,
-    __metadata("design:paramtypes", [state_1.default])
-], MenuUnit);
-exports.default = MenuUnit;
-
-},{"../99.core/state":47,"typescript-ioc":21}],41:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateBus = exports.CREATE_BUS = exports.UpdateBus = exports.UPDATE_BUS = exports.MessageBus = exports.MESSAGE_BUS = exports.ConnectBus = exports.CONNECT_BUS = exports.OpenBus = exports.OPEN_BUS = exports.InitBus = exports.INIT_BUS = void 0;
-// Bus actions
-exports.INIT_BUS = "[Bus action] Init Bus";
-class InitBus {
-    constructor(bale) {
-        this.bale = bale;
-        this.type = exports.INIT_BUS;
-    }
-}
-exports.InitBus = InitBus;
-exports.OPEN_BUS = "[Bus action] Open Bus";
-class OpenBus {
-    constructor(bale) {
-        this.bale = bale;
-        this.type = exports.OPEN_BUS;
-    }
-}
-exports.OpenBus = OpenBus;
-exports.CONNECT_BUS = "[Bus action] Connect Bus";
-class ConnectBus {
-    constructor(bale) {
-        this.bale = bale;
-        this.type = exports.CONNECT_BUS;
-    }
-}
-exports.ConnectBus = ConnectBus;
-exports.MESSAGE_BUS = "[Bus action] Message Bus";
-class MessageBus {
-    constructor(bale) {
-        this.bale = bale;
-        this.type = exports.MESSAGE_BUS;
-    }
-}
-exports.MessageBus = MessageBus;
-exports.UPDATE_BUS = "[Bus action] Update Bus";
-class UpdateBus {
-    constructor(bale) {
-        this.bale = bale;
-        this.type = exports.UPDATE_BUS;
-    }
-}
-exports.UpdateBus = UpdateBus;
-exports.CREATE_BUS = "[Bus action] Create Bus";
-class CreateBus {
-    constructor(bale) {
-        this.bale = bale;
-        this.type = exports.CREATE_BUS;
-    }
-}
-exports.CreateBus = CreateBus;
-
-},{}],42:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.createBus = exports.messageBus = exports.connectBus = exports.updateBus = exports.openBus = exports.initBus = void 0;
-var bus_buzz_1 = require("./buz/bus.buzz");
-Object.defineProperty(exports, "initBus", { enumerable: true, get: function () { return bus_buzz_1.initBus; } });
-var bus_buzz_2 = require("./buz/bus.buzz");
-Object.defineProperty(exports, "openBus", { enumerable: true, get: function () { return bus_buzz_2.openBus; } });
-var bus_buzz_3 = require("./buz/bus.buzz");
-Object.defineProperty(exports, "updateBus", { enumerable: true, get: function () { return bus_buzz_3.updateBus; } });
-var bus_buzz_4 = require("./buz/bus.buzz");
-Object.defineProperty(exports, "connectBus", { enumerable: true, get: function () { return bus_buzz_4.connectBus; } });
-var bus_buzz_5 = require("./buz/bus.buzz");
-Object.defineProperty(exports, "messageBus", { enumerable: true, get: function () { return bus_buzz_5.messageBus; } });
-var bus_buzz_6 = require("./buz/bus.buzz");
-Object.defineProperty(exports, "createBus", { enumerable: true, get: function () { return bus_buzz_6.createBus; } });
-
-},{"./buz/bus.buzz":46}],43:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.BusModel = void 0;
-class BusModel {
-    constructor() {
-        this.host = "mqtt://localhost:1883";
-        this.responseSuffix = '-response';
-        this.promises = {};
-    }
-}
-exports.BusModel = BusModel;
-
-},{}],44:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.reducer = void 0;
-const clone = require("clone-deep");
-const Act = require("./bus.action");
-const bus_model_1 = require("./bus.model");
-const Buzz = require("./bus.buzzer");
-function reducer(model = new bus_model_1.BusModel(), act, state) {
-    switch (act.type) {
-        case Act.UPDATE_BUS:
-            return Buzz.updateBus(clone(model), act.bale, state);
-        case Act.OPEN_BUS:
-            return Buzz.openBus(clone(model), act.bale, state);
-        case Act.CONNECT_BUS:
-            return Buzz.connectBus(clone(model), act.bale, state);
-        case Act.CREATE_BUS:
-            return Buzz.createBus(clone(model), act.bale, state);
-        case Act.MESSAGE_BUS:
-            return Buzz.connectBus(clone(model), act.bale, state);
-        case Act.INIT_BUS:
-            return Buzz.initBus(clone(model), act.bale, state);
-        default:
-            return model;
-    }
-}
-exports.reducer = reducer;
-
-},{"./bus.action":41,"./bus.buzzer":42,"./bus.model":43,"clone-deep":3}],45:[function(require,module,exports){
-"use strict";
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const typescript_ioc_1 = require("typescript-ioc");
-const state_1 = require("../99.core/state");
-let BusUnit = class BusUnit {
-    constructor(state) {
-    }
-};
-BusUnit = __decorate([
-    typescript_ioc_1.Singleton,
-    __metadata("design:paramtypes", [state_1.default])
-], BusUnit);
-exports.default = BusUnit;
-
-},{"../99.core/state":47,"typescript-ioc":21}],46:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateBus = exports.messageBus = exports.connectBus = exports.openBus = exports.createBus = exports.initBus = void 0;
-const ActMnu = require("../../98.menu.unit/menu.action");
-const ActBus = require("../../99.bus.unit/bus.action");
-const ActCol = require("../../97.collect.unit/collect.action");
-var lst, idx, bit, src, dat, dex;
-const initBus = (cpy, bal, ste) => {
-    cpy.actList = [];
-    if (bal == null)
-        bal = { idx: null };
-    if (bal.lst == null)
-        bal.lst = [];
-    if ((bal.src != null) && (bal.src.constructor == Array))
-        lst = bal.src;
-    bal.lst.forEach((a) => {
-        for (var key in a) {
-            cpy.actList.push(a[key]);
-        }
-    });
-    ste.bus = (idx, dat, bit) => (0, exports.updateBus)(cpy, { idx, dat, bit }, ste);
-    if (bal.dat != null) {
-        cpy.MQTT = bal.dat;
-    }
-    else {
-        console.log("return promise");
-    }
-    if (lst == null) {
-        if (bal.src != null)
-            cpy.host = bal.src;
-        cpy.client = cpy.MQTT.connect(cpy.host);
-        cpy.client.on('message', (tpc, msg) => { (0, exports.messageBus)(cpy, { idx: tpc, src: msg }, ste); });
-        cpy.client.on('connect', () => {
-            console.log(bal.idx + " connected " + cpy.host);
-            (0, exports.openBus)(cpy, { idx: 'init-bus', lst: cpy.actList }, ste);
-            if (bal.slv != null)
-                bal.slv({ intBit: { idx: "init-bus" } });
-        });
-    }
-    else {
-        var complete = (lst) => {
-            lst.shift();
-            if (lst.length != 0)
-                return;
-            if (bal.slv != null)
-                bal.slv({ intBit: { idx: "init-bus" } });
-        };
-        lst.forEach(async (a) => {
-            bit = await ste.hunt(ActCol.WRITE_COLLECT, { idx: a.idx, src: a.src, bit: ActBus.CREATE_BUS });
-            var client = bit.clcBit.dat;
-            client.on('message', (tpc, msg) => { (0, exports.messageBus)(cpy, { idx: tpc, src: msg, bit: a.idx }, ste); });
-            client.on('connect', () => {
-                console.log(a.idx + " connected " + a.src);
-                (0, exports.openBus)(cpy, { idx: 'init-bus', lst: cpy.actList, bit: a.idx }, ste);
-                complete(lst);
-            });
-        });
-    }
-    return cpy;
-};
-exports.initBus = initBus;
-const createBus = (cpy, bal, ste) => {
-    var client = cpy.MQTT.connect(bal.src);
-    if (bal.slv != null)
-        bal.slv({ busBit: { idx: "create-bus", dat: client } });
-    //client.on('message', (tpc, msg) => { messageBus(cpy, { idx: tpc, src: msg, bit:bal.idx }, ste) })
-    //client.on('connect', () => {
-    //console.log(bal.idx + " connected " + bal.src)
-    //openBus(cpy, { idx: 'init-bus', lst: cpy.actList, bit:bal.idx }, ste)  
-    //})
-    return cpy;
-};
-exports.createBus = createBus;
-const openBus = async (cpy, bal, ste) => {
-    var out = [];
-    bal.lst.forEach((a) => {
-        if (a == null)
-            return;
-        if (a.includes == null)
-            return;
-        if (a.includes('[') && a.includes(']') == false)
-            return;
-        out.push(a);
-    });
-    var client = cpy.client;
-    if (bal.bit != null) {
-        bit = await ste.hunt(ActCol.READ_COLLECT, { idx: bal.bit, bit: ActBus.CREATE_BUS });
-        client = bit.clcBit.dat;
-    }
-    out.forEach((a) => {
-        client.subscribe(a, (err) => {
-            if (!err) {
-                console.log('subscribing ' + a);
-            }
-        });
-    });
-    return cpy;
-};
-exports.openBus = openBus;
-const connectBus = (cpy, bal, ste) => {
-    var lst = [];
-    if (bal.val == 1)
-        patch(ste, ActMnu.INIT_MENU, { lst });
-};
-exports.connectBus = connectBus;
-const messageBus = async (cpy, bal, ste) => {
-    if (bal.src != null)
-        dat = bal.src.toString();
-    idx = bal.idx;
-    dat = JSON.parse(dat);
-    var client = cpy.client;
-    if (bal.bit != null) {
-        bit = await ste.hunt(ActCol.READ_COLLECT, { idx: bal.bit, bit: ActBus.CREATE_BUS });
-        client = bit.clcBit.dat;
-    }
-    if (idx.includes(cpy.responseSuffix) == true) {
-        var responseIDX = bal.idx;
-        var obj = cpy.promises[responseIDX];
-        if (obj.slv != null)
-            obj.slv(dat);
-        client.unsubscribe(responseIDX, (err) => {
-            if (!err) {
-                //console.log('hitting ' + responseIDX)
-            }
-        });
-    }
-    else {
-        var bit = await ste.hunt(idx, dat);
-        var cloneBit = clone(bit);
-        for (var key in cloneBit) {
-            var itm = cloneBit[key];
-            if (itm.dat != null) {
-                if (itm.dat.bit != null)
-                    itm.dat.bit = null;
-            }
-        }
-        cloneBit;
-        client.publish(bal.idx + cpy.responseSuffix, JSON.stringify(cloneBit));
-    }
-    return cpy;
-};
-exports.messageBus = messageBus;
-//has to return a promise
-const updateBus = async (cpy, bal, ste) => {
-    //how does one create an error message here when bit should be used
-    var client = cpy.client;
-    if (bal.bit != null) {
-        bit = await ste.hunt(ActCol.READ_COLLECT, { idx: bal.bit, bit: ActBus.CREATE_BUS });
-        client = bit.clcBit.dat;
-    }
-    if ((client == null) && (bal.bit == null)) {
-        bit = await ste.hunt(ActCol.FETCH_COLLECT, { bit: ActBus.CREATE_BUS });
-        client = bit.clcBit.dat;
-    }
-    var responseIDX = bal.idx + cpy.responseSuffix;
-    var slv;
-    const promo = new Promise((rslv, rjct) => (slv = rslv));
-    var obj = { slv: (val0) => slv(val0) };
-    cpy.promises[responseIDX] = obj;
-    client.subscribe(responseIDX, (err) => {
-        if (!err) {
-            //console.log('hitting ' + responseIDX)
-        }
-    });
-    //03.10.23
-    //bit throws errors since sometimes it is not a primitive
-    //if (bal.dat == null) bal.dat = {}
-    //if (bal.dat.bit != null) bal.dat.bit = null;
-    client.publish(bal.idx, JSON.stringify(bal.dat));
-    return promo;
-};
-exports.updateBus = updateBus;
-var patch = (ste, type, bale) => ste.dispatch({ type, bale });
-const clone = require("clone-deep");
-
-},{"../../97.collect.unit/collect.action":30,"../../98.menu.unit/menu.action":36,"../../99.bus.unit/bus.action":41,"clone-deep":3}],47:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const rx_lite_1 = require("rx-lite");
-const rx_lite_2 = require("rx-lite");
-const BEE_1 = require("../BEE");
-const Effect = require("../BEE");
-class State extends rx_lite_1.BehaviorSubject {
-    constructor(init = new BEE_1.default()) {
-        super(init);
-        this.dispatcher = new rx_lite_2.Subject();
-        this.dispatcher
-            .scan((state, action) => this.reducedApp(state, action), init)
-            .subscribe((state) => {
-            super.onNext(state);
-        });
-    }
-    reducedApp(nextState, key) {
-        for (var k in Effect.reducer)
-            Effect.reducer[k](nextState[k], key, this);
-        return nextState;
-    }
-    dispatch(value) {
-        var result = this.dispatcher.onNext(value);
-        return result;
-    }
-    pat(value) {
-        this.dispatch(value);
-    }
-    next(value) {
-        this.dispatcher.onNext(value);
-    }
-}
-exports.default = State;
-
-},{"../BEE":48,"rx-lite":12}],48:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.reducer = exports.list = void 0;
-const market_unit_1 = require("./00.market.unit/market.unit");
-const collect_unit_1 = require("./97.collect.unit/collect.unit");
-const menu_unit_1 = require("./98.menu.unit/menu.unit");
-const bus_unit_1 = require("./99.bus.unit/bus.unit");
-const market_model_1 = require("./00.market.unit/market.model");
-const collect_model_1 = require("./97.collect.unit/collect.model");
-const menu_model_1 = require("./98.menu.unit/menu.model");
-const bus_model_1 = require("./99.bus.unit/bus.model");
-exports.list = [market_unit_1.default, collect_unit_1.default, menu_unit_1.default, bus_unit_1.default];
-const reduceFromMarket = require("./00.market.unit/market.reduce");
-const reduceFromCollect = require("./97.collect.unit/collect.reduce");
-const reduceFromMenu = require("./98.menu.unit/menu.reduce");
-const reduceFromBus = require("./99.bus.unit/bus.reduce");
-exports.reducer = {
-    market: reduceFromMarket.reducer,
-    collect: reduceFromCollect.reducer,
-    menu: reduceFromMenu.reducer,
-    bus: reduceFromBus.reducer,
-};
-class UnitData {
-    constructor() {
-        this.market = new market_model_1.MarketModel();
-        this.collect = new collect_model_1.CollectModel();
-        this.menu = new menu_model_1.MenuModel();
-        this.bus = new bus_model_1.BusModel();
-    }
-}
-exports.default = UnitData;
-
-},{"./00.market.unit/market.model":26,"./00.market.unit/market.reduce":27,"./00.market.unit/market.unit":28,"./97.collect.unit/collect.model":32,"./97.collect.unit/collect.reduce":33,"./97.collect.unit/collect.unit":34,"./98.menu.unit/menu.model":38,"./98.menu.unit/menu.reduce":39,"./98.menu.unit/menu.unit":40,"./99.bus.unit/bus.model":43,"./99.bus.unit/bus.reduce":44,"./99.bus.unit/bus.unit":45}],49:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.COPY_DISK = exports.LOAD_LIST_DISK = exports.LIST_DISK = exports.WRITE_DISK = exports.READ_DISK = exports.UPDATE_DISK = exports.INIT_DISK = void 0;
-exports.INIT_DISK = "[Disk action] Init Disk";
-exports.UPDATE_DISK = "[Disk action] Update Disk";
-exports.READ_DISK = "[Disk action] Read Disk";
-exports.WRITE_DISK = "[Disk action] Write Disk";
-exports.LIST_DISK = "[List action] List Disk";
-exports.LOAD_LIST_DISK = "[Load_list action] Load_list Disk";
-exports.COPY_DISK = "[Copy action] Copy Disk";
-
-},{}],50:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ADD_PORT = exports.CONTENT_TERMINAL = exports.ROOT_TERMINAL = exports.CLOSE_TERMINAL = exports.TABLE_TERMINAL = exports.INPUT_TERMINAL = exports.CLEAR_TERMINAL = exports.UPDATE_TERMINAL = exports.WRITE_TERMINAL = exports.FOCUS_TERMINAL = exports.OPEN_TERMINAL = exports.INIT_TERMINAL = void 0;
-// Terminal actions
-exports.INIT_TERMINAL = "[Terminal action] Init Terminal";
-exports.OPEN_TERMINAL = "[Terminal action] Open Terminal";
-exports.FOCUS_TERMINAL = "[Terminal action] Focus Terminal";
-exports.WRITE_TERMINAL = "[Terminal action] Write Terminal";
-exports.UPDATE_TERMINAL = "[Terminal action] Update Terminal";
-exports.CLEAR_TERMINAL = "[Terminal action] Clear Terminal";
-exports.INPUT_TERMINAL = "[Terminal action] Input Terminal";
-exports.TABLE_TERMINAL = "[Terminal action] Table Terminal";
-exports.CLOSE_TERMINAL = "[Terminal action] Close Terminal";
-exports.ROOT_TERMINAL = "[Terminal action] Root Terminal";
-exports.CONTENT_TERMINAL = "[Terminal action] Content Terminal";
-exports.ADD_PORT = "[Terminal action] Add Port";
-
-},{}],51:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.VALUE_VURT = exports.BUNDLE_VURT = exports.CONTAINS_VURT = exports.LIST_UNIT_VURT = exports.LIST_PIVOT_VURT = exports.COUNT_VURT = exports.UNIT_VURT = exports.REPLACE_VURT = exports.UPDATE_VURT = exports.FETCH_VURT = exports.TEST_CLOUD_VURT = exports.DELAY_VURT = exports.INIT_VURT = void 0;
-exports.INIT_VURT = "[Vurt action] Init Vurt";
-exports.DELAY_VURT = "[Vurt action] Delay Vurt";
-exports.TEST_CLOUD_VURT = "[Vurt action] Test Cloud Vurt";
-exports.FETCH_VURT = "[Vurt action] Fetch Vurt";
-exports.UPDATE_VURT = "[Vurt action] Update Vurt";
-exports.REPLACE_VURT = "[Vurt action] Replace Vurt";
-exports.UNIT_VURT = "[Vurt action] Unit Vurt";
-exports.COUNT_VURT = "[Vurt action] Count Vurt";
-exports.LIST_PIVOT_VURT = "[Vurt action] List Pivot Vurt";
-exports.LIST_UNIT_VURT = "[Vurt action] List Unit Vurt";
-exports.CONTAINS_VURT = "[Contains action] Contains Vurt";
-exports.BUNDLE_VURT = "[Bundle action] Bundle Vurt";
-exports.VALUE_VURT = "[Value action] Value Vurt";
-
-},{}],52:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var sim = {
-    hunt: null,
-    state: null
-};
-sim.hunt = (typ, obj) => { return host(obj, typ); };
-var host = (obj, typ) => {
-    init();
-    var slv;
-    const promo = new Promise((rslv, rjct) => (slv = rslv));
-    if (obj == null)
-        obj = {};
-    if (obj.slv == null)
-        obj.slv = (val0) => slv(val0);
-    sim.state.dispatch({ type: typ, bale: obj });
-    return promo;
-};
-var init = () => {
-    if (sim.state != null)
-        return;
-    sim.state = new state_1.default();
-    sim.state.pivot = sim;
-    sim.state.hunt = sim.hunt;
-    for (var k in Import.list)
-        new Import.list[k](sim.state);
-};
-const Import = require("./BEE");
-const state_1 = require("./99.core/state");
-module.exports = sim;
-
-},{"./99.core/state":47,"./BEE":48}]},{},[22]);
+},{"./container/container":59,"./decorators":61,"./model":62,"./scopes":63,"reflect-metadata":54}]},{},[1]);

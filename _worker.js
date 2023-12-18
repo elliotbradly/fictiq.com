@@ -29,7 +29,7 @@ export default {
       const data = await response.json();
 
       // Use the data to modify or manipulate your content as needed
-      return new Response(data);
+      return new Response(JSON.stringify(data));
     } else if (url.pathname.startsWith("/open/")) {
       bit = await globalThis.TASUS.hunt(globalThis.TASUS.ActSrv.OPEN_SERVICE, { idx });
 

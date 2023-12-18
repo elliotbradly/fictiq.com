@@ -18,10 +18,18 @@ export default {
 
       var url0 = "https://ancient-harbor-25799-e23312a8ce20.herokuapp.com/key";
 
-      const response = await fetch(url0);
-      const results = await gatherResponse(response);
+      const response = await fetch(url0, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-      return new Response(JSON.stringify({ idx: "auth", src: "now", dat: results }));
+      // Retrieve the data from the response
+      const data = await response.json();
+
+      // Use the data to modify or manipulate your content as needed
+      return new Response(data);
     } else if (url.pathname.startsWith("/open/")) {
       bit = await globalThis.TASUS.hunt(globalThis.TASUS.ActSrv.OPEN_SERVICE, { idx });
 

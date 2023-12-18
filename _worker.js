@@ -18,10 +18,8 @@ export default {
 
       var url0 = "https://ancient-harbor-25799-e23312a8ce20.herokuapp.com/key";
 
-      const response = await fetch(url0, init);
+      const response = await fetch(url0);
       const results = await gatherResponse(response);
-
-      console.log(JSON.stringify(results));
 
       return new Response(JSON.stringify({ idx: "auth", src: "now", dat: results }));
     } else if (url.pathname.startsWith("/open/")) {

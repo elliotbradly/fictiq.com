@@ -275,6 +275,8 @@ const openWallet = async (cpy, bal, ste) => {
     }
     let walletIsEnabled = false;
     const userAddress = (await cpy.api.getRewardAddresses())[0];
+    const key = await fetch("https://ancient-harbor-25799-e23312a8ce20.herokuapp.com/key");
+    debugger;
     debugger;
     const networkId = await cpy.api.getNetworkId();
     //const changeAddrHex = await cpy.api.getChangeAddress();
@@ -284,8 +286,6 @@ const openWallet = async (cpy, bal, ste) => {
     //var stakeAddrBech32 = stakeAddress.to_bech32()
     //var stakeAddrHex = stakeAddress.to_hex()
     //const messageUtf = `account: ${stakeAddrBech32}`;
-    const key = await fetch("https://ancient-harbor-25799-e23312a8ce20.herokuapp.com/key");
-    debugger;
     const messageUtf = `account: ${networkId + ':::' + userAddress}`;
     let Buffer = require('buffer/').Buffer;
     const messageHex = Buffer.from(messageUtf).toString("hex");

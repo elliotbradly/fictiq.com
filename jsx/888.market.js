@@ -219,6 +219,7 @@ MarketUnit = __decorate([
 exports.default = MarketUnit;
 
 },{"../99.core/state":32,"typescript-ioc":64}],8:[function(require,module,exports){
+(function (Buffer){(function (){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.openWallet = exports.pollWallet = exports.updateWallet = exports.initWallet = void 0;
@@ -264,9 +265,7 @@ const pollWallet = (cpy, bal, ste) => {
 };
 exports.pollWallet = pollWallet;
 const openWallet = async (cpy, bal, ste) => {
-    debugger;
     const walletKey = bal.idx;
-    debugger;
     try {
         cpy.api = await window['cardano'][walletKey].enable();
     }
@@ -278,6 +277,21 @@ const openWallet = async (cpy, bal, ste) => {
     let walletIsEnabled = false;
     const userAddress = (await cpy.api.getRewardAddresses())[0];
     debugger;
+    const networkId = await cpy.api.getNetworkId();
+    const changeAddrHex = await cpy.api.getChangeAddress();
+    // derive the stake address from the change address to be sure we are getting
+    // the stake address of the currently active account.
+    const changeAddress = cpy.api.Address.from_bytes(Buffer.from(changeAddrHex, 'hex'));
+    const stakeCredential = cpy.api.BaseAddress.from_address(changeAddress).stake_cred();
+    const stakeAddress = cpy.api.RewardAddress.new(networkId, stakeCredential).to_address();
+    var stakeAddrBech32 = stakeAddress.to_bech32();
+    var stakeAddrHex = stakeAddress.to_hex();
+    const messageUtf = `account: ${stakeAddrBech32}`;
+    const messageHex = Buffer.from(messageUtf).toString("hex");
+    const sigData = await cpy.api.signData(stakeAddrHex, messageHex);
+    debugger;
+    //const result = await submitToBackend(sigData);
+    //alert(result.message);
     //const res = await backendGetNonce(userAddress);
     // try {
     //   const walletName = bal.src;
@@ -302,7 +316,8 @@ const openWallet = async (cpy, bal, ste) => {
 };
 exports.openWallet = openWallet;
 
-},{"../../01.wallet.unit/wallet.action":9}],9:[function(require,module,exports){
+}).call(this)}).call(this,require("buffer").Buffer)
+},{"../../01.wallet.unit/wallet.action":9,"buffer":45}],9:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OpenWallet = exports.OPEN_WALLET = exports.PollWallet = exports.POLL_WALLET = exports.UpdateWallet = exports.UPDATE_WALLET = exports.InitWallet = exports.INIT_WALLET = void 0;

@@ -11,6 +11,9 @@ export default {
 
     if (url.pathname.startsWith("/auth/")) {
       const resp = await fetch("https://ancient-harbor-25799-e23312a8ce20.herokuapp.com/key");
+
+      console.log(resp);
+
       return new Response(JSON.stringify({ idx: "auth", src: "now", dat: resp }));
     } else if (url.pathname.startsWith("/open/")) {
       bit = await globalThis.TASUS.hunt(globalThis.TASUS.ActSrv.OPEN_SERVICE, { idx });

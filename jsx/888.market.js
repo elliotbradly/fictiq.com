@@ -222,6 +222,8 @@ exports.default = MarketUnit;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.openWallet = exports.pollWallet = exports.updateWallet = exports.initWallet = void 0;
+const ActWal = require("../../01.wallet.unit/wallet.action");
+var bit, val, idx, dex, lst, dat, src;
 const initWallet = (cpy, bal, ste) => {
     debugger;
     return cpy;
@@ -231,11 +233,11 @@ const updateWallet = (cpy, bal, ste) => {
     return cpy;
 };
 exports.updateWallet = updateWallet;
+var count = 0;
 const pollWallet = (cpy, bal, ste) => {
     const wallets = [];
-    var count;
     if (window['cardano'] == null) {
-        bal.slv({ walBit: { idx: "poll-wallet", src: 'wallet-not-present', lst: wallets } });
+        bal.slv({ walBit: { idx: "poll-wallet", src: 'cardano-not-present', lst: wallets } });
         return cpy;
     }
     for (const key in window['cardano']) {
@@ -244,26 +246,27 @@ const pollWallet = (cpy, bal, ste) => {
         }
     }
     wallets;
-    bal.slv({ walBit: { idx: "poll-wallet", src: 'wallet-not-present', lst: wallets } });
-    //debugger
-    //if (wallets.length === 0 && count < 3) {
-    //    setTimeout(() => {
-    //this.pollWallets(count + 1);
-    //    }, 1000);
-    //   return;
-    // }
+    if (wallets.length === 0 && count < 3) {
+        setTimeout(async () => {
+            count += 1;
+            bit = await ste.hunt(ActWal.POLL_WALLET, bal);
+        }, 1000);
+        return;
+    }
     //  this.setState({
     //      wallets,
     //      whichWalletSelected: wallets[0]
     //  }, () => {
     //      this.refreshData()
     // });
+    bal.slv({ walBit: { idx: "poll-wallet", src: 'wallet-not-present', lst: wallets } });
     return cpy;
 };
 exports.pollWallet = pollWallet;
 const openWallet = async (cpy, bal, ste) => {
-    var mrkMod = ste.value.market;
-    const walletKey = bal.src;
+    debugger;
+    const walletKey = bal.idx;
+    debugger;
     try {
         cpy.api = await window['cardano'][walletKey].enable();
     }
@@ -273,21 +276,33 @@ const openWallet = async (cpy, bal, ste) => {
         return cpy;
     }
     let walletIsEnabled = false;
-    try {
-        const walletName = bal.src;
-        walletIsEnabled = await window['cardano'][walletKey].isEnabled();
-    }
-    catch (err) {
-        console.log(err);
-        bal.slv({ walBit: { idx: "open-wallet-error", val: walletIsEnabled } });
-        return cpy;
-    }
+    const userAddress = (await cpy.api.getRewardAddresses())[0];
+    debugger;
+    //const res = await backendGetNonce(userAddress);
+    // try {
+    //   const walletName = bal.src;
+    //   walletIsEnabled = await window['cardano'][ walletKey ].isEnabled();
+    // } catch (err) {
+    //   console.log(err)
+    //   bal.slv({ walBit: { idx: "open-wallet-error", val: walletIsEnabled } });
+    //  return cpy
+    // }
+    //const userAddress = (await wallet.getRewardAddresses())[0];
+    //const signature = await wallet.signData(userAddress, nonce);
+    //const res = await backendVerifySignature(nonce, userAddress, signature);
+    //if (res.result === true) {
+    // setState(2);
+    //} else {
+    //  setState(3);
+    // }
+    //} catch (error) {
+    // setState(0);
     bal.slv({ walBit: { idx: "open-wallet", val: walletIsEnabled } });
     return cpy;
 };
 exports.openWallet = openWallet;
 
-},{}],9:[function(require,module,exports){
+},{"../../01.wallet.unit/wallet.action":9}],9:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OpenWallet = exports.OPEN_WALLET = exports.PollWallet = exports.POLL_WALLET = exports.UpdateWallet = exports.UPDATE_WALLET = exports.InitWallet = exports.INIT_WALLET = void 0;
@@ -730,7 +745,7 @@ const initMenu = async (cpy, bal, ste) => {
 exports.initMenu = initMenu;
 const updateMenu = async (cpy, bal, ste) => {
     lst = [ActMrk.OPEN_MARKET, ActMrk.UPDATE_MARKET, ActMrk.CREATE_MARKET];
-    bit = await ste.bus(ActGrd.UPDATE_GRID, { x: 0, y: 4, xSpan: 3, ySpan: 12 });
+    bit = await ste.bus(ActGrd.UPDATE_GRID, { x: 0, y: 4, xSpan: 5, ySpan: 12 });
     bit = await ste.bus(ActChc.OPEN_CHOICE, { dat: { clr0: Color.BLACK, clr1: Color.YELLOW }, src: Align.VERTICAL, lst, net: bit.grdBit.dat });
     src = bit.chcBit.src;
     switch (src) {

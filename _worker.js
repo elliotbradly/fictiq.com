@@ -10,11 +10,20 @@ export default {
     if (val == null) val = 0;
 
     if (url.pathname.startsWith("/auth/")) {
-      const resp = await fetch("https://ancient-harbor-25799-e23312a8ce20.herokuapp.com/key");
+      const init = {
+        headers: {
+          "content-type": "application/json",
+        },
+      };
 
-      console.log(JSON.stringify(resp.json()));
+      var url0 = "https://ancient-harbor-25799-e23312a8ce20.herokuapp.com/key";
 
-      return new Response(JSON.stringify({ idx: "auth", src: "now", dat: resp }));
+      const response = await fetch(url0, init);
+      const results = await gatherResponse(response);
+
+      console.log(JSON.stringify(results));
+
+      return new Response(JSON.stringify({ idx: "auth", src: "now", dat: results }));
     } else if (url.pathname.startsWith("/open/")) {
       bit = await globalThis.TASUS.hunt(globalThis.TASUS.ActSrv.OPEN_SERVICE, { idx });
 

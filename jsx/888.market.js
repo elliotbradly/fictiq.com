@@ -302,10 +302,7 @@ const openWallet = async (cpy, bal, ste) => {
     const userAddress = (await cpy.api.getRewardAddresses())[0];
     //need a fail state
     var result = await fetcher(userAddress);
-    var code = result.code;
-    debugger;
-    // do: send request with 'userAddress' to the backend
-    // do: if new user, create new user model in the database
+    var code = result.dat.code;
     const networkId = await cpy.api.getNetworkId();
     //const changeAddrHex = await cpy.api.getChangeAddress();
     //const changeAddress = cpy.api.Address.from_bytes(Buffer.from(changeAddrHex, 'hex'));
@@ -314,7 +311,7 @@ const openWallet = async (cpy, bal, ste) => {
     //var stakeAddrBech32 = stakeAddress.to_bech32()
     //var stakeAddrHex = stakeAddress.to_hex()
     //const messageUtf = `account: ${stakeAddrBech32}`;
-    const messageUtf = `account: ${networkId + ':::' + userAddress}`;
+    const messageUtf = code;
     let Buffer = require('buffer/').Buffer;
     const messageHex = Buffer.from(messageUtf).toString("hex");
     const sigData = await cpy.api.signData(userAddress, messageHex);

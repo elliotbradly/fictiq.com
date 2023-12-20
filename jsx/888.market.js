@@ -316,7 +316,7 @@ const openWallet = async (cpy, bal, ste) => {
     let Buffer = require('buffer/').Buffer;
     const messageHex = Buffer.from(messageUtf).toString("hex");
     const sigData = await cpy.api.signData(userAddress, messageHex);
-    var result0 = await verifyPlayer(userAddress, sigData);
+    var result0 = await verifyPlayer(userAddress, sigData.signature);
     debugger;
     //const result = await submitToBackend(sigData);
     //alert(result.message);

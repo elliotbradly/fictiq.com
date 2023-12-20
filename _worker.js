@@ -4,19 +4,15 @@ export default {
 
     var idx = url.searchParams.get("idx");
     var src = url.searchParams.get("src");
+    var dat = url.searchParams.get("dat");
     var val = url.searchParams.get("val");
     var bit;
 
     if (val == null) val = 0;
 
-    if (url.pathname.startsWith("/auth/")) {
-      const init = {
-        headers: {
-          "content-type": "application/json",
-        },
-      };
+    if (url.pathname.startsWith("/writePlayer/")) {
 
-      var url0 = "https://ancient-harbor-25799-e23312a8ce20.herokuapp.com/key";
+      var url0 = "'https://orange-voice-caa1.beeing.workers.dev/writePlayer/?idx=" + idx;
 
       const response = await fetch(url0, {
         method: "GET",
@@ -25,16 +21,15 @@ export default {
         },
       });
 
-      // Retrieve the data from the response
       const data = await response.json();
-
-      // Use the data to modify or manipulate your content as needed
       return new Response(JSON.stringify(data));
-    } else if (url.pathname.startsWith("/open/")) {
+    }
+    else if (url.pathname.startsWith("/open/")) {
       bit = await globalThis.TASUS.hunt(globalThis.TASUS.ActSrv.OPEN_SERVICE, { idx });
 
       return new Response(JSON.stringify({ idx: "open", dat: bit }));
-    } else if (url.pathname.startsWith("/black-meat-machine/")) {
+    }
+    else if (url.pathname.startsWith("/black-meat-machine/")) {
       switch (idx) {
         case "readTime":
           bit = { idx: "read-time" };

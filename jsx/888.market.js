@@ -287,10 +287,9 @@ const pollWallet = (cpy, bal, ste) => {
     return cpy;
 };
 exports.pollWallet = pollWallet;
-const fetcher = async (idx) => await fetch(`http://127.0.0.1:8787/writePlayer?idx=` + idx).then((response) => response.json());
+const fetcher = async (idx) => await fetch(`/writePlayer?idx=` + idx).then((response) => response.json());
 const openWallet = async (cpy, bal, ste) => {
     const walletKey = bal.idx;
-    debugger;
     try {
         cpy.api = await window['cardano'][walletKey].enable();
     }
@@ -300,10 +299,7 @@ const openWallet = async (cpy, bal, ste) => {
         bal.slv({ walBit: { idx: "open-wallet-error", src: walletKey } });
         return cpy;
     }
-    let walletIsEnabled = false;
-    debugger;
     const userAddress = (await cpy.api.getRewardAddresses())[0];
-    debugger;
     //need a fail state
     var result = await fetcher(userAddress);
     debugger;
@@ -343,7 +339,7 @@ const openWallet = async (cpy, bal, ste) => {
     // }
     //} catch (error) {
     // setState(0);
-    bal.slv({ walBit: { idx: "open-wallet", val: walletIsEnabled } });
+    bal.slv({ walBit: { idx: "open-wallet", val: 1 } });
     return cpy;
 };
 exports.openWallet = openWallet;

@@ -288,7 +288,7 @@ const pollWallet = (cpy, bal, ste) => {
 };
 exports.pollWallet = pollWallet;
 const writePlayer = async (idx) => await fetch(`./writePlayer/?idx=` + idx).then((response) => response.json());
-const verifyPlayer = async (idx, dat) => await fetch(`./verifyPlayer/?idx=` + idx + '&dat' + dat).then((response) => response.json());
+const verifyPlayer = async (idx, dat) => await fetch(`./verifyPlayer/?idx=` + idx + '&dat=' + dat).then((response) => response.json());
 const openWallet = async (cpy, bal, ste) => {
     const walletKey = bal.idx;
     try {

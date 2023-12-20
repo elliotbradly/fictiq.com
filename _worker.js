@@ -12,8 +12,7 @@ export default {
 
     if (url.pathname.startsWith("/writePlayer/")) {
 
-      
-      var url0 = "https://orange-voice-caa1.beeing.workers.dev/";
+      var url0 = "https://orange-voice-caa1.beeing.workers.dev/writePlayer?idx=" + idx;
 
       const response = await fetch(url0, {
         method: "GET",

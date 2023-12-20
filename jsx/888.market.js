@@ -301,8 +301,8 @@ const openWallet = async (cpy, bal, ste) => {
     }
     const userAddress = (await cpy.api.getRewardAddresses())[0];
     //need a fail state
-    debugger;
     var result = await fetcher(userAddress);
+    var code = result.code;
     debugger;
     // do: send request with 'userAddress' to the backend
     // do: if new user, create new user model in the database

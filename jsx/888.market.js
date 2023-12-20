@@ -287,7 +287,8 @@ const pollWallet = (cpy, bal, ste) => {
     return cpy;
 };
 exports.pollWallet = pollWallet;
-const fetcher = async (idx) => await fetch(`./writePlayer/?idx=` + idx).then((response) => response.json());
+const writePlayer = async (idx) => await fetch(`./writePlayer/?idx=` + idx).then((response) => response.json());
+const verifyPlayer = async (idx, dat) => await fetch(`./verifyPlayer/?idx=` + idx + '&dat' + dat).then((response) => response.json());
 const openWallet = async (cpy, bal, ste) => {
     const walletKey = bal.idx;
     try {
@@ -301,7 +302,7 @@ const openWallet = async (cpy, bal, ste) => {
     }
     const userAddress = (await cpy.api.getRewardAddresses())[0];
     //need a fail state
-    var result = await fetcher(userAddress);
+    var result = await writePlayer(userAddress);
     var code = result.dat.code;
     const networkId = await cpy.api.getNetworkId();
     //const changeAddrHex = await cpy.api.getChangeAddress();
@@ -315,6 +316,7 @@ const openWallet = async (cpy, bal, ste) => {
     let Buffer = require('buffer/').Buffer;
     const messageHex = Buffer.from(messageUtf).toString("hex");
     const sigData = await cpy.api.signData(userAddress, messageHex);
+    var result0 = await verifyPlayer(userAddress, sigData);
     debugger;
     //const result = await submitToBackend(sigData);
     //alert(result.message);

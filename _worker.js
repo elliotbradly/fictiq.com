@@ -24,9 +24,23 @@ export default {
       const data = await response.json();
       return new Response(JSON.stringify(data));
     }
-    else if (url.pathname.startsWith("/open/")) {
-      bit = await globalThis.TASUS.hunt(globalThis.TASUS.ActSrv.OPEN_SERVICE, { idx });
+    else if (url.pathname.startsWith("/verifyPlayer/")) {
 
+      var url1 = "https://orange-voice-caa1.beeing.workers.dev/verifyPlayer?idx=" + idx + '&dat=' + dat;
+
+      const response = await fetch(url1, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = await response.json();
+      return new Response(JSON.stringify(data));
+
+
+
+     
       return new Response(JSON.stringify({ idx: "open", dat: bit }));
     }
     else if (url.pathname.startsWith("/black-meat-machine/")) {

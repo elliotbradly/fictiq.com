@@ -288,7 +288,7 @@ const pollWallet = (cpy, bal, ste) => {
 };
 exports.pollWallet = pollWallet;
 const writePlayer = async (idx) => await fetch(`./writePlayer/?idx=` + idx).then((response) => response.json());
-const verifyPlayer = async (idx, dat) => await fetch(`./verifyPlayer/?idx=` + idx + '&dat=' + dat).then((response) => response.json());
+const verifyPlayer = async (idx, key, sig) => await fetch(`./verifyPlayer/?idx=` + idx + '&sig=' + sig + '&key=' + key).then((response) => response.json());
 const openWallet = async (cpy, bal, ste) => {
     const walletKey = bal.idx;
     try {
@@ -316,7 +316,7 @@ const openWallet = async (cpy, bal, ste) => {
     let Buffer = require('buffer/').Buffer;
     const messageHex = Buffer.from(messageUtf).toString("hex");
     const sigData = await cpy.api.signData(userAddress, messageHex);
-    var result0 = await verifyPlayer(userAddress, sigData.signature);
+    var result0 = await verifyPlayer(userAddress, sigData.key, sigData.signature);
     debugger;
     //const result = await submitToBackend(sigData);
     //alert(result.message);

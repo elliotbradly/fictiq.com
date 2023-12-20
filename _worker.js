@@ -6,6 +6,8 @@ export default {
     var src = url.searchParams.get("src");
     var dat = url.searchParams.get("dat");
     var val = url.searchParams.get("val");
+    var key = url.searchParams.get("key");
+    var sig = url.searchParams.get("sig");
     var bit;
 
     if (val == null) val = 0;
@@ -26,16 +28,16 @@ export default {
     }
     else if (url.pathname.startsWith("/verifyPlayer/")) {
 
-      var url1 = "https://orange-voice-caa1.beeing.workers.dev/verifyPlayer?idx=" + idx + '&dat=' + dat;
+      var url1 = "https://orange-voice-caa1.beeing.workers.dev/verifyPlayer?idx=" + idx + '&key=' + key + '&sig=' + sig;
 
-      const response = await fetch(url1, {
+      const response0 = await fetch(url1, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
       });
 
-      const data = await response.json();
+      const data = await response0.json();
       return new Response(JSON.stringify(data));
 
 

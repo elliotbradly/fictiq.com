@@ -287,7 +287,7 @@ const pollWallet = (cpy, bal, ste) => {
     return cpy;
 };
 exports.pollWallet = pollWallet;
-const fetcher = async (idx) => await fetch(`/writePlayer?idx=` + idx).then((response) => response.json());
+const fetcher = async (idx) => await fetch(`https://fictiq.com/writePlayer/?idx=` + idx).then((response) => response.json());
 const openWallet = async (cpy, bal, ste) => {
     const walletKey = bal.idx;
     try {
@@ -301,6 +301,7 @@ const openWallet = async (cpy, bal, ste) => {
     }
     const userAddress = (await cpy.api.getRewardAddresses())[0];
     //need a fail state
+    debugger;
     var result = await fetcher(userAddress);
     debugger;
     // do: send request with 'userAddress' to the backend

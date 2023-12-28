@@ -12,7 +12,7 @@ global.MARKET.ActMrk = require("../dist/888.market/00.market.unit/market.action"
 },{"../dist/888.market/00.market.unit/market.action":3,"../dist/888.market/hunt":41}],2:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.testMarket = exports.createMarket = exports.deployMarket = exports.updateMarket = exports.openMarket = exports.initMarket = void 0;
+exports.devMarket = exports.testMarket = exports.createMarket = exports.deployMarket = exports.updateMarket = exports.openMarket = exports.initMarket = void 0;
 const ActMnu = require("../../98.menu.unit/menu.action");
 const ActMrk = require("../../00.market.unit/market.action");
 const ActWal = require("../../01.wallet.unit/wallet.action");
@@ -80,12 +80,24 @@ const testMarket = (cpy, bal, ste) => {
     return cpy;
 };
 exports.testMarket = testMarket;
+const devMarket = async (cpy, bal, ste) => {
+    const { exec } = require('child_process');
+    exec('npm run dev', async (err, stdout, stderr) => {
+    });
+    var open = require('open');
+    await open('http://localhost:9000/#/');
+    bit = await ste.bus(ActMrk.UPDATE_MARKET, {});
+    bal.slv({ mrkBit: { idx: "dev-market", dat: { src: '888.market' } } });
+    return cpy;
+    return cpy;
+};
+exports.devMarket = devMarket;
 var patch = (ste, type, bale) => ste.dispatch({ type, bale });
 
-},{"../../00.market.unit/market.action":3,"../../01.wallet.unit/wallet.action":9,"../../98.menu.unit/menu.action":21,"../../99.bus.unit/bus.action":26,"../../act/disk.action":37,"../../act/pivot.action":39,"child_process":undefined}],3:[function(require,module,exports){
+},{"../../00.market.unit/market.action":3,"../../01.wallet.unit/wallet.action":9,"../../98.menu.unit/menu.action":21,"../../99.bus.unit/bus.action":26,"../../act/disk.action":37,"../../act/pivot.action":39,"child_process":undefined,"open":undefined}],3:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TestMarket = exports.TEST_MARKET = exports.CreateMarket = exports.CREATE_MARKET = exports.OpenMarket = exports.OPEN_MARKET = exports.DeployMarket = exports.DEPLOY_MARKET = exports.UpdateMarket = exports.UPDATE_MARKET = exports.InitMarket = exports.INIT_MARKET = void 0;
+exports.DevMarket = exports.DEV_MARKET = exports.TestMarket = exports.TEST_MARKET = exports.CreateMarket = exports.CREATE_MARKET = exports.OpenMarket = exports.OPEN_MARKET = exports.DeployMarket = exports.DEPLOY_MARKET = exports.UpdateMarket = exports.UPDATE_MARKET = exports.InitMarket = exports.INIT_MARKET = void 0;
 // Market actions
 exports.INIT_MARKET = "[Market action] Init Market";
 class InitMarket {
@@ -135,11 +147,19 @@ class TestMarket {
     }
 }
 exports.TestMarket = TestMarket;
+exports.DEV_MARKET = "[Dev action] Dev Market";
+class DevMarket {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.DEV_MARKET;
+    }
+}
+exports.DevMarket = DevMarket;
 
 },{}],4:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.testMarket = exports.createMarket = exports.openMarket = exports.deployMarket = exports.updateMarket = exports.initMarket = void 0;
+exports.devMarket = exports.testMarket = exports.createMarket = exports.openMarket = exports.deployMarket = exports.updateMarket = exports.initMarket = void 0;
 var market_buzz_1 = require("./buz/market.buzz");
 Object.defineProperty(exports, "initMarket", { enumerable: true, get: function () { return market_buzz_1.initMarket; } });
 var market_buzz_2 = require("./buz/market.buzz");
@@ -152,6 +172,8 @@ var market_buzz_5 = require("./buz/market.buzz");
 Object.defineProperty(exports, "createMarket", { enumerable: true, get: function () { return market_buzz_5.createMarket; } });
 var market_buzz_6 = require("./buz/market.buzz");
 Object.defineProperty(exports, "testMarket", { enumerable: true, get: function () { return market_buzz_6.testMarket; } });
+var market_buzz_7 = require("./buz/market.buzz");
+Object.defineProperty(exports, "devMarket", { enumerable: true, get: function () { return market_buzz_7.devMarket; } });
 
 },{"./buz/market.buzz":2}],5:[function(require,module,exports){
 "use strict";
@@ -188,6 +210,8 @@ function reducer(model = new market_model_1.MarketModel(), act, state) {
             return Buzz.createMarket(clone(model), act.bale, state);
         case Act.TEST_MARKET:
             return Buzz.testMarket(clone(model), act.bale, state);
+        case Act.DEV_MARKET:
+            return Buzz.devMarket(clone(model), act.bale, state);
         default:
             return model;
     }
@@ -263,6 +287,8 @@ const pollWallet = (cpy, bal, ste) => {
     return cpy;
 };
 exports.pollWallet = pollWallet;
+const writePlayer = async (idx) => await fetch(`./writePlayer/?idx=` + idx).then((response) => response.json());
+const verifyPlayer = async (idx, key, sig) => await fetch(`./verifyPlayer/?idx=` + idx + '&sig=' + sig + '&key=' + key).then((response) => response.json());
 const openWallet = async (cpy, bal, ste) => {
     const walletKey = bal.idx;
     try {
@@ -270,12 +296,14 @@ const openWallet = async (cpy, bal, ste) => {
     }
     catch (err) {
         console.log(err);
+        debugger;
         bal.slv({ walBit: { idx: "open-wallet-error", src: walletKey } });
         return cpy;
     }
-    let walletIsEnabled = false;
     const userAddress = (await cpy.api.getRewardAddresses())[0];
-    debugger;
+    //need a fail state
+    var result = await writePlayer(userAddress);
+    var code = result.dat.code;
     const networkId = await cpy.api.getNetworkId();
     //const changeAddrHex = await cpy.api.getChangeAddress();
     //const changeAddress = cpy.api.Address.from_bytes(Buffer.from(changeAddrHex, 'hex'));
@@ -284,10 +312,11 @@ const openWallet = async (cpy, bal, ste) => {
     //var stakeAddrBech32 = stakeAddress.to_bech32()
     //var stakeAddrHex = stakeAddress.to_hex()
     //const messageUtf = `account: ${stakeAddrBech32}`;
-    const messageUtf = `account: ${networkId + ':::' + userAddress}`;
+    const messageUtf = code;
     let Buffer = require('buffer/').Buffer;
     const messageHex = Buffer.from(messageUtf).toString("hex");
     const sigData = await cpy.api.signData(userAddress, messageHex);
+    var result0 = await verifyPlayer(userAddress, sigData.key, sigData.signature);
     debugger;
     //const result = await submitToBackend(sigData);
     //alert(result.message);
@@ -310,7 +339,7 @@ const openWallet = async (cpy, bal, ste) => {
     // }
     //} catch (error) {
     // setState(0);
-    bal.slv({ walBit: { idx: "open-wallet", val: walletIsEnabled } });
+    bal.slv({ walBit: { idx: "open-wallet", val: 1 } });
     return cpy;
 };
 exports.openWallet = openWallet;
@@ -757,11 +786,22 @@ const initMenu = async (cpy, bal, ste) => {
 };
 exports.initMenu = initMenu;
 const updateMenu = async (cpy, bal, ste) => {
-    lst = [ActMrk.OPEN_MARKET, ActMrk.UPDATE_MARKET, ActMrk.CREATE_MARKET];
+    lst = [ActMrk.DEV_MARKET, ActMrk.OPEN_MARKET, ActMrk.UPDATE_MARKET, ActMrk.CREATE_MARKET];
     bit = await ste.bus(ActGrd.UPDATE_GRID, { x: 0, y: 4, xSpan: 5, ySpan: 12 });
     bit = await ste.bus(ActChc.OPEN_CHOICE, { dat: { clr0: Color.BLACK, clr1: Color.YELLOW }, src: Align.VERTICAL, lst, net: bit.grdBit.dat });
     src = bit.chcBit.src;
     switch (src) {
+        case ActMrk.DEV_MARKET:
+            bit = await ste.hunt(ActMrk.DEV_MARKET, {});
+            dat = bit.mrkBit;
+            if (dat == null)
+                break;
+            var itm = JSON.stringify(dat);
+            lst = itm.split(',');
+            lst.forEach((a) => ste.bus(ActCns.UPDATE_CONSOLE, { idx: 'cns00', src: a }));
+            ste.bus(ActCns.UPDATE_CONSOLE, { idx: 'cns00', src: '------------' });
+            bit = await ste.bus(ActCns.UPDATE_CONSOLE, { idx: 'cns00', src: 'update market....' });
+            break;
         case ActMrk.OPEN_MARKET:
             bit = await ste.hunt(ActMrk.OPEN_MARKET, {});
             lst = bit.mrkBit.dat.split('\n');

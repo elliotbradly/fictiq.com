@@ -1,1 +1,1 @@
-npx wrangler@beta dev --local
+wrangler pages dev ./

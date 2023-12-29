@@ -13,7 +13,6 @@ export default {
     if (val == null) val = 0;
 
     if (url.pathname.startsWith("/writePlayer/")) {
-
       var url0 = "https://orange-voice-caa1.beeing.workers.dev/writePlayer?idx=" + idx;
 
       const response = await fetch(url0, {
@@ -25,10 +24,8 @@ export default {
 
       const data = await response.json();
       return new Response(JSON.stringify(data));
-    }
-    else if (url.pathname.startsWith("/verifyPlayer/")) {
-
-      var url1 = "https://orange-voice-caa1.beeing.workers.dev/verifyPlayer?idx=" + idx + '&key=' + key + '&sig=' + sig;
+    } else if (url.pathname.startsWith("/verifyPlayer/")) {
+      var url1 = "https://orange-voice-caa1.beeing.workers.dev/verifyPlayer?idx=" + idx + "&key=" + key + "&sig=" + sig;
 
       const response0 = await fetch(url1, {
         method: "GET",
@@ -40,12 +37,8 @@ export default {
       const data = await response0.json();
       return new Response(JSON.stringify(data));
 
-
-
-     
       return new Response(JSON.stringify({ idx: "open", dat: bit }));
-    }
-    else if (url.pathname.startsWith("/black-meat-machine/")) {
+    } else if (url.pathname.startsWith("/black-meat-machine/")) {
       switch (idx) {
         case "readTime":
           bit = { idx: "read-time" };

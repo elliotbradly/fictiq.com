@@ -10,9 +10,10 @@ global.MARKET.ActMrk = require("../dist/888.market/00.market.unit/market.action"
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"../dist/888.market/00.market.unit/market.action":3,"../dist/888.market/hunt":41}],2:[function(require,module,exports){
+(function (process){(function (){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.devMarket = exports.testMarket = exports.createMarket = exports.deployMarket = exports.updateMarket = exports.openMarket = exports.initMarket = void 0;
+exports.publishMarket = exports.devMarket = exports.testMarket = exports.createMarket = exports.deployMarket = exports.updateMarket = exports.openMarket = exports.initMarket = void 0;
 const ActMnu = require("../../98.menu.unit/menu.action");
 const ActMrk = require("../../00.market.unit/market.action");
 const ActWal = require("../../01.wallet.unit/wallet.action");
@@ -33,8 +34,8 @@ exports.initMarket = initMarket;
 const openMarket = (cpy, bal, ste) => {
     const { exec } = require('child_process');
     exec('npx quasar dev -m electron', async (err, stdout, stderr) => {
-        if (bal.slv != null)
-            bal.slv({ mrkBit: { idx: "open-market", dat: stdout } });
+        bit = await ste.hunt(ActMrk.DEV_MARKET, { val: 1 });
+        bal.slv({ mrkBit: { idx: "open-market", dat: stdout } });
     });
     return cpy;
 };
@@ -58,18 +59,16 @@ const updateMarket = (cpy, bal, ste) => {
 };
 exports.updateMarket = updateMarket;
 const deployMarket = async (cpy, bal, ste) => {
-    bit = await ste.bus(ActDsk.COPY_DISK, { src: './dist/spa', idx: '../reptiq.com', val: 1 });
-    const { exec } = require('child_process');
-    exec('npm run deploy', async (err, stdout, stderr) => {
-        if (bal.slv != null)
-            bal.slv({ mrkBit: { idx: "deploy-market", dat: stdout } });
-    });
+    bit = await ste.bus(ActDsk.COPY_DISK, { src: './dist/spa', idx: './reptiq.com/public', val: 1 });
+    bal.slv({ mrkBit: { idx: "deploy-market", dat: { src: 'None' } } });
     return cpy;
 };
 exports.deployMarket = deployMarket;
 const createMarket = (cpy, bal, ste) => {
     const { exec } = require('child_process');
     exec('npx quasar build', async (err, stdout, stderr) => {
+        bit = await ste.hunt(ActMrk.DEPLOY_MARKET, {});
+        bit = await ste.hunt(ActMrk.DEV_MARKET, {});
         bal.slv({ mrkBit: { idx: "create-market", dat: { src: '888.market' } } });
     });
     return cpy;
@@ -81,23 +80,39 @@ const testMarket = (cpy, bal, ste) => {
 };
 exports.testMarket = testMarket;
 const devMarket = async (cpy, bal, ste) => {
-    const { exec } = require('child_process');
-    exec('npm run dev', async (err, stdout, stderr) => {
-    });
-    var open = require('open');
-    await open('http://localhost:9000/#/');
+    if (bal.val == null)
+        bal.val = 0;
     bit = await ste.bus(ActMrk.UPDATE_MARKET, {});
+    const { exec, fork } = require('child_process');
+    process.chdir("./reptiq.com");
+    exec('npm start', async (err, stdout, stderr) => {
+        console.log(stdout);
+    });
+    process.chdir("../base");
+    exec('wrangler dev', async (err, stdout, stderr) => {
+        console.log(stdout);
+    });
+    process.chdir("../");
+    if (bal.val == 0) {
+        var open = require('open');
+        open('http://localhost:3001/#/');
+    }
     bal.slv({ mrkBit: { idx: "dev-market", dat: { src: '888.market' } } });
-    return cpy;
     return cpy;
 };
 exports.devMarket = devMarket;
 var patch = (ste, type, bale) => ste.dispatch({ type, bale });
+const publishMarket = (cpy, bal, ste) => {
+    debugger;
+    return cpy;
+};
+exports.publishMarket = publishMarket;
 
-},{"../../00.market.unit/market.action":3,"../../01.wallet.unit/wallet.action":9,"../../98.menu.unit/menu.action":21,"../../99.bus.unit/bus.action":26,"../../act/disk.action":37,"../../act/pivot.action":39,"child_process":undefined,"open":undefined}],3:[function(require,module,exports){
+}).call(this)}).call(this,require('_process'))
+},{"../../00.market.unit/market.action":3,"../../01.wallet.unit/wallet.action":9,"../../98.menu.unit/menu.action":21,"../../99.bus.unit/bus.action":26,"../../act/disk.action":37,"../../act/pivot.action":39,"_process":54,"child_process":undefined,"open":undefined}],3:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DevMarket = exports.DEV_MARKET = exports.TestMarket = exports.TEST_MARKET = exports.CreateMarket = exports.CREATE_MARKET = exports.OpenMarket = exports.OPEN_MARKET = exports.DeployMarket = exports.DEPLOY_MARKET = exports.UpdateMarket = exports.UPDATE_MARKET = exports.InitMarket = exports.INIT_MARKET = void 0;
+exports.PublishMarket = exports.PUBLISH_MARKET = exports.DevMarket = exports.DEV_MARKET = exports.TestMarket = exports.TEST_MARKET = exports.CreateMarket = exports.CREATE_MARKET = exports.OpenMarket = exports.OPEN_MARKET = exports.DeployMarket = exports.DEPLOY_MARKET = exports.UpdateMarket = exports.UPDATE_MARKET = exports.InitMarket = exports.INIT_MARKET = void 0;
 // Market actions
 exports.INIT_MARKET = "[Market action] Init Market";
 class InitMarket {
@@ -155,11 +170,19 @@ class DevMarket {
     }
 }
 exports.DevMarket = DevMarket;
+exports.PUBLISH_MARKET = "[Publish action] Publish Market";
+class PublishMarket {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.PUBLISH_MARKET;
+    }
+}
+exports.PublishMarket = PublishMarket;
 
 },{}],4:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.devMarket = exports.testMarket = exports.createMarket = exports.openMarket = exports.deployMarket = exports.updateMarket = exports.initMarket = void 0;
+exports.publishMarket = exports.devMarket = exports.testMarket = exports.createMarket = exports.openMarket = exports.deployMarket = exports.updateMarket = exports.initMarket = void 0;
 var market_buzz_1 = require("./buz/market.buzz");
 Object.defineProperty(exports, "initMarket", { enumerable: true, get: function () { return market_buzz_1.initMarket; } });
 var market_buzz_2 = require("./buz/market.buzz");
@@ -174,6 +197,8 @@ var market_buzz_6 = require("./buz/market.buzz");
 Object.defineProperty(exports, "testMarket", { enumerable: true, get: function () { return market_buzz_6.testMarket; } });
 var market_buzz_7 = require("./buz/market.buzz");
 Object.defineProperty(exports, "devMarket", { enumerable: true, get: function () { return market_buzz_7.devMarket; } });
+var market_buzz_8 = require("./buz/market.buzz");
+Object.defineProperty(exports, "publishMarket", { enumerable: true, get: function () { return market_buzz_8.publishMarket; } });
 
 },{"./buz/market.buzz":2}],5:[function(require,module,exports){
 "use strict";
@@ -212,6 +237,8 @@ function reducer(model = new market_model_1.MarketModel(), act, state) {
             return Buzz.testMarket(clone(model), act.bale, state);
         case Act.DEV_MARKET:
             return Buzz.devMarket(clone(model), act.bale, state);
+        case Act.PUBLISH_MARKET:
+            return Buzz.publishMarket(clone(model), act.bale, state);
         default:
             return model;
     }
@@ -288,7 +315,7 @@ const pollWallet = (cpy, bal, ste) => {
 };
 exports.pollWallet = pollWallet;
 const writePlayer = async (idx) => await fetch(`./writePlayer/?idx=` + idx).then((response) => response.json());
-const verifyPlayer = async (idx, key, sig) => await fetch(`./verifyPlayer/?idx=` + idx + '&sig=' + sig + '&key=' + key).then((response) => response.json());
+const verifyPlayer = async (idx, dat) => await fetch(`./verifyPlayer/?idx=` + idx + '&dat=' + dat).then((response) => response.json());
 const openWallet = async (cpy, bal, ste) => {
     const walletKey = bal.idx;
     try {
@@ -301,6 +328,7 @@ const openWallet = async (cpy, bal, ste) => {
         return cpy;
     }
     const userAddress = (await cpy.api.getRewardAddresses())[0];
+    debugger;
     //need a fail state
     var result = await writePlayer(userAddress);
     var code = result.dat.code;
@@ -316,7 +344,7 @@ const openWallet = async (cpy, bal, ste) => {
     let Buffer = require('buffer/').Buffer;
     const messageHex = Buffer.from(messageUtf).toString("hex");
     const sigData = await cpy.api.signData(userAddress, messageHex);
-    var result0 = await verifyPlayer(userAddress, sigData.key, sigData.signature);
+    var result0 = await verifyPlayer(userAddress, sigData.signature);
     debugger;
     //const result = await submitToBackend(sigData);
     //alert(result.message);
@@ -787,7 +815,7 @@ const initMenu = async (cpy, bal, ste) => {
 exports.initMenu = initMenu;
 const updateMenu = async (cpy, bal, ste) => {
     lst = [ActMrk.DEV_MARKET, ActMrk.OPEN_MARKET, ActMrk.UPDATE_MARKET, ActMrk.CREATE_MARKET];
-    bit = await ste.bus(ActGrd.UPDATE_GRID, { x: 0, y: 4, xSpan: 5, ySpan: 12 });
+    bit = await ste.bus(ActGrd.UPDATE_GRID, { x: 0, y: 4, xSpan: 4, ySpan: 12 });
     bit = await ste.bus(ActChc.OPEN_CHOICE, { dat: { clr0: Color.BLACK, clr1: Color.YELLOW }, src: Align.VERTICAL, lst, net: bit.grdBit.dat });
     src = bit.chcBit.src;
     switch (src) {
@@ -823,6 +851,17 @@ const updateMenu = async (cpy, bal, ste) => {
             break;
         case ActMrk.UPDATE_MARKET:
             bit = await ste.hunt(ActMrk.UPDATE_MARKET, {});
+            dat = bit.mrkBit;
+            if (dat == null)
+                break;
+            var itm = JSON.stringify(dat);
+            lst = itm.split(',');
+            lst.forEach((a) => ste.bus(ActCns.UPDATE_CONSOLE, { idx: 'cns00', src: a }));
+            ste.bus(ActCns.UPDATE_CONSOLE, { idx: 'cns00', src: '------------' });
+            bit = await ste.bus(ActCns.UPDATE_CONSOLE, { idx: 'cns00', src: 'update market....' });
+            break;
+        case ActMrk.DEPLOY_MARKET:
+            bit = await ste.hunt(ActMrk.DEPLOY_MARKET, {});
             dat = bit.mrkBit;
             if (dat == null)
                 break;

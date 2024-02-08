@@ -67,8 +67,8 @@ exports.deployMarket = deployMarket;
 const createMarket = (cpy, bal, ste) => {
     const { exec } = require('child_process');
     exec('npx quasar build', async (err, stdout, stderr) => {
-        bit = await ste.hunt(ActMrk.DEPLOY_MARKET, {});
-        bit = await ste.hunt(ActMrk.DEV_MARKET, {});
+        //bit = await ste.hunt( ActMrk.DEPLOY_MARKET, {})
+        //bit = await ste.hunt( ActMrk.DEV_MARKET, {})
         bal.slv({ mrkBit: { idx: "create-market", dat: { src: '888.market' } } });
     });
     return cpy;

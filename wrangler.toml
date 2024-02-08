@@ -1,4 +1,0 @@
-name = "fictiq-com"
-account_id = "bcf9a6a801dff102ae806a8039defd01"
-main = "./_worker.js"
-compatibility_date = "2022-09-08"

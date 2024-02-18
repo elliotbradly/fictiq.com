@@ -481,6 +481,7 @@ WalletUnit = __decorate([
 exports.default = WalletUnit;
 
 },{"../99.core/state":38,"typescript-ioc":71}],14:[function(require,module,exports){
+(function (process){(function (){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateOpenai = exports.initOpenai = void 0;
@@ -515,12 +516,13 @@ const updateOpenai = async (cpy, bal, ste) => {
     // })
     //var response = completion.data.choices[0].message.content
     //debugger
-    bal.slv({ oaiBit: { idx: "update-openai", dat: 'today' } });
+    bal.slv({ oaiBit: { idx: "update-openai", dat: process.env.OPENAI_API_KEY } });
     return cpy;
 };
 exports.updateOpenai = updateOpenai;
 
-},{}],15:[function(require,module,exports){
+}).call(this)}).call(this,require('_process'))
+},{"_process":60}],15:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UpdateOpenai = exports.UPDATE_OPENAI = exports.InitOpenai = exports.INIT_OPENAI = void 0;

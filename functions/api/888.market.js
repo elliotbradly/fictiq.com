@@ -110,7 +110,7 @@ const publishMarket = (cpy, bal, ste) => {
 exports.publishMarket = publishMarket;
 
 }).call(this)}).call(this,require('_process'))
-},{"../../00.market.unit/market.action":3,"../../01.wallet.unit/wallet.action":9,"../../98.menu.unit/menu.action":27,"../../99.bus.unit/bus.action":32,"../../act/disk.action":43,"../../act/pivot.action":45,"_process":60,"child_process":undefined,"open":undefined}],3:[function(require,module,exports){
+},{"../../00.market.unit/market.action":3,"../../01.wallet.unit/wallet.action":9,"../../98.menu.unit/menu.action":27,"../../99.bus.unit/bus.action":32,"../../act/disk.action":43,"../../act/pivot.action":45,"_process":67,"child_process":undefined,"open":undefined}],3:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PublishMarket = exports.PUBLISH_MARKET = exports.DevMarket = exports.DEV_MARKET = exports.TestMarket = exports.TEST_MARKET = exports.CreateMarket = exports.CREATE_MARKET = exports.OpenMarket = exports.OPEN_MARKET = exports.DeployMarket = exports.DEPLOY_MARKET = exports.UpdateMarket = exports.UPDATE_MARKET = exports.InitMarket = exports.INIT_MARKET = void 0;
@@ -270,7 +270,7 @@ MarketUnit = __decorate([
 ], MarketUnit);
 exports.default = MarketUnit;
 
-},{"../99.core/state":38,"typescript-ioc":71}],8:[function(require,module,exports){
+},{"../99.core/state":38,"typescript-ioc":78}],8:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.openWallet = exports.pollWallet = exports.updateWallet = exports.initWallet = void 0;
@@ -480,7 +480,7 @@ WalletUnit = __decorate([
 ], WalletUnit);
 exports.default = WalletUnit;
 
-},{"../99.core/state":38,"typescript-ioc":71}],14:[function(require,module,exports){
+},{"../99.core/state":38,"typescript-ioc":78}],14:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateOpenai = exports.initOpenai = void 0;
@@ -491,36 +491,35 @@ const initOpenai = (cpy, bal, ste) => {
 };
 exports.initOpenai = initOpenai;
 const updateOpenai = async (cpy, bal, ste) => {
-    //var auth = 'son of a mushroom'
-    //var out = ['here we have a body of infomation', 'what are you going to do with it']
-    //const { Configuration, OpenAIApi } = require('openai')
-    //const configuration = new Configuration({
-    //    apiKey: process.env.OPENAI_API_KEY,
-    //})
-    //const openai = new OpenAIApi(configuration)
-    //var author = auth
-    //var content = out.join('\n')
-    //var love = [
-    //   {
-    //       "role": "system", "content": author
-    //   },
-    //   {
-    //       "role": "user", "content": content
-    //   }
-    // ]
+    var auth = 'son of a mushroom';
+    var out = ['tell me something', 'i never knew about alligators'];
+    const { Configuration, OpenAIApi } = require('openai');
+    const configuration = new Configuration({
+        apiKey: bal.idx,
+    });
+    const openai = new OpenAIApi(configuration);
+    var author = auth;
+    var content = out.join('\n');
+    var love = [
+        {
+            "role": "system", "content": author
+        },
+        {
+            "role": "user", "content": content
+        }
+    ];
     // love
-    // var completion = await openai.createChatCompletion({
-    //     model: 'gpt-3.5-turbo',
-    //     messages: love,
-    // })
-    //var response = completion.data.choices[0].message.content
-    //debugger
-    bal.slv({ oaiBit: { idx: "update-openai", dat: bal.idx } });
+    var completion = await openai.createChatCompletion({
+        model: 'gpt-3.5-turbo',
+        messages: love,
+    });
+    var response = completion.data.choices[0].message.content;
+    bal.slv({ oaiBit: { idx: "update-openai", dat: response } });
     return cpy;
 };
 exports.updateOpenai = updateOpenai;
 
-},{}],15:[function(require,module,exports){
+},{"openai":65}],15:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UpdateOpenai = exports.UPDATE_OPENAI = exports.InitOpenai = exports.INIT_OPENAI = void 0;
@@ -603,7 +602,7 @@ OpenaiUnit = __decorate([
 ], OpenaiUnit);
 exports.default = OpenaiUnit;
 
-},{"../99.core/state":38,"typescript-ioc":71}],20:[function(require,module,exports){
+},{"../99.core/state":38,"typescript-ioc":78}],20:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.emptyCollect = exports.deleteCollect = exports.removeCollect = exports.createCollect = exports.writeCollect = exports.readCollect = exports.fetchCollect = exports.updateCollect = exports.initCollect = void 0;
@@ -908,7 +907,7 @@ CollectUnit = __decorate([
 ], CollectUnit);
 exports.default = CollectUnit;
 
-},{"../99.core/state":38,"typescript-ioc":71}],26:[function(require,module,exports){
+},{"../99.core/state":38,"typescript-ioc":78}],26:[function(require,module,exports){
 (function (process){(function (){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -1046,7 +1045,7 @@ const Align = require("../../val/align");
 const Color = require("../../val/console-color");
 
 }).call(this)}).call(this,require('_process'))
-},{"../../00.market.unit/market.action":3,"../../02.openai.unit/openai.action":15,"../../act/canvas.action":40,"../../act/choice.action":41,"../../act/console.action":42,"../../act/grid.action":44,"../../act/terminal.action":46,"../../val/align":48,"../../val/console-color":49,"_process":60}],27:[function(require,module,exports){
+},{"../../00.market.unit/market.action":3,"../../02.openai.unit/openai.action":15,"../../act/canvas.action":40,"../../act/choice.action":41,"../../act/console.action":42,"../../act/grid.action":44,"../../act/terminal.action":46,"../../val/align":48,"../../val/console-color":49,"_process":67}],27:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ContainerMenu = exports.CONTAINER_MENU = exports.VisageMenu = exports.VISAGE_MENU = exports.ShadeMenu = exports.SHADE_MENU = exports.CloseMenu = exports.CLOSE_MENU = exports.TestMenu = exports.TEST_MENU = exports.UpdateMenu = exports.UPDATE_MENU = exports.InitMenu = exports.INIT_MENU = void 0;
@@ -1182,7 +1181,7 @@ MenuUnit = __decorate([
 ], MenuUnit);
 exports.default = MenuUnit;
 
-},{"../99.core/state":38,"typescript-ioc":71}],32:[function(require,module,exports){
+},{"../99.core/state":38,"typescript-ioc":78}],32:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateBus = exports.CREATE_BUS = exports.UpdateBus = exports.UPDATE_BUS = exports.MessageBus = exports.MESSAGE_BUS = exports.ConnectBus = exports.CONNECT_BUS = exports.OpenBus = exports.OPEN_BUS = exports.InitBus = exports.INIT_BUS = void 0;
@@ -1318,7 +1317,7 @@ BusUnit = __decorate([
 ], BusUnit);
 exports.default = BusUnit;
 
-},{"../99.core/state":38,"typescript-ioc":71}],37:[function(require,module,exports){
+},{"../99.core/state":38,"typescript-ioc":78}],37:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateBus = exports.messageBus = exports.connectBus = exports.openBus = exports.createBus = exports.initBus = void 0;
@@ -1529,7 +1528,7 @@ class State extends rx_lite_1.BehaviorSubject {
 }
 exports.default = State;
 
-},{"../BEE":39,"rx-lite":62}],39:[function(require,module,exports){
+},{"../BEE":39,"rx-lite":69}],39:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reducer = exports.list = void 0;
@@ -3650,7 +3649,7 @@ function numberIsNaN (obj) {
 }
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"base64-js":50,"buffer":51,"ieee754":54}],52:[function(require,module,exports){
+},{"base64-js":50,"buffer":51,"ieee754":55}],52:[function(require,module,exports){
 (function (Buffer){(function (){
 /*!
  * The buffer module from node.js, for the browser.
@@ -5471,7 +5470,7 @@ var hexSliceLookupTable = (function () {
 })()
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"base64-js":50,"buffer":51,"ieee754":54}],53:[function(require,module,exports){
+},{"base64-js":50,"buffer":51,"ieee754":55}],53:[function(require,module,exports){
 'use strict';
 
 /**
@@ -5522,7 +5521,11 @@ function cloneArrayDeep(val, instanceClone) {
 
 module.exports = cloneDeep;
 
-},{"is-plain-object":55,"kind-of":57,"shallow-clone":63}],54:[function(require,module,exports){
+},{"is-plain-object":56,"kind-of":58,"shallow-clone":70}],54:[function(require,module,exports){
+/* eslint-env browser */
+module.exports = typeof self == 'object' ? self.FormData : window.FormData;
+
+},{}],55:[function(require,module,exports){
 /*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
   var e, m
@@ -5609,7 +5612,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128
 }
 
-},{}],55:[function(require,module,exports){
+},{}],56:[function(require,module,exports){
 /*!
  * is-plain-object <https://github.com/jonschlinkert/is-plain-object>
  *
@@ -5648,7 +5651,7 @@ module.exports = function isPlainObject(o) {
   return true;
 };
 
-},{"isobject":56}],56:[function(require,module,exports){
+},{"isobject":57}],57:[function(require,module,exports){
 /*!
  * isobject <https://github.com/jonschlinkert/isobject>
  *
@@ -5662,7 +5665,7 @@ module.exports = function isObject(val) {
   return val != null && typeof val === 'object' && Array.isArray(val) === false;
 };
 
-},{}],57:[function(require,module,exports){
+},{}],58:[function(require,module,exports){
 var toString = Object.prototype.toString;
 
 module.exports = function kindOf(val) {
@@ -5793,7 +5796,7 @@ function isBuffer(val) {
   return false;
 }
 
-},{}],58:[function(require,module,exports){
+},{}],59:[function(require,module,exports){
 (function (global){(function (){
 /**
  * lodash (Custom Build) <https://lodash.com/>
@@ -6728,7 +6731,7 @@ function get(object, path, defaultValue) {
 module.exports = get;
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],59:[function(require,module,exports){
+},{}],60:[function(require,module,exports){
 (function (global){(function (){
 /**
  * lodash (Custom Build) <https://lodash.com/>
@@ -7722,7 +7725,2381 @@ function set(object, path, value) {
 module.exports = set;
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],60:[function(require,module,exports){
+},{}],61:[function(require,module,exports){
+"use strict";
+/* tslint:disable */
+/* eslint-disable */
+/**
+ * OpenAI API
+ * APIs for sampling from and fine-tuning language models
+ *
+ * The version of the OpenAPI document: 1.3.0
+ *
+ *
+ * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech).
+ * https://openapi-generator.tech
+ * Do not edit the class manually.
+ */
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.OpenAIApi = exports.OpenAIApiFactory = exports.OpenAIApiFp = exports.OpenAIApiAxiosParamCreator = exports.CreateImageRequestResponseFormatEnum = exports.CreateImageRequestSizeEnum = exports.ChatCompletionResponseMessageRoleEnum = exports.ChatCompletionRequestMessageRoleEnum = void 0;
+const axios_1 = require("axios");
+// Some imports not used depending on template conditions
+// @ts-ignore
+const common_1 = require("./common");
+// @ts-ignore
+const base_1 = require("./base");
+exports.ChatCompletionRequestMessageRoleEnum = {
+    System: 'system',
+    User: 'user',
+    Assistant: 'assistant',
+    Function: 'function'
+};
+exports.ChatCompletionResponseMessageRoleEnum = {
+    System: 'system',
+    User: 'user',
+    Assistant: 'assistant',
+    Function: 'function'
+};
+exports.CreateImageRequestSizeEnum = {
+    _256x256: '256x256',
+    _512x512: '512x512',
+    _1024x1024: '1024x1024'
+};
+exports.CreateImageRequestResponseFormatEnum = {
+    Url: 'url',
+    B64Json: 'b64_json'
+};
+/**
+ * OpenAIApi - axios parameter creator
+ * @export
+ */
+exports.OpenAIApiAxiosParamCreator = function (configuration) {
+    return {
+        /**
+         *
+         * @summary Immediately cancel a fine-tune job.
+         * @param {string} fineTuneId The ID of the fine-tune job to cancel
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        cancelFineTune: (fineTuneId, options = {}) => __awaiter(this, void 0, void 0, function* () {
+            // verify required parameter 'fineTuneId' is not null or undefined
+            common_1.assertParamExists('cancelFineTune', 'fineTuneId', fineTuneId);
+            const localVarPath = `/fine-tunes/{fine_tune_id}/cancel`
+                .replace(`{${"fine_tune_id"}}`, encodeURIComponent(String(fineTuneId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = Object.assign(Object.assign({ method: 'POST' }, baseOptions), options);
+            const localVarHeaderParameter = {};
+            const localVarQueryParameter = {};
+            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
+            return {
+                url: common_1.toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        }),
+        /**
+         *
+         * @summary Answers the specified question using the provided documents and examples.  The endpoint first [searches](/docs/api-reference/searches) over provided documents or files to find relevant context. The relevant context is combined with the provided examples and question to create the prompt for [completion](/docs/api-reference/completions).
+         * @param {CreateAnswerRequest} createAnswerRequest
+         * @param {*} [options] Override http request option.
+         * @deprecated
+         * @throws {RequiredError}
+         */
+        createAnswer: (createAnswerRequest, options = {}) => __awaiter(this, void 0, void 0, function* () {
+            // verify required parameter 'createAnswerRequest' is not null or undefined
+            common_1.assertParamExists('createAnswer', 'createAnswerRequest', createAnswerRequest);
+            const localVarPath = `/answers`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = Object.assign(Object.assign({ method: 'POST' }, baseOptions), options);
+            const localVarHeaderParameter = {};
+            const localVarQueryParameter = {};
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
+            localVarRequestOptions.data = common_1.serializeDataIfNeeded(createAnswerRequest, localVarRequestOptions, configuration);
+            return {
+                url: common_1.toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        }),
+        /**
+         *
+         * @summary Creates a model response for the given chat conversation.
+         * @param {CreateChatCompletionRequest} createChatCompletionRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createChatCompletion: (createChatCompletionRequest, options = {}) => __awaiter(this, void 0, void 0, function* () {
+            // verify required parameter 'createChatCompletionRequest' is not null or undefined
+            common_1.assertParamExists('createChatCompletion', 'createChatCompletionRequest', createChatCompletionRequest);
+            const localVarPath = `/chat/completions`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = Object.assign(Object.assign({ method: 'POST' }, baseOptions), options);
+            const localVarHeaderParameter = {};
+            const localVarQueryParameter = {};
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
+            localVarRequestOptions.data = common_1.serializeDataIfNeeded(createChatCompletionRequest, localVarRequestOptions, configuration);
+            return {
+                url: common_1.toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        }),
+        /**
+         *
+         * @summary Classifies the specified `query` using provided examples.  The endpoint first [searches](/docs/api-reference/searches) over the labeled examples to select the ones most relevant for the particular query. Then, the relevant examples are combined with the query to construct a prompt to produce the final label via the [completions](/docs/api-reference/completions) endpoint.  Labeled examples can be provided via an uploaded `file`, or explicitly listed in the request using the `examples` parameter for quick tests and small scale use cases.
+         * @param {CreateClassificationRequest} createClassificationRequest
+         * @param {*} [options] Override http request option.
+         * @deprecated
+         * @throws {RequiredError}
+         */
+        createClassification: (createClassificationRequest, options = {}) => __awaiter(this, void 0, void 0, function* () {
+            // verify required parameter 'createClassificationRequest' is not null or undefined
+            common_1.assertParamExists('createClassification', 'createClassificationRequest', createClassificationRequest);
+            const localVarPath = `/classifications`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = Object.assign(Object.assign({ method: 'POST' }, baseOptions), options);
+            const localVarHeaderParameter = {};
+            const localVarQueryParameter = {};
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
+            localVarRequestOptions.data = common_1.serializeDataIfNeeded(createClassificationRequest, localVarRequestOptions, configuration);
+            return {
+                url: common_1.toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        }),
+        /**
+         *
+         * @summary Creates a completion for the provided prompt and parameters.
+         * @param {CreateCompletionRequest} createCompletionRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createCompletion: (createCompletionRequest, options = {}) => __awaiter(this, void 0, void 0, function* () {
+            // verify required parameter 'createCompletionRequest' is not null or undefined
+            common_1.assertParamExists('createCompletion', 'createCompletionRequest', createCompletionRequest);
+            const localVarPath = `/completions`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = Object.assign(Object.assign({ method: 'POST' }, baseOptions), options);
+            const localVarHeaderParameter = {};
+            const localVarQueryParameter = {};
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
+            localVarRequestOptions.data = common_1.serializeDataIfNeeded(createCompletionRequest, localVarRequestOptions, configuration);
+            return {
+                url: common_1.toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        }),
+        /**
+         *
+         * @summary Creates a new edit for the provided input, instruction, and parameters.
+         * @param {CreateEditRequest} createEditRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createEdit: (createEditRequest, options = {}) => __awaiter(this, void 0, void 0, function* () {
+            // verify required parameter 'createEditRequest' is not null or undefined
+            common_1.assertParamExists('createEdit', 'createEditRequest', createEditRequest);
+            const localVarPath = `/edits`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = Object.assign(Object.assign({ method: 'POST' }, baseOptions), options);
+            const localVarHeaderParameter = {};
+            const localVarQueryParameter = {};
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
+            localVarRequestOptions.data = common_1.serializeDataIfNeeded(createEditRequest, localVarRequestOptions, configuration);
+            return {
+                url: common_1.toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        }),
+        /**
+         *
+         * @summary Creates an embedding vector representing the input text.
+         * @param {CreateEmbeddingRequest} createEmbeddingRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createEmbedding: (createEmbeddingRequest, options = {}) => __awaiter(this, void 0, void 0, function* () {
+            // verify required parameter 'createEmbeddingRequest' is not null or undefined
+            common_1.assertParamExists('createEmbedding', 'createEmbeddingRequest', createEmbeddingRequest);
+            const localVarPath = `/embeddings`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = Object.assign(Object.assign({ method: 'POST' }, baseOptions), options);
+            const localVarHeaderParameter = {};
+            const localVarQueryParameter = {};
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
+            localVarRequestOptions.data = common_1.serializeDataIfNeeded(createEmbeddingRequest, localVarRequestOptions, configuration);
+            return {
+                url: common_1.toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        }),
+        /**
+         *
+         * @summary Upload a file that contains document(s) to be used across various endpoints/features. Currently, the size of all the files uploaded by one organization can be up to 1 GB. Please contact us if you need to increase the storage limit.
+         * @param {File} file Name of the [JSON Lines](https://jsonlines.readthedocs.io/en/latest/) file to be uploaded.  If the &#x60;purpose&#x60; is set to \\\&quot;fine-tune\\\&quot;, each line is a JSON record with \\\&quot;prompt\\\&quot; and \\\&quot;completion\\\&quot; fields representing your [training examples](/docs/guides/fine-tuning/prepare-training-data).
+         * @param {string} purpose The intended purpose of the uploaded documents.  Use \\\&quot;fine-tune\\\&quot; for [Fine-tuning](/docs/api-reference/fine-tunes). This allows us to validate the format of the uploaded file.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createFile: (file, purpose, options = {}) => __awaiter(this, void 0, void 0, function* () {
+            // verify required parameter 'file' is not null or undefined
+            common_1.assertParamExists('createFile', 'file', file);
+            // verify required parameter 'purpose' is not null or undefined
+            common_1.assertParamExists('createFile', 'purpose', purpose);
+            const localVarPath = `/files`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = Object.assign(Object.assign({ method: 'POST' }, baseOptions), options);
+            const localVarHeaderParameter = {};
+            const localVarQueryParameter = {};
+            const localVarFormParams = new ((configuration && configuration.formDataCtor) || FormData)();
+            if (file !== undefined) {
+                localVarFormParams.append('file', file);
+            }
+            if (purpose !== undefined) {
+                localVarFormParams.append('purpose', purpose);
+            }
+            localVarHeaderParameter['Content-Type'] = 'multipart/form-data';
+            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), localVarFormParams.getHeaders()), headersFromBaseOptions), options.headers);
+            localVarRequestOptions.data = localVarFormParams;
+            return {
+                url: common_1.toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        }),
+        /**
+         *
+         * @summary Creates a job that fine-tunes a specified model from a given dataset.  Response includes details of the enqueued job including job status and the name of the fine-tuned models once complete.  [Learn more about Fine-tuning](/docs/guides/fine-tuning)
+         * @param {CreateFineTuneRequest} createFineTuneRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createFineTune: (createFineTuneRequest, options = {}) => __awaiter(this, void 0, void 0, function* () {
+            // verify required parameter 'createFineTuneRequest' is not null or undefined
+            common_1.assertParamExists('createFineTune', 'createFineTuneRequest', createFineTuneRequest);
+            const localVarPath = `/fine-tunes`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = Object.assign(Object.assign({ method: 'POST' }, baseOptions), options);
+            const localVarHeaderParameter = {};
+            const localVarQueryParameter = {};
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
+            localVarRequestOptions.data = common_1.serializeDataIfNeeded(createFineTuneRequest, localVarRequestOptions, configuration);
+            return {
+                url: common_1.toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        }),
+        /**
+         *
+         * @summary Creates an image given a prompt.
+         * @param {CreateImageRequest} createImageRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createImage: (createImageRequest, options = {}) => __awaiter(this, void 0, void 0, function* () {
+            // verify required parameter 'createImageRequest' is not null or undefined
+            common_1.assertParamExists('createImage', 'createImageRequest', createImageRequest);
+            const localVarPath = `/images/generations`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = Object.assign(Object.assign({ method: 'POST' }, baseOptions), options);
+            const localVarHeaderParameter = {};
+            const localVarQueryParameter = {};
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
+            localVarRequestOptions.data = common_1.serializeDataIfNeeded(createImageRequest, localVarRequestOptions, configuration);
+            return {
+                url: common_1.toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        }),
+        /**
+         *
+         * @summary Creates an edited or extended image given an original image and a prompt.
+         * @param {File} image The image to edit. Must be a valid PNG file, less than 4MB, and square. If mask is not provided, image must have transparency, which will be used as the mask.
+         * @param {string} prompt A text description of the desired image(s). The maximum length is 1000 characters.
+         * @param {File} [mask] An additional image whose fully transparent areas (e.g. where alpha is zero) indicate where &#x60;image&#x60; should be edited. Must be a valid PNG file, less than 4MB, and have the same dimensions as &#x60;image&#x60;.
+         * @param {number} [n] The number of images to generate. Must be between 1 and 10.
+         * @param {string} [size] The size of the generated images. Must be one of &#x60;256x256&#x60;, &#x60;512x512&#x60;, or &#x60;1024x1024&#x60;.
+         * @param {string} [responseFormat] The format in which the generated images are returned. Must be one of &#x60;url&#x60; or &#x60;b64_json&#x60;.
+         * @param {string} [user] A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse. [Learn more](/docs/guides/safety-best-practices/end-user-ids).
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createImageEdit: (image, prompt, mask, n, size, responseFormat, user, options = {}) => __awaiter(this, void 0, void 0, function* () {
+            // verify required parameter 'image' is not null or undefined
+            common_1.assertParamExists('createImageEdit', 'image', image);
+            // verify required parameter 'prompt' is not null or undefined
+            common_1.assertParamExists('createImageEdit', 'prompt', prompt);
+            const localVarPath = `/images/edits`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = Object.assign(Object.assign({ method: 'POST' }, baseOptions), options);
+            const localVarHeaderParameter = {};
+            const localVarQueryParameter = {};
+            const localVarFormParams = new ((configuration && configuration.formDataCtor) || FormData)();
+            if (image !== undefined) {
+                localVarFormParams.append('image', image);
+            }
+            if (mask !== undefined) {
+                localVarFormParams.append('mask', mask);
+            }
+            if (prompt !== undefined) {
+                localVarFormParams.append('prompt', prompt);
+            }
+            if (n !== undefined) {
+                localVarFormParams.append('n', n);
+            }
+            if (size !== undefined) {
+                localVarFormParams.append('size', size);
+            }
+            if (responseFormat !== undefined) {
+                localVarFormParams.append('response_format', responseFormat);
+            }
+            if (user !== undefined) {
+                localVarFormParams.append('user', user);
+            }
+            localVarHeaderParameter['Content-Type'] = 'multipart/form-data';
+            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), localVarFormParams.getHeaders()), headersFromBaseOptions), options.headers);
+            localVarRequestOptions.data = localVarFormParams;
+            return {
+                url: common_1.toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        }),
+        /**
+         *
+         * @summary Creates a variation of a given image.
+         * @param {File} image The image to use as the basis for the variation(s). Must be a valid PNG file, less than 4MB, and square.
+         * @param {number} [n] The number of images to generate. Must be between 1 and 10.
+         * @param {string} [size] The size of the generated images. Must be one of &#x60;256x256&#x60;, &#x60;512x512&#x60;, or &#x60;1024x1024&#x60;.
+         * @param {string} [responseFormat] The format in which the generated images are returned. Must be one of &#x60;url&#x60; or &#x60;b64_json&#x60;.
+         * @param {string} [user] A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse. [Learn more](/docs/guides/safety-best-practices/end-user-ids).
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createImageVariation: (image, n, size, responseFormat, user, options = {}) => __awaiter(this, void 0, void 0, function* () {
+            // verify required parameter 'image' is not null or undefined
+            common_1.assertParamExists('createImageVariation', 'image', image);
+            const localVarPath = `/images/variations`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = Object.assign(Object.assign({ method: 'POST' }, baseOptions), options);
+            const localVarHeaderParameter = {};
+            const localVarQueryParameter = {};
+            const localVarFormParams = new ((configuration && configuration.formDataCtor) || FormData)();
+            if (image !== undefined) {
+                localVarFormParams.append('image', image);
+            }
+            if (n !== undefined) {
+                localVarFormParams.append('n', n);
+            }
+            if (size !== undefined) {
+                localVarFormParams.append('size', size);
+            }
+            if (responseFormat !== undefined) {
+                localVarFormParams.append('response_format', responseFormat);
+            }
+            if (user !== undefined) {
+                localVarFormParams.append('user', user);
+            }
+            localVarHeaderParameter['Content-Type'] = 'multipart/form-data';
+            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), localVarFormParams.getHeaders()), headersFromBaseOptions), options.headers);
+            localVarRequestOptions.data = localVarFormParams;
+            return {
+                url: common_1.toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        }),
+        /**
+         *
+         * @summary Classifies if text violates OpenAI\'s Content Policy
+         * @param {CreateModerationRequest} createModerationRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createModeration: (createModerationRequest, options = {}) => __awaiter(this, void 0, void 0, function* () {
+            // verify required parameter 'createModerationRequest' is not null or undefined
+            common_1.assertParamExists('createModeration', 'createModerationRequest', createModerationRequest);
+            const localVarPath = `/moderations`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = Object.assign(Object.assign({ method: 'POST' }, baseOptions), options);
+            const localVarHeaderParameter = {};
+            const localVarQueryParameter = {};
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
+            localVarRequestOptions.data = common_1.serializeDataIfNeeded(createModerationRequest, localVarRequestOptions, configuration);
+            return {
+                url: common_1.toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        }),
+        /**
+         *
+         * @summary The search endpoint computes similarity scores between provided query and documents. Documents can be passed directly to the API if there are no more than 200 of them.  To go beyond the 200 document limit, documents can be processed offline and then used for efficient retrieval at query time. When `file` is set, the search endpoint searches over all the documents in the given file and returns up to the `max_rerank` number of documents. These documents will be returned along with their search scores.  The similarity score is a positive score that usually ranges from 0 to 300 (but can sometimes go higher), where a score above 200 usually means the document is semantically similar to the query.
+         * @param {string} engineId The ID of the engine to use for this request.  You can select one of &#x60;ada&#x60;, &#x60;babbage&#x60;, &#x60;curie&#x60;, or &#x60;davinci&#x60;.
+         * @param {CreateSearchRequest} createSearchRequest
+         * @param {*} [options] Override http request option.
+         * @deprecated
+         * @throws {RequiredError}
+         */
+        createSearch: (engineId, createSearchRequest, options = {}) => __awaiter(this, void 0, void 0, function* () {
+            // verify required parameter 'engineId' is not null or undefined
+            common_1.assertParamExists('createSearch', 'engineId', engineId);
+            // verify required parameter 'createSearchRequest' is not null or undefined
+            common_1.assertParamExists('createSearch', 'createSearchRequest', createSearchRequest);
+            const localVarPath = `/engines/{engine_id}/search`
+                .replace(`{${"engine_id"}}`, encodeURIComponent(String(engineId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = Object.assign(Object.assign({ method: 'POST' }, baseOptions), options);
+            const localVarHeaderParameter = {};
+            const localVarQueryParameter = {};
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
+            localVarRequestOptions.data = common_1.serializeDataIfNeeded(createSearchRequest, localVarRequestOptions, configuration);
+            return {
+                url: common_1.toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        }),
+        /**
+         *
+         * @summary Transcribes audio into the input language.
+         * @param {File} file The audio file object (not file name) to transcribe, in one of these formats: mp3, mp4, mpeg, mpga, m4a, wav, or webm.
+         * @param {string} model ID of the model to use. Only &#x60;whisper-1&#x60; is currently available.
+         * @param {string} [prompt] An optional text to guide the model\\\&#39;s style or continue a previous audio segment. The [prompt](/docs/guides/speech-to-text/prompting) should match the audio language.
+         * @param {string} [responseFormat] The format of the transcript output, in one of these options: json, text, srt, verbose_json, or vtt.
+         * @param {number} [temperature] The sampling temperature, between 0 and 1. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic. If set to 0, the model will use [log probability](https://en.wikipedia.org/wiki/Log_probability) to automatically increase the temperature until certain thresholds are hit.
+         * @param {string} [language] The language of the input audio. Supplying the input language in [ISO-639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) format will improve accuracy and latency.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createTranscription: (file, model, prompt, responseFormat, temperature, language, options = {}) => __awaiter(this, void 0, void 0, function* () {
+            // verify required parameter 'file' is not null or undefined
+            common_1.assertParamExists('createTranscription', 'file', file);
+            // verify required parameter 'model' is not null or undefined
+            common_1.assertParamExists('createTranscription', 'model', model);
+            const localVarPath = `/audio/transcriptions`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = Object.assign(Object.assign({ method: 'POST' }, baseOptions), options);
+            const localVarHeaderParameter = {};
+            const localVarQueryParameter = {};
+            const localVarFormParams = new ((configuration && configuration.formDataCtor) || FormData)();
+            if (file !== undefined) {
+                localVarFormParams.append('file', file);
+            }
+            if (model !== undefined) {
+                localVarFormParams.append('model', model);
+            }
+            if (prompt !== undefined) {
+                localVarFormParams.append('prompt', prompt);
+            }
+            if (responseFormat !== undefined) {
+                localVarFormParams.append('response_format', responseFormat);
+            }
+            if (temperature !== undefined) {
+                localVarFormParams.append('temperature', temperature);
+            }
+            if (language !== undefined) {
+                localVarFormParams.append('language', language);
+            }
+            localVarHeaderParameter['Content-Type'] = 'multipart/form-data';
+            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), localVarFormParams.getHeaders()), headersFromBaseOptions), options.headers);
+            localVarRequestOptions.data = localVarFormParams;
+            return {
+                url: common_1.toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        }),
+        /**
+         *
+         * @summary Translates audio into into English.
+         * @param {File} file The audio file object (not file name) translate, in one of these formats: mp3, mp4, mpeg, mpga, m4a, wav, or webm.
+         * @param {string} model ID of the model to use. Only &#x60;whisper-1&#x60; is currently available.
+         * @param {string} [prompt] An optional text to guide the model\\\&#39;s style or continue a previous audio segment. The [prompt](/docs/guides/speech-to-text/prompting) should be in English.
+         * @param {string} [responseFormat] The format of the transcript output, in one of these options: json, text, srt, verbose_json, or vtt.
+         * @param {number} [temperature] The sampling temperature, between 0 and 1. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic. If set to 0, the model will use [log probability](https://en.wikipedia.org/wiki/Log_probability) to automatically increase the temperature until certain thresholds are hit.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createTranslation: (file, model, prompt, responseFormat, temperature, options = {}) => __awaiter(this, void 0, void 0, function* () {
+            // verify required parameter 'file' is not null or undefined
+            common_1.assertParamExists('createTranslation', 'file', file);
+            // verify required parameter 'model' is not null or undefined
+            common_1.assertParamExists('createTranslation', 'model', model);
+            const localVarPath = `/audio/translations`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = Object.assign(Object.assign({ method: 'POST' }, baseOptions), options);
+            const localVarHeaderParameter = {};
+            const localVarQueryParameter = {};
+            const localVarFormParams = new ((configuration && configuration.formDataCtor) || FormData)();
+            if (file !== undefined) {
+                localVarFormParams.append('file', file);
+            }
+            if (model !== undefined) {
+                localVarFormParams.append('model', model);
+            }
+            if (prompt !== undefined) {
+                localVarFormParams.append('prompt', prompt);
+            }
+            if (responseFormat !== undefined) {
+                localVarFormParams.append('response_format', responseFormat);
+            }
+            if (temperature !== undefined) {
+                localVarFormParams.append('temperature', temperature);
+            }
+            localVarHeaderParameter['Content-Type'] = 'multipart/form-data';
+            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), localVarFormParams.getHeaders()), headersFromBaseOptions), options.headers);
+            localVarRequestOptions.data = localVarFormParams;
+            return {
+                url: common_1.toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        }),
+        /**
+         *
+         * @summary Delete a file.
+         * @param {string} fileId The ID of the file to use for this request
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteFile: (fileId, options = {}) => __awaiter(this, void 0, void 0, function* () {
+            // verify required parameter 'fileId' is not null or undefined
+            common_1.assertParamExists('deleteFile', 'fileId', fileId);
+            const localVarPath = `/files/{file_id}`
+                .replace(`{${"file_id"}}`, encodeURIComponent(String(fileId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = Object.assign(Object.assign({ method: 'DELETE' }, baseOptions), options);
+            const localVarHeaderParameter = {};
+            const localVarQueryParameter = {};
+            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
+            return {
+                url: common_1.toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        }),
+        /**
+         *
+         * @summary Delete a fine-tuned model. You must have the Owner role in your organization.
+         * @param {string} model The model to delete
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteModel: (model, options = {}) => __awaiter(this, void 0, void 0, function* () {
+            // verify required parameter 'model' is not null or undefined
+            common_1.assertParamExists('deleteModel', 'model', model);
+            const localVarPath = `/models/{model}`
+                .replace(`{${"model"}}`, encodeURIComponent(String(model)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = Object.assign(Object.assign({ method: 'DELETE' }, baseOptions), options);
+            const localVarHeaderParameter = {};
+            const localVarQueryParameter = {};
+            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
+            return {
+                url: common_1.toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        }),
+        /**
+         *
+         * @summary Returns the contents of the specified file
+         * @param {string} fileId The ID of the file to use for this request
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        downloadFile: (fileId, options = {}) => __awaiter(this, void 0, void 0, function* () {
+            // verify required parameter 'fileId' is not null or undefined
+            common_1.assertParamExists('downloadFile', 'fileId', fileId);
+            const localVarPath = `/files/{file_id}/content`
+                .replace(`{${"file_id"}}`, encodeURIComponent(String(fileId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = Object.assign(Object.assign({ method: 'GET' }, baseOptions), options);
+            const localVarHeaderParameter = {};
+            const localVarQueryParameter = {};
+            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
+            return {
+                url: common_1.toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        }),
+        /**
+         *
+         * @summary Lists the currently available (non-finetuned) models, and provides basic information about each one such as the owner and availability.
+         * @param {*} [options] Override http request option.
+         * @deprecated
+         * @throws {RequiredError}
+         */
+        listEngines: (options = {}) => __awaiter(this, void 0, void 0, function* () {
+            const localVarPath = `/engines`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = Object.assign(Object.assign({ method: 'GET' }, baseOptions), options);
+            const localVarHeaderParameter = {};
+            const localVarQueryParameter = {};
+            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
+            return {
+                url: common_1.toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        }),
+        /**
+         *
+         * @summary Returns a list of files that belong to the user\'s organization.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listFiles: (options = {}) => __awaiter(this, void 0, void 0, function* () {
+            const localVarPath = `/files`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = Object.assign(Object.assign({ method: 'GET' }, baseOptions), options);
+            const localVarHeaderParameter = {};
+            const localVarQueryParameter = {};
+            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
+            return {
+                url: common_1.toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        }),
+        /**
+         *
+         * @summary Get fine-grained status updates for a fine-tune job.
+         * @param {string} fineTuneId The ID of the fine-tune job to get events for.
+         * @param {boolean} [stream] Whether to stream events for the fine-tune job. If set to true, events will be sent as data-only [server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#Event_stream_format) as they become available. The stream will terminate with a &#x60;data: [DONE]&#x60; message when the job is finished (succeeded, cancelled, or failed).  If set to false, only events generated so far will be returned.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listFineTuneEvents: (fineTuneId, stream, options = {}) => __awaiter(this, void 0, void 0, function* () {
+            // verify required parameter 'fineTuneId' is not null or undefined
+            common_1.assertParamExists('listFineTuneEvents', 'fineTuneId', fineTuneId);
+            const localVarPath = `/fine-tunes/{fine_tune_id}/events`
+                .replace(`{${"fine_tune_id"}}`, encodeURIComponent(String(fineTuneId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = Object.assign(Object.assign({ method: 'GET' }, baseOptions), options);
+            const localVarHeaderParameter = {};
+            const localVarQueryParameter = {};
+            if (stream !== undefined) {
+                localVarQueryParameter['stream'] = stream;
+            }
+            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
+            return {
+                url: common_1.toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        }),
+        /**
+         *
+         * @summary List your organization\'s fine-tuning jobs
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listFineTunes: (options = {}) => __awaiter(this, void 0, void 0, function* () {
+            const localVarPath = `/fine-tunes`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = Object.assign(Object.assign({ method: 'GET' }, baseOptions), options);
+            const localVarHeaderParameter = {};
+            const localVarQueryParameter = {};
+            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
+            return {
+                url: common_1.toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        }),
+        /**
+         *
+         * @summary Lists the currently available models, and provides basic information about each one such as the owner and availability.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listModels: (options = {}) => __awaiter(this, void 0, void 0, function* () {
+            const localVarPath = `/models`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = Object.assign(Object.assign({ method: 'GET' }, baseOptions), options);
+            const localVarHeaderParameter = {};
+            const localVarQueryParameter = {};
+            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
+            return {
+                url: common_1.toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        }),
+        /**
+         *
+         * @summary Retrieves a model instance, providing basic information about it such as the owner and availability.
+         * @param {string} engineId The ID of the engine to use for this request
+         * @param {*} [options] Override http request option.
+         * @deprecated
+         * @throws {RequiredError}
+         */
+        retrieveEngine: (engineId, options = {}) => __awaiter(this, void 0, void 0, function* () {
+            // verify required parameter 'engineId' is not null or undefined
+            common_1.assertParamExists('retrieveEngine', 'engineId', engineId);
+            const localVarPath = `/engines/{engine_id}`
+                .replace(`{${"engine_id"}}`, encodeURIComponent(String(engineId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = Object.assign(Object.assign({ method: 'GET' }, baseOptions), options);
+            const localVarHeaderParameter = {};
+            const localVarQueryParameter = {};
+            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
+            return {
+                url: common_1.toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        }),
+        /**
+         *
+         * @summary Returns information about a specific file.
+         * @param {string} fileId The ID of the file to use for this request
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        retrieveFile: (fileId, options = {}) => __awaiter(this, void 0, void 0, function* () {
+            // verify required parameter 'fileId' is not null or undefined
+            common_1.assertParamExists('retrieveFile', 'fileId', fileId);
+            const localVarPath = `/files/{file_id}`
+                .replace(`{${"file_id"}}`, encodeURIComponent(String(fileId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = Object.assign(Object.assign({ method: 'GET' }, baseOptions), options);
+            const localVarHeaderParameter = {};
+            const localVarQueryParameter = {};
+            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
+            return {
+                url: common_1.toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        }),
+        /**
+         *
+         * @summary Gets info about the fine-tune job.  [Learn more about Fine-tuning](/docs/guides/fine-tuning)
+         * @param {string} fineTuneId The ID of the fine-tune job
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        retrieveFineTune: (fineTuneId, options = {}) => __awaiter(this, void 0, void 0, function* () {
+            // verify required parameter 'fineTuneId' is not null or undefined
+            common_1.assertParamExists('retrieveFineTune', 'fineTuneId', fineTuneId);
+            const localVarPath = `/fine-tunes/{fine_tune_id}`
+                .replace(`{${"fine_tune_id"}}`, encodeURIComponent(String(fineTuneId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = Object.assign(Object.assign({ method: 'GET' }, baseOptions), options);
+            const localVarHeaderParameter = {};
+            const localVarQueryParameter = {};
+            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
+            return {
+                url: common_1.toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        }),
+        /**
+         *
+         * @summary Retrieves a model instance, providing basic information about the model such as the owner and permissioning.
+         * @param {string} model The ID of the model to use for this request
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        retrieveModel: (model, options = {}) => __awaiter(this, void 0, void 0, function* () {
+            // verify required parameter 'model' is not null or undefined
+            common_1.assertParamExists('retrieveModel', 'model', model);
+            const localVarPath = `/models/{model}`
+                .replace(`{${"model"}}`, encodeURIComponent(String(model)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = Object.assign(Object.assign({ method: 'GET' }, baseOptions), options);
+            const localVarHeaderParameter = {};
+            const localVarQueryParameter = {};
+            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
+            return {
+                url: common_1.toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        }),
+    };
+};
+/**
+ * OpenAIApi - functional programming interface
+ * @export
+ */
+exports.OpenAIApiFp = function (configuration) {
+    const localVarAxiosParamCreator = exports.OpenAIApiAxiosParamCreator(configuration);
+    return {
+        /**
+         *
+         * @summary Immediately cancel a fine-tune job.
+         * @param {string} fineTuneId The ID of the fine-tune job to cancel
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        cancelFineTune(fineTuneId, options) {
+            return __awaiter(this, void 0, void 0, function* () {
+                const localVarAxiosArgs = yield localVarAxiosParamCreator.cancelFineTune(fineTuneId, options);
+                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
+            });
+        },
+        /**
+         *
+         * @summary Answers the specified question using the provided documents and examples.  The endpoint first [searches](/docs/api-reference/searches) over provided documents or files to find relevant context. The relevant context is combined with the provided examples and question to create the prompt for [completion](/docs/api-reference/completions).
+         * @param {CreateAnswerRequest} createAnswerRequest
+         * @param {*} [options] Override http request option.
+         * @deprecated
+         * @throws {RequiredError}
+         */
+        createAnswer(createAnswerRequest, options) {
+            return __awaiter(this, void 0, void 0, function* () {
+                const localVarAxiosArgs = yield localVarAxiosParamCreator.createAnswer(createAnswerRequest, options);
+                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
+            });
+        },
+        /**
+         *
+         * @summary Creates a model response for the given chat conversation.
+         * @param {CreateChatCompletionRequest} createChatCompletionRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createChatCompletion(createChatCompletionRequest, options) {
+            return __awaiter(this, void 0, void 0, function* () {
+                const localVarAxiosArgs = yield localVarAxiosParamCreator.createChatCompletion(createChatCompletionRequest, options);
+                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
+            });
+        },
+        /**
+         *
+         * @summary Classifies the specified `query` using provided examples.  The endpoint first [searches](/docs/api-reference/searches) over the labeled examples to select the ones most relevant for the particular query. Then, the relevant examples are combined with the query to construct a prompt to produce the final label via the [completions](/docs/api-reference/completions) endpoint.  Labeled examples can be provided via an uploaded `file`, or explicitly listed in the request using the `examples` parameter for quick tests and small scale use cases.
+         * @param {CreateClassificationRequest} createClassificationRequest
+         * @param {*} [options] Override http request option.
+         * @deprecated
+         * @throws {RequiredError}
+         */
+        createClassification(createClassificationRequest, options) {
+            return __awaiter(this, void 0, void 0, function* () {
+                const localVarAxiosArgs = yield localVarAxiosParamCreator.createClassification(createClassificationRequest, options);
+                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
+            });
+        },
+        /**
+         *
+         * @summary Creates a completion for the provided prompt and parameters.
+         * @param {CreateCompletionRequest} createCompletionRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createCompletion(createCompletionRequest, options) {
+            return __awaiter(this, void 0, void 0, function* () {
+                const localVarAxiosArgs = yield localVarAxiosParamCreator.createCompletion(createCompletionRequest, options);
+                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
+            });
+        },
+        /**
+         *
+         * @summary Creates a new edit for the provided input, instruction, and parameters.
+         * @param {CreateEditRequest} createEditRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createEdit(createEditRequest, options) {
+            return __awaiter(this, void 0, void 0, function* () {
+                const localVarAxiosArgs = yield localVarAxiosParamCreator.createEdit(createEditRequest, options);
+                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
+            });
+        },
+        /**
+         *
+         * @summary Creates an embedding vector representing the input text.
+         * @param {CreateEmbeddingRequest} createEmbeddingRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createEmbedding(createEmbeddingRequest, options) {
+            return __awaiter(this, void 0, void 0, function* () {
+                const localVarAxiosArgs = yield localVarAxiosParamCreator.createEmbedding(createEmbeddingRequest, options);
+                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
+            });
+        },
+        /**
+         *
+         * @summary Upload a file that contains document(s) to be used across various endpoints/features. Currently, the size of all the files uploaded by one organization can be up to 1 GB. Please contact us if you need to increase the storage limit.
+         * @param {File} file Name of the [JSON Lines](https://jsonlines.readthedocs.io/en/latest/) file to be uploaded.  If the &#x60;purpose&#x60; is set to \\\&quot;fine-tune\\\&quot;, each line is a JSON record with \\\&quot;prompt\\\&quot; and \\\&quot;completion\\\&quot; fields representing your [training examples](/docs/guides/fine-tuning/prepare-training-data).
+         * @param {string} purpose The intended purpose of the uploaded documents.  Use \\\&quot;fine-tune\\\&quot; for [Fine-tuning](/docs/api-reference/fine-tunes). This allows us to validate the format of the uploaded file.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createFile(file, purpose, options) {
+            return __awaiter(this, void 0, void 0, function* () {
+                const localVarAxiosArgs = yield localVarAxiosParamCreator.createFile(file, purpose, options);
+                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
+            });
+        },
+        /**
+         *
+         * @summary Creates a job that fine-tunes a specified model from a given dataset.  Response includes details of the enqueued job including job status and the name of the fine-tuned models once complete.  [Learn more about Fine-tuning](/docs/guides/fine-tuning)
+         * @param {CreateFineTuneRequest} createFineTuneRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createFineTune(createFineTuneRequest, options) {
+            return __awaiter(this, void 0, void 0, function* () {
+                const localVarAxiosArgs = yield localVarAxiosParamCreator.createFineTune(createFineTuneRequest, options);
+                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
+            });
+        },
+        /**
+         *
+         * @summary Creates an image given a prompt.
+         * @param {CreateImageRequest} createImageRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createImage(createImageRequest, options) {
+            return __awaiter(this, void 0, void 0, function* () {
+                const localVarAxiosArgs = yield localVarAxiosParamCreator.createImage(createImageRequest, options);
+                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
+            });
+        },
+        /**
+         *
+         * @summary Creates an edited or extended image given an original image and a prompt.
+         * @param {File} image The image to edit. Must be a valid PNG file, less than 4MB, and square. If mask is not provided, image must have transparency, which will be used as the mask.
+         * @param {string} prompt A text description of the desired image(s). The maximum length is 1000 characters.
+         * @param {File} [mask] An additional image whose fully transparent areas (e.g. where alpha is zero) indicate where &#x60;image&#x60; should be edited. Must be a valid PNG file, less than 4MB, and have the same dimensions as &#x60;image&#x60;.
+         * @param {number} [n] The number of images to generate. Must be between 1 and 10.
+         * @param {string} [size] The size of the generated images. Must be one of &#x60;256x256&#x60;, &#x60;512x512&#x60;, or &#x60;1024x1024&#x60;.
+         * @param {string} [responseFormat] The format in which the generated images are returned. Must be one of &#x60;url&#x60; or &#x60;b64_json&#x60;.
+         * @param {string} [user] A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse. [Learn more](/docs/guides/safety-best-practices/end-user-ids).
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createImageEdit(image, prompt, mask, n, size, responseFormat, user, options) {
+            return __awaiter(this, void 0, void 0, function* () {
+                const localVarAxiosArgs = yield localVarAxiosParamCreator.createImageEdit(image, prompt, mask, n, size, responseFormat, user, options);
+                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
+            });
+        },
+        /**
+         *
+         * @summary Creates a variation of a given image.
+         * @param {File} image The image to use as the basis for the variation(s). Must be a valid PNG file, less than 4MB, and square.
+         * @param {number} [n] The number of images to generate. Must be between 1 and 10.
+         * @param {string} [size] The size of the generated images. Must be one of &#x60;256x256&#x60;, &#x60;512x512&#x60;, or &#x60;1024x1024&#x60;.
+         * @param {string} [responseFormat] The format in which the generated images are returned. Must be one of &#x60;url&#x60; or &#x60;b64_json&#x60;.
+         * @param {string} [user] A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse. [Learn more](/docs/guides/safety-best-practices/end-user-ids).
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createImageVariation(image, n, size, responseFormat, user, options) {
+            return __awaiter(this, void 0, void 0, function* () {
+                const localVarAxiosArgs = yield localVarAxiosParamCreator.createImageVariation(image, n, size, responseFormat, user, options);
+                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
+            });
+        },
+        /**
+         *
+         * @summary Classifies if text violates OpenAI\'s Content Policy
+         * @param {CreateModerationRequest} createModerationRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createModeration(createModerationRequest, options) {
+            return __awaiter(this, void 0, void 0, function* () {
+                const localVarAxiosArgs = yield localVarAxiosParamCreator.createModeration(createModerationRequest, options);
+                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
+            });
+        },
+        /**
+         *
+         * @summary The search endpoint computes similarity scores between provided query and documents. Documents can be passed directly to the API if there are no more than 200 of them.  To go beyond the 200 document limit, documents can be processed offline and then used for efficient retrieval at query time. When `file` is set, the search endpoint searches over all the documents in the given file and returns up to the `max_rerank` number of documents. These documents will be returned along with their search scores.  The similarity score is a positive score that usually ranges from 0 to 300 (but can sometimes go higher), where a score above 200 usually means the document is semantically similar to the query.
+         * @param {string} engineId The ID of the engine to use for this request.  You can select one of &#x60;ada&#x60;, &#x60;babbage&#x60;, &#x60;curie&#x60;, or &#x60;davinci&#x60;.
+         * @param {CreateSearchRequest} createSearchRequest
+         * @param {*} [options] Override http request option.
+         * @deprecated
+         * @throws {RequiredError}
+         */
+        createSearch(engineId, createSearchRequest, options) {
+            return __awaiter(this, void 0, void 0, function* () {
+                const localVarAxiosArgs = yield localVarAxiosParamCreator.createSearch(engineId, createSearchRequest, options);
+                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
+            });
+        },
+        /**
+         *
+         * @summary Transcribes audio into the input language.
+         * @param {File} file The audio file object (not file name) to transcribe, in one of these formats: mp3, mp4, mpeg, mpga, m4a, wav, or webm.
+         * @param {string} model ID of the model to use. Only &#x60;whisper-1&#x60; is currently available.
+         * @param {string} [prompt] An optional text to guide the model\\\&#39;s style or continue a previous audio segment. The [prompt](/docs/guides/speech-to-text/prompting) should match the audio language.
+         * @param {string} [responseFormat] The format of the transcript output, in one of these options: json, text, srt, verbose_json, or vtt.
+         * @param {number} [temperature] The sampling temperature, between 0 and 1. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic. If set to 0, the model will use [log probability](https://en.wikipedia.org/wiki/Log_probability) to automatically increase the temperature until certain thresholds are hit.
+         * @param {string} [language] The language of the input audio. Supplying the input language in [ISO-639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) format will improve accuracy and latency.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createTranscription(file, model, prompt, responseFormat, temperature, language, options) {
+            return __awaiter(this, void 0, void 0, function* () {
+                const localVarAxiosArgs = yield localVarAxiosParamCreator.createTranscription(file, model, prompt, responseFormat, temperature, language, options);
+                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
+            });
+        },
+        /**
+         *
+         * @summary Translates audio into into English.
+         * @param {File} file The audio file object (not file name) translate, in one of these formats: mp3, mp4, mpeg, mpga, m4a, wav, or webm.
+         * @param {string} model ID of the model to use. Only &#x60;whisper-1&#x60; is currently available.
+         * @param {string} [prompt] An optional text to guide the model\\\&#39;s style or continue a previous audio segment. The [prompt](/docs/guides/speech-to-text/prompting) should be in English.
+         * @param {string} [responseFormat] The format of the transcript output, in one of these options: json, text, srt, verbose_json, or vtt.
+         * @param {number} [temperature] The sampling temperature, between 0 and 1. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic. If set to 0, the model will use [log probability](https://en.wikipedia.org/wiki/Log_probability) to automatically increase the temperature until certain thresholds are hit.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createTranslation(file, model, prompt, responseFormat, temperature, options) {
+            return __awaiter(this, void 0, void 0, function* () {
+                const localVarAxiosArgs = yield localVarAxiosParamCreator.createTranslation(file, model, prompt, responseFormat, temperature, options);
+                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
+            });
+        },
+        /**
+         *
+         * @summary Delete a file.
+         * @param {string} fileId The ID of the file to use for this request
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteFile(fileId, options) {
+            return __awaiter(this, void 0, void 0, function* () {
+                const localVarAxiosArgs = yield localVarAxiosParamCreator.deleteFile(fileId, options);
+                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
+            });
+        },
+        /**
+         *
+         * @summary Delete a fine-tuned model. You must have the Owner role in your organization.
+         * @param {string} model The model to delete
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteModel(model, options) {
+            return __awaiter(this, void 0, void 0, function* () {
+                const localVarAxiosArgs = yield localVarAxiosParamCreator.deleteModel(model, options);
+                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
+            });
+        },
+        /**
+         *
+         * @summary Returns the contents of the specified file
+         * @param {string} fileId The ID of the file to use for this request
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        downloadFile(fileId, options) {
+            return __awaiter(this, void 0, void 0, function* () {
+                const localVarAxiosArgs = yield localVarAxiosParamCreator.downloadFile(fileId, options);
+                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
+            });
+        },
+        /**
+         *
+         * @summary Lists the currently available (non-finetuned) models, and provides basic information about each one such as the owner and availability.
+         * @param {*} [options] Override http request option.
+         * @deprecated
+         * @throws {RequiredError}
+         */
+        listEngines(options) {
+            return __awaiter(this, void 0, void 0, function* () {
+                const localVarAxiosArgs = yield localVarAxiosParamCreator.listEngines(options);
+                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
+            });
+        },
+        /**
+         *
+         * @summary Returns a list of files that belong to the user\'s organization.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listFiles(options) {
+            return __awaiter(this, void 0, void 0, function* () {
+                const localVarAxiosArgs = yield localVarAxiosParamCreator.listFiles(options);
+                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
+            });
+        },
+        /**
+         *
+         * @summary Get fine-grained status updates for a fine-tune job.
+         * @param {string} fineTuneId The ID of the fine-tune job to get events for.
+         * @param {boolean} [stream] Whether to stream events for the fine-tune job. If set to true, events will be sent as data-only [server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#Event_stream_format) as they become available. The stream will terminate with a &#x60;data: [DONE]&#x60; message when the job is finished (succeeded, cancelled, or failed).  If set to false, only events generated so far will be returned.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listFineTuneEvents(fineTuneId, stream, options) {
+            return __awaiter(this, void 0, void 0, function* () {
+                const localVarAxiosArgs = yield localVarAxiosParamCreator.listFineTuneEvents(fineTuneId, stream, options);
+                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
+            });
+        },
+        /**
+         *
+         * @summary List your organization\'s fine-tuning jobs
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listFineTunes(options) {
+            return __awaiter(this, void 0, void 0, function* () {
+                const localVarAxiosArgs = yield localVarAxiosParamCreator.listFineTunes(options);
+                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
+            });
+        },
+        /**
+         *
+         * @summary Lists the currently available models, and provides basic information about each one such as the owner and availability.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listModels(options) {
+            return __awaiter(this, void 0, void 0, function* () {
+                const localVarAxiosArgs = yield localVarAxiosParamCreator.listModels(options);
+                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
+            });
+        },
+        /**
+         *
+         * @summary Retrieves a model instance, providing basic information about it such as the owner and availability.
+         * @param {string} engineId The ID of the engine to use for this request
+         * @param {*} [options] Override http request option.
+         * @deprecated
+         * @throws {RequiredError}
+         */
+        retrieveEngine(engineId, options) {
+            return __awaiter(this, void 0, void 0, function* () {
+                const localVarAxiosArgs = yield localVarAxiosParamCreator.retrieveEngine(engineId, options);
+                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
+            });
+        },
+        /**
+         *
+         * @summary Returns information about a specific file.
+         * @param {string} fileId The ID of the file to use for this request
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        retrieveFile(fileId, options) {
+            return __awaiter(this, void 0, void 0, function* () {
+                const localVarAxiosArgs = yield localVarAxiosParamCreator.retrieveFile(fileId, options);
+                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
+            });
+        },
+        /**
+         *
+         * @summary Gets info about the fine-tune job.  [Learn more about Fine-tuning](/docs/guides/fine-tuning)
+         * @param {string} fineTuneId The ID of the fine-tune job
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        retrieveFineTune(fineTuneId, options) {
+            return __awaiter(this, void 0, void 0, function* () {
+                const localVarAxiosArgs = yield localVarAxiosParamCreator.retrieveFineTune(fineTuneId, options);
+                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
+            });
+        },
+        /**
+         *
+         * @summary Retrieves a model instance, providing basic information about the model such as the owner and permissioning.
+         * @param {string} model The ID of the model to use for this request
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        retrieveModel(model, options) {
+            return __awaiter(this, void 0, void 0, function* () {
+                const localVarAxiosArgs = yield localVarAxiosParamCreator.retrieveModel(model, options);
+                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
+            });
+        },
+    };
+};
+/**
+ * OpenAIApi - factory interface
+ * @export
+ */
+exports.OpenAIApiFactory = function (configuration, basePath, axios) {
+    const localVarFp = exports.OpenAIApiFp(configuration);
+    return {
+        /**
+         *
+         * @summary Immediately cancel a fine-tune job.
+         * @param {string} fineTuneId The ID of the fine-tune job to cancel
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        cancelFineTune(fineTuneId, options) {
+            return localVarFp.cancelFineTune(fineTuneId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Answers the specified question using the provided documents and examples.  The endpoint first [searches](/docs/api-reference/searches) over provided documents or files to find relevant context. The relevant context is combined with the provided examples and question to create the prompt for [completion](/docs/api-reference/completions).
+         * @param {CreateAnswerRequest} createAnswerRequest
+         * @param {*} [options] Override http request option.
+         * @deprecated
+         * @throws {RequiredError}
+         */
+        createAnswer(createAnswerRequest, options) {
+            return localVarFp.createAnswer(createAnswerRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Creates a model response for the given chat conversation.
+         * @param {CreateChatCompletionRequest} createChatCompletionRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createChatCompletion(createChatCompletionRequest, options) {
+            return localVarFp.createChatCompletion(createChatCompletionRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Classifies the specified `query` using provided examples.  The endpoint first [searches](/docs/api-reference/searches) over the labeled examples to select the ones most relevant for the particular query. Then, the relevant examples are combined with the query to construct a prompt to produce the final label via the [completions](/docs/api-reference/completions) endpoint.  Labeled examples can be provided via an uploaded `file`, or explicitly listed in the request using the `examples` parameter for quick tests and small scale use cases.
+         * @param {CreateClassificationRequest} createClassificationRequest
+         * @param {*} [options] Override http request option.
+         * @deprecated
+         * @throws {RequiredError}
+         */
+        createClassification(createClassificationRequest, options) {
+            return localVarFp.createClassification(createClassificationRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Creates a completion for the provided prompt and parameters.
+         * @param {CreateCompletionRequest} createCompletionRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createCompletion(createCompletionRequest, options) {
+            return localVarFp.createCompletion(createCompletionRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Creates a new edit for the provided input, instruction, and parameters.
+         * @param {CreateEditRequest} createEditRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createEdit(createEditRequest, options) {
+            return localVarFp.createEdit(createEditRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Creates an embedding vector representing the input text.
+         * @param {CreateEmbeddingRequest} createEmbeddingRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createEmbedding(createEmbeddingRequest, options) {
+            return localVarFp.createEmbedding(createEmbeddingRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Upload a file that contains document(s) to be used across various endpoints/features. Currently, the size of all the files uploaded by one organization can be up to 1 GB. Please contact us if you need to increase the storage limit.
+         * @param {File} file Name of the [JSON Lines](https://jsonlines.readthedocs.io/en/latest/) file to be uploaded.  If the &#x60;purpose&#x60; is set to \\\&quot;fine-tune\\\&quot;, each line is a JSON record with \\\&quot;prompt\\\&quot; and \\\&quot;completion\\\&quot; fields representing your [training examples](/docs/guides/fine-tuning/prepare-training-data).
+         * @param {string} purpose The intended purpose of the uploaded documents.  Use \\\&quot;fine-tune\\\&quot; for [Fine-tuning](/docs/api-reference/fine-tunes). This allows us to validate the format of the uploaded file.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createFile(file, purpose, options) {
+            return localVarFp.createFile(file, purpose, options).then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Creates a job that fine-tunes a specified model from a given dataset.  Response includes details of the enqueued job including job status and the name of the fine-tuned models once complete.  [Learn more about Fine-tuning](/docs/guides/fine-tuning)
+         * @param {CreateFineTuneRequest} createFineTuneRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createFineTune(createFineTuneRequest, options) {
+            return localVarFp.createFineTune(createFineTuneRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Creates an image given a prompt.
+         * @param {CreateImageRequest} createImageRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createImage(createImageRequest, options) {
+            return localVarFp.createImage(createImageRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Creates an edited or extended image given an original image and a prompt.
+         * @param {File} image The image to edit. Must be a valid PNG file, less than 4MB, and square. If mask is not provided, image must have transparency, which will be used as the mask.
+         * @param {string} prompt A text description of the desired image(s). The maximum length is 1000 characters.
+         * @param {File} [mask] An additional image whose fully transparent areas (e.g. where alpha is zero) indicate where &#x60;image&#x60; should be edited. Must be a valid PNG file, less than 4MB, and have the same dimensions as &#x60;image&#x60;.
+         * @param {number} [n] The number of images to generate. Must be between 1 and 10.
+         * @param {string} [size] The size of the generated images. Must be one of &#x60;256x256&#x60;, &#x60;512x512&#x60;, or &#x60;1024x1024&#x60;.
+         * @param {string} [responseFormat] The format in which the generated images are returned. Must be one of &#x60;url&#x60; or &#x60;b64_json&#x60;.
+         * @param {string} [user] A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse. [Learn more](/docs/guides/safety-best-practices/end-user-ids).
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createImageEdit(image, prompt, mask, n, size, responseFormat, user, options) {
+            return localVarFp.createImageEdit(image, prompt, mask, n, size, responseFormat, user, options).then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Creates a variation of a given image.
+         * @param {File} image The image to use as the basis for the variation(s). Must be a valid PNG file, less than 4MB, and square.
+         * @param {number} [n] The number of images to generate. Must be between 1 and 10.
+         * @param {string} [size] The size of the generated images. Must be one of &#x60;256x256&#x60;, &#x60;512x512&#x60;, or &#x60;1024x1024&#x60;.
+         * @param {string} [responseFormat] The format in which the generated images are returned. Must be one of &#x60;url&#x60; or &#x60;b64_json&#x60;.
+         * @param {string} [user] A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse. [Learn more](/docs/guides/safety-best-practices/end-user-ids).
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createImageVariation(image, n, size, responseFormat, user, options) {
+            return localVarFp.createImageVariation(image, n, size, responseFormat, user, options).then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Classifies if text violates OpenAI\'s Content Policy
+         * @param {CreateModerationRequest} createModerationRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createModeration(createModerationRequest, options) {
+            return localVarFp.createModeration(createModerationRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary The search endpoint computes similarity scores between provided query and documents. Documents can be passed directly to the API if there are no more than 200 of them.  To go beyond the 200 document limit, documents can be processed offline and then used for efficient retrieval at query time. When `file` is set, the search endpoint searches over all the documents in the given file and returns up to the `max_rerank` number of documents. These documents will be returned along with their search scores.  The similarity score is a positive score that usually ranges from 0 to 300 (but can sometimes go higher), where a score above 200 usually means the document is semantically similar to the query.
+         * @param {string} engineId The ID of the engine to use for this request.  You can select one of &#x60;ada&#x60;, &#x60;babbage&#x60;, &#x60;curie&#x60;, or &#x60;davinci&#x60;.
+         * @param {CreateSearchRequest} createSearchRequest
+         * @param {*} [options] Override http request option.
+         * @deprecated
+         * @throws {RequiredError}
+         */
+        createSearch(engineId, createSearchRequest, options) {
+            return localVarFp.createSearch(engineId, createSearchRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Transcribes audio into the input language.
+         * @param {File} file The audio file object (not file name) to transcribe, in one of these formats: mp3, mp4, mpeg, mpga, m4a, wav, or webm.
+         * @param {string} model ID of the model to use. Only &#x60;whisper-1&#x60; is currently available.
+         * @param {string} [prompt] An optional text to guide the model\\\&#39;s style or continue a previous audio segment. The [prompt](/docs/guides/speech-to-text/prompting) should match the audio language.
+         * @param {string} [responseFormat] The format of the transcript output, in one of these options: json, text, srt, verbose_json, or vtt.
+         * @param {number} [temperature] The sampling temperature, between 0 and 1. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic. If set to 0, the model will use [log probability](https://en.wikipedia.org/wiki/Log_probability) to automatically increase the temperature until certain thresholds are hit.
+         * @param {string} [language] The language of the input audio. Supplying the input language in [ISO-639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) format will improve accuracy and latency.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createTranscription(file, model, prompt, responseFormat, temperature, language, options) {
+            return localVarFp.createTranscription(file, model, prompt, responseFormat, temperature, language, options).then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Translates audio into into English.
+         * @param {File} file The audio file object (not file name) translate, in one of these formats: mp3, mp4, mpeg, mpga, m4a, wav, or webm.
+         * @param {string} model ID of the model to use. Only &#x60;whisper-1&#x60; is currently available.
+         * @param {string} [prompt] An optional text to guide the model\\\&#39;s style or continue a previous audio segment. The [prompt](/docs/guides/speech-to-text/prompting) should be in English.
+         * @param {string} [responseFormat] The format of the transcript output, in one of these options: json, text, srt, verbose_json, or vtt.
+         * @param {number} [temperature] The sampling temperature, between 0 and 1. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic. If set to 0, the model will use [log probability](https://en.wikipedia.org/wiki/Log_probability) to automatically increase the temperature until certain thresholds are hit.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createTranslation(file, model, prompt, responseFormat, temperature, options) {
+            return localVarFp.createTranslation(file, model, prompt, responseFormat, temperature, options).then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Delete a file.
+         * @param {string} fileId The ID of the file to use for this request
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteFile(fileId, options) {
+            return localVarFp.deleteFile(fileId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Delete a fine-tuned model. You must have the Owner role in your organization.
+         * @param {string} model The model to delete
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteModel(model, options) {
+            return localVarFp.deleteModel(model, options).then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Returns the contents of the specified file
+         * @param {string} fileId The ID of the file to use for this request
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        downloadFile(fileId, options) {
+            return localVarFp.downloadFile(fileId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Lists the currently available (non-finetuned) models, and provides basic information about each one such as the owner and availability.
+         * @param {*} [options] Override http request option.
+         * @deprecated
+         * @throws {RequiredError}
+         */
+        listEngines(options) {
+            return localVarFp.listEngines(options).then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Returns a list of files that belong to the user\'s organization.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listFiles(options) {
+            return localVarFp.listFiles(options).then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Get fine-grained status updates for a fine-tune job.
+         * @param {string} fineTuneId The ID of the fine-tune job to get events for.
+         * @param {boolean} [stream] Whether to stream events for the fine-tune job. If set to true, events will be sent as data-only [server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#Event_stream_format) as they become available. The stream will terminate with a &#x60;data: [DONE]&#x60; message when the job is finished (succeeded, cancelled, or failed).  If set to false, only events generated so far will be returned.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listFineTuneEvents(fineTuneId, stream, options) {
+            return localVarFp.listFineTuneEvents(fineTuneId, stream, options).then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary List your organization\'s fine-tuning jobs
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listFineTunes(options) {
+            return localVarFp.listFineTunes(options).then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Lists the currently available models, and provides basic information about each one such as the owner and availability.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listModels(options) {
+            return localVarFp.listModels(options).then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Retrieves a model instance, providing basic information about it such as the owner and availability.
+         * @param {string} engineId The ID of the engine to use for this request
+         * @param {*} [options] Override http request option.
+         * @deprecated
+         * @throws {RequiredError}
+         */
+        retrieveEngine(engineId, options) {
+            return localVarFp.retrieveEngine(engineId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Returns information about a specific file.
+         * @param {string} fileId The ID of the file to use for this request
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        retrieveFile(fileId, options) {
+            return localVarFp.retrieveFile(fileId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Gets info about the fine-tune job.  [Learn more about Fine-tuning](/docs/guides/fine-tuning)
+         * @param {string} fineTuneId The ID of the fine-tune job
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        retrieveFineTune(fineTuneId, options) {
+            return localVarFp.retrieveFineTune(fineTuneId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Retrieves a model instance, providing basic information about the model such as the owner and permissioning.
+         * @param {string} model The ID of the model to use for this request
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        retrieveModel(model, options) {
+            return localVarFp.retrieveModel(model, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+/**
+ * OpenAIApi - object-oriented interface
+ * @export
+ * @class OpenAIApi
+ * @extends {BaseAPI}
+ */
+class OpenAIApi extends base_1.BaseAPI {
+    /**
+     *
+     * @summary Immediately cancel a fine-tune job.
+     * @param {string} fineTuneId The ID of the fine-tune job to cancel
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OpenAIApi
+     */
+    cancelFineTune(fineTuneId, options) {
+        return exports.OpenAIApiFp(this.configuration).cancelFineTune(fineTuneId, options).then((request) => request(this.axios, this.basePath));
+    }
+    /**
+     *
+     * @summary Answers the specified question using the provided documents and examples.  The endpoint first [searches](/docs/api-reference/searches) over provided documents or files to find relevant context. The relevant context is combined with the provided examples and question to create the prompt for [completion](/docs/api-reference/completions).
+     * @param {CreateAnswerRequest} createAnswerRequest
+     * @param {*} [options] Override http request option.
+     * @deprecated
+     * @throws {RequiredError}
+     * @memberof OpenAIApi
+     */
+    createAnswer(createAnswerRequest, options) {
+        return exports.OpenAIApiFp(this.configuration).createAnswer(createAnswerRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+    /**
+     *
+     * @summary Creates a model response for the given chat conversation.
+     * @param {CreateChatCompletionRequest} createChatCompletionRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OpenAIApi
+     */
+    createChatCompletion(createChatCompletionRequest, options) {
+        return exports.OpenAIApiFp(this.configuration).createChatCompletion(createChatCompletionRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+    /**
+     *
+     * @summary Classifies the specified `query` using provided examples.  The endpoint first [searches](/docs/api-reference/searches) over the labeled examples to select the ones most relevant for the particular query. Then, the relevant examples are combined with the query to construct a prompt to produce the final label via the [completions](/docs/api-reference/completions) endpoint.  Labeled examples can be provided via an uploaded `file`, or explicitly listed in the request using the `examples` parameter for quick tests and small scale use cases.
+     * @param {CreateClassificationRequest} createClassificationRequest
+     * @param {*} [options] Override http request option.
+     * @deprecated
+     * @throws {RequiredError}
+     * @memberof OpenAIApi
+     */
+    createClassification(createClassificationRequest, options) {
+        return exports.OpenAIApiFp(this.configuration).createClassification(createClassificationRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+    /**
+     *
+     * @summary Creates a completion for the provided prompt and parameters.
+     * @param {CreateCompletionRequest} createCompletionRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OpenAIApi
+     */
+    createCompletion(createCompletionRequest, options) {
+        return exports.OpenAIApiFp(this.configuration).createCompletion(createCompletionRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+    /**
+     *
+     * @summary Creates a new edit for the provided input, instruction, and parameters.
+     * @param {CreateEditRequest} createEditRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OpenAIApi
+     */
+    createEdit(createEditRequest, options) {
+        return exports.OpenAIApiFp(this.configuration).createEdit(createEditRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+    /**
+     *
+     * @summary Creates an embedding vector representing the input text.
+     * @param {CreateEmbeddingRequest} createEmbeddingRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OpenAIApi
+     */
+    createEmbedding(createEmbeddingRequest, options) {
+        return exports.OpenAIApiFp(this.configuration).createEmbedding(createEmbeddingRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+    /**
+     *
+     * @summary Upload a file that contains document(s) to be used across various endpoints/features. Currently, the size of all the files uploaded by one organization can be up to 1 GB. Please contact us if you need to increase the storage limit.
+     * @param {File} file Name of the [JSON Lines](https://jsonlines.readthedocs.io/en/latest/) file to be uploaded.  If the &#x60;purpose&#x60; is set to \\\&quot;fine-tune\\\&quot;, each line is a JSON record with \\\&quot;prompt\\\&quot; and \\\&quot;completion\\\&quot; fields representing your [training examples](/docs/guides/fine-tuning/prepare-training-data).
+     * @param {string} purpose The intended purpose of the uploaded documents.  Use \\\&quot;fine-tune\\\&quot; for [Fine-tuning](/docs/api-reference/fine-tunes). This allows us to validate the format of the uploaded file.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OpenAIApi
+     */
+    createFile(file, purpose, options) {
+        return exports.OpenAIApiFp(this.configuration).createFile(file, purpose, options).then((request) => request(this.axios, this.basePath));
+    }
+    /**
+     *
+     * @summary Creates a job that fine-tunes a specified model from a given dataset.  Response includes details of the enqueued job including job status and the name of the fine-tuned models once complete.  [Learn more about Fine-tuning](/docs/guides/fine-tuning)
+     * @param {CreateFineTuneRequest} createFineTuneRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OpenAIApi
+     */
+    createFineTune(createFineTuneRequest, options) {
+        return exports.OpenAIApiFp(this.configuration).createFineTune(createFineTuneRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+    /**
+     *
+     * @summary Creates an image given a prompt.
+     * @param {CreateImageRequest} createImageRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OpenAIApi
+     */
+    createImage(createImageRequest, options) {
+        return exports.OpenAIApiFp(this.configuration).createImage(createImageRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+    /**
+     *
+     * @summary Creates an edited or extended image given an original image and a prompt.
+     * @param {File} image The image to edit. Must be a valid PNG file, less than 4MB, and square. If mask is not provided, image must have transparency, which will be used as the mask.
+     * @param {string} prompt A text description of the desired image(s). The maximum length is 1000 characters.
+     * @param {File} [mask] An additional image whose fully transparent areas (e.g. where alpha is zero) indicate where &#x60;image&#x60; should be edited. Must be a valid PNG file, less than 4MB, and have the same dimensions as &#x60;image&#x60;.
+     * @param {number} [n] The number of images to generate. Must be between 1 and 10.
+     * @param {string} [size] The size of the generated images. Must be one of &#x60;256x256&#x60;, &#x60;512x512&#x60;, or &#x60;1024x1024&#x60;.
+     * @param {string} [responseFormat] The format in which the generated images are returned. Must be one of &#x60;url&#x60; or &#x60;b64_json&#x60;.
+     * @param {string} [user] A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse. [Learn more](/docs/guides/safety-best-practices/end-user-ids).
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OpenAIApi
+     */
+    createImageEdit(image, prompt, mask, n, size, responseFormat, user, options) {
+        return exports.OpenAIApiFp(this.configuration).createImageEdit(image, prompt, mask, n, size, responseFormat, user, options).then((request) => request(this.axios, this.basePath));
+    }
+    /**
+     *
+     * @summary Creates a variation of a given image.
+     * @param {File} image The image to use as the basis for the variation(s). Must be a valid PNG file, less than 4MB, and square.
+     * @param {number} [n] The number of images to generate. Must be between 1 and 10.
+     * @param {string} [size] The size of the generated images. Must be one of &#x60;256x256&#x60;, &#x60;512x512&#x60;, or &#x60;1024x1024&#x60;.
+     * @param {string} [responseFormat] The format in which the generated images are returned. Must be one of &#x60;url&#x60; or &#x60;b64_json&#x60;.
+     * @param {string} [user] A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse. [Learn more](/docs/guides/safety-best-practices/end-user-ids).
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OpenAIApi
+     */
+    createImageVariation(image, n, size, responseFormat, user, options) {
+        return exports.OpenAIApiFp(this.configuration).createImageVariation(image, n, size, responseFormat, user, options).then((request) => request(this.axios, this.basePath));
+    }
+    /**
+     *
+     * @summary Classifies if text violates OpenAI\'s Content Policy
+     * @param {CreateModerationRequest} createModerationRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OpenAIApi
+     */
+    createModeration(createModerationRequest, options) {
+        return exports.OpenAIApiFp(this.configuration).createModeration(createModerationRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+    /**
+     *
+     * @summary The search endpoint computes similarity scores between provided query and documents. Documents can be passed directly to the API if there are no more than 200 of them.  To go beyond the 200 document limit, documents can be processed offline and then used for efficient retrieval at query time. When `file` is set, the search endpoint searches over all the documents in the given file and returns up to the `max_rerank` number of documents. These documents will be returned along with their search scores.  The similarity score is a positive score that usually ranges from 0 to 300 (but can sometimes go higher), where a score above 200 usually means the document is semantically similar to the query.
+     * @param {string} engineId The ID of the engine to use for this request.  You can select one of &#x60;ada&#x60;, &#x60;babbage&#x60;, &#x60;curie&#x60;, or &#x60;davinci&#x60;.
+     * @param {CreateSearchRequest} createSearchRequest
+     * @param {*} [options] Override http request option.
+     * @deprecated
+     * @throws {RequiredError}
+     * @memberof OpenAIApi
+     */
+    createSearch(engineId, createSearchRequest, options) {
+        return exports.OpenAIApiFp(this.configuration).createSearch(engineId, createSearchRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+    /**
+     *
+     * @summary Transcribes audio into the input language.
+     * @param {File} file The audio file object (not file name) to transcribe, in one of these formats: mp3, mp4, mpeg, mpga, m4a, wav, or webm.
+     * @param {string} model ID of the model to use. Only &#x60;whisper-1&#x60; is currently available.
+     * @param {string} [prompt] An optional text to guide the model\\\&#39;s style or continue a previous audio segment. The [prompt](/docs/guides/speech-to-text/prompting) should match the audio language.
+     * @param {string} [responseFormat] The format of the transcript output, in one of these options: json, text, srt, verbose_json, or vtt.
+     * @param {number} [temperature] The sampling temperature, between 0 and 1. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic. If set to 0, the model will use [log probability](https://en.wikipedia.org/wiki/Log_probability) to automatically increase the temperature until certain thresholds are hit.
+     * @param {string} [language] The language of the input audio. Supplying the input language in [ISO-639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) format will improve accuracy and latency.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OpenAIApi
+     */
+    createTranscription(file, model, prompt, responseFormat, temperature, language, options) {
+        return exports.OpenAIApiFp(this.configuration).createTranscription(file, model, prompt, responseFormat, temperature, language, options).then((request) => request(this.axios, this.basePath));
+    }
+    /**
+     *
+     * @summary Translates audio into into English.
+     * @param {File} file The audio file object (not file name) translate, in one of these formats: mp3, mp4, mpeg, mpga, m4a, wav, or webm.
+     * @param {string} model ID of the model to use. Only &#x60;whisper-1&#x60; is currently available.
+     * @param {string} [prompt] An optional text to guide the model\\\&#39;s style or continue a previous audio segment. The [prompt](/docs/guides/speech-to-text/prompting) should be in English.
+     * @param {string} [responseFormat] The format of the transcript output, in one of these options: json, text, srt, verbose_json, or vtt.
+     * @param {number} [temperature] The sampling temperature, between 0 and 1. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic. If set to 0, the model will use [log probability](https://en.wikipedia.org/wiki/Log_probability) to automatically increase the temperature until certain thresholds are hit.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OpenAIApi
+     */
+    createTranslation(file, model, prompt, responseFormat, temperature, options) {
+        return exports.OpenAIApiFp(this.configuration).createTranslation(file, model, prompt, responseFormat, temperature, options).then((request) => request(this.axios, this.basePath));
+    }
+    /**
+     *
+     * @summary Delete a file.
+     * @param {string} fileId The ID of the file to use for this request
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OpenAIApi
+     */
+    deleteFile(fileId, options) {
+        return exports.OpenAIApiFp(this.configuration).deleteFile(fileId, options).then((request) => request(this.axios, this.basePath));
+    }
+    /**
+     *
+     * @summary Delete a fine-tuned model. You must have the Owner role in your organization.
+     * @param {string} model The model to delete
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OpenAIApi
+     */
+    deleteModel(model, options) {
+        return exports.OpenAIApiFp(this.configuration).deleteModel(model, options).then((request) => request(this.axios, this.basePath));
+    }
+    /**
+     *
+     * @summary Returns the contents of the specified file
+     * @param {string} fileId The ID of the file to use for this request
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OpenAIApi
+     */
+    downloadFile(fileId, options) {
+        return exports.OpenAIApiFp(this.configuration).downloadFile(fileId, options).then((request) => request(this.axios, this.basePath));
+    }
+    /**
+     *
+     * @summary Lists the currently available (non-finetuned) models, and provides basic information about each one such as the owner and availability.
+     * @param {*} [options] Override http request option.
+     * @deprecated
+     * @throws {RequiredError}
+     * @memberof OpenAIApi
+     */
+    listEngines(options) {
+        return exports.OpenAIApiFp(this.configuration).listEngines(options).then((request) => request(this.axios, this.basePath));
+    }
+    /**
+     *
+     * @summary Returns a list of files that belong to the user\'s organization.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OpenAIApi
+     */
+    listFiles(options) {
+        return exports.OpenAIApiFp(this.configuration).listFiles(options).then((request) => request(this.axios, this.basePath));
+    }
+    /**
+     *
+     * @summary Get fine-grained status updates for a fine-tune job.
+     * @param {string} fineTuneId The ID of the fine-tune job to get events for.
+     * @param {boolean} [stream] Whether to stream events for the fine-tune job. If set to true, events will be sent as data-only [server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#Event_stream_format) as they become available. The stream will terminate with a &#x60;data: [DONE]&#x60; message when the job is finished (succeeded, cancelled, or failed).  If set to false, only events generated so far will be returned.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OpenAIApi
+     */
+    listFineTuneEvents(fineTuneId, stream, options) {
+        return exports.OpenAIApiFp(this.configuration).listFineTuneEvents(fineTuneId, stream, options).then((request) => request(this.axios, this.basePath));
+    }
+    /**
+     *
+     * @summary List your organization\'s fine-tuning jobs
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OpenAIApi
+     */
+    listFineTunes(options) {
+        return exports.OpenAIApiFp(this.configuration).listFineTunes(options).then((request) => request(this.axios, this.basePath));
+    }
+    /**
+     *
+     * @summary Lists the currently available models, and provides basic information about each one such as the owner and availability.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OpenAIApi
+     */
+    listModels(options) {
+        return exports.OpenAIApiFp(this.configuration).listModels(options).then((request) => request(this.axios, this.basePath));
+    }
+    /**
+     *
+     * @summary Retrieves a model instance, providing basic information about it such as the owner and availability.
+     * @param {string} engineId The ID of the engine to use for this request
+     * @param {*} [options] Override http request option.
+     * @deprecated
+     * @throws {RequiredError}
+     * @memberof OpenAIApi
+     */
+    retrieveEngine(engineId, options) {
+        return exports.OpenAIApiFp(this.configuration).retrieveEngine(engineId, options).then((request) => request(this.axios, this.basePath));
+    }
+    /**
+     *
+     * @summary Returns information about a specific file.
+     * @param {string} fileId The ID of the file to use for this request
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OpenAIApi
+     */
+    retrieveFile(fileId, options) {
+        return exports.OpenAIApiFp(this.configuration).retrieveFile(fileId, options).then((request) => request(this.axios, this.basePath));
+    }
+    /**
+     *
+     * @summary Gets info about the fine-tune job.  [Learn more about Fine-tuning](/docs/guides/fine-tuning)
+     * @param {string} fineTuneId The ID of the fine-tune job
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OpenAIApi
+     */
+    retrieveFineTune(fineTuneId, options) {
+        return exports.OpenAIApiFp(this.configuration).retrieveFineTune(fineTuneId, options).then((request) => request(this.axios, this.basePath));
+    }
+    /**
+     *
+     * @summary Retrieves a model instance, providing basic information about the model such as the owner and permissioning.
+     * @param {string} model The ID of the model to use for this request
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OpenAIApi
+     */
+    retrieveModel(model, options) {
+        return exports.OpenAIApiFp(this.configuration).retrieveModel(model, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+exports.OpenAIApi = OpenAIApi;
+
+},{"./base":62,"./common":63,"axios":undefined}],62:[function(require,module,exports){
+"use strict";
+/* tslint:disable */
+/* eslint-disable */
+/**
+ * OpenAI API
+ * APIs for sampling from and fine-tuning language models
+ *
+ * The version of the OpenAPI document: 1.3.0
+ *
+ *
+ * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech).
+ * https://openapi-generator.tech
+ * Do not edit the class manually.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.RequiredError = exports.BaseAPI = exports.COLLECTION_FORMATS = exports.BASE_PATH = void 0;
+const axios_1 = require("axios");
+exports.BASE_PATH = "https://api.openai.com/v1".replace(/\/+$/, "");
+/**
+ *
+ * @export
+ */
+exports.COLLECTION_FORMATS = {
+    csv: ",",
+    ssv: " ",
+    tsv: "\t",
+    pipes: "|",
+};
+/**
+ *
+ * @export
+ * @class BaseAPI
+ */
+class BaseAPI {
+    constructor(configuration, basePath = exports.BASE_PATH, axios = axios_1.default) {
+        this.basePath = basePath;
+        this.axios = axios;
+        if (configuration) {
+            this.configuration = configuration;
+            this.basePath = configuration.basePath || this.basePath;
+        }
+    }
+}
+exports.BaseAPI = BaseAPI;
+;
+/**
+ *
+ * @export
+ * @class RequiredError
+ * @extends {Error}
+ */
+class RequiredError extends Error {
+    constructor(field, msg) {
+        super(msg);
+        this.field = field;
+        this.name = "RequiredError";
+    }
+}
+exports.RequiredError = RequiredError;
+
+},{"axios":undefined}],63:[function(require,module,exports){
+"use strict";
+/* tslint:disable */
+/* eslint-disable */
+/**
+ * OpenAI API
+ * APIs for sampling from and fine-tuning language models
+ *
+ * The version of the OpenAPI document: 1.3.0
+ *
+ *
+ * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech).
+ * https://openapi-generator.tech
+ * Do not edit the class manually.
+ */
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.createRequestFunction = exports.toPathString = exports.serializeDataIfNeeded = exports.setSearchParams = exports.setOAuthToObject = exports.setBearerAuthToObject = exports.setBasicAuthToObject = exports.setApiKeyToObject = exports.assertParamExists = exports.DUMMY_BASE_URL = void 0;
+const base_1 = require("./base");
+/**
+ *
+ * @export
+ */
+exports.DUMMY_BASE_URL = 'https://example.com';
+/**
+ *
+ * @throws {RequiredError}
+ * @export
+ */
+exports.assertParamExists = function (functionName, paramName, paramValue) {
+    if (paramValue === null || paramValue === undefined) {
+        throw new base_1.RequiredError(paramName, `Required parameter ${paramName} was null or undefined when calling ${functionName}.`);
+    }
+};
+/**
+ *
+ * @export
+ */
+exports.setApiKeyToObject = function (object, keyParamName, configuration) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (configuration && configuration.apiKey) {
+            const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+                ? yield configuration.apiKey(keyParamName)
+                : yield configuration.apiKey;
+            object[keyParamName] = localVarApiKeyValue;
+        }
+    });
+};
+/**
+ *
+ * @export
+ */
+exports.setBasicAuthToObject = function (object, configuration) {
+    if (configuration && (configuration.username || configuration.password)) {
+        object["auth"] = { username: configuration.username, password: configuration.password };
+    }
+};
+/**
+ *
+ * @export
+ */
+exports.setBearerAuthToObject = function (object, configuration) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (configuration && configuration.accessToken) {
+            const accessToken = typeof configuration.accessToken === 'function'
+                ? yield configuration.accessToken()
+                : yield configuration.accessToken;
+            object["Authorization"] = "Bearer " + accessToken;
+        }
+    });
+};
+/**
+ *
+ * @export
+ */
+exports.setOAuthToObject = function (object, name, scopes, configuration) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (configuration && configuration.accessToken) {
+            const localVarAccessTokenValue = typeof configuration.accessToken === 'function'
+                ? yield configuration.accessToken(name, scopes)
+                : yield configuration.accessToken;
+            object["Authorization"] = "Bearer " + localVarAccessTokenValue;
+        }
+    });
+};
+function setFlattenedQueryParams(urlSearchParams, parameter, key = "") {
+    if (parameter == null)
+        return;
+    if (typeof parameter === "object") {
+        if (Array.isArray(parameter)) {
+            parameter.forEach(item => setFlattenedQueryParams(urlSearchParams, item, key));
+        }
+        else {
+            Object.keys(parameter).forEach(currentKey => setFlattenedQueryParams(urlSearchParams, parameter[currentKey], `${key}${key !== '' ? '.' : ''}${currentKey}`));
+        }
+    }
+    else {
+        if (urlSearchParams.has(key)) {
+            urlSearchParams.append(key, parameter);
+        }
+        else {
+            urlSearchParams.set(key, parameter);
+        }
+    }
+}
+/**
+ *
+ * @export
+ */
+exports.setSearchParams = function (url, ...objects) {
+    const searchParams = new URLSearchParams(url.search);
+    setFlattenedQueryParams(searchParams, objects);
+    url.search = searchParams.toString();
+};
+/**
+ *
+ * @export
+ */
+exports.serializeDataIfNeeded = function (value, requestOptions, configuration) {
+    const nonString = typeof value !== 'string';
+    const needsSerialization = nonString && configuration && configuration.isJsonMime
+        ? configuration.isJsonMime(requestOptions.headers['Content-Type'])
+        : nonString;
+    return needsSerialization
+        ? JSON.stringify(value !== undefined ? value : {})
+        : (value || "");
+};
+/**
+ *
+ * @export
+ */
+exports.toPathString = function (url) {
+    return url.pathname + url.search + url.hash;
+};
+/**
+ *
+ * @export
+ */
+exports.createRequestFunction = function (axiosArgs, globalAxios, BASE_PATH, configuration) {
+    return (axios = globalAxios, basePath = BASE_PATH) => {
+        const axiosRequestArgs = Object.assign(Object.assign({}, axiosArgs.options), { url: ((configuration === null || configuration === void 0 ? void 0 : configuration.basePath) || basePath) + axiosArgs.url });
+        return axios.request(axiosRequestArgs);
+    };
+};
+
+},{"./base":62}],64:[function(require,module,exports){
+"use strict";
+/* tslint:disable */
+/* eslint-disable */
+/**
+ * OpenAI API
+ * APIs for sampling from and fine-tuning language models
+ *
+ * The version of the OpenAPI document: 1.3.0
+ *
+ *
+ * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech).
+ * https://openapi-generator.tech
+ * Do not edit the class manually.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Configuration = void 0;
+const packageJson = require("../package.json");
+class Configuration {
+    constructor(param = {}) {
+        this.apiKey = param.apiKey;
+        this.organization = param.organization;
+        this.username = param.username;
+        this.password = param.password;
+        this.accessToken = param.accessToken;
+        this.basePath = param.basePath;
+        this.baseOptions = param.baseOptions;
+        this.formDataCtor = param.formDataCtor;
+        if (!this.baseOptions) {
+            this.baseOptions = {};
+        }
+        this.baseOptions.headers = Object.assign({ 'User-Agent': `OpenAI/NodeJS/${packageJson.version}`, 'Authorization': `Bearer ${this.apiKey}` }, this.baseOptions.headers);
+        if (this.organization) {
+            this.baseOptions.headers['OpenAI-Organization'] = this.organization;
+        }
+        if (!this.formDataCtor) {
+            this.formDataCtor = require("form-data");
+        }
+    }
+    /**
+     * Check if the given MIME is a JSON MIME.
+     * JSON MIME examples:
+     *   application/json
+     *   application/json; charset=UTF8
+     *   APPLICATION/JSON
+     *   application/vnd.company+json
+     * @param mime - MIME (Multipurpose Internet Mail Extensions)
+     * @return True if the given MIME is JSON, false otherwise.
+     */
+    isJsonMime(mime) {
+        const jsonMime = new RegExp('^(application\/json|[^;/ \t]+\/[^;/ \t]+[+]json)[ \t]*(;.*)?$', 'i');
+        return mime !== null && (jsonMime.test(mime) || mime.toLowerCase() === 'application/json-patch+json');
+    }
+}
+exports.Configuration = Configuration;
+
+},{"../package.json":66,"form-data":54}],65:[function(require,module,exports){
+"use strict";
+/* tslint:disable */
+/* eslint-disable */
+/**
+ * OpenAI API
+ * APIs for sampling from and fine-tuning language models
+ *
+ * The version of the OpenAPI document: 1.3.0
+ *
+ *
+ * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech).
+ * https://openapi-generator.tech
+ * Do not edit the class manually.
+ */
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+__exportStar(require("./api"), exports);
+__exportStar(require("./configuration"), exports);
+
+},{"./api":61,"./configuration":64}],66:[function(require,module,exports){
+module.exports={
+  "name": "openai",
+  "version": "3.3.0",
+  "description": "Node.js library for the OpenAI API",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:openai/openai-node.git"
+  },
+  "keywords": [
+    "openai",
+    "open",
+    "ai",
+    "gpt-3",
+    "gpt3"
+  ],
+  "author": "OpenAI",
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc --outDir dist/"
+  },
+  "dependencies": {
+    "axios": "^0.26.0",
+    "form-data": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^12.11.5",
+    "typescript": "^3.6.4"
+  }
+}
+
+},{}],67:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -7908,7 +10285,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],61:[function(require,module,exports){
+},{}],68:[function(require,module,exports){
 (function (process,global){(function (){
 /*! *****************************************************************************
 Copyright (C) Microsoft. All rights reserved.
@@ -9043,7 +11420,7 @@ var Reflect;
 })(Reflect || (Reflect = {}));
 
 }).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":60}],62:[function(require,module,exports){
+},{"_process":67}],69:[function(require,module,exports){
 (function (process,global){(function (){
 // Copyright (c) Microsoft, All rights reserved. See License.txt in the project root for license information.
 
@@ -16101,7 +18478,7 @@ Observable.fromNodeCallback = function (fn, ctx, selector) {
 }.call(this));
 
 }).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":60}],63:[function(require,module,exports){
+},{"_process":67}],70:[function(require,module,exports){
 (function (Buffer){(function (){
 /*!
  * shallow-clone <https://github.com/jonschlinkert/shallow-clone>
@@ -16188,7 +18565,7 @@ function cloneSymbol(val) {
 module.exports = clone;
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"buffer":51,"kind-of":57}],64:[function(require,module,exports){
+},{"buffer":51,"kind-of":58}],71:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const injection_handler_1 = require("./injection-handler");
@@ -16332,7 +18709,7 @@ class PropertyPath {
 }
 exports.PropertyPath = PropertyPath;
 
-},{"../model":69,"./injection-handler":67,"lodash.get":58,"lodash.set":59}],65:[function(require,module,exports){
+},{"../model":76,"./injection-handler":74,"lodash.get":59,"lodash.set":60}],72:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class ContainerNamespaces {
@@ -16420,7 +18797,7 @@ class NamespaceBindings {
     }
 }
 
-},{}],66:[function(require,module,exports){
+},{}],73:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const injection_handler_1 = require("./injection-handler");
@@ -16516,7 +18893,7 @@ exports.IoCContainer = IoCContainer;
 IoCContainer.namespaces = new container_namespaces_1.ContainerNamespaces();
 IoCContainer.snapshotsCount = 0;
 
-},{"./container-binding-config":64,"./container-namespaces":65,"./injection-handler":67}],67:[function(require,module,exports){
+},{"./container-binding-config":71,"./container-namespaces":72,"./injection-handler":74}],74:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const BUILD_CONTEXT_KEY = '__BuildContext';
@@ -16628,7 +19005,7 @@ exports.InjectorHandler = InjectorHandler;
 InjectorHandler.constructorNameRegEx = /function (\w*)/;
 InjectorHandler.instantiationsBlocked = true;
 
-},{}],68:[function(require,module,exports){
+},{}],75:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
@@ -16863,7 +19240,7 @@ function InjectValueParamDecorator(target, propertyKey, _parameterIndex, value) 
     }
 }
 
-},{"./container/container":66,"./model":69,"reflect-metadata":61}],69:[function(require,module,exports){
+},{"./container/container":73,"./model":76,"reflect-metadata":68}],76:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
@@ -16900,7 +19277,7 @@ class BuildContext {
 }
 exports.BuildContext = BuildContext;
 
-},{}],70:[function(require,module,exports){
+},{}],77:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const injection_handler_1 = require("./container/injection-handler");
@@ -16953,7 +19330,7 @@ class RequestScope extends model_1.Scope {
 }
 exports.RequestScope = RequestScope;
 
-},{"./container/injection-handler":67,"./model":69}],71:[function(require,module,exports){
+},{"./container/injection-handler":74,"./model":76}],78:[function(require,module,exports){
 "use strict";
 /**
  * This is a lightweight annotation-based dependency injection container for typescript.
@@ -17125,4 +19502,4 @@ class ContainerBuildContext extends model_1.BuildContext {
     }
 }
 
-},{"./container/container":66,"./decorators":68,"./model":69,"./scopes":70,"reflect-metadata":61}]},{},[1]);
+},{"./container/container":73,"./decorators":75,"./model":76,"./scopes":77,"reflect-metadata":68}]},{},[1]);

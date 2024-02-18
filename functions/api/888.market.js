@@ -513,9 +513,9 @@ const updateOpenai = async (cpy, bal, ste) => {
     //    model: 'gpt-3.5-turbo',
     //    messages: love,
     //})
-    var response = 'response';
+    //var response = 'response'
     //var response = completion.data.choices[0].message.content
-    bal.slv({ oaiBit: { idx: "update-openai", dat: response } });
+    bal.slv({ oaiBit: { idx: "update-openai", dat: bal.idx } });
     return cpy;
 };
 exports.updateOpenai = updateOpenai;

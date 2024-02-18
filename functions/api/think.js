@@ -3,7 +3,7 @@ var pivot = require("./888.market");
 export const onRequestGet = async () => {
   var bit = await globalThis.MARKET.hunt(MARKET.ActOai.UPDATE_OPENAI, {});
 
-  var response = "yo yo yo bit" + bit;
+  var response = "yo yo yo bit" + JSON.stringify(bit);
   return new Response(response);
 };
 

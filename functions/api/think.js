@@ -1,6 +1,6 @@
 var pivot = require("./888.market");
 
-export const onRequestGet = async () => {
+export const onRequestGet = async (context) => {
   var bit = await globalThis.MARKET.hunt(MARKET.ActOai.UPDATE_OPENAI, { idx: context.env.OPENAI_API_KEY });
 
   var response = "yo yo yo bit" + JSON.stringify(bit);

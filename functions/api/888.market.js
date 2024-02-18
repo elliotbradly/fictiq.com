@@ -494,9 +494,9 @@ const updateOpenai = async (cpy, bal, ste) => {
     var auth = 'son of a mushroom';
     var out = ['tell me something', 'i never knew about alligators'];
     const { Configuration, OpenAIApi } = require('openai');
-    // const configuration = new Configuration({
-    //    apiKey: bal.idx,
-    // })
+    const configuration = new Configuration({
+        apiKey: bal.idx,
+    });
     //const openai = new OpenAIApi(configuration)
     //var author = auth
     //var content = out.join('\n')
@@ -515,7 +515,7 @@ const updateOpenai = async (cpy, bal, ste) => {
     //})
     //var response = 'response'
     //var response = completion.data.choices[0].message.content
-    bal.slv({ oaiBit: { idx: "update-openai", src: bal.idx } });
+    bal.slv({ oaiBit: { idx: "update-openai-0", src: bal.idx } });
     return cpy;
 };
 exports.updateOpenai = updateOpenai;

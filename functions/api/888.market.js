@@ -481,7 +481,6 @@ WalletUnit = __decorate([
 exports.default = WalletUnit;
 
 },{"../99.core/state":38,"typescript-ioc":71}],14:[function(require,module,exports){
-(function (process){(function (){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateOpenai = exports.initOpenai = void 0;
@@ -516,13 +515,12 @@ const updateOpenai = async (cpy, bal, ste) => {
     // })
     //var response = completion.data.choices[0].message.content
     //debugger
-    bal.slv({ oaiBit: { idx: "update-openai", dat: process.env.OPENAI_API_KEY } });
+    bal.slv({ oaiBit: { idx: "update-openai", dat: bal.idx } });
     return cpy;
 };
 exports.updateOpenai = updateOpenai;
 
-}).call(this)}).call(this,require('_process'))
-},{"_process":60}],15:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UpdateOpenai = exports.UPDATE_OPENAI = exports.InitOpenai = exports.INIT_OPENAI = void 0;
@@ -911,6 +909,7 @@ CollectUnit = __decorate([
 exports.default = CollectUnit;
 
 },{"../99.core/state":38,"typescript-ioc":71}],26:[function(require,module,exports){
+(function (process){(function (){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createMenu = exports.closeMenu = exports.testMenu = exports.updateMenu = exports.initMenu = void 0;
@@ -947,7 +946,7 @@ const updateMenu = async (cpy, bal, ste) => {
     src = bit.chcBit.src;
     switch (src) {
         case ActOai.UPDATE_OPENAI:
-            bit = await ste.hunt(ActOai.UPDATE_OPENAI, {});
+            bit = await ste.hunt(ActOai.UPDATE_OPENAI, { idx: process.env.OPENAI_API_KEY });
             dat = bit.oaiBit;
             if (dat == null)
                 break;
@@ -1046,7 +1045,8 @@ var patch = (ste, type, bale) => ste.dispatch({ type, bale });
 const Align = require("../../val/align");
 const Color = require("../../val/console-color");
 
-},{"../../00.market.unit/market.action":3,"../../02.openai.unit/openai.action":15,"../../act/canvas.action":40,"../../act/choice.action":41,"../../act/console.action":42,"../../act/grid.action":44,"../../act/terminal.action":46,"../../val/align":48,"../../val/console-color":49}],27:[function(require,module,exports){
+}).call(this)}).call(this,require('_process'))
+},{"../../00.market.unit/market.action":3,"../../02.openai.unit/openai.action":15,"../../act/canvas.action":40,"../../act/choice.action":41,"../../act/console.action":42,"../../act/grid.action":44,"../../act/terminal.action":46,"../../val/align":48,"../../val/console-color":49,"_process":60}],27:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ContainerMenu = exports.CONTAINER_MENU = exports.VisageMenu = exports.VISAGE_MENU = exports.ShadeMenu = exports.SHADE_MENU = exports.CloseMenu = exports.CLOSE_MENU = exports.TestMenu = exports.TEST_MENU = exports.UpdateMenu = exports.UPDATE_MENU = exports.InitMenu = exports.INIT_MENU = void 0;

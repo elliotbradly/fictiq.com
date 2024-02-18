@@ -1,9 +1,9 @@
 var pivot = require("./888.market");
 
 export const onRequestGet = async () => {
-  var bit = globalThis.MARKET.hunt(MARKET.ActOai.UPDATE_OPENAI, {});
+  var bit = await globalThis.MARKET.hunt(MARKET.ActOai.UPDATE_OPENAI, {});
 
-  var response = "yo yo yo " + globalThis.MARKET;
+  var response = "yo yo yo bit" + bit;
   return new Response(response);
 };
 

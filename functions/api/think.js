@@ -33,7 +33,7 @@ export const onRequestGet = async (context) => {
   };
 
   const bit = await fetch(url, init);
-  const results = await gatherResponse(response);
+  const results = await gatherResponse(bit);
   return new Response(results, init);
 
   //var response = "yo yo yo bit" + JSON.stringify(bit);

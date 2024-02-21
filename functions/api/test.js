@@ -26,7 +26,7 @@ export const onRequestGet = async (context) => {
 
   const init = {
     body: JSON.stringify(body),
-    method: "POST",
+    method: "GET",
     headers: {
       "content-type": "application/json;charset=UTF-8",
     },

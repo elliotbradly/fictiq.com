@@ -36,25 +36,21 @@
  */
 
 (() => {
+  $DEBUG = true;
 
-  $DEBUG = true
-
-  var blender = require('./js/plugins/122.blender.js')
+  //var blender = require('./js/plugins/122.blender.js')
   const pluginName = "Blender";
 
   var render = () => {
-    console.log("render")
-    window.requestAnimationFrame(render)
-  }
+    console.log("render");
+    window.requestAnimationFrame(render);
+  };
 
-  window.requestAnimationFrame(render)
+  window.requestAnimationFrame(render);
 
-  PluginManager.registerCommand(pluginName, "set", (args) => {
-
-  });
+  PluginManager.registerCommand(pluginName, "set", (args) => {});
 
   Scene_Boot.prototype.startNormalGame = function () {
-
     // alert("open game")
     //this.checkPlayerLocation();
     DataManager.setupNewGame();
@@ -67,9 +63,4 @@
 
     Window_TitleCommand.initCommandPosition();
   };
-
-
 })();
-
-
-

@@ -1,0 +1,5 @@
+[
+null,
+{"id":1,"battlerName":"","characterIndex":0,"characterName":"VisuStella-Characters","classId":1,"equips":[0,0,0,0,0],"faceIndex":0,"faceName":"VS_Actor1","traits":[],"initialLevel":1,"maxLevel":99,"name":"TileD Student","nickname":"","note":"","profile":""},
+{"id":2,"battlerName":"","characterIndex":1,"characterName":"VisuStella-Animals2","classId":1,"equips":[0,0,0,0,0],"faceIndex":0,"faceName":"","traits":[],"initialLevel":1,"maxLevel":99,"name":"Test follower","nickname":"","note":"","profile":""}
+]

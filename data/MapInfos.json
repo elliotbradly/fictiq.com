@@ -9,6 +9,7 @@ null,
 {"id":7,"expanded":false,"name":"Map7 - Blending Modes","order":7,"parentId":0,"scrollX":811,"scrollY":484.5},
 {"id":8,"expanded":false,"name":"Map8 - All functions","order":8,"parentId":0,"scrollX":884.7272727272727,"scrollY":503.4545454545455},
 {"id":9,"expanded":false,"name":"Map9 - Tips and Troubleshooting","order":9,"parentId":0,"scrollX":811,"scrollY":498.5},
-{"id":10,"expanded":false,"name":"Map10 - x16 pixel example","order":10,"parentId":0,"scrollX":1391,"scrollY":1498.5},
-{"id":11,"expanded":false,"name":"Map11 - x32 pixel example","order":11,"parentId":0,"scrollX":1092,"scrollY":778.5}
+{"id":10,"expanded":true,"name":"Map10 - x16 pixel example","order":10,"parentId":0,"scrollX":1391,"scrollY":1499},
+{"id":11,"expanded":false,"name":"Map11 - x32 pixel example","order":11,"parentId":0,"scrollX":1092,"scrollY":778.5},
+{"id":12,"expanded":false,"name":"Map12 - x16 pixel example","order":12,"parentId":0,"scrollX":1391,"scrollY":1499}
 ]

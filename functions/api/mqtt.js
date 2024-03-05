@@ -14,7 +14,7 @@ export const onRequestGet = async (context) => {
   //console.log("act " + initMarket);
   var bit = {};
   bit = await globalThis.MARKET.hunt(initMarket, { val: 0, dat: MQTT, src: local });
-  //bit = globalThis.MARKET.hunt(testMarket, { dat: bit });
+  bit = globalThis.MARKET.hunt(testMarket, { dat: bit });
 
   const init = {
     body: JSON.stringify(body),

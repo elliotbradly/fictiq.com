@@ -1357,10 +1357,11 @@ const initBus = (cpy, bal, ste) => {
         cpy.client = cpy.MQTT.connect(cpy.host);
         cpy.client.on('message', (tpc, msg) => { (0, exports.messageBus)(cpy, { idx: tpc, src: msg }, ste); });
         cpy.client.on('connect', () => {
-            console.log(bal.idx + " connected " + cpy.host);
+            var output = bal.idx + " connected " + cpy.host;
+            console.log(output);
             (0, exports.openBus)(cpy, { idx: 'init-bus', lst: cpy.actList }, ste);
             if (bal.slv != null)
-                bal.slv({ intBit: { idx: "init-bus" } });
+                bal.slv({ intBit: { idx: "init-bus", dat: output } });
         });
     }
     else {

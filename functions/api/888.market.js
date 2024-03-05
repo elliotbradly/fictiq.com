@@ -78,7 +78,7 @@ const createMarket = (cpy, bal, ste) => {
 };
 exports.createMarket = createMarket;
 const testMarket = async (cpy, bal, ste) => {
-    bit = await ste.bus(ActDep.TEST_DEPTH, { src: '888.market' });
+    bit = ste.bus(ActDep.TEST_DEPTH, { src: '888.market' });
     bal.slv({ mrkBit: { idx: "test-market", dat: { src: '888.market', dat: bit } } });
     return cpy;
 };

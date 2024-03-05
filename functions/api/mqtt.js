@@ -6,15 +6,15 @@ export const onRequestGet = async (context) => {
   var MQTT = globalThis.MARKET.MQTT;
   //console.log("mqtt" + MQTT);
 
-  //const local = "ws://swamp-fly-448d63614f75.herokuapp.com/";
-  const localBit = { idx: "local", src: "ws://swamp-fly-448d63614f75.herokuapp.com/" };
+  const local = "ws://swamp-fly-448d63614f75.herokuapp.com/";
+  //const localBit = { idx: "local", src: "ws://swamp-fly-448d63614f75.herokuapp.com/" };
 
   var initMarket = globalThis.MARKET.ActMrk.INIT_MARKET;
   var testMarket = globalThis.MARKET.ActMrk.TEST_MARKET;
   //console.log("act " + initMarket);
-  var bit;
-  bit = await globalThis.MARKET.hunt(initMarket, { val: 0, dat: MQTT, src: [localBit] });
-  bit = globalThis.MARKET.hunt(testMarket, { dat: bit });
+  var bit = {};
+  bit = await globalThis.MARKET.hunt(initMarket, { val: 0, dat: MQTT, src: local });
+  //bit = globalThis.MARKET.hunt(testMarket, { dat: bit });
 
   const init = {
     body: JSON.stringify(body),

@@ -51,7 +51,7 @@ const updateMarket = (cpy, bal, ste) => {
         bit = await ste.bus(ActPvt.BUNDLE_PIVOT, { src: "888.market" });
         bit = await ste.bus(ActDsk.READ_DISK, { src: './work/888.market.js' });
         var shade = bit.dskBit.dat;
-        var writeBit = await ste.bus(ActDsk.WRITE_DISK, { src: './data/function/888.market.js', dat: shade });
+        var writeBit = await ste.bus(ActDsk.WRITE_DISK, { src: './data/functions/888.market.js', dat: shade });
         setTimeout(() => {
             if (bal.slv != null)
                 bal.slv({ mrkBit: { idx: "update-market", dat: { lst: [writeBit] } } });
@@ -1673,9 +1673,11 @@ exports.ADD_PORT = "[Terminal action] Add Port";
 Object.defineProperty(exports, "__esModule", { value: true });
 var sim = {
     hunt: null,
+    bus: null,
     state: null
 };
 sim.hunt = (typ, obj) => { return host(obj, typ); };
+sim.bus = (typ, obj) => { return sim.state.bus(obj, typ); };
 var host = (obj, typ) => {
     init();
     var slv;

@@ -10,12 +10,11 @@ export const onRequestGet = async (context) => {
   //const localBit = { idx: "local", src: "ws://swamp-fly-448d63614f75.herokuapp.com/" };
 
   var initMarket = globalThis.MARKET.ActMrk.INIT_MARKET;
-  var testDepth = "[Test action] Test Depth";
+  var testMarket = globalThis.MARKET.ActMrk.TEST_MARKET;
   //console.log("act " + initMarket);
-
-  var bit = await globalThis.MARKET.hunt(initMarket, { val: 0, dat: MQTT, src: local });
-
-  globalThis.MARKET.bus(testDepth, {});
+  var bit;
+  bit = await globalThis.MARKET.hunt(initMarket, { val: 0, dat: MQTT, src: local });
+  bit = await globalThis.MARKET.hunt(testMarket, {});
 
   const init = {
     body: JSON.stringify(body),

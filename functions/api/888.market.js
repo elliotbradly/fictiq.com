@@ -30,7 +30,7 @@ const initMarket = async (cpy, bal, ste) => {
     if (bal.val == 1)
         patch(ste, ActMnu.INIT_MENU, bal);
     if (bal.slv != null)
-        bal.slv({ intBit: { idx: "init-market" } });
+        bal.slv({ intBit: { idx: "init-market", bit } });
     return cpy;
 };
 exports.initMarket = initMarket;

@@ -35,8 +35,13 @@
     1: [
       function (require, module, exports) {
         (function (global) {
+          debugger;
+
           (function () {
+            debugger;
             if (global == null) this.global = {};
+
+            debugger;
 
             global.BLENDER = require("../dist/122.blender/hunt");
             global.BLENDER.ActBld = require("../dist/122.blender/00.blender.unit/blender.action");

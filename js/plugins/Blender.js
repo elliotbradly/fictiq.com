@@ -38,7 +38,7 @@
 (() => {
   $DEBUG = true;
 
-  var blender = require("./js/plugins/122.blender.js");
+  //var blender = require("./js/plugins/122.blender.js");
   const pluginName = "Blender";
 
   PluginManager.registerCommand(pluginName, "set", (args) => {});

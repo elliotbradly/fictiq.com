@@ -1,9 +1,0 @@
-[
-null,
-{"id":1,"battlerName":"Actor1_1","characterIndex":0,"characterName":"VisuStella-Characters","classId":1,"equips":[0,0,0,0,0],"faceIndex":0,"faceName":"VS_Actor1","traits":[],"initialLevel":1,"maxLevel":99,"name":"TileD Student","nickname":"","note":"","profile":""},
-{"id":2,"battlerName":"Actor1_1","characterIndex":1,"characterName":"VisuStella-Animals2","classId":1,"equips":[0,0,0,0,0],"faceIndex":1,"faceName":"VS_Actor1","traits":[],"initialLevel":1,"maxLevel":99,"name":"Test follower","nickname":"","note":"","profile":""},
-{"id":3,"battlerName":"","characterIndex":5,"characterName":"VisuStella-Animals1","classId":1,"equips":[0,0,0,0,0],"faceIndex":3,"faceName":"VS_Actor1","traits":[],"initialLevel":1,"maxLevel":99,"name":"Test Actor","nickname":"","note":"","profile":""},
-{"id":4,"battlerName":"Actor1_1","characterIndex":4,"characterName":"VisuStella-Animals1","classId":1,"equips":[0,0,0,0,0],"faceIndex":1,"faceName":"VS_Actor1","traits":[],"initialLevel":1,"maxLevel":99,"name":"Test Actor","nickname":"","note":"","profile":""},
-{"id":5,"battlerName":"Actor1_1","characterIndex":1,"characterName":"VisuStella-Characters","classId":1,"equips":[0,0,0,0,0],"faceIndex":2,"faceName":"VS_Actor1","traits":[],"initialLevel":1,"maxLevel":99,"name":"Test Actor","nickname":"","note":"","profile":""},
-{"id":6,"battlerName":"Actor1_1","characterIndex":1,"characterName":"2003-Samplex16","classId":1,"equips":[0,0,0,0,0],"faceIndex":2,"faceName":"VS_Actor1","traits":[],"initialLevel":1,"maxLevel":99,"name":"Test Actor","nickname":"","note":"","profile":""}
-]

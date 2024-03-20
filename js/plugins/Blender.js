@@ -57,9 +57,9 @@
     var openBld = window.BLENDER.ActBld.OPEN_BLENDER;
     console.log("act " + initBld);
 
-    var bit = await window.BLENDER.hunt(initBld, { val: 0, dat: MQTT, src: local });
+    var bit = await window.BLENDER.hunt(initBld, { val: 0 });
 
-    window.BLENDER.hunt(openBld, { idx: "simo-beeing" });
+    //window.BLENDER.hunt(openBld, { idx: "simo-beeing" });
 
     // alert("open game")
     //this.checkPlayerLocation();

@@ -36,10 +36,12 @@
       function (require, module, exports) {
         (function (global) {
           (function () {
-            window.BLENDER = require("../dist/122.blender/hunt");
-            window.BLENDER.ActBld = require("../dist/122.blender/00.blender.unit/blender.action");
+            if (global == null) this.global = {};
 
-            window.BLENDER.MQTT = require("async-mqtt");
+            global.BLENDER = require("../dist/122.blender/hunt");
+            global.BLENDER.ActBld = require("../dist/122.blender/00.blender.unit/blender.action");
+
+            global.BLENDER.MQTT = require("async-mqtt");
           }).call(this);
         }).call(this, typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {});
       },

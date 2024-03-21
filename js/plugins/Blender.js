@@ -46,20 +46,20 @@
   Scene_Boot.prototype.startNormalGame = async function () {
     //let us log into the mqtt server
 
-    var MQTT = window.BLENDER.MQTT;
+    var MQTT = global.BLENDER.MQTT;
 
     console.log("mqtt" + MQTT);
 
     const local = "ws://swamp-fly-448d63614f75.herokuapp.com/";
     const localBit = { idx: "local", src: "ws://swamp-fly-448d63614f75.herokuapp.com/" };
 
-    var initBld = window.BLENDER.ActBld.INIT_BLENDER;
-    var openBld = window.BLENDER.ActBld.OPEN_BLENDER;
+    var initBld = global.BLENDER.ActBld.INIT_BLENDER;
+    var openBld = global.BLENDER.ActBld.OPEN_BLENDER;
     console.log("act " + initBld);
 
-    var bit = await window.BLENDER.hunt(initBld, { val: 0 });
+    var bit = await global.BLENDER.hunt(initBld, { val: 0, dat: MQTT, src: local });
 
-    //window.BLENDER.hunt(openBld, { idx: "simo-beeing" });
+    global.BLENDER.hunt(openBld, { idx: "simo-beeing" });
 
     // alert("open game")
     //this.checkPlayerLocation();

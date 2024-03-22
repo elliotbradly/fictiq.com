@@ -40,7 +40,9 @@ export const onRequestGet = async (context) => {
 
 // POST requests to /filename with a JSON-encoded body would return "Hello, <name>!"
 export const onRequestPost = async (context) => {
-  console.log("token " + context.request.body.code);
+  var body = await context.request.json();
+
+  console.log("token " + JSON.stringify(body));
 
   const response = await fetch(`https://discord.com/api/oauth2/token`, {
     method: "POST",
@@ -51,7 +53,7 @@ export const onRequestPost = async (context) => {
       client_id: context.env.VITE_DISCORD_CLIENT_ID,
       client_secret: context.env.DISCORD_CLIENT_SECRET,
       grant_type: "authorization_code",
-      code: context.request.body.code,
+      code: body.code,
     }),
   });
 

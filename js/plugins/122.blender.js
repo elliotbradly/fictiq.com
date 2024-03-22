@@ -571,7 +571,7 @@ const initActivity = (cpy, bal, ste) => {
     setupDiscordSdk().then(() => {
         console.log("Discord SDK is authenticated");
         if (bal.slv != null)
-            bal.slv({ intBit: { idx: "init-activity", val: 1, src: auth, dat: currentGuild } });
+            bal.slv({ intBit: { idx: "init-activity", val: 1, dat: currentGuild } });
         // We can now make API calls within the scopes we requested in setupDiscordSDK()
         // Note: the access_token returned is a sensitive secret and should be treated as such
     });
@@ -613,6 +613,16 @@ const initActivity = (cpy, bal, ste) => {
         }).then((response) => response.json());
         // 2. Find the current guild's info, including it's "icon"
         currentGuild = guilds.find((g) => g.id === discordSdk.guildId);
+        console.log("creating web socket");
+        //now connect to websocket??
+        const currentUrl = window.location.origin;
+        // get our current connection and replace http with ws, or https with wss
+        var socket = new WebSocket(currentUrl.replace('http', 'ws') + '/socket/');
+        socket.addEventListener('message', function (event) {
+            if (event.data) {
+                console.log("you have a message");
+            }
+        });
         if (auth == null) {
             throw new Error("Authenticate command failed");
         }

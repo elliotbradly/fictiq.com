@@ -62,7 +62,7 @@
     var bit = await window.BLENDER.hunt(initBld, { val: 0 });
     var bit = await window.BLENDER.hunt(initAtv, { val: 0 });
 
-    alert(JSON.stringify(bit));
+    //alert(JSON.stringify(bit));
 
     //var bit = await window.BLENDER.hunt(initBld, { val: 0, dat: MQTT, src: local });
 

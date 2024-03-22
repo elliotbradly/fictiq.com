@@ -49,7 +49,7 @@ export const onRequestPost = async (context) => {
       client_id: context.env.VITE_DISCORD_CLIENT_ID,
       client_secret: context.env.DISCORD_CLIENT_SECRET,
       grant_type: "authorization_code",
-      code: req.body.code,
+      code: context.request.body.code,
     }),
   });
 

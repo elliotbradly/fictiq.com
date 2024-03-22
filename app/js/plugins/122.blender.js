@@ -1,9 +1,10 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 window.BLENDER = require("../dist/122.blender/hunt");
 window.BLENDER.ActBld = require("../dist/122.blender/00.blender.unit/blender.action");
+window.BLENDER.ActAtv = require("../dist/122.blender/80.activity.unit/activity.action");
 
 window.BLENDER.MQTT = require("async-mqtt");
-},{"../dist/122.blender/00.blender.unit/blender.action":2,"../dist/122.blender/hunt":60,"async-mqtt":126}],2:[function(require,module,exports){
+},{"../dist/122.blender/00.blender.unit/blender.action":2,"../dist/122.blender/80.activity.unit/activity.action":26,"../dist/122.blender/hunt":60,"async-mqtt":126}],2:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CloseBlender = exports.CLOSE_BLENDER = exports.OpenBlender = exports.OPEN_BLENDER = exports.UpdateBlender = exports.UPDATE_BLENDER = exports.InitBlender = exports.INIT_BLENDER = void 0;
@@ -563,16 +564,49 @@ exports.default = ActivityUnit;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateActivity = exports.initActivity = void 0;
 var discordSdk;
+var auth;
 const initActivity = (cpy, bal, ste) => {
     discordSdk = new embedded_app_sdk_1.DiscordSDK(cpy.clientID);
+    setupDiscordSdk().then(() => {
+        console.log("Discord SDK is authenticated");
+        if (bal.slv != null)
+            bal.slv({ intBit: { idx: "init-activity", val: 1, src: auth } });
+        // We can now make API calls within the scopes we requested in setupDiscordSDK()
+        // Note: the access_token returned is a sensitive secret and should be treated as such
+    });
     async function setupDiscordSdk() {
         await discordSdk.ready();
-    }
-    setupDiscordSdk().then(() => {
         console.log("Discord SDK is ready");
-        if (bal.slv != null)
-            bal.slv({ intBit: { idx: "init-activity", val: 1 } });
-    });
+        // Authorize with Discord Client
+        const { code } = await discordSdk.commands.authorize({
+            client_id: cpy.clientID,
+            response_type: "code",
+            state: "",
+            prompt: "none",
+            scope: [
+                "identify",
+                "guilds",
+            ],
+        });
+        // Retrieve an access_token from your activity's server
+        const response = await fetch("/api/token", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                code,
+            }),
+        });
+        const { access_token } = await response.json();
+        // Authenticate with Discord client (using the access_token)
+        auth = await discordSdk.commands.authenticate({
+            access_token,
+        });
+        if (auth == null) {
+            throw new Error("Authenticate command failed");
+        }
+    }
     return cpy;
 };
 exports.initActivity = initActivity;

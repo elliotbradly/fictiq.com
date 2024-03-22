@@ -55,9 +55,15 @@
 
     var initBld = window.BLENDER.ActBld.INIT_BLENDER;
     var openBld = window.BLENDER.ActBld.OPEN_BLENDER;
+    var initAtv = window.BLENDER.ActAtv.INIT_ACTIVITY;
+
     console.log("act " + initBld);
 
     var bit = await window.BLENDER.hunt(initBld, { val: 0 });
+    var bit = await window.BLENDER.hunt(initAtv, { val: 0 });
+
+    alert(JSON.stringify(bit));
+
     //var bit = await window.BLENDER.hunt(initBld, { val: 0, dat: MQTT, src: local });
 
     //window.BLENDER.hunt(openBld, { idx: "simo-beeing" });

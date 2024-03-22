@@ -40,6 +40,8 @@ export const onRequestGet = async (context) => {
 
 // POST requests to /filename with a JSON-encoded body would return "Hello, <name>!"
 export const onRequestPost = async (context) => {
+  console.log("token " + context.request.body.code);
+
   const response = await fetch(`https://discord.com/api/oauth2/token`, {
     method: "POST",
     headers: {
@@ -53,12 +55,31 @@ export const onRequestPost = async (context) => {
     }),
   });
 
-  // Retrieve the access_token from the response
-  const { access_token } = await response.json();
+  async function gatherResponse(response) {
+    const { headers } = response;
+    const contentType = headers.get("content-type") || "";
+    if (contentType.includes("application/json")) {
+      return JSON.stringify(await response.json());
+    } else if (contentType.includes("application/text")) {
+      return response.text();
+    } else if (contentType.includes("text/html")) {
+      return response.text();
+    } else {
+      return response.text();
+    }
+  }
 
-  // Return the access_token to our client as { access_token: "..."}
-  //res.send({ access_token });
+  const results = await gatherResponse(response);
 
-  //const { name } = await request.json();
-  return new Response({ access_token });
+  console.log(JSON.stringify(results));
+
+  const init = {
+    body: JSON.stringify(body),
+    method: "POST",
+    headers: {
+      "content-type": "application/json;charset=UTF-8",
+    },
+  };
+
+  return new Response(results, init);
 };

@@ -565,12 +565,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateActivity = exports.initActivity = void 0;
 var discordSdk;
 var auth;
+var currentGuild;
 const initActivity = (cpy, bal, ste) => {
     discordSdk = new embedded_app_sdk_1.DiscordSDK(cpy.clientID);
     setupDiscordSdk().then(() => {
         console.log("Discord SDK is authenticated");
         if (bal.slv != null)
-            bal.slv({ intBit: { idx: "init-activity", val: 1, src: auth } });
+            bal.slv({ intBit: { idx: "init-activity", val: 1, src: auth, dat: currentGuild } });
         // We can now make API calls within the scopes we requested in setupDiscordSDK()
         // Note: the access_token returned is a sensitive secret and should be treated as such
     });
@@ -589,7 +590,7 @@ const initActivity = (cpy, bal, ste) => {
             ],
         });
         // Retrieve an access_token from your activity's server
-        const response = await fetch("./api/token", {
+        const response = await fetch("/api/token", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -603,6 +604,15 @@ const initActivity = (cpy, bal, ste) => {
         auth = await discordSdk.commands.authenticate({
             access_token,
         });
+        const guilds = await fetch(`https://discord.com/api/v10/users/@me/guilds`, {
+            headers: {
+                // NOTE: we're using the access_token provided by the "authenticate" command
+                Authorization: `Bearer ${auth.access_token}`,
+                'Content-Type': 'application/json',
+            },
+        }).then((response) => response.json());
+        // 2. Find the current guild's info, including it's "icon"
+        currentGuild = guilds.find((g) => g.id === discordSdk.guildId);
         if (auth == null) {
             throw new Error("Authenticate command failed");
         }

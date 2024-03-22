@@ -62,7 +62,7 @@
     var bit = await window.BLENDER.hunt(initBld, { val: 0 });
     var bit = await window.BLENDER.hunt(initAtv, { val: 0 });
 
-    alert(JSON.stringify(bit));
+    console.log("init activity " + JSON.stringify(bit));
 
     //var bit = await window.BLENDER.hunt(initBld, { val: 0, dat: MQTT, src: local });
 
@@ -91,9 +91,9 @@
       $gameTemp;
       $gameSystem;
 
-      var base = new Sprite(ImageManager.loadPicture("Actor1_1"));
+      //var base = new Sprite(ImageManager.loadPicture("Actor1_1"));
 
-      Graphics.app.stage.children[0].addChild(base);
+      //Graphics.app.stage.children[0].addChild(base);
 
       //$gameTemp._pkdJoyStick.base.addChild(base);
 

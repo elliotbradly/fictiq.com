@@ -8,10 +8,10 @@
  *
  */
 
- // * CHANGELOG ===================
- // v1.0 (14.12.2020)
- //    - Release
- // ===============================
+// * CHANGELOG ===================
+// v1.0 (14.12.2020)
+//    - Release
+// ===============================
 
 /*:
  * @plugindesc (v.1.0)[BASIC] Mobile controls: Joystick and Buttons
@@ -19,7 +19,7 @@
  * @target MZ
  * @url http://kdworkshop.net/plugins/mobile-controls
  *
- * 
+ *
  * @help
  *
  * Add simple mobile controls: joystick for movement and custom screen buttons
@@ -32,49 +32,58 @@
  *  PKD_MobileControls.simulateCancel(); - simualte Esc key press
  *  PKD_MobileControls.simulateJump(); - Jump (1 forward)
  *
- Plugin have commands for control joystick and buttons.You can change visibility during game or enable or disableitems.
+ Plugin have commands for control joystick and buttons.
+You can change visibility during game or enable or disable
+items.
+
  *
-  * This is BASIC plugin version and have some restrictions: *    - Plugin usage allowed only in Non-Commercial project *    - You can create only 5 screen buttons *  *  PRO version of plugin don't have this restrictions!
+  * This is BASIC plugin version and have some restrictions:
+ *    - Plugin usage allowed only in Non-Commercial project
+ *    - You can create only 5 screen buttons
+ *
+ *  PRO version of plugin don't have this restrictions!
+
  *
  * Visit plugin web page for more information, also you can find Demo project.
- * 
+ *
  * If you like my Plugins, want more and offten updates,
  * please support me on Patreon!
- * 
+ *
  * Patreon Page:
  *      https://www.patreon.com/KageDesu
  * YouTube Channel:
  *      https://www.youtube.com/channel/UCA3R61ojF5vp5tGwJ1YqdgQ?
  *
  * You can use this plugin in your game thanks to all my Patrons!
- * 
- * License: Creative Commons 4.0 Attribution, Share Alike, Non-Commercial
- * 
- 
+ *
+ * License: Creative Commons 4.0 Attribution, Share Alike, Non-Commercial
+
+ *
+
  * @param Joystick:s
  * @text Joystick
  * @type struct<LJoystick>
  * @default {"visible:b":"true","joyType:i":"0","position:s":"{\"x\":\"10\",\"y\":\"Graphics.height - 196\"}","is4WayDirection:b":"true","isHideWhenMessage:b":"true","dashingOnEdge:b":"true","extraMoveOutOfEdge:i":"10"}
  * @desc Joystick settings
- * 
+ *
  * @param Buttons:structA
  * @text Buttons
  * @type struct<CUButton>[]
  * @default ["{\"visible:bool\":\"true\",\"position:s\":\"{\\\"x\\\":\\\"Graphics.width - 170\\\",\\\"y\\\":\\\"Graphics.height - 100\\\"}\",\"states:s\":\"{\\\"main\\\":\\\"JButton_A_00\\\",\\\"hover\\\":\\\"JButton_A_01\\\",\\\"disabled\\\":\\\"JButton_A_03\\\"}\",\"isHideWhenMessage:b\":\"true\",\"click:int\":\"0\",\"clickE\":\"PKD_MobileControls.simulateAction()\"}","{\"visible:bool\":\"true\",\"position:s\":\"{\\\"x\\\":\\\"Graphics.width - 120\\\",\\\"y\\\":\\\"Graphics.height - 190\\\"}\",\"states:s\":\"{\\\"main\\\":\\\"JButton_B_00\\\",\\\"hover\\\":\\\"JButton_B_01\\\",\\\"disabled\\\":\\\"JButton_B_03\\\"}\",\"isHideWhenMessage:b\":\"true\",\"click:int\":\"0\",\"clickE\":\"PKD_MobileControls.simulateCancel()\"}"]
  * @desc Screen buttons
- * 
+ *
  * @param MapTouchInput:bool
  * @text Map Touch Movement?
  * @type boolean
  * @default false
  * @desc Allow player movement by map touch (mouse click on map)?
- * 
+ *
  * @param 8wayMovement:bool
  * @text Diagonal movement?
  * @type boolean
  * @default false
  * @desc Simple 8-way diagonal movement, works with Joystick, don't works with DPad
- * 
+ *
  * @param diagonalEventStart:bool
  * @parent 8wayMovement:bool
  * @text Diagonal Event Touch
@@ -86,58 +95,58 @@
  * @command JoyStickState
  * @text Joystick State
  * @desc Deactivate or activate joystick
- * 
+ *
  * @arg active
  * @text Is Disabled?
  * @type boolean
  * @default false
- * 
- * 
+ *
+ *
  * @command JoyStickVisible
  * @text Joystick Visibility
  * @desc Hide or show joystick
- * 
+ *
  * @arg hidden
  * @text Is Hidden?
  * @type boolean
  * @default false
- * 
- * 
+ *
+ *
  * @command ButtonState
  * @text Button State
  * @desc Deactivate or activate any button
- * 
+ *
  * @arg buttonId
  * @text Index
  * @type number
  * @min 1
  * @default 1
  * @desc Button index (from 1) in Plugin Parameter Buttons
- * 
+ *
  * @arg active
  * @text Is Disabled?
  * @type boolean
  * @default false
- * 
- * 
- * 
- * 
+ *
+ *
+ *
+ *
  * @command ButtonVisible
  * @text Button Visibility
  * @desc Hide or Show any button
- * 
+ *
  * @arg buttonId
  * @text Index
  * @type number
  * @min 1
  * @default 1
  * @desc Button index (from 1) in Plugin Parameter Buttons
- * 
+ *
  * @arg hidden
  * @text Is Hidden?
  * @type boolean
  * @default false
- * 
+ *
 
 
  */
@@ -203,7 +212,7 @@
  * @type boolean
  * @default true
  * @desc Will be this button visible?
- 
+
     @param position:s
     @text Position
     @type struct<XY2>
@@ -234,7 +243,7 @@
  * @param clickE
  * @text Script Call On Click
  * @desc Script call when button is clicked, override CE On Click!
- * @default 
+ * @default
  *
 */
 
@@ -246,7 +255,7 @@
  * @require 1
  * @default
  * @desc Button main image, required!
- * 
+ *
  * @param hover
  * @text Hover Image
  * @type file
@@ -254,7 +263,7 @@
  * @require 1
  * @default
  * @desc Button hover image (when you hover by mouse or press button), required!
- *  
+ *
  * @param disabled
  * @text Disabled Image
  * @type file
@@ -282,9 +291,8 @@ Imported.PKD_MobileControls = true;
 
 var PKD_MobileControls = {};
 PKD_MobileControls.link = function (library) {
-    this[library.name] = library;
+  this[library.name] = library;
 };
-
 
 // Generated by CoffeeScript 2.5.1
 // ==========================================================================
@@ -300,23 +308,23 @@ var KDCore;
 
 KDCore = KDCore || {};
 
-KDCore.Version = '2.4.3';
+KDCore.Version = "2.4.3";
 
 KDCore.LIBS = KDCore.LIBS || {};
 
-KDCore.register = function(library) {
-  return this.LIBS[library.name] = library;
+KDCore.register = function (library) {
+  return (this.LIBS[library.name] = library);
 };
 
 window.KDCore = KDCore;
 
 console.warn("XDev KDCore is loaded " + KDCore.Version);
 
-(function() {
+(function () {
   var BitmapSrc, Color, DevLog, Point, SDK, __TMP_LOGS__, ___Sprite_alias_Move_KDCORE_2, __alias_Bitmap_fillAll, i, j, l, m;
   // * Array Extension
   //------------------------------------------------------------------------------
-  Array.prototype.delete = function() {
+  Array.prototype.delete = function () {
     var L, a, ax, what;
     what = void 0;
     a = arguments;
@@ -330,25 +338,25 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
     }
     return this;
   };
-  Array.prototype.max = function() {
+  Array.prototype.max = function () {
     return Math.max.apply(null, this);
   };
-  Array.prototype.min = function() {
+  Array.prototype.min = function () {
     return Math.min.apply(null, this);
   };
-  Array.prototype.sample = function() {
+  Array.prototype.sample = function () {
     if (this.length === 0) {
       return [];
     }
     return this[SDK.rand(0, this.length - 1)];
   };
-  Array.prototype.first = function() {
+  Array.prototype.first = function () {
     return this[0];
   };
-  Array.prototype.last = function() {
+  Array.prototype.last = function () {
     return this[this.length - 1];
   };
-  Array.prototype.shuffle = function() {
+  Array.prototype.shuffle = function () {
     var k, n, v;
     n = this.length;
     while (n > 1) {
@@ -359,85 +367,85 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
       this[n] = v;
     }
   };
-  Array.prototype.count = function() {
+  Array.prototype.count = function () {
     return this.length;
   };
-  Array.prototype.isEmpty = function() {
+  Array.prototype.isEmpty = function () {
     return this.length === 0;
   };
   // * Number Extension
   //------------------------------------------------------------------------------
-  Number.prototype.do = function(method) {
+  Number.prototype.do = function (method) {
     return SDK.times(this, method);
   };
-  Number.prototype.clamp = function(min, max) {
+  Number.prototype.clamp = function (min, max) {
     return Math.min(Math.max(this, min), max);
   };
-  Number.prototype.any = function(number) {
-    return (number != null) && number > 0;
+  Number.prototype.any = function (number) {
+    return number != null && number > 0;
   };
   // * String Extension
   //------------------------------------------------------------------------------
-  String.prototype.toCss = function() {
+  String.prototype.toCss = function () {
     return KDCore.Color.FromHex(this).CSS;
   };
-  String.prototype.toCSS = function() {
+  String.prototype.toCSS = function () {
     return this.toCss();
   };
-  String.prototype.isEmpty = function() {
+  String.prototype.isEmpty = function () {
     return this.length === 0 || !this.trim();
   };
-  String.isNullOrEmpty = function(str) {
-    return (str == null) || str.isEmpty();
+  String.isNullOrEmpty = function (str) {
+    return str == null || str.isEmpty();
   };
-  String.any = function(str) {
+  String.any = function (str) {
     return !String.isNullOrEmpty(str);
   };
   // * Sprite Extension
   //------------------------------------------------------------------------------
-  Sprite.prototype.moveToCenter = function(dx = 0, dy = 0) {
+  Sprite.prototype.moveToCenter = function (dx = 0, dy = 0) {
     return this.move(-this.bitmap.width / 2 + dx, -this.bitmap.height / 2 + dy);
   };
-  Sprite.prototype.setStaticAnchor = function(floatX = 1, floatY = 1) {
+  Sprite.prototype.setStaticAnchor = function (floatX = 1, floatY = 1) {
     this.x -= Math.round(this.width * floatX);
     this.y -= Math.round(this.height * floatY);
   };
-  Sprite.prototype.moveToParentCenter = function() {
+  Sprite.prototype.moveToParentCenter = function () {
     if (!this.parent) {
       return;
     }
     return this.move(this.parent.width / 2, this.parent.height / 2);
   };
   ___Sprite_alias_Move_KDCORE_2 = Sprite.prototype.move;
-  Sprite.prototype.move = function(x, y) {
+  Sprite.prototype.move = function (x, y) {
     if (x instanceof Array) {
       return ___Sprite_alias_Move_KDCORE_2.call(this, x[0], x[1]);
-    } else if (x instanceof KDCore.Point || ((x != null ? x.x : void 0) != null)) {
+    } else if (x instanceof KDCore.Point || (x != null ? x.x : void 0) != null) {
       return ___Sprite_alias_Move_KDCORE_2.call(this, x.x, x.y);
-    } else if ((x != null) && (x._x != null)) {
+    } else if (x != null && x._x != null) {
       return ___Sprite_alias_Move_KDCORE_2.call(this, x._x, x._y);
     } else {
       return ___Sprite_alias_Move_KDCORE_2.call(this, x, y);
     }
   };
-  Sprite.prototype.isContainsPoint = function(point) {
+  Sprite.prototype.isContainsPoint = function (point) {
     var rect, rx, ry;
     if (this.width === 0 || this.height === 0) {
       return false;
     }
-    rx = KDCore.SDK.toGlobalCoord(this, 'x');
-    ry = KDCore.SDK.toGlobalCoord(this, 'y');
+    rx = KDCore.SDK.toGlobalCoord(this, "x");
+    ry = KDCore.SDK.toGlobalCoord(this, "y");
     rect = new PIXI.Rectangle(rx, ry, this.width, this.height);
     return rect.contains(point.x, point.y);
   };
-  Sprite.prototype.fillAll = function(color) {
+  Sprite.prototype.fillAll = function (color) {
     if (color != null) {
       return this.bitmap.fillAll(color);
     } else {
       return this.fillAll(KDCore.Color.WHITE);
     }
   };
-  Sprite.prototype.removeFromParent = function() {
+  Sprite.prototype.removeFromParent = function () {
     if (this.parent != null) {
       return this.parent.removeChild(this);
     }
@@ -445,14 +453,14 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
   // * Bitmap Extension
   //------------------------------------------------------------------------------
   __alias_Bitmap_fillAll = Bitmap.prototype.fillAll;
-  Bitmap.prototype.fillAll = function(color) {
+  Bitmap.prototype.fillAll = function (color) {
     if (color instanceof KDCore.Color) {
       return this.fillRect(0, 0, this.width, this.height, color.CSS);
     } else {
       return __alias_Bitmap_fillAll.call(this, color);
     }
   };
-  Bitmap.prototype.drawIcon = function(x, y, icon, size = 32) {
+  Bitmap.prototype.drawIcon = function (x, y, icon, size = 32) {
     var bitmap;
     bitmap = null;
     if (icon instanceof Bitmap) {
@@ -462,7 +470,7 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
     }
     return this.drawOnMe(bitmap, x, y, size, size);
   };
-  Bitmap.prototype.drawOnMe = function(bitmap, x = 0, y = 0, sw = 0, sh = 0) {
+  Bitmap.prototype.drawOnMe = function (bitmap, x = 0, y = 0, sw = 0, sh = 0) {
     if (sw <= 0) {
       sw = bitmap.width;
     }
@@ -471,15 +479,15 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
     }
     this.blt(bitmap, 0, 0, bitmap.width, bitmap.height, x, y, sw, sh);
   };
-  Bitmap.prototype.drawInMe = function(bitmap) {
+  Bitmap.prototype.drawInMe = function (bitmap) {
     return Bitmap.prototype.drawOnMe(bitmap, 0, 0, this.width, this.height);
   };
-  Bitmap.prototype.drawTextFull = function(text, position = 'center') {
+  Bitmap.prototype.drawTextFull = function (text, position = "center") {
     return this.drawText(text, 0, 0, this.width, this.height, position);
   };
   // * String Extenstion
   //------------------------------------------------------------------------------
-  String.prototype.replaceAll = function(search, replacement) {
+  String.prototype.replaceAll = function (search, replacement) {
     var target;
     target = this;
     return target.split(search).join(replacement);
@@ -489,24 +497,24 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
 
   //TODO: Gamepad support
   Input.KeyMapperPKD = {};
-//Numbers
+  //Numbers
   for (i = j = 48; j <= 57; i = ++j) {
     Input.KeyMapperPKD[i] = String.fromCharCode(i);
   }
-//Letters Upper
+  //Letters Upper
   for (i = l = 65; l <= 90; i = ++l) {
     Input.KeyMapperPKD[i] = String.fromCharCode(i).toLowerCase();
   }
-//Letters Lower (for key code events)
+  //Letters Lower (for key code events)
   for (i = m = 97; m <= 122; i = ++m) {
     Input.KeyMapperPKD[i] = String.fromCharCode(i).toLowerCase();
   }
-  (function() {
+  (function () {
     var _input_onKeyDown, _input_onKeyUp;
-    
+
     //@[ALIAS]
     _input_onKeyDown = Input._onKeyDown;
-    Input._onKeyDown = function(event) {
+    Input._onKeyDown = function (event) {
       _input_onKeyDown.call(this, event);
       if (Input.keyMapper[event.keyCode]) {
         return;
@@ -515,7 +523,7 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
     };
     //@[ALIAS]
     _input_onKeyUp = Input._onKeyUp;
-    Input._onKeyUp = function(event) {
+    Input._onKeyUp = function (event) {
       _input_onKeyUp.call(this, event);
       if (Input.keyMapper[event.keyCode]) {
         return;
@@ -523,43 +531,43 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
       Input._setStateWithMapperPKD(event.keyCode, false);
     };
     //?NEW
-    Input._setStateWithMapperPKD = function(keyCode, state = true) {
+    Input._setStateWithMapperPKD = function (keyCode, state = true) {
       var symbol;
       symbol = Input.KeyMapperPKD[keyCode];
       if (symbol != null) {
-        return this._currentState[symbol] = state;
+        return (this._currentState[symbol] = state);
       }
     };
     //?NEW
-    Input.isCancel = function() {
-      return Input.isTriggered('cancel') || TouchInput.isCancelled();
+    Input.isCancel = function () {
+      return Input.isTriggered("cancel") || TouchInput.isCancelled();
     };
     //?NEW
-    TouchInput.toPoint = function() {
+    TouchInput.toPoint = function () {
       return new KDCore.Point(TouchInput.x, TouchInput.y);
     };
   })();
   // * SDK
   //------------------------------------------------------------------------------
-  SDK = function() {
-    throw new Error('This is a static class');
+  SDK = function () {
+    throw new Error("This is a static class");
   };
-  SDK.rand = function(min, max) {
+  SDK.rand = function (min, max) {
     return Math.round(Math.random() * (max - min)) + min;
   };
-  SDK.setConstantToObject = function(object, constantName, constantValue) {
+  SDK.setConstantToObject = function (object, constantName, constantValue) {
     object[constantName] = constantValue;
-    if (typeof object[constantName] === 'object') {
+    if (typeof object[constantName] === "object") {
       Object.freeze(object[constantName]);
     }
     Object.defineProperty(object, constantName, {
-      writable: false
+      writable: false,
     });
   };
-  SDK.convertBitmapToBase64Data = function(bitmap) {
-    return bitmap._canvas.toDataURL('image/png');
+  SDK.convertBitmapToBase64Data = function (bitmap) {
+    return bitmap._canvas.toDataURL("image/png");
   };
-  SDK.times = function(times, method) {
+  SDK.times = function (times, method) {
     var results;
     i = 0;
     results = [];
@@ -569,7 +577,7 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
     }
     return results;
   };
-  SDK.toGlobalCoord = function(layer, coordSymbol = 'x') {
+  SDK.toGlobalCoord = function (layer, coordSymbol = "x") {
     var node, t;
     t = layer[coordSymbol];
     node = layer;
@@ -577,35 +585,35 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
       t -= node[coordSymbol];
       node = node.parent;
     }
-    return (t * -1) + layer[coordSymbol];
+    return t * -1 + layer[coordSymbol];
   };
-  SDK.canvasToLocalX = function(layer, x) {
+  SDK.canvasToLocalX = function (layer, x) {
     while (layer) {
       x -= layer.x;
       layer = layer.parent;
     }
     return x;
   };
-  SDK.canvasToLocalY = function(layer, y) {
+  SDK.canvasToLocalY = function (layer, y) {
     while (layer) {
       y -= layer.y;
       layer = layer.parent;
     }
     return y;
   };
-  SDK.isInt = function(n) {
+  SDK.isInt = function (n) {
     return Number(n) === n && n % 1 === 0;
   };
-  SDK.isFloat = function(n) {
+  SDK.isFloat = function (n) {
     return Number(n) === n && n % 1 !== 0;
   };
-  SDK.checkSwitch = function(switchValue) {
-    if (switchValue === 'A' || switchValue === 'B' || switchValue === 'C' || switchValue === 'D') {
+  SDK.checkSwitch = function (switchValue) {
+    if (switchValue === "A" || switchValue === "B" || switchValue === "C" || switchValue === "D") {
       return true;
     }
     return false;
   };
-  SDK.toNumber = function(string, none = 0) {
+  SDK.toNumber = function (string, none = 0) {
     var number;
     if (string == null) {
       return none;
@@ -635,14 +643,14 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
         if (bf >= 0) {
           p = Math.abs(bf - lightLevel) / lightLevel;
         }
-        newColor = this.ARR.map(function(c) {
-          return c - (p * c);
+        newColor = this.ARR.map(function (c) {
+          return c - p * c;
         });
       } else {
         if (bf >= 0) {
           p = (lightLevel - bf) / (255 - bf);
         }
-        newColor = this.ARR.map(function(c) {
+        newColor = this.ARR.map(function (c) {
           return [(255 - c) * p + c, 255].min();
         });
       }
@@ -672,14 +680,14 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
       r = Math.floor(this.r).toString(16).padZero(2);
       g = Math.floor(this.g).toString(16).padZero(2);
       b = Math.floor(this.b).toString(16).padZero(2);
-      return this._colorHex = '#' + r + g + b;
+      return (this._colorHex = "#" + r + g + b);
     }
 
     toArray() {
       if (this._colorArray != null) {
         return this._colorArray;
       }
-      return this._colorArray = [this.r, this.g, this.b, this.a];
+      return (this._colorArray = [this.r, this.g, this.b, this.a]);
     }
 
     toCSS() {
@@ -691,7 +699,7 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
       ng = Math.round(this.g);
       nb = Math.round(this.b);
       na = this.a / 255;
-      return this._colorCss = `rgba(${nr},${ng},${nb},${na})`;
+      return (this._colorCss = `rgba(${nr},${ng},${nb},${na})`);
     }
 
     toNumber() {
@@ -714,7 +722,7 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
         color = {
           r: parseInt(result[1], 16),
           g: parseInt(result[2], 16),
-          b: parseInt(result[3], 16)
+          b: parseInt(result[3], 16),
         };
       }
       if (color != null) {
@@ -723,71 +731,69 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
         return Color.NONE;
       }
     }
-
   };
   Object.defineProperties(Color.prototype, {
     R: {
-      get: function() {
+      get: function () {
         return this.r;
       },
-      configurable: true
+      configurable: true,
     },
     G: {
-      get: function() {
+      get: function () {
         return this.g;
       },
-      configurable: true
+      configurable: true,
     },
     B: {
-      get: function() {
+      get: function () {
         return this.b;
       },
-      configurable: true
+      configurable: true,
     },
     A: {
-      get: function() {
+      get: function () {
         return this.a;
       },
-      configurable: true
+      configurable: true,
     },
     ARR: {
-      get: function() {
+      get: function () {
         return this.toArray();
       },
-      configurable: true
+      configurable: true,
     },
     CSS: {
-      get: function() {
+      get: function () {
         return this.toCSS();
       },
-      configurable: true
+      configurable: true,
     },
     HEX: {
-      get: function() {
+      get: function () {
         return this.toHex();
       },
-      configurable: true
+      configurable: true,
     },
     OX: {
-      get: function() {
+      get: function () {
         return this.toNumber();
       },
-      configurable: true
-    }
+      configurable: true,
+    },
   });
-  Color.AddConstantColor('NONE', new Color(0, 0, 0, 0));
-  Color.AddConstantColor('BLACK', new Color(0, 0, 0, 255));
-  Color.AddConstantColor('WHITE', new Color(255, 255, 255, 255));
-  Color.AddConstantColor('RED', new Color(255, 0, 0, 255));
-  Color.AddConstantColor('GREEN', new Color(0, 255, 0, 255));
-  Color.AddConstantColor('BLUE', new Color(0, 0, 255, 255));
-  Color.AddConstantColor('AQUA', new Color(128, 255, 255, 255));
-  Color.AddConstantColor('MAGENTA', new Color(128, 0, 128, 255));
-  Color.AddConstantColor('YELLOW', new Color(255, 255, 0, 255));
-  Color.AddConstantColor('ORANGE', new Color(255, 128, 0, 255));
-  BitmapSrc = (function() {
-    
-      //BitmapSrc
+  Color.AddConstantColor("NONE", new Color(0, 0, 0, 0));
+  Color.AddConstantColor("BLACK", new Color(0, 0, 0, 255));
+  Color.AddConstantColor("WHITE", new Color(255, 255, 255, 255));
+  Color.AddConstantColor("RED", new Color(255, 0, 0, 255));
+  Color.AddConstantColor("GREEN", new Color(0, 255, 0, 255));
+  Color.AddConstantColor("BLUE", new Color(0, 0, 255, 255));
+  Color.AddConstantColor("AQUA", new Color(128, 255, 255, 255));
+  Color.AddConstantColor("MAGENTA", new Color(128, 0, 128, 255));
+  Color.AddConstantColor("YELLOW", new Color(255, 255, 0, 255));
+  Color.AddConstantColor("ORANGE", new Color(255, 128, 0, 255));
+  BitmapSrc = function () {
+    //BitmapSrc
     //------------------------------------------------------------------------------
     class BitmapSrc {
       constructor() {
@@ -798,7 +804,7 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
         var bs, icon_bitmap, iconset, ph, pw, sx, sy;
         bs = new BitmapSrc();
         if (BitmapSrc.CACHE[iconIndex] == null) {
-          iconset = ImageManager.loadSystem('IconSet');
+          iconset = ImageManager.loadSystem("IconSet");
           if (KDCore.isMV()) {
             pw = Window_Base._iconWidth;
             ph = Window_Base._iconHeight;
@@ -806,10 +812,10 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
             pw = ImageManager.iconWidth;
             ph = ImageManager.iconHeight;
           }
-          sx = iconIndex % 16 * pw;
+          sx = (iconIndex % 16) * pw;
           sy = Math.floor(iconIndex / 16) * ph;
           icon_bitmap = new Bitmap(pw, ph);
-          icon_bitmap.addLoadListener(function() {
+          icon_bitmap.addLoadListener(function () {
             icon_bitmap.blt(iconset, sx, sy, pw, ph, 0, 0);
           });
           BitmapSrc.CACHE[iconIndex] = icon_bitmap;
@@ -851,21 +857,19 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
         }
         return bs;
       }
-
-    };
+    }
 
     BitmapSrc.CACHE = {};
 
     return BitmapSrc;
-
-  }).call(this);
+  }.call(this);
   // * DevLog
   //------------------------------------------------------------------------------
   __TMP_LOGS__ = [];
   DevLog = class DevLog {
     constructor(prefix = "") {
       this.prefix = prefix;
-      this._isShow = typeof DEV !== 'undefined';
+      this._isShow = typeof DEV !== "undefined";
       this._color = Color.BLACK;
       this._backColor = Color.WHITE;
       __TMP_LOGS__.push(this);
@@ -948,7 +952,7 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
 
     _printTextWithColors(text) {
       var args;
-      args = ['%c' + text, `color: ${this._color.HEX} ; background: ${this._backColor.HEX};`];
+      args = ["%c" + text, `color: ${this._color.HEX} ; background: ${this._backColor.HEX};`];
       return window.console.log.apply(console, args);
     }
 
@@ -960,15 +964,14 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
     }
 
     static EnableAllLogs() {
-      return __TMP_LOGS__.forEach(function(log) {
+      return __TMP_LOGS__.forEach(function (log) {
         return log.on();
       });
     }
-
   };
   // * ParametersManager
   //------------------------------------------------------------------------------
-  PluginManager.getPluginParametersByRoot = function(rootName) {
+  PluginManager.getPluginParametersByRoot = function (rootName) {
     var pluginParameters, property;
     for (property in this._parameters) {
       if (this._parameters.hasOwnProperty(property)) {
@@ -980,7 +983,7 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
     }
     return PluginManager.parameters(rootName);
   };
-  PluginManager.isPluginParametersContentKey = function(pluginParameters, key) {
+  PluginManager.isPluginParametersContentKey = function (pluginParameters, key) {
     return pluginParameters[key] != null;
   };
   //@[AUTO EXTEND]
@@ -993,7 +996,7 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
     }
 
     isLoaded() {
-      return (this._parameters != null) && this._parameters.hasOwnProperty(this.pluginName);
+      return this._parameters != null && this._parameters.hasOwnProperty(this.pluginName);
     }
 
     isHasParameter(name) {
@@ -1007,27 +1010,27 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
     convertField(object, fieldName) {
       var e;
       try {
-        object[fieldName] = JSON.parse(object[fieldName] || 'false');
+        object[fieldName] = JSON.parse(object[fieldName] || "false");
       } catch (error1) {
         e = error1;
-        console.error('Error while convert field ' + e.name);
+        console.error("Error while convert field " + e.name);
         object[fieldName] = false;
       }
       return object;
     }
 
     convertImage(object, fieldName) {
-      return object[fieldName] = this.loadImage(object[fieldName]);
+      return (object[fieldName] = this.loadImage(object[fieldName]));
     }
 
     loadImage(filename, smooth) {
       var e, path;
       try {
         if (filename) {
-          path = filename.split('/');
+          path = filename.split("/");
           filename = path.last();
-          path = path.first() + '/';
-          return ImageManager.loadBitmap('img/' + path, filename, 0, smooth || true);
+          path = path.first() + "/";
+          return ImageManager.loadBitmap("img/" + path, filename, 0, smooth || true);
         } else {
           return ImageManager.loadEmptyBitmap();
         }
@@ -1054,7 +1057,7 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
     }
 
     putInCache(name, object) {
-      return this._cache[name] = object;
+      return (this._cache[name] = object);
     }
 
     getFromCache(name) {
@@ -1072,7 +1075,7 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
 
     getObject(name) {
       if (this.isHasParameter(name)) {
-        return JSON.parse(this.getString(name) || '{}');
+        return JSON.parse(this.getString(name) || "{}");
       } else {
         return {};
       }
@@ -1111,27 +1114,26 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
     }
 
     getBooleanFromCache(name) {
-      return this.getFromCacheOrInit(name, function() {
+      return this.getFromCacheOrInit(name, function () {
         return this.getBoolean(name);
       });
     }
 
     getNumberFromCache(name) {
-      return this.getFromCacheOrInit(name, function() {
+      return this.getFromCacheOrInit(name, function () {
         return this.getNumber(name);
       });
     }
 
     getStringFromCache(name) {
-      return this.getFromCacheOrInit(name, function() {
+      return this.getFromCacheOrInit(name, function () {
         return this.getString(name);
       });
     }
-
   };
   // * ParamLoader (ParametersManager alternative)
 
-    //@[AUTO EXTEND]
+  //@[AUTO EXTEND]
   KDCore.ParamLoader = class ParamLoader {
     constructor(pluginName) {
       this.pluginName = pluginName;
@@ -1161,7 +1163,7 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
 
     // * Проверка, загружены ли параметры плагина
     isLoaded() {
-      return (this.paramsRaw != null) && this.paramsRaw.hasOwnProperty(this.pluginName);
+      return this.paramsRaw != null && this.paramsRaw.hasOwnProperty(this.pluginName);
     }
 
     // * Имя параметра без ключа
@@ -1169,8 +1171,7 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
       return this.params[paramName] != null;
     }
 
-    
-      // * Возвращает значение параметра (def - по умолчанию, если не найден)
+    // * Возвращает значение параметра (def - по умолчанию, если не найден)
     getParam(paramName, def) {
       if (this.isHasParameter(paramName)) {
         return this.params[paramName];
@@ -1243,9 +1244,8 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
         return item;
       }
     }
-
   };
-  Point = (function() {
+  Point = function () {
     // * Point
     //------------------------------------------------------------------------------
     class Point {
@@ -1302,8 +1302,8 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
 
       mapPointOnScreen() {
         var nx, ny;
-        nx = (this._x * $gameMap.tileWidth()) - ($gameMap.displayX() * $gameMap.tileWidth());
-        ny = (this._y * $gameMap.tileHeight()) - ($gameMap.displayY() * $gameMap.tileHeight());
+        nx = this._x * $gameMap.tileWidth() - $gameMap.displayX() * $gameMap.tileWidth();
+        ny = this._y * $gameMap.tileHeight() - $gameMap.displayY() * $gameMap.tileHeight();
         return new Point(nx, ny);
       }
 
@@ -1324,55 +1324,53 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
         }
         return Point._emptyPoint;
       }
-
-    };
+    }
 
     Object.defineProperties(Point.prototype, {
       x: {
-        get: function() {
+        get: function () {
           return this._x;
         },
-        configurable: true
+        configurable: true,
       },
       y: {
-        get: function() {
+        get: function () {
           return this._y;
         },
-        configurable: true
-      }
+        configurable: true,
+      },
     });
 
     Object.defineProperties(Point, {
       Empty: {
-        get: function() {
+        get: function () {
           return Point._getEmpty();
         },
-        configurable: false
-      }
+        configurable: false,
+      },
     });
 
-    Array.prototype.toPoint = function() {
+    Array.prototype.toPoint = function () {
       return new Point(this[0], this[1]);
     };
 
-    Sprite.prototype.toPoint = function() {
+    Sprite.prototype.toPoint = function () {
       return new Point(this.x, this.y);
     };
 
-    Game_CharacterBase.prototype.toPoint = function() {
+    Game_CharacterBase.prototype.toPoint = function () {
       return new Point(this.x, this.y);
     };
 
     return Point;
-
-  }).call(this);
+  }.call(this);
   // * Utils
   //------------------------------------------------------------------------------
   KDCore.Utils = {};
-  (function() {
+  (function () {
     var _;
     _ = KDCore.Utils;
-    _.getJDataById = function(id, source) {
+    _.getJDataById = function (id, source) {
       var d, len, o;
       for (o = 0, len = source.length; o < len; o++) {
         d = source[o];
@@ -1382,16 +1380,16 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
       }
       return null;
     };
-    _.hasMeta = function(symbol, obj) {
-      return (obj.meta != null) && (obj.meta[symbol] != null);
+    _.hasMeta = function (symbol, obj) {
+      return obj.meta != null && obj.meta[symbol] != null;
     };
-    _.getValueFromMeta = function(symbol, obj) {
+    _.getValueFromMeta = function (symbol, obj) {
       if (!_.hasMeta(symbol, obj)) {
         return null;
       }
       return obj.meta[symbol];
     };
-    _.getNumberFromMeta = function(symbol, obj) {
+    _.getNumberFromMeta = function (symbol, obj) {
       var value;
       if (!_.hasMeta(symbol, obj)) {
         return null;
@@ -1403,21 +1401,21 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
       }
       return value;
     };
-    _.isSceneMap = function() {
+    _.isSceneMap = function () {
       try {
         return SceneManager._scene instanceof Scene_Map;
       } catch (error1) {
         return false;
       }
     };
-    _.isSceneBattle = function() {
+    _.isSceneBattle = function () {
       try {
         return SceneManager._scene instanceof Scene_Battle;
       } catch (error1) {
         return false;
       }
     };
-    _.getEventCommentValue = function(commentCode, list) {
+    _.getEventCommentValue = function (commentCode, list) {
       var comment, e, item;
       try {
         if (list && list.length > 1) {
@@ -1441,10 +1439,10 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
       }
       return null;
     };
-    _.getPositionPointFromJSON = function(jsonSettings) {
+    _.getPositionPointFromJSON = function (jsonSettings) {
       return _.convertPositionPointFromJSON(jsonSettings.position);
     };
-    _.convertPositionPointFromJSON = function(position) {
+    _.convertPositionPointFromJSON = function (position) {
       var e, x, y;
       try {
         x = position[0];
@@ -1458,36 +1456,36 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
         return new KDCore.Point(x, y);
       } catch (error1) {
         e = error1;
-        console.warn('Utils.getPositionPointFromJSON', e);
+        console.warn("Utils.getPositionPointFromJSON", e);
         return KDCore.Point.Empty;
       }
     };
-    _.jsonPos = function(jsonPosition) {
+    _.jsonPos = function (jsonPosition) {
       return _.convertPositionPointFromJSON(jsonPosition);
     };
-    _.jsonPosXY = function(jsonPosition) {
+    _.jsonPosXY = function (jsonPosition) {
       var e, x, y;
       try {
-        ({x, y} = jsonPosition);
+        ({ x, y } = jsonPosition);
         return new KDCore.Point(eval(x), eval(y));
       } catch (error1) {
         e = error1;
-        console.warn('Utils.jsonPosXY', e);
+        console.warn("Utils.jsonPosXY", e);
         return KDCore.Point.Empty;
       }
     };
-    _.getVar = function(id) {
+    _.getVar = function (id) {
       return $gameVariables.value(id);
     };
-    _.setVar = function(id, value) {
+    _.setVar = function (id, value) {
       return $gameVariables.setValue(id, value);
     };
-    _.addToVar = function(id, value) {
+    _.addToVar = function (id, value) {
       var prevVal;
       prevVal = _.getVar(id);
       return _.setVar(id, prevVal + value);
     };
-    _.playSE = function(seFileName, pitch = 100, volume = 100) {
+    _.playSE = function (seFileName, pitch = 100, volume = 100) {
       var sound;
       if (seFileName == null) {
         return;
@@ -1499,11 +1497,11 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
         name: seFileName,
         pan: 0,
         pitch: pitch,
-        volume: volume
+        volume: volume,
       };
       AudioManager.playStaticSe(sound);
     };
-    _.getItemTypeId = function(item) {
+    _.getItemTypeId = function (item) {
       if (DataManager.isWeapon(item)) {
         return 1;
       } else if (DataManager.isArmor(item)) {
@@ -1511,12 +1509,12 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
       }
       return 0;
     };
-    _.getItemByType = function(itemId, typeId) {
+    _.getItemByType = function (itemId, typeId) {
       var data;
       data = [$dataItems, $dataWeapons, $dataArmors];
       return data[typeId][itemId];
     };
-    _.loadFont = function(name) {
+    _.loadFont = function (name) {
       if (!KDCore.isMZ()) {
         return;
       }
@@ -1528,11 +1526,11 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
       }
       FontManager.load(name, name + ".ttf");
     };
-    _.convertTimeShort = function(seconds) {
+    _.convertTimeShort = function (seconds) {
       var e;
       try {
         if (seconds > 59) {
-          return Math.floor(seconds / 60) + 'm';
+          return Math.floor(seconds / 60) + "m";
         } else {
           return seconds;
         }
@@ -1542,9 +1540,9 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
         return seconds;
       }
     };
-    _.isPointInScreen = function(point, margin = 10) {
+    _.isPointInScreen = function (point, margin = 10) {
       var maxH, maxW, screenMargin, x, y;
-      ({x, y} = point);
+      ({ x, y } = point);
       maxW = Graphics.width;
       maxH = Graphics.height;
       // * Граница от краёв экрана
@@ -1555,10 +1553,10 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
       if (y < screenMargin) {
         return false;
       }
-      if (x > (maxW - screenMargin)) {
+      if (x > maxW - screenMargin) {
         return false;
       }
-      if (y > (maxH - screenMargin)) {
+      if (y > maxH - screenMargin) {
         return false;
       }
       return true;
@@ -1566,16 +1564,16 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
     // * Ассинхронная загрузка изображения, возвращает bitmap, когда загружен
     // * Пример использования loadImageAsync(a, b).then(метод)
     // в метод будет передан bitmap первым аргументом
-    _.loadImageAsync = async function(folder, filename) {
+    _.loadImageAsync = async function (folder, filename) {
       var promise;
-      promise = new Promise(function(resolve, reject) {
+      promise = new Promise(function (resolve, reject) {
         var b;
         b = ImageManager.loadBitmap("img/" + folder + "/", filename);
-        return b.addLoadListener(function() {
+        return b.addLoadListener(function () {
           return resolve(b);
         });
       });
-      return (await promise);
+      return await promise;
     };
   })();
   // * TimedUpdate
@@ -1603,7 +1601,7 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
     }
 
     once() {
-      return this._once = true;
+      return (this._once = true);
     }
 
     onUpdate(method1) {
@@ -1611,7 +1609,7 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
     }
 
     stop() {
-      return this.interval = null;
+      return (this.interval = null);
     }
 
     isAlive() {
@@ -1625,7 +1623,7 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
         return;
       }
       value = SDK.rand(min, max);
-      return this.interval += value;
+      return (this.interval += value);
     }
 
     call() {
@@ -1633,7 +1631,6 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
         return this.method();
       }
     }
-
   };
   // * Button (Sprite_XButton)
   //------------------------------------------------------------------------------
@@ -1670,22 +1667,22 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
     }
 
     activateSlowUpdate() {
-      return this._slowUpdateActive = true;
+      return (this._slowUpdateActive = true);
     }
 
     setLocalMode() {
       this._realX = this.x;
       this._realY = this.y;
-      return this._localMode = true;
+      return (this._localMode = true);
     }
 
     setAlphaMode() {
-      return this._checkAlpha = true;
+      return (this._checkAlpha = true);
     }
 
     // * above, below
     setTextPosition(position) {
-      return this._textPosition = position;
+      return (this._textPosition = position);
     }
 
     setHelpText(text, size) {
@@ -1693,11 +1690,11 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
     }
 
     setInfoData(data) {
-      return this._infoData = data;
+      return (this._infoData = data);
     }
 
     setOverrideMode() {
-      return this._override = true;
+      return (this._override = true);
     }
 
     isOverride() {
@@ -1721,7 +1718,7 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
     }
 
     clearClickHandlers() {
-      return this._clickHandlers = [];
+      return (this._clickHandlers = []);
     }
 
     isLocalMode() {
@@ -1729,33 +1726,34 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
     }
 
     setCondition(method) {
-      return this._condition = method;
+      return (this._condition = method);
     }
 
     setConditionForDisable(method) {
-      return this._condition2 = method;
+      return (this._condition2 = method);
     }
 
     getInfoData() {
       return this._infoData;
     }
 
-    simulateClick() { //?NEW
+    simulateClick() {
+      //?NEW
       return this.applyClickedState();
     }
 
-    simulateClickManual() { //?NEW
+    simulateClickManual() {
+      //?NEW
       this.simulateClick();
-      return setTimeout((() => {
+      return setTimeout(() => {
         try {
           return this.applyNormalState();
-        } catch (error1) {
-
-        }
-      }), 50);
+        } catch (error1) {}
+      }, 50);
     }
 
-    prepare() { //?NEW
+    prepare() {
+      //?NEW
       return this.slowUpdate();
     }
 
@@ -1777,19 +1775,19 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
 
     show() {
       this.visible = true;
-      return this._manualHided = false;
+      return (this._manualHided = false);
     }
 
     hide() {
       this.visible = false;
-      return this._manualHided = true;
+      return (this._manualHided = true);
     }
 
     disable() {
       this._disabled = true;
       this._manualDisabled = true;
       this.refreshEnDisState();
-      return this._mouseIn = false;
+      return (this._mouseIn = false);
     }
 
     enable() {
@@ -1829,10 +1827,10 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
       }
       if (this.cursorInButton()) {
         this._onMouseEnter();
-        return this._mouseIn = true;
+        return (this._mouseIn = true);
       } else {
         this._onMouseLeave();
-        return this._mouseIn = false;
+        return (this._mouseIn = false);
       }
     }
 
@@ -1843,8 +1841,8 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
 
     xyInButton(x, y) {
       var inRect, rect, rx, ry;
-      rx = KDCore.SDK.toGlobalCoord(this, 'x');
-      ry = KDCore.SDK.toGlobalCoord(this, 'y');
+      rx = KDCore.SDK.toGlobalCoord(this, "x");
+      ry = KDCore.SDK.toGlobalCoord(this, "y");
       rect = new PIXI.Rectangle(rx, ry, this._realWidth(), this._realHeight());
       inRect = rect.contains(x, y);
       if (inRect === true && this._checkAlpha === true) {
@@ -1913,30 +1911,30 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
         return;
       }
       this._updateTextPosition();
-      return this._textSprite.visible = true;
+      return (this._textSprite.visible = true);
     }
 
     _hideText() {
       if (this._textSprite == null) {
         return;
       }
-      return this._textSprite.visible = false;
+      return (this._textSprite.visible = false);
     }
 
     _startComplexTimer() {
       this._stopComplexTimer();
-      return this._cTimer = setTimeout((() => {
+      return (this._cTimer = setTimeout(() => {
         if (this._mouseIn === true) {
-          return this._isNeedShowText = true;
+          return (this._isNeedShowText = true);
         }
-      }), 1000);
+      }, 1000));
     }
 
     _stopComplexTimer() {
       if (this._cTimer != null) {
         clearTimeout(this._cTimer);
       }
-      return this._isNeedShowText = false;
+      return (this._isNeedShowText = false);
     }
 
     updateMouseClick() {
@@ -1976,7 +1974,7 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
 
     callClickHandler() {
       if (this._clickHandlers.length > 0) {
-        return this._clickHandlers.forEach(function(method) {
+        return this._clickHandlers.forEach(function (method) {
           return method();
         });
       }
@@ -2001,10 +1999,10 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
       }
       try {
         result = this._condition();
-        return this.visible = !result;
+        return (this.visible = !result);
       } catch (error1) {
-        console.warn('wrong condition in button');
-        return this.visible = true;
+        console.warn("wrong condition in button");
+        return (this.visible = true);
       }
     }
 
@@ -2019,14 +2017,14 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
         this._disabled = this._condition2();
         return this.refreshEnDisState();
       } catch (error1) {
-        console.warn('wrong condition in button for enable state');
+        console.warn("wrong condition in button for enable state");
         return this.disable();
       }
     }
 
     setButtonImages(img1, img2, img3, img4) {
       if (this._images != null) {
-        this._images.forEach(function(img) {
+        this._images.forEach(function (img) {
           if (img != null) {
             return img.parent.removeChild(img);
           }
@@ -2044,19 +2042,19 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
     applyNormalState() {
       var ref;
       this.refreshImages();
-      return (ref = this._images[0]) != null ? ref.visible = true : void 0;
+      return (ref = this._images[0]) != null ? (ref.visible = true) : void 0;
     }
 
     refreshImages() {
-      return this._images.forEach(function(img) {
-        return img != null ? img.visible = false : void 0;
+      return this._images.forEach(function (img) {
+        return img != null ? (img.visible = false) : void 0;
       });
     }
 
     applyCoverState() {
       this.refreshImages();
       if (this._images[1] != null) {
-        return this._images[1].visible = true;
+        return (this._images[1].visible = true);
       } else {
         return this.applyNormalState();
       }
@@ -2065,7 +2063,7 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
     applyClickedState() {
       this.refreshImages();
       if (this._images[2] != null) {
-        return this._images[2].visible = true;
+        return (this._images[2].visible = true);
       } else {
         return this.applyNormalState();
       }
@@ -2076,11 +2074,11 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
       if (this._textSprite) {
         this.removeChild(this._textSprite);
       }
-      w = Math.round(((size / 10) + 1) * 5 * text.length);
+      w = Math.round((size / 10 + 1) * 5 * text.length);
       h = size + 4;
       this._textSprite = new Sprite(new Bitmap(w, h));
       this._textSprite.bitmap.fontSize = size;
-      this._textSprite.bitmap.drawText(text, 0, h / 2, w, 1, 'center');
+      this._textSprite.bitmap.drawText(text, 0, h / 2, w, 1, "center");
       this._textSprite.visible = false;
       return this.addChild(this._textSprite);
     }
@@ -2102,7 +2100,7 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
     applyDisableState() {
       var ref;
       this.refreshImages();
-      return (ref = this._images[3]) != null ? ref.visible = true : void 0;
+      return (ref = this._images[3]) != null ? (ref.visible = true) : void 0;
     }
 
     refreshEnDisState() {
@@ -2134,11 +2132,11 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
 
     static FromSet(imgName, sourceFolder = null) {
       var button, getterFunc, img0, img1;
-      getterFunc = function(filename) {
+      getterFunc = function (filename) {
         return ImageManager.loadPicture(filename);
       };
       if (sourceFolder != null) {
-        getterFunc = function(filename) {
+        getterFunc = function (filename) {
           return ImageManager.loadBitmap("img/" + sourceFolder + "/", filename);
         };
       }
@@ -2151,11 +2149,11 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
 
     static FromSetFull(imgName, sourceFolder = null) {
       var button, getterFunc, img0, img1, img2, img3;
-      getterFunc = function(filename) {
+      getterFunc = function (filename) {
         return ImageManager.loadPicture(filename);
       };
       if (sourceFolder != null) {
-        getterFunc = function(filename) {
+        getterFunc = function (filename) {
           return ImageManager.loadBitmap("img/" + sourceFolder + "/", filename);
         };
       }
@@ -2167,9 +2165,8 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
       button.setButtonImages(img0, img1, img2, img3);
       return button;
     }
-
   };
-  KDCore.Sprite = (function(superClass) {
+  KDCore.Sprite = function (superClass) {
     // * Sprite
     //------------------------------------------------------------------------------
     //@[AUTO EXTEND]
@@ -2194,20 +2191,20 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
         if (h == null) {
           h = w;
         }
-        return this.bitmap = new Bitmap(w, h);
+        return (this.bitmap = new Bitmap(w, h));
       }
 
       bImg(filename, sourceFolder) {
         var getterFunc;
-        getterFunc = function(filename) {
+        getterFunc = function (filename) {
           return ImageManager.loadPicture(filename);
         };
         if (sourceFolder != null) {
-          getterFunc = function(filename) {
+          getterFunc = function (filename) {
             return ImageManager.loadBitmap("img/" + sourceFolder + "/", filename);
           };
         }
-        return this.bitmap = getterFunc(filename);
+        return (this.bitmap = getterFunc(filename));
       }
 
       onReady(method) {
@@ -2270,7 +2267,7 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
             return false;
           }
         }
-        for (i = o = 0, ref = this.children.length; (0 <= ref ? o < ref : o > ref); i = 0 <= ref ? ++o : --o) {
+        for (i = o = 0, ref = this.children.length; 0 <= ref ? o < ref : o > ref; i = 0 <= ref ? ++o : --o) {
           if (!this.children[i].bitmap.isReady()) {
             return false;
           }
@@ -2362,28 +2359,26 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
           return s;
         } catch (error1) {
           e = error1;
-          KDCore.warning('Something wrong with Text Settings!', e);
+          KDCore.warning("Something wrong with Text Settings!", e);
           return KDCore.Sprite.FromBitmap(60, 30);
         }
       }
-
-    };
+    }
 
     return Sprite;
-
-  }).call(this, Sprite);
+  }.call(this, Sprite);
   // * Button M
   //------------------------------------------------------------------------------
   //@[AUTO EXTEND]
   // * Button Mini - упрощённый класс Sprite_XButton (KDCore.Button)
 
-    // * Принимает название файла изображения кнопки без _00
+  // * Принимает название файла изображения кнопки без _00
   // * Названия изображения должны быть в стандартном формате _00, _01, [_03]
   // * _02 - не используются в этом классе
 
-    // * Класс использует глобальную временную переменную для определения находится ли мышь в зоне кнопки
+  // * Класс использует глобальную временную переменную для определения находится ли мышь в зоне кнопки
 
-    // * Если isFull - true, значит нужен _03
+  // * Если isFull - true, значит нужен _03
   KDCore.ButtonM = class ButtonM extends KDCore.Sprite {
     constructor(filename, isFull = false, sourceFolder = null) {
       super();
@@ -2418,7 +2413,7 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
     }
 
     clearClickHandler() {
-      return this._handler = null;
+      return (this._handler = null);
     }
 
     // * Воспроизводит визуальный эффект нажатия
@@ -2471,9 +2466,8 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
       super.update();
       return this._updateMain();
     }
-
   };
-  (function() {    
+  (function () {
     //╒═════════════════════════════════════════════════════════════════════════╛
     // ■ ButtonM Implementation
     //╒═════════════════════════════════════════════════════════════════════════╛
@@ -2481,48 +2475,48 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
     var _, alias_SM_isAnyButtonPressed, alias_SM_onMapLoaded;
     //@[DEFINES]
     _ = KDCore.ButtonM.prototype;
-    _._loadBitmaps = function(filename, isFull = false, sourceFolder = null) {
+    _._loadBitmaps = function (filename, isFull = false, sourceFolder = null) {
       var getterFunc;
       getterFunc = this._getGetter(sourceFolder);
-      this._bitmaps.push(getterFunc(filename + '_00'));
-      this._bitmaps.push(getterFunc(filename + '_01'));
+      this._bitmaps.push(getterFunc(filename + "_00"));
+      this._bitmaps.push(getterFunc(filename + "_01"));
       if (isFull) {
-        this._bitmaps.push(getterFunc(filename + '_03'));
+        this._bitmaps.push(getterFunc(filename + "_03"));
       }
     };
-    _._getGetter = function(sourceFolder = null) {
+    _._getGetter = function (sourceFolder = null) {
       var getterFunc;
-      getterFunc = function(filename) {
+      getterFunc = function (filename) {
         return ImageManager.loadPicture(filename);
       };
       if (sourceFolder !== null) {
-        getterFunc = function(filename) {
-          return ImageManager.loadBitmap('img/' + sourceFolder + '/', filename);
+        getterFunc = function (filename) {
+          return ImageManager.loadBitmap("img/" + sourceFolder + "/", filename);
         };
       }
       return getterFunc;
     };
-    _._setImageState = function(index = 0) {
+    _._setImageState = function (index = 0) {
       if (this._bitmaps[index] == null) {
         index = 0;
       }
       this.bitmap = this._bitmaps[index];
       this._lastState = index;
     };
-    _._createThread = function() {
+    _._createThread = function () {
       this.hoverThread = new KDCore.TimedUpdate(3, this._updateHover.bind(this));
       this.hoverThread.applyTimeRange(-1, 1);
       this.hoverThread.call();
     };
     //?[DYNAMIC]
-    _._updateMain = function() {
+    _._updateMain = function () {
       return this._updateMouseLogic();
     };
-    _._updateMouseLogic = function() {
+    _._updateMouseLogic = function () {
       this.hoverThread.update();
       return this._updateMouseClick();
     };
-    _._updateHover = function() {
+    _._updateHover = function () {
       if (!this.isActive()) {
         return;
       }
@@ -2549,7 +2543,7 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
         }
       }
     };
-    _._updateMouseClick = function() {
+    _._updateMouseClick = function () {
       if (!this.isActive()) {
         return;
       }
@@ -2569,15 +2563,15 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
         }
       }
     };
-    _._startSimulation = function() {
+    _._startSimulation = function () {
       this._setImageState(1);
       this._simulateThread = new KDCore.TimedUpdate(10, () => {
         return this._setImageState(0);
       });
       this._simulateThread.once();
-      return this._updateMain = this._updateMouseClickSimulated;
+      return (this._updateMain = this._updateMouseClickSimulated);
     };
-    _._updateMouseClickSimulated = function() {
+    _._updateMouseClickSimulated = function () {
       this._simulateThread.update();
       if (!this._simulateThread.isAlive()) {
         this._simulateThread = null;
@@ -2588,7 +2582,7 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
 
     //@[ALIAS]
     alias_SM_isAnyButtonPressed = Scene_Map.prototype.isAnyButtonPressed;
-    Scene_Map.prototype.isAnyButtonPressed = function() {
+    Scene_Map.prototype.isAnyButtonPressed = function () {
       if ($gameTemp.kdButtonUnderMouse != null) {
         return true;
       } else {
@@ -2597,7 +2591,7 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
     };
     //@[ALIAS]
     alias_SM_onMapLoaded = Scene_Map.prototype.onMapLoaded;
-    Scene_Map.prototype.onMapLoaded = function() {
+    Scene_Map.prototype.onMapLoaded = function () {
       $gameTemp.kdButtonUnderMouse = null;
       return alias_SM_onMapLoaded.call(this);
     };
@@ -2605,7 +2599,7 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
   // ■ END ButtonM Implementation
   //---------------------------------------------------------------------------
 
-    // * Button Mini User - класс с определением файла каждого состояния отдельно
+  // * Button Mini User - класс с определением файла каждого состояния отдельно
   // * Принимает теже аргументы, только заместо имени файла, три изображения (имени)
   // ? states = { main, hover, disabled }
   KDCore.ButtonMU = class ButtonMU extends KDCore.ButtonM {
@@ -2624,9 +2618,8 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
         this._bitmaps.push(getterFunc(states.disabled));
       }
     }
-
   };
-  
+
   //@[EXTENSION TO GLOBAL]
   //------------------------------------------------------------------------------
   KDCore.SDK = SDK;
@@ -2636,13 +2629,13 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
   KDCore.BitmapSrc = BitmapSrc;
   //? SOME KDCORE METHODS
   //--------------------------------------------------------------------------------
-  KDCore.isMV = function() {
+  KDCore.isMV = function () {
     return Utils.RPGMAKER_NAME.contains("MV");
   };
-  KDCore.isMZ = function() {
+  KDCore.isMZ = function () {
     return !KDCore.isMV();
   };
-  KDCore.warning = function(msg, error) {
+  KDCore.warning = function (msg, error) {
     if (msg != null) {
       console.warn(msg);
     }
@@ -2654,29 +2647,28 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
   // MV TouchInput Extension =======================================================
   //--------------------------------------------------------------------------------
 
-    // * Для совместимости MV и MZ
+  // * Для совместимости MV и MZ
   //TouchInput.getMousePosition = -> new KDCore.Point(TouchInput.x, TouchInput.y)
 
-    //?SMouse better alternative
-  (function() {
+  //?SMouse better alternative
+  (function () {
     var alias_SM_processMapTouch, alias_TIOMM;
     if (KDCore.isMZ()) {
       return;
     }
-    
+
     // * Для ButtonM
     //@[ALIAS]
     alias_SM_processMapTouch = Scene_Map.prototype.processMapTouch;
-    Scene_Map.prototype.processMapTouch = function() {
+    Scene_Map.prototype.processMapTouch = function () {
       if ($gameTemp.kdButtonUnderMouse != null) {
-
       } else {
         return alias_SM_processMapTouch.call(this);
       }
     };
     //@[ALIAS]
     alias_TIOMM = TouchInput._onMouseMove;
-    TouchInput._onMouseMove = function(event) {
+    TouchInput._onMouseMove = function (event) {
       var x, y;
       alias_TIOMM.call(this, event);
       x = Graphics.pageToCanvasX(event.pageX);
@@ -2685,12 +2677,12 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
         return this._onHover(x, y);
       }
     };
-    
+
     //?NEW, from MZ
-    return TouchInput._onHover = function(_x, _y) {
+    return (TouchInput._onHover = function (_x, _y) {
       this._x = _x;
       this._y = _y;
-    };
+    });
   })();
 })();
 
@@ -2701,203 +2693,177 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
 //    new KDCore.Point(TouchInput._x, TouchInput._y)
 
 // * Загрузка и обработка параметров плагина
-(function(){
-    
-    PKD_MobileControls.LoadPluginSettings = () => {
+(function () {
+  PKD_MobileControls.LoadPluginSettings = () => {
+    PKD_MobileControls.PARAMS = new KDCore.ParamLoader("Joystick:s");
+    PKD_MobileControls.JOYSTICK = PKD_MobileControls.PARAMS.getParam("Joystick", {
+      visible: true,
+      position: [10, "Graphics.height - 196"],
+      joyType: 0,
+      is4WayDirection: true,
+      isHideWhenMessage: true,
+      dashingOnEdge: true,
+      extraMoveOutOfEdge: 10,
+    });
 
-        PKD_MobileControls.PARAMS = new KDCore.ParamLoader("Joystick:s");
-        PKD_MobileControls.JOYSTICK = PKD_MobileControls.PARAMS.getParam(
-            "Joystick",
-            {
-                visible: true,
-                position: [10, "Graphics.height - 196"],
-                joyType: 0,
-                is4WayDirection: true,
-                isHideWhenMessage: true,
-                dashingOnEdge: true,
-                extraMoveOutOfEdge: 10
-            }
-        );
+    PKD_MobileControls.BUTTONS = PKD_MobileControls.PARAMS.getParam("Buttons", []);
 
-        PKD_MobileControls.BUTTONS = PKD_MobileControls.PARAMS.getParam(
-            "Buttons", []
-        );
+    PKD_MobileControls.MAP_TOUCH = PKD_MobileControls.PARAMS.getParam("MapTouchInput", false);
 
-        PKD_MobileControls.MAP_TOUCH = PKD_MobileControls.PARAMS.getParam(
-            "MapTouchInput", false
-        );
+    PKD_MobileControls.DIAG = PKD_MobileControls.PARAMS.getParam("8wayMovement", false);
 
-        PKD_MobileControls.DIAG = PKD_MobileControls.PARAMS.getParam(
-            "8wayMovement", false
-        );
+    PKD_MobileControls.DIAG_EV_START = PKD_MobileControls.PARAMS.getParam("diagonalEventStart", false);
 
-        PKD_MobileControls.DIAG_EV_START = PKD_MobileControls.PARAMS.getParam(
-            "diagonalEventStart", false
-        );
+    if (PKD_MobileControls.DIAG == true) {
+      PKD_MobileControls.ActivateDiagonalMovement();
+      if (PKD_MobileControls.DIAG_EV_START == true) {
+        PKD_MobileControls.ActivateDiagonalEventStart();
+      }
+    }
 
-        if(PKD_MobileControls.DIAG == true) {
-            PKD_MobileControls.ActivateDiagonalMovement();
-            if(PKD_MobileControls.DIAG_EV_START == true) {
-                PKD_MobileControls.ActivateDiagonalEventStart();
-            }
+    if (KDCore.isMZ()) RegisterPluginCommnadsMZ();
+    else {
+      RegisterPluginCommandsMV();
+      ExtendInputMV();
+    }
+
+    ConfigurateClasses();
+  };
+
+  RegisterPluginCommnadsMZ = () => {
+    PluginManager.registerCommand("PKD_MobileControls", "JoyStickState", (args) => {
+      try {
+        let isActive = eval(args.active);
+        $gameSystem.pSetMobileControlsSettings(0, 1, !isActive);
+        PKD_MobileControls.refresh();
+      } catch (e) {
+        console.warn(e);
+      }
+    });
+
+    PluginManager.registerCommand("PKD_MobileControls", "JoyStickVisible", (args) => {
+      try {
+        let isHidden = eval(args.hidden);
+        $gameSystem.pSetMobileControlsSettings(0, 0, !isHidden);
+        PKD_MobileControls.refresh();
+      } catch (e) {
+        console.warn(e);
+      }
+    });
+
+    PluginManager.registerCommand("PKD_MobileControls", "ButtonState", (args) => {
+      try {
+        let index = parseInt(args.buttonId);
+        let isActive = eval(args.active);
+        $gameSystem.pSetMobileControlsSettings(index, 1, !isActive);
+        PKD_MobileControls.refresh();
+      } catch (e) {
+        console.warn(e);
+      }
+    });
+
+    PluginManager.registerCommand("PKD_MobileControls", "ButtonVisible", (args) => {
+      try {
+        let index = parseInt(args.buttonId);
+        let isHidden = eval(args.hidden);
+        $gameSystem.pSetMobileControlsSettings(index, 0, !isHidden);
+        PKD_MobileControls.refresh();
+      } catch (e) {
+        console.warn(e);
+      }
+    });
+  };
+
+  RegisterPluginCommandsMV = () => {
+    executeMCCommand = (index, cmd) => {
+      switch (cmd) {
+        case "hide":
+          $gameSystem.pSetMobileControlsSettings(index, 0, false);
+          break;
+
+        case "show":
+          $gameSystem.pSetMobileControlsSettings(index, 0, true);
+          break;
+
+        case "disable":
+          $gameSystem.pSetMobileControlsSettings(index, 1, false);
+          break;
+
+        case "enable":
+          $gameSystem.pSetMobileControlsSettings(index, 1, true);
+          break;
+      }
+      PKD_MobileControls.refresh();
+    };
+
+    //@[ALIAS]
+    var _Game_Interpreter_pluginCommand_3434 = Game_Interpreter.prototype.pluginCommand;
+    Game_Interpreter.prototype.pluginCommand = function (command, args) {
+      _Game_Interpreter_pluginCommand_3434.call(this, command, args);
+      if (command === "MC") {
+        try {
+          switch (args[0]) {
+            case "Joystick":
+              let cmd = args[1];
+              executeMCCommand(0, cmd);
+              break;
+            case "Button":
+              let cmd2 = args[2];
+              let index = parseInt(args[1]);
+              executeMCCommand(index, cmd2);
+              break;
+
+            default:
+              break;
+          }
+        } catch (e) {
+          console.warn(e);
         }
+      }
+    };
+  };
 
-        if(KDCore.isMZ())
-            RegisterPluginCommnadsMZ();
-        else {
-            RegisterPluginCommandsMV();
-            ExtendInputMV();
-        }
-        
-        ConfigurateClasses();
+  ExtendInputMV = () => {
+    let alias_input_clear = Input.clear;
+    Input.clear = function () {
+      alias_input_clear.call(this);
+      this._virtualButton = null;
     };
 
-    RegisterPluginCommnadsMZ = () => {
-
-        PluginManager.registerCommand("PKD_MobileControls", 'JoyStickState', args => {
-            try {
-                let isActive = eval(args.active);
-                $gameSystem.pSetMobileControlsSettings(0, 1, !isActive);
-                PKD_MobileControls.refresh();
-            } catch (e) {
-                console.warn(e);
-            }
-        });
-
-        PluginManager.registerCommand("PKD_MobileControls", 'JoyStickVisible', args => {
-            try {
-                let isHidden = eval(args.hidden);
-                $gameSystem.pSetMobileControlsSettings(0, 0, !isHidden);
-                PKD_MobileControls.refresh();
-            } catch (e) {
-                console.warn(e);
-            }
-        });
-
-        PluginManager.registerCommand("PKD_MobileControls", 'ButtonState', args => {
-            try {
-                let index = parseInt(args.buttonId);
-                let isActive = eval(args.active);
-                $gameSystem.pSetMobileControlsSettings(index, 1, !isActive);
-                PKD_MobileControls.refresh();
-            } catch (e) {
-                console.warn(e);
-            }
-        });
-
-        PluginManager.registerCommand("PKD_MobileControls", 'ButtonVisible', args => {
-            try {
-                let index = parseInt(args.buttonId);
-                let isHidden = eval(args.hidden);
-                $gameSystem.pSetMobileControlsSettings(index, 0, !isHidden);
-                PKD_MobileControls.refresh();
-            } catch (e) {
-                console.warn(e);
-            }
-        });
-
+    let alias_input_update = Input.update;
+    Input.update = function () {
+      alias_input_update.call(this);
+      if (this._virtualButton) {
+        this._latestButton = this._virtualButton;
+        this._pressedTime = 0;
+        this._virtualButton = null;
+      }
     };
 
-    RegisterPluginCommandsMV = () => {
-
-        executeMCCommand = (index, cmd) => {
-
-            switch (cmd) {
-                case "hide":
-                    $gameSystem.pSetMobileControlsSettings(index, 0, false);
-                    break;
-            
-                case "show":
-                    $gameSystem.pSetMobileControlsSettings(index, 0, true);
-                    break;
-
-                case "disable":
-                    $gameSystem.pSetMobileControlsSettings(index, 1, false);
-                    break;
-
-                case "enable":
-                    $gameSystem.pSetMobileControlsSettings(index, 1, true);
-                    break;
-            }
-            PKD_MobileControls.refresh();
-
-        };
-
-        //@[ALIAS]
-        var _Game_Interpreter_pluginCommand_3434 = Game_Interpreter.prototype.pluginCommand;
-        Game_Interpreter.prototype.pluginCommand = function (command, args) {
-            _Game_Interpreter_pluginCommand_3434.call(this, command, args);
-            if (command === 'MC') {
-                try {
-
-                    switch (args[0]) {
-                        case "Joystick":
-                            let cmd = args[1];
-                            executeMCCommand(0, cmd);
-                            break;
-                        case "Button":
-                            let cmd2 = args[2];
-                            let index = parseInt(args[1]);
-                            executeMCCommand(index, cmd2);
-                            break;
-
-                        default:
-                            break;
-                    }
-
-                } catch (e) {
-                    console.warn(e);
-                }
-            }
-        };
-
+    Input.virtualClick = function (buttonName) {
+      this._virtualButton = buttonName;
     };
+  };
 
-    ExtendInputMV = () => {
-
-        let alias_input_clear = Input.clear;
-        Input.clear = function() {
-            alias_input_clear.call(this);
-            this._virtualButton = null;
-        };
-
-        let alias_input_update = Input.update;
-        Input.update = function() {
-            alias_input_update.call(this);
-            if (this._virtualButton) {
-                this._latestButton = this._virtualButton;
-                this._pressedTime = 0;
-                this._virtualButton = null;
-            }
-        };
-
-        Input.virtualClick = function(buttonName) {
-            this._virtualButton = buttonName;
-        };
-
-    };
-
-    ConfigurateClasses = () => {
-        if(PKD_MobileControls.JOYSTICK.dashingOnEdge === true)
-            Game_Player.prototype.updateDashing = Game_Player.prototype._updateDashingJoystick;
-    };
-
+  ConfigurateClasses = () => {
+    if (PKD_MobileControls.JOYSTICK.dashingOnEdge === true) Game_Player.prototype.updateDashing = Game_Player.prototype._updateDashingJoystick;
+  };
 })();
 // Generated by CoffeeScript 2.5.1
-(function() {
-  PKD_MobileControls.IsInputInJoystick = function() {
-    return (typeof $gameTemp !== "undefined" && $gameTemp !== null) && ($gameTemp._pkdJoyStick != null) && $gameTemp._pkdJoyStick.isPressed();
+(function () {
+  PKD_MobileControls.IsInputInJoystick = function () {
+    return typeof $gameTemp !== "undefined" && $gameTemp !== null && $gameTemp._pkdJoyStick != null && $gameTemp._pkdJoyStick.isPressed();
   };
-  PKD_MobileControls.refresh = function() {
+  PKD_MobileControls.refresh = function () {
     return PKD_MobileControls.mcUI.refreshUserSettings();
   };
-  PKD_MobileControls.simulateAction = function() {
-    Input.virtualClick('ok');
+  PKD_MobileControls.simulateAction = function () {
+    Input.virtualClick("ok");
   };
-  PKD_MobileControls.simulateCancel = function() {
-    Input.virtualClick('escape');
+  PKD_MobileControls.simulateCancel = function () {
+    Input.virtualClick("escape");
   };
-  PKD_MobileControls.simulateJump = function() {
+  PKD_MobileControls.simulateJump = function () {
     var d, jx, jy;
     if (!$gamePlayer.canMove()) {
       return;
@@ -2926,48 +2892,44 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
   };
 })();
 
-(function(){
-    
+(function () {
+  //@[ALIAS]
+  var _alias_Input__signY = Input._signY;
+  Input._signY = function () {
+    if (PKD_MobileControls.IsInputInJoystick()) {
+      return Input.mJoyY;
+    }
+    return _alias_Input__signY.call(this);
+  };
 
-    //@[ALIAS]
-    var _alias_Input__signY = Input._signY;
-    Input._signY = function () {
-        if (PKD_MobileControls.IsInputInJoystick()) {
-            return Input.mJoyY;
-        }
-        return _alias_Input__signY.call(this);
-    };
+  //@[ALIAS]
+  var _alias_Input__signX = Input._signX;
+  Input._signX = function () {
+    if (PKD_MobileControls.IsInputInJoystick()) {
+      return Input.mJoyX;
+    }
+    return _alias_Input__signX.call(this);
+  };
 
-    //@[ALIAS]
-    var _alias_Input__signX = Input._signX;
-    Input._signX = function () {
-        if (PKD_MobileControls.IsInputInJoystick()) {
-            return Input.mJoyX;
-        }
-        return _alias_Input__signX.call(this);
-    };
-
-
-    //?[NEW]
-    //?[DYNAMIC]
-    Game_Player.prototype._updateDashingJoystick = function () {
-        if (this.isMoving()) {
-                return;
-            }
-        if (this.canMove() && !this.isInVehicle() && !$gameMap.isDashDisabled()) {
-            this._dashing = Input.mJoyDash || this.isDashButtonPressed();
-        } else {
-            this._dashing = false;
-        }
-    };
-
+  //?[NEW]
+  //?[DYNAMIC]
+  Game_Player.prototype._updateDashingJoystick = function () {
+    if (this.isMoving()) {
+      return;
+    }
+    if (this.canMove() && !this.isInVehicle() && !$gameMap.isDashDisabled()) {
+      this._dashing = Input.mJoyDash || this.isDashButtonPressed();
+    } else {
+      this._dashing = false;
+    }
+  };
 })();
 // Generated by CoffeeScript 2.5.1
 // * Общий класс для всех UI элементов
 //? FROM AABSZ (rev 13.10.20), modified
-(function() {
+(function () {
   var Sprite_UIElement;
-  Sprite_UIElement = (function() {
+  Sprite_UIElement = function () {
     // * ABSTRACT значит что класс сам по себе ничего не создаёт, не хранит данные
     //@[ABSTRACT]
     class Sprite_UIElement extends KDCore.Sprite {
@@ -2980,7 +2942,7 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
       // * Стандартный набор настроек
       defaultParams() {
         return {
-          visible: true
+          visible: true,
         };
       }
 
@@ -2993,8 +2955,7 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
       // * Общий метод
       drawText() {} // * EMPTY
 
-      
-        // * Если изначально невидимый (из параметров), то не активный вообще
+      // * Если изначально невидимый (из параметров), то не активный вообще
       isActive() {
         return this.params.visible === true;
       }
@@ -3073,26 +3034,25 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
           KDCore.warning(e);
         }
       }
-
-    };
+    }
 
     // * Корневая директория для изображений
     Sprite_UIElement.RootImageFolder = "pictures";
 
     return Sprite_UIElement;
-
-  }).call(this);
+  }.call(this);
   PKD_MobileControls.link(Sprite_UIElement);
 })();
 
-(function() {  //╒═════════════════════════════════════════════════════════════════════════╛
+(function () {
+  //╒═════════════════════════════════════════════════════════════════════════╛
   // ■ PRIVATE.coffee
   //╒═════════════════════════════════════════════════════════════════════════╛
   //---------------------------------------------------------------------------
   var _;
   //@[DEFINES]
   _ = PKD_MobileControls.Sprite_UIElement.prototype;
-  _._init = function() {
+  _._init = function () {
     var e;
     this._prepare();
     try {
@@ -3101,26 +3061,26 @@ console.warn("XDev KDCore is loaded " + KDCore.Version);
       e = error;
       KDCore.warning(e);
       // * Если при создании произошла ошибка, отключаем элемент
-      return this.isActive = function() {
+      return (this.isActive = function () {
         return false;
-      };
+      });
     }
   };
-  
+
   // * Подготовка элемента (проверка параметров)
-  _._prepare = function() {
+  _._prepare = function () {
     if (this.params == null) {
       this.params = this.defaultParams();
     }
-    return this.visible = this.params.visible;
+    return (this.visible = this.params.visible);
   };
   // * Наследники создают свои элементы в этом методе
-  _._createContent = function() {}; // * EMPTY
-  
+  _._createContent = function () {}; // * EMPTY
+
   // * Сброс позиции
-  _._resetPosition = function() {
+  _._resetPosition = function () {
     var x, y;
-    ({x, y} = this.params.position);
+    ({ x, y } = this.params.position);
     this.move(x, y);
   };
 })();
@@ -3142,22 +3102,21 @@ Sprite_PKDJoystick = class Sprite_PKDJoystick extends PKD_MobileControls.Sprite_
     this.moveOnPosition();
   }
 
-  
-    // * Стандартный набор настроек
+  // * Стандартный набор настроек
   defaultParams() {
     return PKD_MobileControls.JOYSTICK;
   }
 
   enable() {
-    return this._isDisabled = false;
+    return (this._isDisabled = false);
   }
 
   disable() {
-    return this._isDisabled = true;
+    return (this._isDisabled = true);
   }
 
   show() {
-    return this.visible = true;
+    return (this.visible = true);
   }
 
   hide() {
@@ -3178,14 +3137,13 @@ Sprite_PKDJoystick = class Sprite_PKDJoystick extends PKD_MobileControls.Sprite_
   isHaveHideWithMessageFlag() {
     return this.params.isHideWhenMessage === true;
   }
-
 };
 
-(function() {
+(function () {
   var _;
   //@[DEFINES]
   _ = Sprite_PKDJoystick.prototype;
-  _.update = function() {
+  _.update = function () {
     PKD_MobileControls.Sprite_UIElement.prototype.update.call(this);
     if (this._isDisabled === true) {
       return;
@@ -3203,34 +3161,34 @@ Sprite_PKDJoystick = class Sprite_PKDJoystick extends PKD_MobileControls.Sprite_
       Input.mJoyDash = false;
     }
   };
-  _._createContent = function() {
+  _._createContent = function () {
     this._initValues();
     return this._createParts();
   };
-  _._initValues = function() {
+  _._initValues = function () {
     this.joyType = this.params.joyType;
     this._isBeenPressed = false;
     this._isRunning = false;
     this._isDisabled = false;
-    return this.precission = 10;
+    return (this.precission = 10);
   };
-  _._createParts = function() {
+  _._createParts = function () {
     if (this.joyType === 0) {
       return this._createPartsBase();
     } else {
       return this._createPartsArrows();
     }
   };
-  _._createPartsBase = function() {
-    this.base = new Sprite(ImageManager.loadPicture('JoystickBase_00'));
-    this.baseFore = new Sprite(ImageManager.loadPicture('JoystickBase'));
+  _._createPartsBase = function () {
+    this.base = new Sprite(ImageManager.loadPicture("JoystickBase_00"));
+    this.baseFore = new Sprite(ImageManager.loadPicture("JoystickBase"));
     this.base.addChild(this.baseFore);
     this.baseFore.visible = false;
     this.addChild(this.base);
-    this.main = new Sprite(ImageManager.loadPicture('JoystickMain_00'));
+    this.main = new Sprite(ImageManager.loadPicture("JoystickMain_00"));
     this.main.anchor.x = 0.5;
     this.main.anchor.y = 0.5;
-    this.mainFore = new Sprite(ImageManager.loadPicture('JoystickMain'));
+    this.mainFore = new Sprite(ImageManager.loadPicture("JoystickMain"));
     this.main.addChild(this.mainFore);
     this.mainFore.anchor.x = 0.5;
     this.mainFore.anchor.y = 0.5;
@@ -3239,9 +3197,9 @@ Sprite_PKDJoystick = class Sprite_PKDJoystick extends PKD_MobileControls.Sprite_
     this.base.bitmap.addLoadListener(this._afterCreateParts.bind(this));
     return this._afterCreateParts();
   };
-  _._createPartsArrows = function() {
-    this.base = new Sprite(ImageManager.loadPicture('JoystickBase_Arrows_00'));
-    this.baseFore = new Sprite(ImageManager.loadPicture('JoystickBase_Arrows'));
+  _._createPartsArrows = function () {
+    this.base = new Sprite(ImageManager.loadPicture("JoystickBase_Arrows_00"));
+    this.baseFore = new Sprite(ImageManager.loadPicture("JoystickBase_Arrows"));
     this.base.addChild(this.baseFore);
     this.baseFore.visible = false;
     this.addChild(this.base);
@@ -3257,42 +3215,43 @@ Sprite_PKDJoystick = class Sprite_PKDJoystick extends PKD_MobileControls.Sprite_
     this.arrowHighlitghts = [
       null,
       null,
-      ImageManager.loadPicture('JoystickBase_Arrows_D'), // 2
+      ImageManager.loadPicture("JoystickBase_Arrows_D"), // 2
       null,
-      ImageManager.loadPicture('JoystickBase_Arrows_L'), // 4
+      ImageManager.loadPicture("JoystickBase_Arrows_L"), // 4
       null,
-      ImageManager.loadPicture('JoystickBase_Arrows_R'), // 6
+      ImageManager.loadPicture("JoystickBase_Arrows_R"), // 6
       null,
-      ImageManager.loadPicture('JoystickBase_Arrows_U') // 8
+      ImageManager.loadPicture("JoystickBase_Arrows_U"), // 8
     ];
     this.base.bitmap.addLoadListener(this._afterCreateParts.bind(this));
     return this._afterCreateParts();
   };
-  _._afterCreateParts = function() {
+  _._afterCreateParts = function () {
     if (this.base.bitmap.width === 0) {
       return;
     }
+
     this._resetMainPosition();
-    return this.half = this.base.bitmap.width / 2;
+    return (this.half = this.base.bitmap.width / 2);
   };
-  _._resetMainPosition = function() {
+  _._resetMainPosition = function () {
     this.main.x = this.base.bitmap.width / 2;
-    return this.main.y = this.base.bitmap.height / 2;
+    return (this.main.y = this.base.bitmap.height / 2);
   };
-  _._resetMoving = function() {
+  _._resetMoving = function () {
     $gameTemp.clearDestination();
     Input.mJoyX = 0;
     Input.mJoyY = 0;
-    return this._isRunning = false;
+    return (this._isRunning = false);
   };
-  _.inPosition = function(point, extraSize) {
+  _.inPosition = function (point, extraSize) {
     var inRect, rx, ry;
     rx = KDCore.SDK.canvasToLocalX(this, point.x);
     ry = KDCore.SDK.canvasToLocalY(this, point.y);
     inRect = rx + extraSize >= 0 && ry + extraSize >= 0 && rx < this.baseFore.width + extraSize && ry < this.baseFore.height + extraSize;
     return inRect;
   };
-  _._updateTouchInput = function() {
+  _._updateTouchInput = function () {
     if (TouchInput.isPressed()) {
       if (this._isBeenPressed === true) {
         if (!this.isTouchInProperZoneBigger()) {
@@ -3315,13 +3274,13 @@ Sprite_PKDJoystick = class Sprite_PKDJoystick extends PKD_MobileControls.Sprite_
     this.baseFore.visible = this._isBeenPressed;
     this.mainFore.visible = this._isBeenPressed;
   };
-  _.isTouchInProperZone = function() {
+  _.isTouchInProperZone = function () {
     return this.inPosition(TouchInput, 0);
   };
-  _.isTouchInProperZoneBigger = function() {
+  _.isTouchInProperZoneBigger = function () {
     return this.inPosition(TouchInput, this.params.extraMoveOutOfEdge);
   };
-  _._moveMainToTouch = function() {
+  _._moveMainToTouch = function () {
     var lx, ly;
     lx = TouchInput.x;
     ly = TouchInput.y;
@@ -3334,12 +3293,12 @@ Sprite_PKDJoystick = class Sprite_PKDJoystick extends PKD_MobileControls.Sprite_
       this._onMoved8();
     }
   };
-  _._onMoved8 = function() {
+  _._onMoved8 = function () {
     this._isRunning = false;
     Input.mJoyX = this.getMovingXValue();
     Input.mJoyY = this.getMovingYValue();
   };
-  _._onMoved4 = function() {
+  _._onMoved4 = function () {
     var section;
     this._isRunning = false;
     // * FOR DASHING
@@ -3373,19 +3332,19 @@ Sprite_PKDJoystick = class Sprite_PKDJoystick extends PKD_MobileControls.Sprite_
         break;
     }
   };
-  _.highlightArrowSectionFor4 = function(sectionNumber) {
+  _.highlightArrowSectionFor4 = function (sectionNumber) {
     if (this.joyType !== 1) {
       return;
     }
     if (sectionNumber < 0) {
-      this.baseFore.bitmap = ImageManager.loadPicture('JoystickBase_Arrows');
+      this.baseFore.bitmap = ImageManager.loadPicture("JoystickBase_Arrows");
     } else {
       if (this.arrowHighlitghts[sectionNumber] != null) {
         this.baseFore.bitmap = this.arrowHighlitghts[sectionNumber];
       }
     }
   };
-  _.getMovingXValue = function() {
+  _.getMovingXValue = function () {
     var deltaX, x;
     deltaX = this.main.x - this.half;
     x = 0;
@@ -3396,13 +3355,13 @@ Sprite_PKDJoystick = class Sprite_PKDJoystick extends PKD_MobileControls.Sprite_
       }
     } else if (deltaX > this.precission) {
       x++;
-      if (this.main.x >= (this.base.x + this.base.width - this.precission * 2)) {
+      if (this.main.x >= this.base.x + this.base.width - this.precission * 2) {
         this._isRunning = true;
       }
     }
     return x;
   };
-  _.getMovingYValue = function() {
+  _.getMovingYValue = function () {
     var deltaY, y;
     deltaY = this.main.y - this.half;
     y = 0;
@@ -3413,13 +3372,13 @@ Sprite_PKDJoystick = class Sprite_PKDJoystick extends PKD_MobileControls.Sprite_
       }
     } else if (deltaY > this.precission) {
       y++;
-      if (this.main.y >= (this.base.y + this.base.height - this.precission * 2)) {
+      if (this.main.y >= this.base.y + this.base.height - this.precission * 2) {
         this._isRunning = true;
       }
     }
     return y;
   };
-  _.getSection = function() {
+  _.getSection = function () {
     var deltaX, deltaY, half, maxIndex;
     half = this.base.bitmap.width / 2;
     deltaX = this.main.x - half;
@@ -3451,7 +3410,7 @@ Sprite_PKDJoystick = class Sprite_PKDJoystick extends PKD_MobileControls.Sprite_
 
 // Generated by CoffeeScript 2.5.1
 // * Пользовательская кнопка на экране
-(function() {
+(function () {
   var Sprite_UIUButton;
   // * Кнопка на экране, можно нажимать
   Sprite_UIUButton = class Sprite_UIUButton extends PKD_MobileControls.Sprite_UIElement {
@@ -3467,14 +3426,14 @@ Sprite_PKDJoystick = class Sprite_PKDJoystick extends PKD_MobileControls.Sprite_
         states: {
           main: "",
           hover: "",
-          disabled: ""
+          disabled: "",
         },
         isHideWhenMessage: true,
         click: 0,
         position: {
           x: "0",
-          y: "0"
-        }
+          y: "0",
+        },
       };
     }
 
@@ -3498,13 +3457,13 @@ Sprite_PKDJoystick = class Sprite_PKDJoystick extends PKD_MobileControls.Sprite_
     show() {
       var ref;
       this.visible = true;
-      return (ref = this.button) != null ? ref.visible = true : void 0;
+      return (ref = this.button) != null ? (ref.visible = true) : void 0;
     }
 
     hide() {
       var ref;
       this.visible = false;
-      return (ref = this.button) != null ? ref.visible = false : void 0;
+      return (ref = this.button) != null ? (ref.visible = false) : void 0;
     }
 
     setState(isEnabled) {
@@ -3515,8 +3474,7 @@ Sprite_PKDJoystick = class Sprite_PKDJoystick extends PKD_MobileControls.Sprite_
       }
     }
 
-    
-      // * Просто вызов метода
+    // * Просто вызов метода
     call() {
       var ref;
       return (ref = this.button) != null ? ref.click() : void 0;
@@ -3530,12 +3488,12 @@ Sprite_PKDJoystick = class Sprite_PKDJoystick extends PKD_MobileControls.Sprite_
       }
       return (ref1 = this.button) != null ? ref1.simulateClick() : void 0;
     }
-
   };
   PKD_MobileControls.link(Sprite_UIUButton);
 })();
 
-(function() {  //╒═════════════════════════════════════════════════════════════════════════╛
+(function () {
+  //╒═════════════════════════════════════════════════════════════════════════╛
   // ■ PRIVATE.coffee
   //╒═════════════════════════════════════════════════════════════════════════╛
   //---------------------------------------------------------------------------
@@ -3543,9 +3501,9 @@ Sprite_PKDJoystick = class Sprite_PKDJoystick extends PKD_MobileControls.Sprite_
   //@[DEFINES]
   _ = PKD_MobileControls.Sprite_UIUButton.prototype;
   //$[OVER]
-  _._createContent = function() {
+  _._createContent = function () {
     if (this.params.states.main.isEmpty()) {
-      KDCore.warning('You try create Button without Main Image');
+      KDCore.warning("You try create Button without Main Image");
       return;
     }
     this.button = new KDCore.ButtonMU(this.params.states, true, this.rootImageFolder());
@@ -3555,7 +3513,7 @@ Sprite_PKDJoystick = class Sprite_PKDJoystick extends PKD_MobileControls.Sprite_
     this._registerClickMethod(); // * Common Event
     this._registerClickMethodE(); // * Script Call
   };
-  _._registerClickMethod = function() {
+  _._registerClickMethod = function () {
     var commonEventId, e, method, ref;
     if (this.params.click == null) {
       return;
@@ -3568,8 +3526,8 @@ Sprite_PKDJoystick = class Sprite_PKDJoystick extends PKD_MobileControls.Sprite_
       // * Если число, то значит общее событие
       if (isFinite(this.params.click)) {
         commonEventId = this.params.click;
-        if (commonEventId > 0 && ($dataCommonEvents[commonEventId] != null)) {
-          method = function() {
+        if (commonEventId > 0 && $dataCommonEvents[commonEventId] != null) {
+          method = function () {
             return $gameTemp.reserveCommonEvent(commonEventId);
           };
           return this.button.addClickHandler(method);
@@ -3581,14 +3539,14 @@ Sprite_PKDJoystick = class Sprite_PKDJoystick extends PKD_MobileControls.Sprite_
       return (ref = this.button) != null ? ref.clearClickHandler() : void 0;
     }
   };
-  _._registerClickMethodE = function() {
+  _._registerClickMethodE = function () {
     var codeLine, e, method, ref;
     if (!String.any(this.params.clickE)) {
       return;
     }
     try {
       codeLine = this.params.clickE;
-      method = function() {
+      method = function () {
         return eval(codeLine);
       };
       this.button.addClickHandler(method);
@@ -3601,7 +3559,7 @@ Sprite_PKDJoystick = class Sprite_PKDJoystick extends PKD_MobileControls.Sprite_
     }
   };
   //$[OVER]
-  _._resetPosition = function() {
+  _._resetPosition = function () {
     var pos;
     pos = KDCore.Utils.jsonPosXY(this.params.position);
     this.move(pos);
@@ -3611,53 +3569,47 @@ Sprite_PKDJoystick = class Sprite_PKDJoystick extends PKD_MobileControls.Sprite_
 // ■ END PRIVATE.coffee
 //---------------------------------------------------------------------------
 
-(function(){
-    
-    //@[ALIAS]
-    var _alias_DataManager_loadDatabase = DataManager.loadDatabase;
-    DataManager.loadDatabase = function () {
-        PKD_MobileControls.LoadPluginSettings();
-        _alias_DataManager_loadDatabase.call(this);
-    };
-
+(function () {
+  //@[ALIAS]
+  var _alias_DataManager_loadDatabase = DataManager.loadDatabase;
+  DataManager.loadDatabase = function () {
+    PKD_MobileControls.LoadPluginSettings();
+    _alias_DataManager_loadDatabase.call(this);
+  };
 })();
 /////////////////////////////////////////////////////////////////////////////
 //╒═════════════════════════════════════════════════════════════════════════╛
 // ■ Game_Player.js
 //╒═════════════════════════════════════════════════════════════════════════╛
 /////////////////////////////////////////////////////////////////////////////
-PKD_MobileControls.ActivateDiagonalEventStart = (function(){
+PKD_MobileControls.ActivateDiagonalEventStart = function () {
+  //@[ALIAS]
+  var _alias_Game_Player_triggerTouchAction = Game_Player.prototype.triggerTouchAction;
+  Game_Player.prototype.triggerTouchAction = function () {
+    if (this._diagonalDir) {
+      if (this.canStartLocalEvents()) {
+        this.checkEventTriggerThere([0, 1, 2]);
+        if ($gameMap.isEventRunning()) {
+          this._diagonalDir = 0;
+          return true;
+        }
+      }
+      return false;
+    } else return _alias_Game_Player_triggerTouchAction.call(this);
+  };
 
-    //@[ALIAS]
-    var _alias_Game_Player_triggerTouchAction = Game_Player.prototype.triggerTouchAction;
-    Game_Player.prototype.triggerTouchAction = function () {
-        if(this._diagonalDir) {
-            if(this.canStartLocalEvents()) {
-                this.checkEventTriggerThere([0, 1, 2]);
-                if($gameMap.isEventRunning()) {
-                    this._diagonalDir = 0;
-                    return true;
-                }
-            }
-            return false;
-        } else
-            return _alias_Game_Player_triggerTouchAction.call(this);
-    };
-
-    //@[ALIAS]
-    var _alias_Game_Player_checkEventTriggerThere = Game_Player.prototype.checkEventTriggerThere;
-    Game_Player.prototype.checkEventTriggerThere = function (triggers) {
-        if(this.canStartLocalEvents() && this._diagonalDir) {
-            var horz = ((this._diagonalDir === 1 || this._diagonalDir === 7) ? 4 : 6);
-            var vert = ((this._diagonalDir === 1 || this._diagonalDir === 3) ? 2 : 8);
-            var x2 = $gameMap.roundXWithDirection(this.x, horz);
-            var y2 = $gameMap.roundYWithDirection(this.y, vert);
-            this.startMapEvent(x2, y2, triggers, true);
-        } else
-            return _alias_Game_Player_checkEventTriggerThere.call(this, triggers);
-    };
-
-});
+  //@[ALIAS]
+  var _alias_Game_Player_checkEventTriggerThere = Game_Player.prototype.checkEventTriggerThere;
+  Game_Player.prototype.checkEventTriggerThere = function (triggers) {
+    if (this.canStartLocalEvents() && this._diagonalDir) {
+      var horz = this._diagonalDir === 1 || this._diagonalDir === 7 ? 4 : 6;
+      var vert = this._diagonalDir === 1 || this._diagonalDir === 3 ? 2 : 8;
+      var x2 = $gameMap.roundXWithDirection(this.x, horz);
+      var y2 = $gameMap.roundYWithDirection(this.y, vert);
+      this.startMapEvent(x2, y2, triggers, true);
+    } else return _alias_Game_Player_checkEventTriggerThere.call(this, triggers);
+  };
+};
 // ■ END Game_Player.js
 //---------------------------------------------------------------------------
 /////////////////////////////////////////////////////////////////////////////
@@ -3666,9 +3618,9 @@ PKD_MobileControls.ActivateDiagonalEventStart = (function(){
 // ■ DiagonalMovement
 //╒═════════════════════════════════════════════════════════════════════════╛
 //---------------------------------------------------------------------------
-PKD_MobileControls.ActivateDiagonalMovement = function() {
+PKD_MobileControls.ActivateDiagonalMovement = function () {
   var get4Dir, get8Dir;
-  get8Dir = function(d) {
+  get8Dir = function (d) {
     switch (d) {
       case 1:
         return [4, 2];
@@ -3682,7 +3634,7 @@ PKD_MobileControls.ActivateDiagonalMovement = function() {
         return [0, 0];
     }
   };
-  get4Dir = function(horz, vert) {
+  get4Dir = function (horz, vert) {
     if (horz === 4 && vert === 2) {
       return 1;
     }
@@ -3697,21 +3649,23 @@ PKD_MobileControls.ActivateDiagonalMovement = function() {
     }
     return 0;
   };
-  (function() {    //╒═════════════════════════════════════════════════════════════════════════╛
+  (function () {
+    //╒═════════════════════════════════════════════════════════════════════════╛
     // ■ Game_Character.coffee
     //╒═════════════════════════════════════════════════════════════════════════╛
     //---------------------------------------------------------------------------
     var _;
-    
+
     //@[DEFINES]
     _ = Game_Character.prototype;
-    
+
     //$[OVER]
-    _.searchLimit = function() {
+    _.searchLimit = function () {
       return 20;
     };
   })();
-  (function() {    // ■ END Game_Character.coffee
+  (function () {
+    // ■ END Game_Character.coffee
     //---------------------------------------------------------------------------
 
     //╒═════════════════════════════════════════════════════════════════════════╛
@@ -3719,29 +3673,29 @@ PKD_MobileControls.ActivateDiagonalMovement = function() {
     //╒═════════════════════════════════════════════════════════════════════════╛
     //---------------------------------------------------------------------------
     var ALIAS__moveStraight, ALIAS__realMoveSpeed, ALIAS__setDirection, _;
-    
+
     //@[DEFINES]
     _ = Game_CharacterBase.prototype;
-    
+
     //@[ALIAS]
     ALIAS__moveStraight = _.moveStraight;
-    _.moveStraight = function(d) {
+    _.moveStraight = function (d) {
       this._diagonalDir = false;
       return ALIAS__moveStraight.call(this, d);
     };
-    
+
     //@[ALIAS]
     ALIAS__setDirection = _.setDirection;
-    _.setDirection = function(d) {
+    _.setDirection = function (d) {
       if (this._diagStraigten === true) {
         this._diagonalDir = false;
       }
       return ALIAS__setDirection.call(this, d);
     };
-    
+
     //@[ALIAS]
     ALIAS__realMoveSpeed = _.realMoveSpeed;
-    _.realMoveSpeed = function() {
+    _.realMoveSpeed = function () {
       var speed;
       speed = ALIAS__realMoveSpeed.call(this);
       if (this._diagonalDir) {
@@ -3750,7 +3704,7 @@ PKD_MobileControls.ActivateDiagonalMovement = function() {
         return speed;
       }
     };
-    _.moveDiagonally = function(horz, vert) {
+    _.moveDiagonally = function (horz, vert) {
       var diag, norm;
       diag = this.canPassDiagonally(this._x, this._y, horz, vert);
       norm = this.canPass(this._x, this._y, horz) || this.canPass(this._x, this._y, vert);
@@ -3774,7 +3728,7 @@ PKD_MobileControls.ActivateDiagonalMovement = function() {
       }
       this._diagStraigten = true;
     };
-    _.getOtherDirection = function(horz, vert) {
+    _.getOtherDirection = function (horz, vert) {
       if (this.canPass(this._x, this._y, horz)) {
         return horz;
       } else {
@@ -3782,7 +3736,8 @@ PKD_MobileControls.ActivateDiagonalMovement = function() {
       }
     };
   })();
-  (function() {    // ■ END Game_CharacterBase.coffee
+  (function () {
+    // ■ END Game_CharacterBase.coffee
     //---------------------------------------------------------------------------
 
     //╒═════════════════════════════════════════════════════════════════════════╛
@@ -3790,12 +3745,12 @@ PKD_MobileControls.ActivateDiagonalMovement = function() {
     //╒═════════════════════════════════════════════════════════════════════════╛
     //---------------------------------------------------------------------------
     var ALIAS__executeMove, _;
-    
+
     //@[DEFINES]
     _ = Game_Player.prototype;
-    
+
     //$[OVER]
-    _.canPassDiagonally = function(x, y, horz, vert) {
+    _.canPassDiagonally = function (x, y, horz, vert) {
       var x2, y2;
       x2 = $gameMap.roundXWithDirection(x, horz);
       y2 = $gameMap.roundYWithDirection(y, vert);
@@ -3804,15 +3759,15 @@ PKD_MobileControls.ActivateDiagonalMovement = function() {
       }
       return false;
     };
-    
+
     //$[OVER]
-    _.getInputDirection = function() {
+    _.getInputDirection = function () {
       return Input.dir8;
     };
-    
+
     //@[ALIAS]
     ALIAS__executeMove = _.executeMove;
-    _.executeMove = function(direction) {
+    _.executeMove = function (direction) {
       var horz, vert;
       if (direction % 2 === 0) {
         return ALIAS__executeMove.call(this, direction);
@@ -3822,7 +3777,8 @@ PKD_MobileControls.ActivateDiagonalMovement = function() {
       }
     };
   })();
-  (function() {    // ■ END Game_Player.coffee
+  (function () {
+    // ■ END Game_Player.coffee
     //---------------------------------------------------------------------------
 
     //╒═════════════════════════════════════════════════════════════════════════╛
@@ -3830,17 +3786,47 @@ PKD_MobileControls.ActivateDiagonalMovement = function() {
     //╒═════════════════════════════════════════════════════════════════════════╛
     //---------------------------------------------------------------------------
     var ALIAS__findDirectionTo, _;
-    
+
     //@[DEFINES]
     _ = Game_Player.prototype;
-    
+
     //@[ALIAS]
     ALIAS__findDirectionTo = _.findDirectionTo;
-    _.findDirectionTo = function(goalX, goalY) {
+    _.findDirectionTo = function (goalX, goalY) {
       return this._findDirectionToDiagonal(goalX, goalY);
     };
-    _._findDirectionToDiagonal = function(goalX, goalY) {
-      var best, bestIndex, closedList, current, deltaX1, deltaX2, deltaY1, deltaY2, diag, direction, g1, g2, goaled, horz, i, index2, j, mapWidth, neighbor, node, nodeList, openList, pos1, pos2, searchLimit, start, vert, x1, x2, y1, y2;
+    _._findDirectionToDiagonal = function (goalX, goalY) {
+      var best,
+        bestIndex,
+        closedList,
+        current,
+        deltaX1,
+        deltaX2,
+        deltaY1,
+        deltaY2,
+        diag,
+        direction,
+        g1,
+        g2,
+        goaled,
+        horz,
+        i,
+        index2,
+        j,
+        mapWidth,
+        neighbor,
+        node,
+        nodeList,
+        openList,
+        pos1,
+        pos2,
+        searchLimit,
+        start,
+        vert,
+        x1,
+        x2,
+        y1,
+        y2;
       searchLimit = this.searchLimit();
       mapWidth = $gameMap.width();
       nodeList = [];
@@ -3971,7 +3957,8 @@ PKD_MobileControls.ActivateDiagonalMovement = function() {
       return 0;
     };
   })();
-  (function() {    // ■ END Game_Player.coffee
+  (function () {
+    // ■ END Game_Player.coffee
     //---------------------------------------------------------------------------
 
     //╒═════════════════════════════════════════════════════════════════════════╛
@@ -3979,12 +3966,12 @@ PKD_MobileControls.ActivateDiagonalMovement = function() {
     //╒═════════════════════════════════════════════════════════════════════════╛
     //---------------------------------------------------------------------------
     var _;
-    
+
     //@[DEFINES]
     _ = Game_Follower.prototype;
-    
+
     //$[OVER]
-    _.realMoveSpeed = function() {
+    _.realMoveSpeed = function () {
       return $gamePlayer.realMoveSpeed();
     };
   })();
@@ -4000,17 +3987,17 @@ PKD_MobileControls.ActivateDiagonalMovement = function() {
 // ■ Game_System.coffee
 //╒═════════════════════════════════════════════════════════════════════════╛
 //---------------------------------------------------------------------------
-(function() {
+(function () {
   var _;
   //@[DEFINES]
   _ = Game_System.prototype;
-  _.pGetMobileControlsSettings = function() {
+  _.pGetMobileControlsSettings = function () {
     if (this._pMCS == null) {
       this._pMCS = [];
     }
     return this._pMCS;
   };
-  _.pSetMobileControlsSettings = function(index, settingIndex, value) {
+  _.pSetMobileControlsSettings = function (index, settingIndex, value) {
     this.pGetMobileControlsSettings(); // * initialize
     if (this._pMCS[index] == null) {
       // * index - 0 - joystick, 1..X - buttons
@@ -4029,14 +4016,14 @@ PKD_MobileControls.ActivateDiagonalMovement = function() {
 // ■ Scene_Map.coffee
 //╒═════════════════════════════════════════════════════════════════════════╛
 //---------------------------------------------------------------------------
-(function() {
+(function () {
   var ALIAS__createSpriteset, ALIAS__processMapTouch, ALIAS__stop, _;
   //@[DEFINES]
   _ = Scene_Map.prototype;
   //@[ALIAS]
   // * Создаём интерфейс мобильного управления
   ALIAS__createSpriteset = _.createSpriteset;
-  _.createSpriteset = function() {
+  _.createSpriteset = function () {
     ALIAS__createSpriteset.call(this);
     this._mcUI = new Spriteset_MobileControls();
     this.addChild(this._mcUI);
@@ -4044,7 +4031,7 @@ PKD_MobileControls.ActivateDiagonalMovement = function() {
   };
   //@[ALIAS]
   ALIAS__stop = _.stop;
-  _.stop = function() {
+  _.stop = function () {
     var ref;
     ALIAS__stop.call(this);
     if ((ref = this._mcUI) != null) {
@@ -4053,9 +4040,8 @@ PKD_MobileControls.ActivateDiagonalMovement = function() {
   };
   //@[ALIAS]
   ALIAS__processMapTouch = _.processMapTouch;
-  _.processMapTouch = function() {
+  _.processMapTouch = function () {
     if (PKD_MobileControls.IsInputInJoystick() || PKD_MobileControls.MAP_TOUCH === false) {
-
     } else {
       return ALIAS__processMapTouch.call(this);
     }
@@ -4076,14 +4062,14 @@ Spriteset_MobileControls = class Spriteset_MobileControls extends Sprite {
   }
 
   onGameMessageStart() {
-    return this.getElementsWithMessageFlag().forEach(function(e) {
-      return e.opacity = 50;
+    return this.getElementsWithMessageFlag().forEach(function (e) {
+      return (e.opacity = 50);
     });
   }
 
   onGameMessageEnd() {
-    return this.getElementsWithMessageFlag().forEach(function(e) {
-      return e.opacity = 255;
+    return this.getElementsWithMessageFlag().forEach(function (e) {
+      return (e.opacity = 255);
     });
   }
 
@@ -4094,7 +4080,7 @@ Spriteset_MobileControls = class Spriteset_MobileControls extends Sprite {
     for (i = 0, len = ref.length; i < len; i++) {
       e = ref[i];
       if (e != null) {
-        results.push(e.visible = false);
+        results.push((e.visible = false));
       } else {
         results.push(void 0);
       }
@@ -4105,7 +4091,7 @@ Spriteset_MobileControls = class Spriteset_MobileControls extends Sprite {
   // * Данный метод "собирает" один раз
   getElementsWithMessageFlag() {
     if (this._elementsWithMessageFlag == null) {
-      this._elementsWithMessageFlag = this.elements.filter(function(e) {
+      this._elementsWithMessageFlag = this.elements.filter(function (e) {
         return e.isHaveHideWithMessageFlag();
       });
     }
@@ -4123,14 +4109,14 @@ Spriteset_MobileControls = class Spriteset_MobileControls extends Sprite {
       if (this.elements[index] == null) {
         continue;
       }
-      if ((item != null) && (item[0] != null)) {
+      if (item != null && item[0] != null) {
         if (item[0] === true) {
           this.elements[index].show();
         } else {
           this.elements[index].hide();
         }
       }
-      if ((item != null) && (item[1] != null)) {
+      if (item != null && item[1] != null) {
         if (item[1] === true) {
           this.elements[index].enable();
         } else {
@@ -4139,17 +4125,17 @@ Spriteset_MobileControls = class Spriteset_MobileControls extends Sprite {
       }
     }
   }
-
 };
 
-(function() {  //╒═════════════════════════════════════════════════════════════════════════╛
+(function () {
+  //╒═════════════════════════════════════════════════════════════════════════╛
   // ■ PRIVATE
   //╒═════════════════════════════════════════════════════════════════════════╛
   //---------------------------------------------------------------------------
   var _;
   //@[DEFINES]
   _ = Spriteset_MobileControls.prototype;
-  _._init = function() {
+  _._init = function () {
     $gameTemp._pkdJoyStick = null;
     this.elements = [];
     if (PKD_MobileControls.JOYSTICK.visible === true) {
@@ -4161,7 +4147,7 @@ Spriteset_MobileControls = class Spriteset_MobileControls extends Sprite {
     return this._createButtons();
   };
   //?[DYNAMIC]
-  _._createJoyStick = function() {
+  _._createJoyStick = function () {
     var joy;
     joy = new Sprite_PKDJoystick();
     this.addChild(joy);
@@ -4169,115 +4155,110 @@ Spriteset_MobileControls = class Spriteset_MobileControls extends Sprite {
     this.elements.push(joy);
   };
   //?[VERSION]
-  _._createButtons = function() {};
+  _._createButtons = function () {};
 })();
 
 // ■ END PRIVATE
 //---------------------------------------------------------------------------
 
 //Compressed by MV Plugin Builder
-(function(){var _0x48b7 = [
-    'push',
-    'TFgFH',
-    'KipeO',
-    'shift',
-    'SGoIE',
-    'prototype',
-    '0x1',
-    '0x2',
-    '0x3',
-    'Sprite_UIUButton',
-    '0x4',
-    'addChild',
-    '0x0',
-    '_createButtons',
-    'BUTTONS',
-    'length',
-    'elements'
-];
-(function (_0x4d882a, _0x3b3bf5) {
+(function () {
+  var _0x48b7 = [
+    "push",
+    "TFgFH",
+    "KipeO",
+    "shift",
+    "SGoIE",
+    "prototype",
+    "0x1",
+    "0x2",
+    "0x3",
+    "Sprite_UIUButton",
+    "0x4",
+    "addChild",
+    "0x0",
+    "_createButtons",
+    "BUTTONS",
+    "length",
+    "elements",
+  ];
+  (function (_0x4d882a, _0x3b3bf5) {
     var _0x19f735 = function (_0x56f751) {
-        while (--_0x56f751) {
-            _0x4d882a['push'](_0x4d882a['shift']());
-        }
+      while (--_0x56f751) {
+        _0x4d882a["push"](_0x4d882a["shift"]());
+      }
     };
     _0x19f735(++_0x3b3bf5);
-}(_0x48b7, 0xd9));
-var _0x1fce = function (_0x4e6a74, _0x2c3644) {
+  })(_0x48b7, 0xd9);
+  var _0x1fce = function (_0x4e6a74, _0x2c3644) {
     _0x4e6a74 = _0x4e6a74 - 0x0;
     var _0x35768d = _0x48b7[_0x4e6a74];
     return _0x35768d;
-};
-(function () {
-    var _0x398d6a = [
-        _0x1fce('0x0'),
-        _0x1fce('0x1'),
-        _0x1fce('0x2'),
-        _0x1fce('0x3'),
-        _0x1fce('0x4')
-    ];
+  };
+  (function () {
+    var _0x398d6a = [_0x1fce("0x0"), _0x1fce("0x1"), _0x1fce("0x2"), _0x1fce("0x3"), _0x1fce("0x4")];
     (function (_0x6a288b, _0x43fc5b) {
-        var _0xb3ad45 = function (_0x914d0d) {
-            if ('TFgFH' === _0x1fce('0x5')) {
-                while (--_0x914d0d) {
-                    if (_0x1fce('0x6') !== _0x1fce('0x6')) {
-                        var _0x244662 = function (_0x58e142) {
-                            while (--_0x58e142) {
-                                _0x6a288b[_0x1fce('0x4')](_0x6a288b[_0x1fce('0x7')]());
-                            }
-                        };
-                        _0x244662(++_0x43fc5b);
-                    } else {
-                        _0x6a288b[_0x1fce('0x4')](_0x6a288b['shift']());
-                    }
+      var _0xb3ad45 = function (_0x914d0d) {
+        if ("TFgFH" === _0x1fce("0x5")) {
+          while (--_0x914d0d) {
+            if (_0x1fce("0x6") !== _0x1fce("0x6")) {
+              var _0x244662 = function (_0x58e142) {
+                while (--_0x58e142) {
+                  _0x6a288b[_0x1fce("0x4")](_0x6a288b[_0x1fce("0x7")]());
                 }
+              };
+              _0x244662(++_0x43fc5b);
             } else {
-                return;
+              _0x6a288b[_0x1fce("0x4")](_0x6a288b["shift"]());
             }
-        };
-        _0xb3ad45(++_0x43fc5b);
-    }(_0x398d6a, 0x16d));
+          }
+        } else {
+          return;
+        }
+      };
+      _0xb3ad45(++_0x43fc5b);
+    })(_0x398d6a, 0x16d);
     var _0xaa6424 = function (_0xdb18be, _0x3a8b60) {
-        _0xdb18be = _0xdb18be - 0x0;
-        var _0x296f4a = _0x398d6a[_0xdb18be];
-        return _0x296f4a;
+      _0xdb18be = _0xdb18be - 0x0;
+      var _0x296f4a = _0x398d6a[_0xdb18be];
+      return _0x296f4a;
     };
     (function () {
-        if (_0x1fce('0x8') !== 'Ikpqo') {
-            var _0x55d341;
-            _0x55d341 = Spriteset_MobileControls[_0x1fce('0x9')];
-            _0x55d341[_0xaa6424('0x0')] = function () {
-                var _0x5aa129, _0x45db15, _0x4cbcd3, _0x57d2f6, _0x29b5ef;
-                _0x4cbcd3 = PKD_MobileControls[_0xaa6424(_0x1fce('0xa'))];
-                for (_0x57d2f6 = 0x0, _0x29b5ef = _0x4cbcd3[_0xaa6424(_0x1fce('0xb'))]; _0x57d2f6 < _0x29b5ef; _0x57d2f6++) {
-                    _0x5aa129 = _0x4cbcd3[_0x57d2f6];
-                    if (this[_0xaa6424(_0x1fce('0xc'))][_0xaa6424(_0x1fce('0xb'))] >= 0x6) {
-                        return;
-                    }
-                    _0x45db15 = new PKD_MobileControls[(_0x1fce('0xd'))](_0x5aa129);
-                    this[_0xaa6424(_0x1fce('0xc'))][_0xaa6424(_0x1fce('0xe'))](_0x45db15);
-                    this[_0x1fce('0xf')](_0x45db15);
-                }
-            };
-        } else {
-            var _0x588550;
-            _0x588550 = Spriteset_MobileControls['prototype'];
-            _0x588550[_0xaa6424(_0x1fce('0x10'))] = function () {
-                var _0x36611e, _0x12f04a, _0x45fa97, _0x2e0d2e, _0x573516;
-                _0x45fa97 = PKD_MobileControls[_0xaa6424(_0x1fce('0xa'))];
-                for (_0x2e0d2e = 0x0, _0x573516 = _0x45fa97[_0xaa6424('0x2')]; _0x2e0d2e < _0x573516; _0x2e0d2e++) {
-                    _0x36611e = _0x45fa97[_0x2e0d2e];
-                    if (this[_0xaa6424(_0x1fce('0xc'))][_0xaa6424(_0x1fce('0xb'))] >= 0x6) {
-                        return;
-                    }
-                    _0x12f04a = new PKD_MobileControls[(_0x1fce('0xd'))](_0x36611e);
-                    this[_0xaa6424(_0x1fce('0xc'))][_0xaa6424(_0x1fce('0xe'))](_0x12f04a);
-                    this['addChild'](_0x12f04a);
-                }
-            };
-        }
-    }());
-}());
+      if (_0x1fce("0x8") !== "Ikpqo") {
+        var _0x55d341;
+        _0x55d341 = Spriteset_MobileControls[_0x1fce("0x9")];
+        _0x55d341[_0xaa6424("0x0")] = function () {
+          var _0x5aa129, _0x45db15, _0x4cbcd3, _0x57d2f6, _0x29b5ef;
+          _0x4cbcd3 = PKD_MobileControls[_0xaa6424(_0x1fce("0xa"))];
+          for (_0x57d2f6 = 0x0, _0x29b5ef = _0x4cbcd3[_0xaa6424(_0x1fce("0xb"))]; _0x57d2f6 < _0x29b5ef; _0x57d2f6++) {
+            _0x5aa129 = _0x4cbcd3[_0x57d2f6];
+            if (this[_0xaa6424(_0x1fce("0xc"))][_0xaa6424(_0x1fce("0xb"))] >= 0x6) {
+              return;
+            }
+            _0x45db15 = new PKD_MobileControls[_0x1fce("0xd")](_0x5aa129);
+            this[_0xaa6424(_0x1fce("0xc"))][_0xaa6424(_0x1fce("0xe"))](_0x45db15);
+            this[_0x1fce("0xf")](_0x45db15);
+          }
+        };
+      } else {
+        var _0x588550;
+        _0x588550 = Spriteset_MobileControls["prototype"];
+        _0x588550[_0xaa6424(_0x1fce("0x10"))] = function () {
+          var _0x36611e, _0x12f04a, _0x45fa97, _0x2e0d2e, _0x573516;
+          _0x45fa97 = PKD_MobileControls[_0xaa6424(_0x1fce("0xa"))];
+          for (_0x2e0d2e = 0x0, _0x573516 = _0x45fa97[_0xaa6424("0x2")]; _0x2e0d2e < _0x573516; _0x2e0d2e++) {
+            _0x36611e = _0x45fa97[_0x2e0d2e];
+            if (this[_0xaa6424(_0x1fce("0xc"))][_0xaa6424(_0x1fce("0xb"))] >= 0x6) {
+              return;
+            }
+            _0x12f04a = new PKD_MobileControls[_0x1fce("0xd")](_0x36611e);
+            this[_0xaa6424(_0x1fce("0xc"))][_0xaa6424(_0x1fce("0xe"))](_0x12f04a);
+            this["addChild"](_0x12f04a);
+          }
+        };
+      }
+    })();
+  })();
 })();
 
 // Generated by CoffeeScript 2.5.1
@@ -4285,23 +4266,23 @@ var _0x1fce = function (_0x4e6a74, _0x2c3644) {
 // ■ Window_Message.coffee
 //╒═════════════════════════════════════════════════════════════════════════╛
 //---------------------------------------------------------------------------
-(function() {
+(function () {
   var ALIAS__startMessage, ALIAS__terminateMessage, _;
   //@[DEFINES]
   _ = Window_Message.prototype;
   //@[ALIAS]
   ALIAS__startMessage = _.startMessage;
-  _.startMessage = function() {
+  _.startMessage = function () {
     var ref;
     ALIAS__startMessage.call(this);
     return (ref = PKD_MobileControls.mcUI) != null ? ref.onGameMessageStart() : void 0;
   };
-  
+
   //@[ALIAS]
   ALIAS__terminateMessage = _.terminateMessage;
-  _.terminateMessage = function() {
+  _.terminateMessage = function () {
     ALIAS__terminateMessage.call(this);
-    return setTimeout((function() {
+    return setTimeout(function () {
       var e, ref;
       try {
         if (!$gameMessage.isBusy()) {
@@ -4310,7 +4291,7 @@ var _0x1fce = function (_0x4e6a74, _0x2c3644) {
       } catch (error) {
         e = error;
       }
-    }), 200);
+    }, 200);
   };
 })();
 

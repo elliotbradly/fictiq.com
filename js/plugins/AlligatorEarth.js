@@ -92,6 +92,8 @@
       $gameSystem;
       $gameMap;
 
+      SceneManager._scene._spriteset;
+
       debugger;
 
       //var base = new Sprite(ImageManager.loadPicture("Actor1_1"));

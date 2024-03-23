@@ -90,8 +90,8 @@
     setTimeout(() => {
       $gameTemp;
       $gameSystem;
+      $gameMap;
 
-      this._tilemap;
       debugger;
 
       //var base = new Sprite(ImageManager.loadPicture("Actor1_1"));

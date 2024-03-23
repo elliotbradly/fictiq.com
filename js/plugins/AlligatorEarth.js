@@ -62,9 +62,6 @@
     var bit = await window.BLENDER.hunt(initBld, { val: 0 });
     var bit = await window.BLENDER.hunt(initAtv, { val: 0 });
 
-    this._tilemap;
-    debugger;
-
     console.log("init activity " + JSON.stringify(bit));
 
     //var bit = await window.BLENDER.hunt(initBld, { val: 0, dat: MQTT, src: local });
@@ -93,6 +90,9 @@
     setTimeout(() => {
       $gameTemp;
       $gameSystem;
+
+      this._tilemap;
+      debugger;
 
       //var base = new Sprite(ImageManager.loadPicture("Actor1_1"));
 

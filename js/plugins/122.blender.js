@@ -606,6 +606,9 @@ const initActivity = (cpy, bal, ste) => {
         auth = await discordSdk.commands.authenticate({
             access_token,
         });
+        discordSdk.subscribe(embedded_app_sdk_1.Events.CURRENT_USER_UPDATE, (data) => {
+            console.log('update ' + JSON.stringify(data));
+        });
         const guilds = await fetch(`https://discord.com/api/v10/users/@me/guilds`, {
             headers: {
                 // NOTE: we're using the access_token provided by the "authenticate" command

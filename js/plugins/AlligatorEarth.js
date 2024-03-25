@@ -92,13 +92,16 @@
       $gameSystem;
       $gameMap;
 
-      SceneManager._scene._spriteset;
+      var display = SceneManager._scene._spriteset.children[1];
 
+      SceneManager._scene;
       debugger;
 
-      //var base = new Sprite(ImageManager.loadPicture("Actor1_1"));
+      var base = new Sprite(ImageManager.loadPicture("Actor1_1"));
 
       //Graphics.app.stage.children[0].addChild(base);
+
+      Spriteset_Map._tilemap.addChild(base);
 
       //$gameTemp._pkdJoyStick.base.addChild(base);
 

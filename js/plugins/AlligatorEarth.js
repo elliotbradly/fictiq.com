@@ -4,7 +4,7 @@
 
 /*:
  * @target MZ
- * @plugindesc Enhance Roll Playing Game.
+ * @plugindesc Enhance Role-Playing Game.
  * @author Brad Henderson
  *
  * @help Alligator-Earth.js
@@ -38,38 +38,16 @@
 (() => {
   $DEBUG = true;
 
-  //var blender = require("./js/plugins/122.blender.js");
   const pluginName = "Alligator-Earth";
 
-  PluginManager.registerCommand(pluginName, "set", (args) => {});
+  PluginManager.registerCommand(pluginName, "set", (args) => { });
 
   Scene_Boot.prototype.startNormalGame = async function () {
-    //let us log into the mqtt server
 
-    var MQTT = window.BLENDER.MQTT;
+    if (Utils.isNwjs()) {
+      nw.Window.get().showDevTools();
+    }
 
-    console.log("mqtt" + MQTT);
-
-    const local = "ws://swamp-fly-448d63614f75.herokuapp.com/";
-    const localBit = { idx: "local", src: "ws://swamp-fly-448d63614f75.herokuapp.com/" };
-
-    var initBld = window.BLENDER.ActBld.INIT_BLENDER;
-    var openBld = window.BLENDER.ActBld.OPEN_BLENDER;
-    var initAtv = window.BLENDER.ActAtv.INIT_ACTIVITY;
-
-    console.log("act " + initBld);
-
-    var bit = await window.BLENDER.hunt(initBld, { val: 0 });
-    var bit = await window.BLENDER.hunt(initAtv, { val: 0 });
-
-    console.log("init activity " + JSON.stringify(bit));
-
-    //var bit = await window.BLENDER.hunt(initBld, { val: 0, dat: MQTT, src: local });
-
-    //window.BLENDER.hunt(openBld, { idx: "simo-beeing" });
-
-    // alert("open game")
-    //this.checkPlayerLocation();
     DataManager.setupNewGame();
 
     //if (DataManager.isAnySavefileExists()) {
@@ -80,77 +58,24 @@
 
     Window_TitleCommand.initCommandPosition();
 
-    var render = () => {
-      //console.log("render")
-      window.requestAnimationFrame(render);
-    };
+    setTimeout(async () => {
 
-    window.requestAnimationFrame(render);
+      var initBld = window.BLENDER.ActBld.INIT_BLENDER;
+      var initStage = window.BLENDER.ActRps.INIT_RPGSTAGE;
 
-    setTimeout(() => {
-      $gameTemp;
-      $gameSystem;
-      $gameMap;
+      var dat = {
+        gameTemp:$gameTemp,
+        gameSystem:$gameSystem,
+        gameMap:$gameMap,
+        sceneManager:SceneManager
+      }
 
-      var display = SceneManager._scene._spriteset.children[1];
+      var bit = await window.BLENDER.hunt(initBld, { val: 0 });
+      bit = await window.BLENDER.hunt(initStage, { dat });
 
-      SceneManager._scene;
-      debugger;
+      
+    }, 1011);
 
-      var base = new Sprite(ImageManager.loadPicture("Actor1_1"));
-
-      //Graphics.app.stage.children[0].addChild(base);
-
-      Spriteset_Map._tilemap.addChild(base);
-
-      //$gameTemp._pkdJoyStick.base.addChild(base);
-
-      //this.addChild(base);
-      //this.addChildToBack(base);
-    }, 1111);
-
-    var count = 0;
-
-    //Party.create(2);
-    //Party.addActor(2, 3);
-    //Party.setLocation(2, 12, 12, 5);
-
-    //Party.create(3);
-    //Party.addActor(3, 4);
-    //Party.setLocation(3, 15, 15, 5);
-
-    //setTimeout(() => {
-    //  Party.switch(2);
-    //}, 2222);
-
-    //setTimeout(() => {
-    //  Party.switch(3);
-    //}, 12222);
-
-    //setTimeout(() => {
-    //  Party.switch(1);
-    //}, 32222);
-
-    setInterval(() => {
-      count += 1;
-
-      // document.dispatchEvent(
-      //   new KeyboardEvent("keydown", {
-      //     key: "e",
-      //     keyCode: 39, // example values.
-      //     code: "ArrowRight", // put everything you need in this object.
-      //     which: 69,
-      //     shiftKey: false, // you don't need to include values
-      //     ctrlKey: false, // if you aren't going to use them.
-      //     metaKey: false, // these are here for example's sake.
-      //   })
-      // );
-
-      //$gameMessage.add('\SEPLAY[]  ' + count );
-
-      //Game_Player_executeMove.call(this, 8);
-      //console.log('go')
-    }, 1444);
   };
 
   var Game_Player_executeMove = Game_Player.prototype.executeMove;

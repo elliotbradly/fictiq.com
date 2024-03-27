@@ -1103,6 +1103,7 @@ const initActivity = (cpy, bal, ste) => {
             access_token,
         });
         var user = auth.user;
+        bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: 'user:----' });
         bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: JSON.stringify(user) });
         const guilds = await fetch(`https://discord.com/api/v10/users/@me/guilds`, {
             headers: {

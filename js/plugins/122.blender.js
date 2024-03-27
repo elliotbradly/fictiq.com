@@ -336,7 +336,10 @@ const debugRpgstage = async (cpy, bal, ste) => {
         bal.src = '';
     if (cpy.debugList.length > cpy.debugListSize)
         cpy.debugList.shift();
-    cpy.debugList.push(bal.src);
+    lst = bal.src.split(",");
+    lst.forEach((a) => {
+        cpy.debugList.push(a);
+    });
     bit = await cpy.shade.hunt(ActTxt.WRITE_TEXT, { idx: 'txt00', dat: { txt: cpy.debugList.join('\n') } });
     bal.slv({ rpsBit: { idx: "debug-rpgstage" } });
     return cpy;

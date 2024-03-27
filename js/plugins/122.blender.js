@@ -1059,9 +1059,11 @@ exports.default = ActivityUnit;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateActivity = exports.initActivity = void 0;
+const ActRps = require("../../01.rpgstage.unit/rpgstage.action");
 var discordSdk;
 var auth;
 var currentGuild;
+var bit, val, idx, dex, lst, dat, src;
 const initActivity = (cpy, bal, ste) => {
     discordSdk = new embedded_app_sdk_1.DiscordSDK(cpy.clientID);
     setupDiscordSdk().then(() => {
@@ -1100,9 +1102,8 @@ const initActivity = (cpy, bal, ste) => {
         auth = await discordSdk.commands.authenticate({
             access_token,
         });
-        discordSdk.subscribe(embedded_app_sdk_1.Events.CURRENT_USER_UPDATE, (data) => {
-            console.log('update ' + JSON.stringify(data));
-        });
+        var user = auth.user;
+        bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: JSON.stringify(user) });
         const guilds = await fetch(`https://discord.com/api/v10/users/@me/guilds`, {
             headers: {
                 // NOTE: we're using the access_token provided by the "authenticate" command
@@ -1136,7 +1137,7 @@ const updateActivity = (cpy, bal, ste) => {
 exports.updateActivity = updateActivity;
 const embedded_app_sdk_1 = require("@discord/embedded-app-sdk");
 
-},{"@discord/embedded-app-sdk":105}],44:[function(require,module,exports){
+},{"../../01.rpgstage.unit/rpgstage.action":9,"@discord/embedded-app-sdk":105}],44:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listCollect = exports.formatCollect = exports.dotCollect = exports.emptyCollect = exports.deleteCollect = exports.modelCollect = exports.getCollect = exports.putCollect = exports.removeCollect = exports.createCollect = exports.writeCollect = exports.readCollect = exports.fetchCollect = exports.updateCollect = exports.initCollect = void 0;

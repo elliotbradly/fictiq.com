@@ -1930,6 +1930,8 @@ const createText = async (cpy, bal, ste) => {
         dat.a = 1;
     if (dat.clr == null)
         dat.clr = 0x000000;
+    if (dat.aln == null)
+        dat.aln = "right";
     try {
         dat.bit = new PIXI.Text(dat.txt);
         dat.bit.style = new PIXI.TextStyle({
@@ -1938,7 +1940,7 @@ const createText = async (cpy, bal, ste) => {
             wordWrap: true,
             wordWrapWidth: dat.wrp,
             fill: dat.clr,
-            align: "right",
+            align: dat.aln,
         });
     }
     catch (e) {

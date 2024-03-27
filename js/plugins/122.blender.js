@@ -238,6 +238,7 @@ exports.writeBlender = writeBlender;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.debugRpgstage = exports.updateRpgstage = exports.initRpgstage = void 0;
+const ActAtv = require("../../80.activity.unit/activity.action");
 const ActRps = require("../rpgstage.action");
 const ActHud = require("../../10.hud.unit/hud.action");
 const ActTxt = require("../../act/text.action");
@@ -265,6 +266,7 @@ const initRpgstage = async (cpy, bal, ste) => {
     var text = bit.txtBit.dat.bit;
     hud.addChild(text);
     bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: 'Welcome to Alligator Earth' });
+    bit = await ste.hunt(ActAtv.INIT_ACTIVITY, { val: 0 });
     //debugger
     //debugger
     //cpy.mainHUD.visible = false
@@ -341,7 +343,7 @@ const debugRpgstage = async (cpy, bal, ste) => {
 exports.debugRpgstage = debugRpgstage;
 const HUD = require("../../val/hud");
 
-},{"../../10.hud.unit/hud.action":33,"../../act/text.action":72,"../../val/hud":76,"../rpgstage.action":9}],9:[function(require,module,exports){
+},{"../../10.hud.unit/hud.action":33,"../../80.activity.unit/activity.action":38,"../../act/text.action":72,"../../val/hud":76,"../rpgstage.action":9}],9:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DebugRpgstage = exports.DEBUG_RPGSTAGE = exports.UpdateRpgstage = exports.UPDATE_RPGSTAGE = exports.InitRpgstage = exports.INIT_RPGSTAGE = void 0;

@@ -267,6 +267,7 @@ const initRpgstage = async (cpy, bal, ste) => {
     hud.addChild(text);
     bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: 'Welcome to Alligator Earth' });
     bit = await ste.hunt(ActAtv.INIT_ACTIVITY, { val: 0 });
+    bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: JSON.stringify(bit) });
     //debugger
     //debugger
     //cpy.mainHUD.visible = false

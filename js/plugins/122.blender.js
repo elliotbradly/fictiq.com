@@ -426,7 +426,7 @@ exports.RpgstageModel = void 0;
 class RpgstageModel {
     constructor() {
         this.debugList = [];
-        this.debugListSize = 11;
+        this.debugListSize = 8;
         //idx:string;
         //rpgstageBitList: RpgstageBit[] = [];
         //rpgstageBits: any = {};
@@ -1688,7 +1688,7 @@ const updateMenu = async (cpy, bal, ste) => {
             var count = 0;
             var interval = setInterval(() => {
                 count += 1;
-                if (count <= 10)
+                if (count <= 11)
                     ste.bus(ActCns.UPDATE_CONSOLE, { idx: 'cns00', src: 'waiting... ' + count });
                 else
                     clearInterval(interval);

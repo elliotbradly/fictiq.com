@@ -291,6 +291,12 @@ const initRpgstage = async (cpy, bal, ste) => {
     bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: '----------' });
     bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: '----------' });
     bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: '----------' });
+    bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: '----------' });
+    bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: '----------' });
+    bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: '----------' });
+    bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: '----------' });
+    bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: '----------' });
+    bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: '----------' });
     bit = await ste.hunt(ActAtv.INIT_ACTIVITY, { val: 0 });
     bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: JSON.stringify(bit) });
     //debugger

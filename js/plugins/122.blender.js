@@ -426,7 +426,7 @@ exports.RpgstageModel = void 0;
 class RpgstageModel {
     constructor() {
         this.debugList = [];
-        this.debugListSize = 15;
+        this.debugListSize = 11;
         //idx:string;
         //rpgstageBitList: RpgstageBit[] = [];
         //rpgstageBits: any = {};

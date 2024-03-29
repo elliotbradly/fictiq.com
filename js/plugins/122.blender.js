@@ -247,7 +247,8 @@ const writeBlender = (cpy, bal, ste) => {
 };
 exports.writeBlender = writeBlender;
 const commitBlender = async (cpy, bal, ste) => {
-    bit = await ste.bus(ActGit.COMMIT_GITHUB, { idx: '122.blender', lst: ['../', './service', './fictiq.com'], src: " from 122.blender" });
+    dat = { lst: ['../', '../', './122.blender'] };
+    bit = await ste.bus(ActGit.COMMIT_GITHUB, { idx: '122.blender', lst: ['../', './service', './fictiq.com'], src: " from 122.blender", dat });
     lst = bit.gitBit.lst;
     bal.slv({ blnBit: { idx: "commit-blender", lst } });
     return cpy;
@@ -264,7 +265,6 @@ const ActHud = require("../../10.hud.unit/hud.action");
 const ActTxt = require("../../act/text.action");
 var bit, val, idx, dex, lst, dat, src;
 const initRpgstage = async (cpy, bal, ste) => {
-    console.log("init rpg stage");
     var dat = bal.dat;
     cpy.shade = dat.shade;
     cpy.gameMap = dat.gameMap;
@@ -287,6 +287,7 @@ const initRpgstage = async (cpy, bal, ste) => {
     var text = bit.txtBit.dat.bit;
     hud.addChild(text);
     bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: 'Welcome to Alligator Earth' });
+    bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: 'init rpg stage' });
     bit = await ste.hunt(ActAtv.INIT_ACTIVITY, { val: 0 });
     bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: JSON.stringify(bit) });
     //debugger

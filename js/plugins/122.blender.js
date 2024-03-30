@@ -1186,7 +1186,8 @@ const initClientsocket = (cpy, bal, ste) => {
 exports.initClientsocket = initClientsocket;
 const updateClientsocket = (cpy, bal, ste) => {
     console.log(JSON.stringify(bal));
-    bal.slv({ cskBit: { idx: "update-clientsocket" } });
+    if (bal.slv != null)
+        bal.slv({ cskBit: { idx: "update-clientsocket" } });
     return cpy;
 };
 exports.updateClientsocket = updateClientsocket;

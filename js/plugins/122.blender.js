@@ -1113,7 +1113,6 @@ const initActivity = (cpy, bal, ste) => {
         // Note: the access_token returned is a sensitive secret and should be treated as such
     });
     async function setupDiscordSdk() {
-        debugger;
         await discordSdk.ready();
         console.log("Discord SDK is ready");
         // Authorize with Discord Client

@@ -1091,6 +1091,7 @@ exports.default = ActivityUnit;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateActivity = exports.initActivity = void 0;
 const ActRps = require("../../01.rpgstage.unit/rpgstage.action");
+const ActCsk = require("../../96.clientsocket.unit/clientsocket.action");
 var discordSdk;
 var auth;
 var currentGuild;
@@ -1153,6 +1154,8 @@ const initActivity = (cpy, bal, ste) => {
         }).then((response) => response.json());
         // 2. Find the current guild's info, including it's "icon"
         currentGuild = guilds.find((g) => g.id === discordSdk.guildId);
+        ////here
+        bit = await ste.hunt(ActCsk.INIT_CLIENTSOCKET, {});
         if (auth == null) {
             throw new Error("Authenticate command failed");
         }
@@ -1165,12 +1168,13 @@ const updateActivity = (cpy, bal, ste) => {
 exports.updateActivity = updateActivity;
 const embedded_app_sdk_1 = require("@discord/embedded-app-sdk");
 
-},{"../../01.rpgstage.unit/rpgstage.action":9,"@discord/embedded-app-sdk":112}],44:[function(require,module,exports){
+},{"../../01.rpgstage.unit/rpgstage.action":9,"../../96.clientsocket.unit/clientsocket.action":45,"@discord/embedded-app-sdk":112}],44:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateClientsocket = exports.initClientsocket = void 0;
 var bit, val, idx, dex, lst, dat, src;
 const initClientsocket = (cpy, bal, ste) => {
+    debugger;
     const currentUrl = window.location.origin;
     var socket = new WebSocket(currentUrl.replace('http', 'ws') + '/socket/');
     socket.addEventListener('message', function (event) {

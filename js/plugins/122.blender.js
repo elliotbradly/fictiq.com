@@ -240,7 +240,6 @@ const reloadBlender = (cpy, bal, ste) => {
     return cpy;
 };
 exports.reloadBlender = reloadBlender;
-var patch = (ste, type, bale) => ste.dispatch({ type, bale });
 const writeBlender = (cpy, bal, ste) => {
     debugger;
     return cpy;
@@ -254,6 +253,7 @@ const commitBlender = async (cpy, bal, ste) => {
     return cpy;
 };
 exports.commitBlender = commitBlender;
+var patch = (ste, type, bale) => ste.dispatch({ type, bale });
 
 },{"../../00.blender.unit/blender.action":2,"../../98.menu.unit/menu.action":57,"../../99.bus.unit/bus.action":62,"../../act/disk.action":73,"../../act/engine.action":74,"../../act/github.action":75,"../../act/pivot.action":77,"child_process":undefined}],8:[function(require,module,exports){
 "use strict";
@@ -1172,26 +1172,27 @@ const embedded_app_sdk_1 = require("@discord/embedded-app-sdk");
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateClientsocket = exports.initClientsocket = void 0;
+const ActCsk = require("../../96.clientsocket.unit/clientsocket.action");
 var bit, val, idx, dex, lst, dat, src;
 const initClientsocket = (cpy, bal, ste) => {
-    debugger;
     const currentUrl = window.location.origin;
     var socket = new WebSocket(currentUrl.replace('http', 'ws') + '/socket/');
-    socket.addEventListener('message', function (event) {
-        if (event.data) {
-            console.log(event.data);
-        }
+    socket.addEventListener('message', (event) => {
+        if (event.data)
+            patch(ste, ActCsk.UPDATE_CLIENTSOCKET, { dat: event.data });
     });
-    bal.slv({ intBit: { idx: "init-rpgstage" } });
+    bal.slv({ intBit: { idx: "init-clientsocket" } });
     return cpy;
 };
 exports.initClientsocket = initClientsocket;
 const updateClientsocket = (cpy, bal, ste) => {
+    debugger;
     return cpy;
 };
 exports.updateClientsocket = updateClientsocket;
+var patch = (ste, type, bale) => ste.dispatch({ type, bale });
 
-},{}],45:[function(require,module,exports){
+},{"../../96.clientsocket.unit/clientsocket.action":45}],45:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UpdateClientsocket = exports.UPDATE_CLIENTSOCKET = exports.InitClientsocket = exports.INIT_CLIENTSOCKET = void 0;

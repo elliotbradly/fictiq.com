@@ -1128,36 +1128,36 @@ const initActivity = (cpy, bal, ste) => {
         });
         bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: 'code:----' });
         bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: JSON.stringify(code) });
-        debugger;
-        // Retrieve an access_token from your activity's server
-        const response = await fetch("/api/token", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                code,
-            }),
-        });
-        const { access_token } = await response.json();
-        // Authenticate with Discord client (using the access_token)
-        auth = await discordSdk.commands.authenticate({
-            access_token,
-        });
-        var user = auth.user;
-        bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: 'user:----' });
-        bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: JSON.stringify(user) });
-        const guilds = await fetch(`https://discord.com/api/v10/users/@me/guilds`, {
-            headers: {
-                // NOTE: we're using the access_token provided by the "authenticate" command
-                Authorization: `Bearer ${auth.access_token}`,
-                'Content-Type': 'application/json',
-            },
-        }).then((response) => response.json());
-        // 2. Find the current guild's info, including it's "icon"
-        currentGuild = guilds.find((g) => g.id === discordSdk.guildId);
+        //maybe connect to websocket here
         ////here
-        bit = await ste.hunt(ActCsk.INIT_CLIENTSOCKET, {});
+        bit = await ste.hunt(ActCsk.INIT_CLIENTSOCKET, { idx: code });
+        // Retrieve an access_token from your activity's server
+        //const response = await fetch("/api/token", {
+        //  method: "POST",
+        //  headers: {
+        //    "Content-Type": "application/json",
+        //  },
+        //  body: JSON.stringify({
+        //    code,
+        //  }),
+        //});
+        //const { access_token } = await response.json();
+        // Authenticate with Discord client (using the access_token)
+        //auth = await discordSdk.commands.authenticate({
+        //  access_token,
+        //});
+        //var user = auth.user
+        //bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: 'user:----' });
+        //bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: JSON.stringify(user) });
+        //const guilds = await fetch(`https://discord.com/api/v10/users/@me/guilds`, {
+        //  headers: {
+        // NOTE: we're using the access_token provided by the "authenticate" command
+        //    Authorization: `Bearer ${auth.access_token}`,
+        //    'Content-Type': 'application/json',
+        //  },
+        //}).then((response) => response.json());
+        // 2. Find the current guild's info, including it's "icon"
+        //currentGuild = guilds.find((g) => g.id === discordSdk.guildId);
         if (auth == null) {
             throw new Error("Authenticate command failed");
         }
@@ -1179,6 +1179,8 @@ var bit, val, idx, dex, lst, dat, src;
 const initClientsocket = (cpy, bal, ste) => {
     const currentUrl = window.location.origin;
     var socket = new WebSocket(currentUrl.replace('http', 'ws') + '/socket/');
+    var intBit = { intBit: { idx: bal.idx } };
+    socket.send(JSON.stringify(intBit));
     socket.addEventListener('message', (event) => {
         if (event.data)
             patch(ste, ActCsk.UPDATE_CLIENTSOCKET, { dat: event.data });

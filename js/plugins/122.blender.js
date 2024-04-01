@@ -1174,16 +1174,15 @@ const embedded_app_sdk_1 = require("@discord/embedded-app-sdk");
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateClientsocket = exports.initClientsocket = void 0;
-const ActCsk = require("../../96.clientsocket.unit/clientsocket.action");
 var bit, val, idx, dex, lst, dat, src;
 const initClientsocket = (cpy, bal, ste) => {
     const currentUrl = window.location.origin;
     var socket = new WebSocket(currentUrl.replace('http', 'ws') + '/socket/');
-    var intBit = { intBit: { idx: bal.idx } };
-    socket.send(JSON.stringify(intBit));
     socket.addEventListener('message', (event) => {
-        if (event.data)
-            patch(ste, ActCsk.UPDATE_CLIENTSOCKET, { dat: event.data });
+        var intBit = { intBit: { idx: bal.idx } };
+        socket.send(JSON.stringify(intBit));
+        debugger;
+        //if (event.data) patch( ste, ActCsk.UPDATE_CLIENTSOCKET, {dat:event.data} )
     });
     bal.slv({ intBit: { idx: "init-clientsocket" } });
     return cpy;
@@ -1198,7 +1197,7 @@ const updateClientsocket = (cpy, bal, ste) => {
 exports.updateClientsocket = updateClientsocket;
 var patch = (ste, type, bale) => ste.dispatch({ type, bale });
 
-},{"../../96.clientsocket.unit/clientsocket.action":45}],45:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UpdateClientsocket = exports.UPDATE_CLIENTSOCKET = exports.InitClientsocket = exports.INIT_CLIENTSOCKET = void 0;

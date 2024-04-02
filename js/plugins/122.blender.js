@@ -1182,6 +1182,7 @@ const initClientsocket = (cpy, bal, ste) => {
         socket.send(JSON.stringify(intBit));
         var sighBit = { idx: ActEng.UPDATE_ENGINE, dat: {} };
         setInterval(() => {
+            ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: 'set interval' });
             socket.send(JSON.stringify(sighBit));
         }, 3333);
         socket.removeEventListener('message', init);

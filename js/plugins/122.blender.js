@@ -1175,13 +1175,15 @@ var bit, val, idx, dex, lst, dat, src;
 const initClientsocket = (cpy, bal, ste) => {
     const currentUrl = window.location.origin;
     var socket = new WebSocket(currentUrl.replace('http', 'ws') + '/socket/');
-    var init = (event) => {
+    var init = async (event) => {
+        bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: 'initing the client socket' });
         var intBit = { intBit: { idx: bal.idx, dat: bal.dat } };
         socket.send(JSON.stringify(intBit));
         socket.removeEventListener('message', init);
         socket.addEventListener('message', update);
     };
-    var update = (event) => {
+    var update = async (event) => {
+        bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: 'updating the client socket' });
         if (event.data)
             patch(ste, ActCsk.UPDATE_CLIENTSOCKET, { dat: event.data });
     };

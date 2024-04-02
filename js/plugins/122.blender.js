@@ -1185,7 +1185,7 @@ const initClientsocket = (cpy, bal, ste) => {
     var update = async (event) => {
         bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: 'updating the client socket' });
         if (event.data)
-            patch(ste, ActCsk.UPDATE_CLIENTSOCKET, { dat: event.data });
+            patch(ste, ActCsk.UPDATE_CLIENTSOCKET, { dat: JSON.parse(event.data) });
     };
     socket.addEventListener('message', init);
     bal.slv({ intBit: { idx: "init-clientsocket" } });

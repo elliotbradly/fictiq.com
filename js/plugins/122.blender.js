@@ -1193,9 +1193,12 @@ const initClientsocket = (cpy, bal, ste) => {
 };
 exports.initClientsocket = initClientsocket;
 const updateClientsocket = async (cpy, bal, ste) => {
-    bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: JSON.stringify(bal) });
-    if (bal.slv != null)
+    if (bal.dat == 'heartbeat ') {
         bal.slv({ cskBit: { idx: "update-clientsocket" } });
+        return cpy;
+    }
+    bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: JSON.stringify(bal) });
+    bal.slv({ cskBit: { idx: "update-clientsocket" } });
     return cpy;
 };
 exports.updateClientsocket = updateClientsocket;

@@ -1169,6 +1169,7 @@ const embedded_app_sdk_1 = require("@discord/embedded-app-sdk");
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateClientsocket = exports.initClientsocket = void 0;
+const ActRps = require("../../01.rpgstage.unit/rpgstage.action");
 const ActCsk = require("../../96.clientsocket.unit/clientsocket.action");
 var bit, val, idx, dex, lst, dat, src;
 const initClientsocket = (cpy, bal, ste) => {
@@ -1189,8 +1190,8 @@ const initClientsocket = (cpy, bal, ste) => {
     return cpy;
 };
 exports.initClientsocket = initClientsocket;
-const updateClientsocket = (cpy, bal, ste) => {
-    console.log(JSON.stringify(bal));
+const updateClientsocket = async (cpy, bal, ste) => {
+    bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: JSON.stringify(bal) });
     if (bal.slv != null)
         bal.slv({ cskBit: { idx: "update-clientsocket" } });
     return cpy;
@@ -1198,7 +1199,7 @@ const updateClientsocket = (cpy, bal, ste) => {
 exports.updateClientsocket = updateClientsocket;
 var patch = (ste, type, bale) => ste.dispatch({ type, bale });
 
-},{"../../96.clientsocket.unit/clientsocket.action":45}],45:[function(require,module,exports){
+},{"../../01.rpgstage.unit/rpgstage.action":9,"../../96.clientsocket.unit/clientsocket.action":45}],45:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UpdateClientsocket = exports.UPDATE_CLIENTSOCKET = exports.InitClientsocket = exports.INIT_CLIENTSOCKET = void 0;

@@ -1129,26 +1129,24 @@ const initActivity = (cpy, bal, ste) => {
         bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: 'code:----' });
         bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: JSON.stringify(code) });
         //maybe connect to websocket here
-        ////here
-        bit = await ste.hunt(ActCsk.INIT_CLIENTSOCKET, { idx: code });
         // Retrieve an access_token from your activity's server
-        //const response = await fetch("/api/token", {
-        //  method: "POST",
-        //  headers: {
-        //    "Content-Type": "application/json",
-        //  },
-        //  body: JSON.stringify({
-        //    code,
-        //  }),
-        //});
-        //const { access_token } = await response.json();
-        // Authenticate with Discord client (using the access_token)
-        //auth = await discordSdk.commands.authenticate({
-        //  access_token,
-        //});
-        //var user = auth.user
-        //bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: 'user:----' });
-        //bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: JSON.stringify(user) });
+        const response = await fetch("/api/token", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                code,
+            }),
+        });
+        const { access_token } = await response.json();
+        auth = await discordSdk.commands.authenticate({
+            access_token,
+        });
+        var user = auth.user;
+        bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: 'user:----' });
+        bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: JSON.stringify(user) });
+        bit = await ste.hunt(ActCsk.INIT_CLIENTSOCKET, { idx: code });
         //const guilds = await fetch(`https://discord.com/api/v10/users/@me/guilds`, {
         //  headers: {
         // NOTE: we're using the access_token provided by the "authenticate" command

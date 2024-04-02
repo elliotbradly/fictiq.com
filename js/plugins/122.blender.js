@@ -1184,7 +1184,7 @@ const initClientsocket = (cpy, bal, ste) => {
     };
     var update = async (event) => {
         bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: 'updating the client socket' });
-        if (event.data)
+        if (event.data != 'heartbeat')
             patch(ste, ActCsk.UPDATE_CLIENTSOCKET, { dat: JSON.parse(event.data) });
     };
     socket.addEventListener('message', init);
@@ -1195,11 +1195,6 @@ exports.initClientsocket = initClientsocket;
 const updateClientsocket = async (cpy, bal, ste) => {
     if (bal == null)
         bal = { idx, dat: {} };
-    if (bal.dat == 'heartbeat ') {
-        if (bal.slv != null)
-            bal.slv({ cskBit: { idx: "update-clientsocket", src: 'heartbeat' } });
-        return cpy;
-    }
     bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: JSON.stringify(bal) });
     if (bal.slv != null)
         bal.slv({ cskBit: { idx: "update-clientsocket" } });

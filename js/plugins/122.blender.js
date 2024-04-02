@@ -1115,7 +1115,6 @@ const initActivity = (cpy, bal, ste) => {
     async function setupDiscordSdk() {
         await discordSdk.ready();
         console.log("Discord SDK is ready");
-        // Authorize with Discord Client
         const { code } = await discordSdk.commands.authorize({
             client_id: cpy.clientID,
             response_type: "code",
@@ -1128,8 +1127,6 @@ const initActivity = (cpy, bal, ste) => {
         });
         bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: 'code:----' });
         bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: JSON.stringify(code) });
-        //maybe connect to websocket here
-        // Retrieve an access_token from your activity's server
         const response = await fetch("/api/token", {
             method: "POST",
             headers: {
@@ -1146,7 +1143,7 @@ const initActivity = (cpy, bal, ste) => {
         var user = auth.user;
         bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: 'user:----' });
         bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: JSON.stringify(user) });
-        bit = await ste.hunt(ActCsk.INIT_CLIENTSOCKET, { idx: code });
+        bit = await ste.hunt(ActCsk.INIT_CLIENTSOCKET, { idx: code, dat: auth });
         //const guilds = await fetch(`https://discord.com/api/v10/users/@me/guilds`, {
         //  headers: {
         // NOTE: we're using the access_token provided by the "authenticate" command

@@ -1174,7 +1174,7 @@ const initClientsocket = (cpy, bal, ste) => {
     const currentUrl = window.location.origin;
     var socket = new WebSocket(currentUrl.replace('http', 'ws') + '/socket/');
     socket.addEventListener('message', (event) => {
-        var intBit = { intBit: { idx: bal.idx } };
+        var intBit = { intBit: { idx: bal.idx, dat: bal.dat } };
         socket.send(JSON.stringify(intBit));
         debugger;
         //if (event.data) patch( ste, ActCsk.UPDATE_CLIENTSOCKET, {dat:event.data} )

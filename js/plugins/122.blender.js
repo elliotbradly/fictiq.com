@@ -1173,11 +1173,11 @@ const ActRps = require("../../01.rpgstage.unit/rpgstage.action");
 const ActCsk = require("../../96.clientsocket.unit/clientsocket.action");
 const ActEng = require("../../act/engine.action");
 var bit, val, idx, dex, lst, dat, src;
-const initClientsocket = (cpy, bal, ste) => {
+const initClientsocket = async (cpy, bal, ste) => {
+    bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: 'initing the client socket' });
     const currentUrl = window.location.origin;
     var socket = new WebSocket(currentUrl.replace('http', 'ws') + '/socket/');
     var init = async (event) => {
-        bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: 'initing the client socket' });
         var intBit = { intBit: { idx: bal.idx, dat: bal.dat } };
         socket.send(JSON.stringify(intBit));
         var sighBit = { idx: ActEng.UPDATE_ENGINE, dat: {} };

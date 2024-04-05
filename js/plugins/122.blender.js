@@ -1200,6 +1200,7 @@ const updateClientsocket = async (cpy, bal, ste) => {
 exports.updateClientsocket = updateClientsocket;
 var patch = (ste, type, bale) => ste.dispatch({ type, bale });
 const openClientsocket = (cpy, bal, ste) => {
+    cpy.idx = bal.idx;
     debugger;
     update = async (event) => {
         bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: 'updating the client socket' });
@@ -1210,7 +1211,7 @@ const openClientsocket = (cpy, bal, ste) => {
     };
     var intBit = { intBit: { idx: bal.idx, dat: bal.dat } };
     cpy.socket.send(JSON.stringify(intBit));
-    var sighBit = { idx: ActEng.UPDATE_ENGINE, dat: {} };
+    var sighBit = { idx: ActEng.UPDATE_ENGINE, dat: { idx: cpy.idx } };
     setInterval(() => {
         ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: 'set interval' });
         cpy.socket.send(JSON.stringify(sighBit));

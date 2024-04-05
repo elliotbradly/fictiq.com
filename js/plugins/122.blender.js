@@ -1196,8 +1196,7 @@ const updateClientsocket = async (cpy, bal, ste) => {
 exports.updateClientsocket = updateClientsocket;
 var patch = (ste, type, bale) => ste.dispatch({ type, bale });
 const openClientsocket = (cpy, bal, ste) => {
-    var ActMod;
-    debugger;
+    var ActMod = ste.value.activity;
     cpy.idx = bal.idx;
     update = async (event) => {
         bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: 'updating the client socket' });

@@ -1179,6 +1179,7 @@ const initClientsocket = async (cpy, bal, ste) => {
     const currentUrl = window.location.origin;
     var socket = new WebSocket(currentUrl.replace('http', 'ws') + '/socket/');
     var init = async (event) => {
+        debugger;
         var intBit = { intBit: { idx: bal.idx, dat: bal.dat } };
         socket.send(JSON.stringify(intBit));
         var sighBit = { idx: ActEng.UPDATE_ENGINE, dat: {} };

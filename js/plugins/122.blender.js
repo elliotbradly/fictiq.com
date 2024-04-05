@@ -1134,14 +1134,14 @@ const initActivity = (cpy, bal, ste) => {
             }),
         });
         const { access_token } = await response.json();
-        cpy.auth = await discordSdk.commands.authenticate({
+        var auth = cpy.auth = await discordSdk.commands.authenticate({
             access_token,
         });
-        cpy.user = cpy.auth.user;
+        var user = cpy.user = cpy.auth.user;
         bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: 'user:----' });
-        bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: JSON.stringify(cpy.user) });
+        bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: JSON.stringify(user) });
         bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: 'open client socket' });
-        bit = await ste.hunt(ActCsk.INIT_CLIENTSOCKET, { idx: code, dat: cpy.auth });
+        bit = await ste.hunt(ActCsk.INIT_CLIENTSOCKET, { idx: code, dat: auth });
         //const guilds = await fetch(`https://discord.com/api/v10/users/@me/guilds`, {
         //  headers: {
         // NOTE: we're using the access_token provided by the "authenticate" command

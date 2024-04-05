@@ -1034,9 +1034,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ActivityModel = void 0;
 class ActivityModel {
     constructor() {
-        //idx:string;
-        //activityBitList: ActivityBit[] = [];
-        //activityBits: any = {};
         this.clientID = '1219668297763520664';
     }
 }
@@ -1137,14 +1134,14 @@ const initActivity = (cpy, bal, ste) => {
             }),
         });
         const { access_token } = await response.json();
-        auth = await discordSdk.commands.authenticate({
+        cpy.auth = await discordSdk.commands.authenticate({
             access_token,
         });
         var user = auth.user;
         bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: 'user:----' });
         bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: JSON.stringify(user) });
         bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: 'open client socket' });
-        bit = await ste.hunt(ActCsk.INIT_CLIENTSOCKET, { idx: code, dat: auth });
+        bit = await ste.hunt(ActCsk.INIT_CLIENTSOCKET, { idx: code, dat: cpy.auth });
         //const guilds = await fetch(`https://discord.com/api/v10/users/@me/guilds`, {
         //  headers: {
         // NOTE: we're using the access_token provided by the "authenticate" command
@@ -1181,7 +1178,6 @@ const initClientsocket = async (cpy, bal, ste) => {
     cpy.socket = new WebSocket(currentUrl.replace('http', 'ws') + '/socket/');
     init = async (event) => {
         var initBit = JSON.parse(event.data);
-        debugger;
         ste.hunt(initBit.idx, initBit.bal);
     };
     cpy.socket.addEventListener('message', init);
@@ -1200,8 +1196,8 @@ const updateClientsocket = async (cpy, bal, ste) => {
 exports.updateClientsocket = updateClientsocket;
 var patch = (ste, type, bale) => ste.dispatch({ type, bale });
 const openClientsocket = (cpy, bal, ste) => {
+    var ActMod;
     cpy.idx = bal.idx;
-    debugger;
     update = async (event) => {
         bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: 'updating the client socket' });
         if (event.data != 'heartbeat')
@@ -1211,7 +1207,7 @@ const openClientsocket = (cpy, bal, ste) => {
     };
     var intBit = { intBit: { idx: bal.idx, dat: bal.dat } };
     cpy.socket.send(JSON.stringify(intBit));
-    var sighBit = { idx: ActEng.UPDATE_ENGINE, dat: { idx: cpy.idx } };
+    var sighBit = { idx: ActEng.UPDATE_ENGINE, dat: { idx: cpy.idx, auth: ActMod.auth } };
     setInterval(() => {
         ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: 'set interval' });
         cpy.socket.send(JSON.stringify(sighBit));

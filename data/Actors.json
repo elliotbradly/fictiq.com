@@ -169,5 +169,22 @@
     "nickname": "Beeing",
     "note": "Simone Note",
     "profile": "Simone Beeing"
+  },
+  {
+    "id": 11,
+    "battlerName": "Actor2_2",
+    "characterIndex": 3,
+    "characterName": "Actor3",
+    "classId": 5,
+    "equips": [14, 28, 50, 10, 89],
+    "faceIndex": 7,
+    "faceName": "Actor1",
+    "traits": [{ "code": 11, "dataId": 1, "value": 1 }],
+    "initialLevel": 1,
+    "maxLevel": 99,
+    "name": "Orbie Mayhaw",
+    "nickname": "Orbie",
+    "note": "Oribe Note",
+    "profile": "Oribe Profile"
   }
 ]

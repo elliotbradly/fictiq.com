@@ -118,23 +118,23 @@
      //   window.BLENDER.hunt(sceneStage, { val: 2 });
      // };
 
-      var Scene_Map_onTransfer = Scene_Map.prototype.onMapLoaded;
-      Scene_Map.prototype.onTransfer = function () {
-        Scene_Map_onTransfer.call(this)
-        window.BLENDER.hunt(sceneStage, { val: 3 });
-      };
+      //var Scene_Map_onTransfer = Scene_Map.prototype.onMapLoaded;
+      //Scene_Map.prototype.onTransfer = function () {
+      //  Scene_Map_onTransfer.call(this)
+      //  window.BLENDER.hunt(sceneStage, { val: 3 });
+      //};
 
-      var Scene_Map_start = Scene_Map.prototype.start;
-      Scene_Map.prototype.start = function () {
-        Scene_Map_start.call(this)
-        window.BLENDER.hunt(sceneStage, { val: 4 });
-      };
+      //var Scene_Map_start = Scene_Map.prototype.start;
+      //Scene_Map.prototype.start = function () {
+      //  Scene_Map_start.call(this)
+      //  window.BLENDER.hunt(sceneStage, { val: 4 });
+      //};
 
-      var Scene_Map_onTransferEnd = Scene_Map.prototype.onTransferEnd;
-      Scene_Map.prototype.onTransferEnd = function () {
-        Scene_Map_onTransferEnd.call(this)
-        window.BLENDER.hunt(sceneStage, { val: 5 });
-      };
+      //var Scene_Map_onTransferEnd = Scene_Map.prototype.onTransferEnd;
+      //Scene_Map.prototype.onTransferEnd = function () {
+      //  Scene_Map_onTransferEnd.call(this)
+      //  window.BLENDER.hunt(sceneStage, { val: 5 });
+      //};
 
     }, 1011);
 

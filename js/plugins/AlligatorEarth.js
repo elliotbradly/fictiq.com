@@ -65,6 +65,8 @@
       var initStage = window.BLENDER.ActRps.INIT_RPGSTAGE;
       var debugStage = window.BLENDER.ActRps.DEBUG_RPGSTAGE;
 
+      debugger
+
       var dat = {
         gameTemp: $gameTemp,
         gameSystem: $gameSystem,
@@ -97,17 +99,20 @@
 
       window.BLENDER.hunt( debugStage, { src: 'Scene Boot' });
 
+
+      var Scene_Map_create = Scene_Map.prototype.create;
+      Scene_Map.prototype.create = async function (){
+    
+        window.BLENDER.hunt( debugStage, { src: 'create scene map' });
+        
+        Scene_Map_create.call(this);
+      }
+    
+
     }, 1011);
 
   };
 
-  var Scene_Map_create = Scene_Map.prototype.create;
-  Scene_Map.prototype.create = async function (){
-
-    window.BLENDER.hunt( debugStage, { src: 'create scene map' });
-    
-    Scene_Map_create.call(this);
-  }
 
 
   var Game_Player_executeMove = Game_Player.prototype.executeMove;

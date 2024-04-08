@@ -133,7 +133,13 @@
       var Scene_Map_onTransferEnd = Scene_Map.prototype.onTransferEnd;
       Scene_Map.prototype.onTransferEnd = function () {
         Scene_Map_onTransferEnd.call(this)
-        window.BLENDER.hunt(sceneStage, { val: 5 });
+
+        setTimeout( ()=>{
+
+          window.BLENDER.hunt(sceneStage, { val: 5 });
+
+        }, 1111)
+        
       };
 
     }, 1011);

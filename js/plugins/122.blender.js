@@ -263,6 +263,7 @@ var patch = (ste, type, bale) => ste.dispatch({ type, bale });
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.debugRpgstage = exports.updateRpgstage = exports.initRpgstage = void 0;
+const ActRps = require("../rpgstage.action");
 const ActHud = require("../../10.hud.unit/hud.action");
 const ActTxt = require("../../act/text.action");
 var bit, val, idx, dex, lst, dat, src;
@@ -301,17 +302,17 @@ const initRpgstage = async (cpy, bal, ste) => {
     //bit = await cpy.shade.hunt(ActTxt.WRITE_TEXT, { idx: 'txt00', dat })
     //var text = bit.txtBit.dat.bit
     //hud.addChild(text)
-    //bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: 'Welcome to Alligator Earth' });
-    //bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: 'init rpg stage' });
-    //bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: '----------' });
-    //bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: '----------' });
-    //bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: '----------' });
-    //bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: '----------' });
-    //bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: '----------' });
-    //bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: '----------' });
-    //bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: '----------' });
-    //bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: '----------' });
-    //bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: '----------' });
+    bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: 'Welcome to Alligator Earth' });
+    bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: 'init rpg stage' });
+    bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: '----------' });
+    bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: '----------' });
+    bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: '----------' });
+    bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: '----------' });
+    bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: '----------' });
+    bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: '----------' });
+    bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: '----------' });
+    bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: '----------' });
+    bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: '----------' });
     //bit = await ste.hunt(ActAtv.INIT_ACTIVITY, { val: 0 });
     //bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: JSON.stringify(bit) });
     //bit = await ste.hunt( ActRpa.INIT_RPGACTOR, { dat: cpy.dataActors });
@@ -394,7 +395,7 @@ const debugRpgstage = async (cpy, bal, ste) => {
 exports.debugRpgstage = debugRpgstage;
 const HUD = require("../../val/hud");
 
-},{"../../10.hud.unit/hud.action":33,"../../act/text.action":80,"../../val/hud":84}],9:[function(require,module,exports){
+},{"../../10.hud.unit/hud.action":33,"../../act/text.action":80,"../../val/hud":84,"../rpgstage.action":9}],9:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DebugRpgstage = exports.DEBUG_RPGSTAGE = exports.UpdateRpgstage = exports.UPDATE_RPGSTAGE = exports.InitRpgstage = exports.INIT_RPGSTAGE = void 0;

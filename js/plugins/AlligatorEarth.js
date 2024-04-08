@@ -138,7 +138,7 @@
 
           window.BLENDER.hunt(sceneStage, { val: 5 });
 
-        }, 1111)
+        }, 4111)
         
       };
 

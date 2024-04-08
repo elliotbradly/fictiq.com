@@ -316,8 +316,6 @@ const initRpgstage = async (cpy, bal, ste) => {
     //bit = await ste.hunt(ActAtv.INIT_ACTIVITY, { val: 0 });
     //bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: JSON.stringify(bit) });
     //bit = await ste.hunt( ActRpa.INIT_RPGACTOR, { dat: cpy.dataActors });
-    //debugger
-    //debugger
     //cpy.mainHUD.visible = false
     //var openBld = window.BLENDER.ActBld.OPEN_BLENDER;
     //var initAtv = window.BLENDER.ActAtv.INIT_ACTIVITY;

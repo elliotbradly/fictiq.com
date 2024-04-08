@@ -1,4 +1,5 @@
 [
 null,
-{"id":1,"expanded":false,"name":"MAP001-Astrokahn Hub","order":1,"parentId":0,"scrollX":571,"scrollY":1193}
+{"id":1,"expanded":true,"name":"MAP001-Astrokahn Hub","order":1,"parentId":0,"scrollX":571,"scrollY":1193},
+{"id":2,"expanded":false,"name":"MAP002-Fang-Swamp","order":2,"parentId":0,"scrollX":0,"scrollY":0}
 ]

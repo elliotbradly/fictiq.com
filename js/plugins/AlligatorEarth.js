@@ -64,10 +64,10 @@
       var initShade = window.SHADE.ActShd.INIT_SHADE;
       var initStage = window.BLENDER.ActRps.INIT_RPGSTAGE;
 
-      $dataActors
+      $dataMapInfos;
+      $dataMap;
+
       debugger
-
-
       
       var dat = {
         gameTemp:$gameTemp,
@@ -76,9 +76,9 @@
         gameParty:$gameParty,
         sceneManager:SceneManager,
         shade:window.SHADE,
-        graphics:Graphics
+        graphics:Graphics,
+        dataActors:$dataActors
       }
-
 
       var bit;
 

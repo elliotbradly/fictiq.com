@@ -103,9 +103,9 @@
 
         var newMapId = $gamePlayer.newMapId();
         var datMapId = $dataMap.id
-        var gameMapId = $gameMap.mapId()
+        var oldMapId = $gameMap.mapId()
 
-        var dat = { newMapId, datMapId, gameMapId }
+        var dat = {  datMapId, newMapId, oldMapId }
 
         window.BLENDER.hunt( sceneStage, { dat });
         
@@ -117,18 +117,17 @@
   };
 
 
-
-  var Game_Player_executeMove = Game_Player.prototype.executeMove;
-  Game_Player.prototype.executeMove = function (direction) {
+ // var Game_Player_executeMove = Game_Player.prototype.executeMove;
+ // Game_Player.prototype.executeMove = function (direction) {
     //window.location = './vue.html'
 
-    console.log(JSON.stringify(direction));
+  //  console.log(JSON.stringify(direction));
     //if (direction % 2 == 0) {
-    Game_Player_executeMove.call(this, direction);
+  //  Game_Player_executeMove.call(this, direction);
     //} else {
     // const dirArray = Galv.DM.getHorzVertDirs(direction);
     // this.moveDiagonally(dirArray[0], dirArray[1]);
     //};
-  };
+  //};
 
 })();

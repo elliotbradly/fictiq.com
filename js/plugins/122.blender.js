@@ -262,7 +262,7 @@ var patch = (ste, type, bale) => ste.dispatch({ type, bale });
 },{"../../00.blender.unit/blender.action":2,"../../98.menu.unit/menu.action":58,"../../99.bus.unit/bus.action":63,"../../act/disk.action":74,"../../act/engine.action":75,"../../act/github.action":76,"../../act/pivot.action":78,"child_process":undefined}],8:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.debugRpgstage = exports.updateRpgstage = exports.initRpgstage = void 0;
+exports.sceneRpgstage = exports.debugRpgstage = exports.updateRpgstage = exports.initRpgstage = void 0;
 const ActHud = require("../../10.hud.unit/hud.action");
 const ActTxt = require("../../act/text.action");
 var bit, val, idx, dex, lst, dat, src;
@@ -390,12 +390,17 @@ const debugRpgstage = async (cpy, bal, ste) => {
     return cpy;
 };
 exports.debugRpgstage = debugRpgstage;
+const sceneRpgstage = (cpy, bal, ste) => {
+    debugger;
+    return cpy;
+};
+exports.sceneRpgstage = sceneRpgstage;
 const HUD = require("../../val/hud");
 
 },{"../../10.hud.unit/hud.action":33,"../../act/text.action":80,"../../val/hud":84}],9:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DebugRpgstage = exports.DEBUG_RPGSTAGE = exports.UpdateRpgstage = exports.UPDATE_RPGSTAGE = exports.InitRpgstage = exports.INIT_RPGSTAGE = void 0;
+exports.SceneRpgstage = exports.SCENE_RPGSTAGE = exports.DebugRpgstage = exports.DEBUG_RPGSTAGE = exports.UpdateRpgstage = exports.UPDATE_RPGSTAGE = exports.InitRpgstage = exports.INIT_RPGSTAGE = void 0;
 // Rpgstage actions
 exports.INIT_RPGSTAGE = "[Rpgstage action] Init Rpgstage";
 class InitRpgstage {
@@ -421,17 +426,27 @@ class DebugRpgstage {
     }
 }
 exports.DebugRpgstage = DebugRpgstage;
+exports.SCENE_RPGSTAGE = "[Scene action] Scene Rpgstage";
+class SceneRpgstage {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.SCENE_RPGSTAGE;
+    }
+}
+exports.SceneRpgstage = SceneRpgstage;
 
 },{}],10:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.debugRpgstage = exports.updateRpgstage = exports.initRpgstage = void 0;
+exports.sceneRpgstage = exports.debugRpgstage = exports.updateRpgstage = exports.initRpgstage = void 0;
 var rpgstage_buzz_1 = require("./buz/rpgstage.buzz");
 Object.defineProperty(exports, "initRpgstage", { enumerable: true, get: function () { return rpgstage_buzz_1.initRpgstage; } });
 var rpgstage_buzz_2 = require("./buz/rpgstage.buzz");
 Object.defineProperty(exports, "updateRpgstage", { enumerable: true, get: function () { return rpgstage_buzz_2.updateRpgstage; } });
 var rpgstage_buzz_3 = require("./buz/rpgstage.buzz");
 Object.defineProperty(exports, "debugRpgstage", { enumerable: true, get: function () { return rpgstage_buzz_3.debugRpgstage; } });
+var rpgstage_buzz_4 = require("./buz/rpgstage.buzz");
+Object.defineProperty(exports, "sceneRpgstage", { enumerable: true, get: function () { return rpgstage_buzz_4.sceneRpgstage; } });
 
 },{"./buz/rpgstage.buzz":8}],11:[function(require,module,exports){
 "use strict";
@@ -464,6 +479,8 @@ function reducer(model = new rpgstage_model_1.RpgstageModel(), act, state) {
             return Buzz.initRpgstage(clone(model), act.bale, state);
         case Act.DEBUG_RPGSTAGE:
             return Buzz.debugRpgstage(clone(model), act.bale, state);
+        case Act.SCENE_RPGSTAGE:
+            return Buzz.sceneRpgstage(clone(model), act.bale, state);
         default:
             return model;
     }

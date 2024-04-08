@@ -64,8 +64,8 @@
       var initShade = window.SHADE.ActShd.INIT_SHADE;
       var initStage = window.BLENDER.ActRps.INIT_RPGSTAGE;
       var debugStage = window.BLENDER.ActRps.DEBUG_RPGSTAGE;
+      var sceneStage = window.BLENDER.ActRps.SCENE_RPGSTAGE;
 
-  
       var dat = {
         gameTemp: $gameTemp,
         gameSystem: $gameSystem,
@@ -98,19 +98,20 @@
 
       window.BLENDER.hunt( debugStage, { src: 'Scene Boot' });
 
-
       var Scene_Map_create = Scene_Map.prototype.create;
       Scene_Map.prototype.create = async function (){
-    
 
-        debugger
+        var newMapId = $gamePlayer.newMapId();
+        var datMapId = $dataMap.id
+        var gameMapId = $gameMap.mapId()
 
-        //window.BLENDER.hunt( debugStage, { src: 'create scene map' });
+        var dat = { newMapId, datMapId, gameMapId }
+
+        window.BLENDER.hunt( sceneStage, { dat });
         
         Scene_Map_create.call(this);
       }
     
-
     }, 1011);
 
   };

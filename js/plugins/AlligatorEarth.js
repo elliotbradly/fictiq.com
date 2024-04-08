@@ -63,6 +63,7 @@
       var initBlender = window.BLENDER.ActBld.INIT_BLENDER;
       var initShade = window.SHADE.ActShd.INIT_SHADE;
       var initStage = window.BLENDER.ActRps.INIT_RPGSTAGE;
+      var debugStage = window.BLENDER.ActRps.DEBUG_RPGSTAGE;
 
       var dat = {
         gameTemp: $gameTemp,
@@ -94,10 +95,20 @@
       bit = await window.BLENDER.hunt(initBlender, { val: 0 });
       bit = await window.BLENDER.hunt(initStage, { dat });
 
+      window.BLENDER.hunt( debugStage, { src: 'Scene Boot' });
 
     }, 1011);
 
   };
+
+  var Scene_Map_create = Scene_Map.prototype.create;
+  Scene_Map.prototype.create = async function (){
+
+    window.BLENDER.hunt( debugStage, { src: 'create scene map' });
+    
+    Scene_Map_create.call(this);
+  }
+
 
   var Game_Player_executeMove = Game_Player.prototype.executeMove;
   Game_Player.prototype.executeMove = function (direction) {
@@ -111,4 +122,5 @@
     // this.moveDiagonally(dirArray[0], dirArray[1]);
     //};
   };
+
 })();

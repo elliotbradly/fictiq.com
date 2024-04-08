@@ -1,14 +1,18 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 window.BLENDER = require("../dist/122.blender/hunt");
 window.BLENDER.ActBld = require("../dist/122.blender/00.blender.unit/blender.action");
-window.BLENDER.ActAtv = require("../dist/122.blender/80.activity.unit/activity.action");
+
 window.BLENDER.ActRps = require("../dist/122.blender/01.rpgstage.unit/rpgstage.action");
 window.BLENDER.ActRpa = require("../dist/122.blender/02.rpgactor.unit/rpgactor.action");
 window.BLENDER.ActRpp = require("../dist/122.blender/03.rpgparty.unit/rpgparty.action");
 window.BLENDER.ActRpm = require("../dist/122.blender/04.rpgmap.unit/rpgmap.action");
 
+window.BLENDER.ActHud = require("../dist/122.blender/10.hud.unit/hud.action");
+window.BLENDER.ActAtv = require("../dist/122.blender/80.activity.unit/activity.action");
+window.BLENDER.ActCsk = require("../dist/122.blender/96.clientsocket.unit/clientsocket.action");
+
 window.BLENDER.MQTT = require("async-mqtt");
-},{"../dist/122.blender/00.blender.unit/blender.action":2,"../dist/122.blender/01.rpgstage.unit/rpgstage.action":9,"../dist/122.blender/02.rpgactor.unit/rpgactor.action":15,"../dist/122.blender/03.rpgparty.unit/rpgparty.action":21,"../dist/122.blender/04.rpgmap.unit/rpgmap.action":27,"../dist/122.blender/80.activity.unit/activity.action":38,"../dist/122.blender/hunt":81,"async-mqtt":148}],2:[function(require,module,exports){
+},{"../dist/122.blender/00.blender.unit/blender.action":2,"../dist/122.blender/01.rpgstage.unit/rpgstage.action":9,"../dist/122.blender/02.rpgactor.unit/rpgactor.action":15,"../dist/122.blender/03.rpgparty.unit/rpgparty.action":21,"../dist/122.blender/04.rpgmap.unit/rpgmap.action":27,"../dist/122.blender/10.hud.unit/hud.action":33,"../dist/122.blender/80.activity.unit/activity.action":38,"../dist/122.blender/96.clientsocket.unit/clientsocket.action":45,"../dist/122.blender/hunt":81,"async-mqtt":148}],2:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CommitBlender = exports.COMMIT_BLENDER = exports.WriteBlender = exports.WRITE_BLENDER = exports.ReloadBlender = exports.RELOAD_BLENDER = exports.CloseBlender = exports.CLOSE_BLENDER = exports.OpenBlender = exports.OPEN_BLENDER = exports.UpdateBlender = exports.UPDATE_BLENDER = exports.InitBlender = exports.INIT_BLENDER = void 0;

@@ -290,7 +290,7 @@ const initRpgstage = async (cpy, bal, ste) => {
     display = cpy.sceneManager._scene._ultraHudContainer;
     var hudData = { mainHUD: display._mainHUD };
     bit = await ste.hunt(ActHud.INIT_HUD, { dat: hudData });
-    bit = await ste.hunt(ActRps.SCENE_RPGSTAGE, {});
+    bit = await ste.hunt(ActRps.SCENE_RPGSTAGE, { val: 0 });
     //var openBld = window.BLENDER.ActBld.OPEN_BLENDER;
     //var initAtv = window.BLENDER.ActAtv.INIT_ACTIVITY;
     //var initMap = window.BLENDER.ActRpm.INIT_RPGMAP;

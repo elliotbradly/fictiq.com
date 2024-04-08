@@ -65,8 +65,7 @@
       var initStage = window.BLENDER.ActRps.INIT_RPGSTAGE;
       var debugStage = window.BLENDER.ActRps.DEBUG_RPGSTAGE;
 
-      debugger
-
+  
       var dat = {
         gameTemp: $gameTemp,
         gameSystem: $gameSystem,

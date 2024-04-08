@@ -109,7 +109,13 @@
 
         Scene_Map_create.call(this);
 
-        window.BLENDER.hunt(sceneStage, { val: 1, dat });
+        setTimeout( ()=>{
+
+          window.BLENDER.hunt(sceneStage, { val: 5 });
+
+        }, 4111)
+
+        //window.BLENDER.hunt(sceneStage, { val: 1, dat });
       }
 
       //var Scene_Map_onMapLoaded = Scene_Map.prototype.onMapLoaded;
@@ -134,11 +140,7 @@
       Scene_Map.prototype.onTransferEnd = function () {
         Scene_Map_onTransferEnd.call(this)
 
-        setTimeout( ()=>{
-
-          window.BLENDER.hunt(sceneStage, { val: 5 });
-
-        }, 4111)
+        
         
       };
 

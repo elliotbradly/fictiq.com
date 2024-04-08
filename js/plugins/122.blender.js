@@ -296,12 +296,12 @@ const initRpgstage = async (cpy, bal, ste) => {
     ste.hunt(ActHud.WRITE_HUD, { idx: HUD.PLAY_DATA_GROUP, dat: { visible: false } });
     ste.hunt(ActHud.WRITE_HUD, { idx: HUD.WELCOME_WINDOW, dat: { visible: false } });
     ste.hunt(ActHud.WRITE_HUD, { idx: HUD.ACTION_BAR, dat: { visible: false } });
-    //bit = await ste.hunt(ActHud.READ_HUD, { idx: HUD.DEBUG_WINDOW, dat: {} });
-    //var hud = bit.hudBit.dat.bit;
-    //dat = { txt: '', x: -138, y: -140, sze: 16, clr: 0xFFFFFF, wrp: 280, aln: 'left' }
-    //bit = await cpy.shade.hunt(ActTxt.WRITE_TEXT, { idx: 'txt00', dat })
-    //var text = bit.txtBit.dat.bit
-    //hud.addChild(text)
+    bit = await ste.hunt(ActHud.READ_HUD, { idx: HUD.DEBUG_WINDOW, dat: {} });
+    var hud = bit.hudBit.dat.bit;
+    dat = { txt: '', x: -138, y: -140, sze: 16, clr: 0xFFFFFF, wrp: 280, aln: 'left' };
+    bit = await cpy.shade.hunt(ActTxt.WRITE_TEXT, { idx: 'txt00', dat });
+    var text = bit.txtBit.dat.bit;
+    hud.addChild(text);
     bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: 'Welcome to Alligator Earth' });
     bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: 'init rpg stage' });
     bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: '----------' });

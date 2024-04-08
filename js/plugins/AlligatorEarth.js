@@ -112,11 +112,11 @@
         window.BLENDER.hunt(sceneStage, { val: 1, dat });
       }
 
-      var Scene_Map_onMapLoaded = Scene_Map.prototype.onMapLoaded;
-      Scene_Map.prototype.onMapLoaded = function () {
-        Scene_Map_onMapLoaded.call(this);
-        window.BLENDER.hunt(sceneStage, { val: 2 });
-      };
+      //var Scene_Map_onMapLoaded = Scene_Map.prototype.onMapLoaded;
+     // Scene_Map.prototype.onMapLoaded = function () {
+     //   Scene_Map_onMapLoaded.call(this);
+     //   window.BLENDER.hunt(sceneStage, { val: 2 });
+     // };
 
       var Scene_Map_onTransfer = Scene_Map.prototype.onMapLoaded;
       Scene_Map.prototype.onTransfer = function () {

@@ -102,7 +102,10 @@
       var Scene_Map_create = Scene_Map.prototype.create;
       Scene_Map.prototype.create = async function (){
     
-        window.BLENDER.hunt( debugStage, { src: 'create scene map' });
+
+        debugger
+
+        //window.BLENDER.hunt( debugStage, { src: 'create scene map' });
         
         Scene_Map_create.call(this);
       }

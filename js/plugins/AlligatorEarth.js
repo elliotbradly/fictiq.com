@@ -64,29 +64,37 @@
       var initShade = window.SHADE.ActShd.INIT_SHADE;
       var initStage = window.BLENDER.ActRps.INIT_RPGSTAGE;
 
-      $dataMapInfos;
-      $dataMap;
-
-      debugger
-      
       var dat = {
-        gameTemp:$gameTemp,
-        gameSystem:$gameSystem,
-        gameMap:$gameMap,
-        gameParty:$gameParty,
-        sceneManager:SceneManager,
-        shade:window.SHADE,
-        graphics:Graphics,
-        dataActors:$dataActors
+        gameTemp: $gameTemp,
+        gameSystem: $gameSystem,
+        gameScreen: $gameScreen, 
+        gameTimer: $gameTimer, 
+        gameMessage: $gameMessage,
+        gameSwitches: $gameSwitches,
+        gameVariables: $gameVariables,
+        gameSelfSwitches: $gameSelfSwitches,
+        gameActors: $gameActors,
+        gameParty: $gameParty,
+        gameTroop: $gameTroop,
+        gameMap: $gameMap,
+        gamePlayer: $gamePlayer,
+        
+        sceneManager: SceneManager,
+        shade: window.SHADE,
+        graphics: Graphics,
+
+        dataActors: $dataActors,
+        dataMapInfos: $dataMapInfos,
+        dataMap: $dataMap
       }
 
       var bit;
 
-      bit = await window.SHADE.hunt(initShade, { val:0 });
+      bit = await window.SHADE.hunt(initShade, { val: 0 });
       bit = await window.BLENDER.hunt(initBlender, { val: 0 });
       bit = await window.BLENDER.hunt(initStage, { dat });
-      
-      
+
+
     }, 1011);
 
   };

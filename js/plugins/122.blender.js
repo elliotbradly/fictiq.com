@@ -286,10 +286,6 @@ const initRpgstage = async (cpy, bal, ste) => {
     cpy.graphics = dat.graphics;
     cpy.sceneManager = dat.sceneManager;
     cpy.dataActors = dat.dataActors;
-    var display = cpy.sceneManager._scene._spriteset;
-    display = cpy.sceneManager._scene._ultraHudContainer;
-    var hudData = { mainHUD: display._mainHUD };
-    bit = await ste.hunt(ActHud.INIT_HUD, { dat: hudData });
     bit = await ste.hunt(ActRps.SCENE_RPGSTAGE, { val: 0 });
     //var openBld = window.BLENDER.ActBld.OPEN_BLENDER;
     //var initAtv = window.BLENDER.ActAtv.INIT_ACTIVITY;
@@ -366,6 +362,10 @@ const debugRpgstage = async (cpy, bal, ste) => {
 };
 exports.debugRpgstage = debugRpgstage;
 const sceneRpgstage = async (cpy, bal, ste) => {
+    var display = cpy.sceneManager._scene._spriteset;
+    display = cpy.sceneManager._scene._ultraHudContainer;
+    var hudData = { mainHUD: display._mainHUD };
+    bit = await ste.hunt(ActHud.INIT_HUD, { dat: hudData });
     bit = await ste.hunt(ActHud.READ_HUD, { idx: HUD.ICON_WINDOW });
     ste.hunt(ActHud.WRITE_HUD, { idx: HUD.DEBUG_WINDOW, dat: { visible: true } });
     ste.hunt(ActHud.WRITE_HUD, { idx: HUD.ICON_WINDOW, dat: { visible: false } });

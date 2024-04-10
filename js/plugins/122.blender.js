@@ -361,10 +361,16 @@ const debugRpgstage = async (cpy, bal, ste) => {
     return cpy;
 };
 exports.debugRpgstage = debugRpgstage;
+var first = true;
 const sceneRpgstage = async (cpy, bal, ste) => {
+    if (first == true) {
+        first = false;
+        return;
+    }
     var display = cpy.sceneManager._scene._spriteset;
     display = cpy.sceneManager._scene._ultraHudContainer;
     var hudData = { mainHUD: display._mainHUD };
+    bit = await ste.hunt(ActHud.FIN_HUD, {});
     bit = await ste.hunt(ActHud.INIT_HUD, { dat: hudData });
     bit = await ste.hunt(ActHud.READ_HUD, { idx: HUD.ICON_WINDOW });
     ste.hunt(ActHud.WRITE_HUD, { idx: HUD.DEBUG_WINDOW, dat: { visible: true } });
@@ -372,7 +378,7 @@ const sceneRpgstage = async (cpy, bal, ste) => {
     ste.hunt(ActHud.WRITE_HUD, { idx: HUD.PLAY_DATA_GROUP, dat: { visible: false } });
     ste.hunt(ActHud.WRITE_HUD, { idx: HUD.WELCOME_WINDOW, dat: { visible: false } });
     ste.hunt(ActHud.WRITE_HUD, { idx: HUD.ACTION_BAR, dat: { visible: false } });
-    //bit = await ste.hunt(ActHud.READ_HUD, { idx: HUD.DEBUG_WINDOW, dat: {} });
+    bit = await ste.hunt(ActHud.READ_HUD, { idx: HUD.DEBUG_WINDOW, dat: {} });
     //var hud = bit.hudBit.dat.bit;
     //dat = { txt: '', x: -138, y: -140, sze: 16, clr: 0xFFFFFF, wrp: 280, aln: 'left' }
     //bit = await cpy.shade.hunt(ActTxt.WRITE_TEXT, { idx: 'txt00', dat })
@@ -937,7 +943,7 @@ exports.default = RpgmapUnit;
 },{"../99.core/state":69,"typescript-ioc":342}],32:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteHud = exports.removeHud = exports.writeHud = exports.readHud = exports.updateHud = exports.createHud = exports.initHud = void 0;
+exports.finHud = exports.deleteHud = exports.removeHud = exports.writeHud = exports.readHud = exports.updateHud = exports.createHud = exports.initHud = void 0;
 const ActHud = require("../../10.hud.unit/hud.action");
 const ActCol = require("../../97.collect.unit/collect.action");
 var bit, val, idx, dex, lst, dat, src;
@@ -1006,21 +1012,40 @@ const writeHud = async (cpy, bal, ste) => {
     return cpy;
 };
 exports.writeHud = writeHud;
-const removeHud = (cpy, bal, ste) => {
-    debugger;
+const removeHud = async (cpy, bal, ste) => {
+    bit = await ste.hunt(ActCol.REMOVE_COLLECT, { idx: bal.idx, src: bal.src, dat: bal.dat, bit: ActHud.CREATE_HUD });
+    bal.slv({ hudBit: { idx: "remove-graphic", dat: bit.clcBit } });
     return cpy;
 };
 exports.removeHud = removeHud;
 const deleteHud = (cpy, bal, ste) => {
-    debugger;
+    bal.slv({ hudBit: { idx: "delete-hud", dat: bit.clcBit } });
     return cpy;
 };
 exports.deleteHud = deleteHud;
+const finHud = async (cpy, bal, ste) => {
+    bit = await ste.hunt(ActCol.LIST_COLLECT, { bit: ActHud.CREATE_HUD });
+    lst = bit.clcBit.lst;
+    var dex = lst.length - 1;
+    var output = [];
+    var nextHud = async () => {
+        if (dex < 0) {
+            bal.slv({ hudBit: { idx: "fin-hud", lst } });
+            return cpy;
+        }
+        var now = lst[dex];
+        await ste.hunt(ActHud.REMOVE_HUD, { idx: now });
+        dex -= 1;
+        await nextHud();
+    };
+    await nextHud();
+};
+exports.finHud = finHud;
 
 },{"../../10.hud.unit/hud.action":33,"../../97.collect.unit/collect.action":51}],33:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateHud = exports.CREATE_HUD = exports.DeleteHud = exports.DELETE_HUD = exports.WriteHud = exports.WRITE_HUD = exports.RemoveHud = exports.REMOVE_HUD = exports.ReadHud = exports.READ_HUD = exports.UpdateHud = exports.UPDATE_HUD = exports.InitHud = exports.INIT_HUD = void 0;
+exports.FinHud = exports.FIN_HUD = exports.CreateHud = exports.CREATE_HUD = exports.DeleteHud = exports.DELETE_HUD = exports.WriteHud = exports.WRITE_HUD = exports.RemoveHud = exports.REMOVE_HUD = exports.ReadHud = exports.READ_HUD = exports.UpdateHud = exports.UPDATE_HUD = exports.InitHud = exports.INIT_HUD = void 0;
 // Hud actions
 exports.INIT_HUD = "[Hud action] Init Hud";
 class InitHud {
@@ -1078,11 +1103,19 @@ class CreateHud {
     }
 }
 exports.CreateHud = CreateHud;
+exports.FIN_HUD = "[Fin action] Fin Hud";
+class FinHud {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.FIN_HUD;
+    }
+}
+exports.FinHud = FinHud;
 
 },{}],34:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createHud = exports.deleteHud = exports.writeHud = exports.removeHud = exports.readHud = exports.updateHud = exports.initHud = void 0;
+exports.finHud = exports.createHud = exports.deleteHud = exports.writeHud = exports.removeHud = exports.readHud = exports.updateHud = exports.initHud = void 0;
 var hud_buzz_1 = require("./buz/hud.buzz");
 Object.defineProperty(exports, "initHud", { enumerable: true, get: function () { return hud_buzz_1.initHud; } });
 var hud_buzz_2 = require("./buz/hud.buzz");
@@ -1097,6 +1130,8 @@ var hud_buzz_6 = require("./buz/hud.buzz");
 Object.defineProperty(exports, "deleteHud", { enumerable: true, get: function () { return hud_buzz_6.deleteHud; } });
 var hud_buzz_7 = require("./buz/hud.buzz");
 Object.defineProperty(exports, "createHud", { enumerable: true, get: function () { return hud_buzz_7.createHud; } });
+var hud_buzz_8 = require("./buz/hud.buzz");
+Object.defineProperty(exports, "finHud", { enumerable: true, get: function () { return hud_buzz_8.finHud; } });
 
 },{"./buz/hud.buzz":32}],35:[function(require,module,exports){
 "use strict";
@@ -1130,6 +1165,8 @@ function reducer(model = new hud_model_1.HudModel(), act, state) {
             return Buzz.deleteHud(clone(model), act.bale, state);
         case Act.CREATE_HUD:
             return Buzz.createHud(clone(model), act.bale, state);
+        case Act.FIN_HUD:
+            return Buzz.finHud(clone(model), act.bale, state);
         default:
             return model;
     }
@@ -1494,8 +1531,8 @@ exports.updateCollect = updateCollect;
 const fetchCollect = (cpy, bal, ste) => {
     if (bal.val == null)
         bal.val = 1;
-    if ((bal.bit == null))
-        bal.slv({ clcBit: { idx: "fetch-collect-err", src: 'no-bit' } });
+    if (bal.bit == null)
+        bal.slv({ clcBit: { idx: 'fetch-collect-err', src: 'no-bit' } });
     var type = bal.bit.split(' ').slice(-1).pop().toLowerCase();
     var cabBit = cpy.caboodleBitList[cpy.caboodleBits[type]];
     if (bal.val == 1)
@@ -1503,39 +1540,42 @@ const fetchCollect = (cpy, bal, ste) => {
     else
         bit = cabBit;
     if (bal.slv != null)
-        bal.slv({ clcBit: { idx: "fetch-collect", dat: bit } });
+        bal.slv({ clcBit: { idx: 'fetch-collect', dat: bit } });
     return cpy;
 };
 exports.fetchCollect = fetchCollect;
 const readCollect = async (cpy, bal, ste) => {
-    if ((bal.bit == null))
-        bal.slv({ clcBit: { idx: "read-collect-err", src: 'no-bit' } });
+    if (bal.bit == null)
+        bal.slv({ clcBit: { idx: 'read-collect-err', src: 'no-bit' } });
     var type = bal.bit.split(' ').slice(-1).pop().toLowerCase();
     if (cpy.caboodleBits[type] == null)
         (0, exports.createCollect)(cpy, { idx: type }, ste);
     var cabBit = cpy.caboodleBitList[cpy.caboodleBits[type]];
     if (cabBit.bits[bal.idx] == null) {
-        bit = await ste.hunt(ActCol.WRITE_COLLECT, { idx: bal.idx, src: bal.src, bit: bal.bit });
+        bit = await ste.hunt(ActCol.WRITE_COLLECT, {
+            idx: bal.idx,
+            src: bal.src,
+            bit: bal.bit,
+        });
     }
     else {
         dat = cabBit.bitList[cabBit.bits[bal.idx]];
     }
     if (bal.slv != null)
-        bal.slv({ clcBit: { idx: "read-collect", dat } });
+        bal.slv({ clcBit: { idx: 'read-collect', dat } });
     return cpy;
 };
 exports.readCollect = readCollect;
 const writeCollect = async (cpy, bal, ste) => {
     dat = null;
-    //let us check see if it exists 
+    //let us check see if it exists
     var type = bal.bit.split(' ').slice(-1).pop().toLowerCase();
     if (cpy.caboodleBits[type] == null)
         (0, exports.createCollect)(cpy, { idx: type }, ste);
-    if ((bal.bit == null))
-        bal.slv({ rskBit: { idx: "write-collect-err", src: 'no-bit' } });
+    if (bal.bit == null)
+        bal.slv({ rskBit: { idx: 'write-collect-err', src: 'no-bit' } });
     var cabBit = cpy.caboodleBitList[cpy.caboodleBits[type]];
     bal.idx;
-    val = 0;
     if (cabBit.bits[bal.idx] == null) {
         bit = await ste.hunt(bal.bit, { idx: bal.idx, src: bal.src, dat: bal.dat });
         var objDat = bit[Object.keys(bit)[0]];
@@ -1548,11 +1588,10 @@ const writeCollect = async (cpy, bal, ste) => {
         if (idx == null)
             idx = dat.idx;
         if (idx == null)
-            throw new Error("write collect has no idx");
+            throw new Error('write collect has no idx');
         cabBit.bits[idx] = dat.dex;
     }
     else {
-        val = 1;
         var cabDat = cabBit.bitList[cabBit.bits[bal.idx]];
         bal.dat;
         for (var key in bal.dat) {
@@ -1564,10 +1603,10 @@ const writeCollect = async (cpy, bal, ste) => {
         dat = cabBit;
         //!!! SUPER IMPORTANT
     }
-    if ((dat == null) && (bal.slv != null))
-        bal.slv({ rskBit: { idx: "write-collect-err", src: 'no-dat' } });
+    if (dat == null && bal.slv != null)
+        bal.slv({ rskBit: { idx: 'write-collect-err', src: 'no-dat' } });
     if (bal.slv != null)
-        bal.slv({ clcBit: { idx: "write-collect", val, dat } });
+        bal.slv({ clcBit: { idx: 'write-collect', dat } });
     return cpy;
 };
 exports.writeCollect = writeCollect;
@@ -1577,17 +1616,17 @@ const createCollect = (cpy, bal, ste) => {
     cpy.caboodleBitList.push(cabBit);
     cpy.caboodleBits[cabBit.idx] = cabBit.dex;
     if (bal.slv != null)
-        bal.slv({ clcBit: { idx: "create-collect", dat: cabBit } });
+        bal.slv({ clcBit: { idx: 'create-collect', dat: cabBit } });
     return cpy;
 };
 exports.createCollect = createCollect;
 const removeCollect = async (cpy, bal, ste) => {
     var type = bal.bit.split(' ').slice(-1).pop().toLowerCase();
     if (cpy.caboodleBits[type] == null)
-        return bal.slv({ rskBit: { idx: "remove-collect-not-present" } });
+        return bal.slv({ rskBit: { idx: 'remove-collect-not-present' } });
     var cabBit = cpy.caboodleBitList[cpy.caboodleBits[type]];
     if (cabBit.bits[bal.idx] == null)
-        return bal.slv({ rskBit: { idx: "remove-collect-idx-not-present" } });
+        return bal.slv({ rskBit: { idx: 'remove-collect-idx-not-present' } });
     bit = await ste.hunt(bal.bit, { idx: bal.idx, src: bal.src, dat: bal.dat });
     var objDat = bit[Object.keys(bit)[0]];
     dat = objDat.dat;
@@ -1603,7 +1642,7 @@ const removeCollect = async (cpy, bal, ste) => {
     var itm = cabBit.bitList.splice(dex, 1);
     cabBit.dex -= 1;
     if (bal.slv != null)
-        bal.slv({ clcBit: { idx: "remove-collect", dat: itm[0] } });
+        bal.slv({ clcBit: { idx: 'remove-collect', dat: itm[0] } });
     return cpy;
 };
 exports.removeCollect = removeCollect;
@@ -1611,7 +1650,7 @@ const putCollect = (cpy, bal, ste) => {
     cpy.caboodleBits[bal.idx] = bal.val;
     cpy.caboodleBitList[bal.val] = bal.dat;
     if (bal.slv != null)
-        bal.slv({ clcBit: { idx: "put-collect", dat: bal.dat } });
+        bal.slv({ clcBit: { idx: 'put-collect', dat: bal.dat } });
     return cpy;
 };
 exports.putCollect = putCollect;
@@ -1619,14 +1658,14 @@ const getCollect = (cpy, bal, ste) => {
     val = cpy.caboodleBits[bal.idx];
     dat = cpy.caboodleBitList[val];
     if (bal.slv != null)
-        bal.slv({ clcBit: { idx: "get-collect", val, dat } });
+        bal.slv({ clcBit: { idx: 'get-collect', val, dat } });
     return cpy;
 };
 exports.getCollect = getCollect;
 const modelCollect = (cpy, bal, ste) => {
     //debugger
     if (bal.slv != null)
-        bal.slv({ clcBit: { idx: "model-collect", dat: cpy } });
+        bal.slv({ clcBit: { idx: 'model-collect', dat: cpy } });
     return cpy;
 };
 exports.modelCollect = modelCollect;
@@ -1643,7 +1682,7 @@ exports.emptyCollect = emptyCollect;
 const dotCollect = (cpy, bal, ste) => {
     var gel = bal.dat;
     var out = [];
-    bal.src.split("\n").forEach((a, b) => {
+    bal.src.split('\n').forEach((a, b) => {
         if (a.includes('//') == true)
             return;
         var doTCompiled = doT.template(a);
@@ -1651,7 +1690,7 @@ const dotCollect = (cpy, bal, ste) => {
         out.push(outLine);
     });
     if (bal.slv != null)
-        bal.slv({ colBit: { idx: "dot-vurt", lst: out, src: out.join('\n') } });
+        bal.slv({ clcBit: { idx: 'dot-vurt', lst: out, src: out.join('\n') } });
     return cpy;
 };
 exports.dotCollect = dotCollect;
@@ -1668,7 +1707,7 @@ const formatCollect = (cpy, bal, ste) => {
         out.push(now);
     });
     dat = [idx, out];
-    bal.slv({ colBit: { idx: "format-collect", dat } });
+    bal.slv({ clcBit: { idx: 'format-collect', dat } });
     return cpy;
 };
 exports.formatCollect = formatCollect;
@@ -1679,9 +1718,9 @@ const listCollect = (cpy, bal, ste) => {
     var cabBit = cpy.caboodleBitList[cpy.caboodleBits[type]];
     lst = [];
     cabBit.bitList.forEach((a) => {
-        lst.push((a.idx));
+        lst.push(a.idx);
     });
-    bal.slv({ colBit: { idx: "list-collect", lst } });
+    bal.slv({ clcBit: { idx: 'list-collect', lst } });
     return cpy;
 };
 exports.listCollect = listCollect;

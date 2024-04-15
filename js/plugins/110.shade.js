@@ -1959,7 +1959,7 @@ const deleteText = async (cpy, bal, ste) => {
     bit = await ste.hunt(ActTxt.READ_TEXT, { idx: bal.idx });
     var dat = bit.txtBit.dat;
     var text = dat.bit;
-    text.destroy();
+    //text.destroy()
     dat.bit = null;
     if (bal.slv != null)
         return bal.slv({ vsgBit: { idx: "delete-text", dat } });
@@ -4013,7 +4013,7 @@ exports.default = ChromeUnit;
 },{"../99.core/state":113,"typescript-ioc":730}],92:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.formatCollect = exports.dotCollect = exports.emptyCollect = exports.deleteCollect = exports.modelCollect = exports.getCollect = exports.putCollect = exports.removeCollect = exports.createCollect = exports.writeCollect = exports.readCollect = exports.fetchCollect = exports.updateCollect = exports.initCollect = void 0;
+exports.listCollect = exports.formatCollect = exports.dotCollect = exports.emptyCollect = exports.deleteCollect = exports.modelCollect = exports.getCollect = exports.putCollect = exports.removeCollect = exports.createCollect = exports.writeCollect = exports.readCollect = exports.fetchCollect = exports.updateCollect = exports.initCollect = void 0;
 const ActCol = require("../../97.collect.unit/collect.action");
 var bit, lst, dat, idx, val, src, dex;
 const initCollect = (cpy, bal, ste) => {
@@ -4028,8 +4028,8 @@ exports.updateCollect = updateCollect;
 const fetchCollect = (cpy, bal, ste) => {
     if (bal.val == null)
         bal.val = 1;
-    if ((bal.bit == null))
-        bal.slv({ clcBit: { idx: "fetch-collect-err", src: 'no-bit' } });
+    if (bal.bit == null)
+        bal.slv({ clcBit: { idx: 'fetch-collect-err', src: 'no-bit' } });
     var type = bal.bit.split(' ').slice(-1).pop().toLowerCase();
     var cabBit = cpy.caboodleBitList[cpy.caboodleBits[type]];
     if (bal.val == 1)
@@ -4037,36 +4037,40 @@ const fetchCollect = (cpy, bal, ste) => {
     else
         bit = cabBit;
     if (bal.slv != null)
-        bal.slv({ clcBit: { idx: "fetch-collect", dat: bit } });
+        bal.slv({ clcBit: { idx: 'fetch-collect', dat: bit } });
     return cpy;
 };
 exports.fetchCollect = fetchCollect;
 const readCollect = async (cpy, bal, ste) => {
-    if ((bal.bit == null))
-        bal.slv({ clcBit: { idx: "read-collect-err", src: 'no-bit' } });
+    if (bal.bit == null)
+        bal.slv({ clcBit: { idx: 'read-collect-err', src: 'no-bit' } });
     var type = bal.bit.split(' ').slice(-1).pop().toLowerCase();
     if (cpy.caboodleBits[type] == null)
         (0, exports.createCollect)(cpy, { idx: type }, ste);
     var cabBit = cpy.caboodleBitList[cpy.caboodleBits[type]];
     if (cabBit.bits[bal.idx] == null) {
-        bit = await ste.hunt(ActCol.WRITE_COLLECT, { idx: bal.idx, src: bal.src, bit: bal.bit });
+        bit = await ste.hunt(ActCol.WRITE_COLLECT, {
+            idx: bal.idx,
+            src: bal.src,
+            bit: bal.bit,
+        });
     }
     else {
         dat = cabBit.bitList[cabBit.bits[bal.idx]];
     }
     if (bal.slv != null)
-        bal.slv({ clcBit: { idx: "read-collect", dat } });
+        bal.slv({ clcBit: { idx: 'read-collect', dat } });
     return cpy;
 };
 exports.readCollect = readCollect;
 const writeCollect = async (cpy, bal, ste) => {
     dat = null;
-    //let us check see if it exists 
+    //let us check see if it exists
     var type = bal.bit.split(' ').slice(-1).pop().toLowerCase();
     if (cpy.caboodleBits[type] == null)
         (0, exports.createCollect)(cpy, { idx: type }, ste);
-    if ((bal.bit == null))
-        bal.slv({ rskBit: { idx: "write-collect-err", src: 'no-bit' } });
+    if (bal.bit == null)
+        bal.slv({ rskBit: { idx: 'write-collect-err', src: 'no-bit' } });
     var cabBit = cpy.caboodleBitList[cpy.caboodleBits[type]];
     bal.idx;
     if (cabBit.bits[bal.idx] == null) {
@@ -4081,7 +4085,7 @@ const writeCollect = async (cpy, bal, ste) => {
         if (idx == null)
             idx = dat.idx;
         if (idx == null)
-            throw new Error("write collect has no idx");
+            throw new Error('write collect has no idx');
         cabBit.bits[idx] = dat.dex;
     }
     else {
@@ -4096,10 +4100,10 @@ const writeCollect = async (cpy, bal, ste) => {
         dat = cabBit;
         //!!! SUPER IMPORTANT
     }
-    if ((dat == null) && (bal.slv != null))
-        bal.slv({ rskBit: { idx: "write-collect-err", src: 'no-dat' } });
+    if (dat == null && bal.slv != null)
+        bal.slv({ rskBit: { idx: 'write-collect-err', src: 'no-dat' } });
     if (bal.slv != null)
-        bal.slv({ clcBit: { idx: "write-collect", dat } });
+        bal.slv({ clcBit: { idx: 'write-collect', dat } });
     return cpy;
 };
 exports.writeCollect = writeCollect;
@@ -4109,17 +4113,17 @@ const createCollect = (cpy, bal, ste) => {
     cpy.caboodleBitList.push(cabBit);
     cpy.caboodleBits[cabBit.idx] = cabBit.dex;
     if (bal.slv != null)
-        bal.slv({ clcBit: { idx: "create-collect", dat: cabBit } });
+        bal.slv({ clcBit: { idx: 'create-collect', dat: cabBit } });
     return cpy;
 };
 exports.createCollect = createCollect;
 const removeCollect = async (cpy, bal, ste) => {
     var type = bal.bit.split(' ').slice(-1).pop().toLowerCase();
     if (cpy.caboodleBits[type] == null)
-        return bal.slv({ rskBit: { idx: "remove-collect-not-present" } });
+        return bal.slv({ rskBit: { idx: 'remove-collect-not-present' } });
     var cabBit = cpy.caboodleBitList[cpy.caboodleBits[type]];
     if (cabBit.bits[bal.idx] == null)
-        return bal.slv({ rskBit: { idx: "remove-collect-idx-not-present" } });
+        return bal.slv({ rskBit: { idx: 'remove-collect-idx-not-present' } });
     bit = await ste.hunt(bal.bit, { idx: bal.idx, src: bal.src, dat: bal.dat });
     var objDat = bit[Object.keys(bit)[0]];
     dat = objDat.dat;
@@ -4135,7 +4139,7 @@ const removeCollect = async (cpy, bal, ste) => {
     var itm = cabBit.bitList.splice(dex, 1);
     cabBit.dex -= 1;
     if (bal.slv != null)
-        bal.slv({ clcBit: { idx: "remove-collect", dat: itm[0] } });
+        bal.slv({ clcBit: { idx: 'remove-collect', dat: itm[0] } });
     return cpy;
 };
 exports.removeCollect = removeCollect;
@@ -4143,7 +4147,7 @@ const putCollect = (cpy, bal, ste) => {
     cpy.caboodleBits[bal.idx] = bal.val;
     cpy.caboodleBitList[bal.val] = bal.dat;
     if (bal.slv != null)
-        bal.slv({ clcBit: { idx: "put-collect", dat: bal.dat } });
+        bal.slv({ clcBit: { idx: 'put-collect', dat: bal.dat } });
     return cpy;
 };
 exports.putCollect = putCollect;
@@ -4151,14 +4155,14 @@ const getCollect = (cpy, bal, ste) => {
     val = cpy.caboodleBits[bal.idx];
     dat = cpy.caboodleBitList[val];
     if (bal.slv != null)
-        bal.slv({ clcBit: { idx: "get-collect", val, dat } });
+        bal.slv({ clcBit: { idx: 'get-collect', val, dat } });
     return cpy;
 };
 exports.getCollect = getCollect;
 const modelCollect = (cpy, bal, ste) => {
     //debugger
     if (bal.slv != null)
-        bal.slv({ clcBit: { idx: "model-collect", dat: cpy } });
+        bal.slv({ clcBit: { idx: 'model-collect', dat: cpy } });
     return cpy;
 };
 exports.modelCollect = modelCollect;
@@ -4175,7 +4179,7 @@ exports.emptyCollect = emptyCollect;
 const dotCollect = (cpy, bal, ste) => {
     var gel = bal.dat;
     var out = [];
-    bal.src.split("\n").forEach((a, b) => {
+    bal.src.split('\n').forEach((a, b) => {
         if (a.includes('//') == true)
             return;
         var doTCompiled = doT.template(a);
@@ -4183,7 +4187,7 @@ const dotCollect = (cpy, bal, ste) => {
         out.push(outLine);
     });
     if (bal.slv != null)
-        bal.slv({ colBit: { idx: "dot-vurt", lst: out, src: out.join('\n') } });
+        bal.slv({ clcBit: { idx: 'dot-vurt', lst: out, src: out.join('\n') } });
     return cpy;
 };
 exports.dotCollect = dotCollect;
@@ -4200,17 +4204,30 @@ const formatCollect = (cpy, bal, ste) => {
         out.push(now);
     });
     dat = [idx, out];
-    bal.slv({ colBit: { idx: "format-collect", dat } });
+    bal.slv({ clcBit: { idx: 'format-collect', dat } });
     return cpy;
 };
 exports.formatCollect = formatCollect;
+const listCollect = (cpy, bal, ste) => {
+    var type = bal.bit.split(' ').slice(-1).pop().toLowerCase();
+    if (cpy.caboodleBits[type] == null)
+        (0, exports.createCollect)(cpy, { idx: type }, ste);
+    var cabBit = cpy.caboodleBitList[cpy.caboodleBits[type]];
+    lst = [];
+    cabBit.bitList.forEach((a) => {
+        lst.push(a.idx);
+    });
+    bal.slv({ clcBit: { idx: 'list-collect', lst } });
+    return cpy;
+};
+exports.listCollect = listCollect;
 const S = require("string");
 const doT = require("dot");
 
 },{"../../97.collect.unit/collect.action":93,"dot":540,"string":710}],93:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DotCollect = exports.DOT_COLLECT = exports.FormatCollect = exports.FORMAT_COLLECT = exports.GetCollect = exports.GET_COLLECT = exports.PutCollect = exports.PUT_COLLECT = exports.ModelCollect = exports.MODEL_COLLECT = exports.EmptyCollect = exports.EMPTY_COLLECT = exports.DeleteCollect = exports.DELETE_COLLECT = exports.RemoveCollect = exports.REMOVE_COLLECT = exports.CreateCollect = exports.CREATE_COLLECT = exports.WriteCollect = exports.WRITE_COLLECT = exports.ReadCollect = exports.READ_COLLECT = exports.FetchCollect = exports.FETCH_COLLECT = exports.UpdateCollect = exports.UPDATE_COLLECT = exports.InitCollect = exports.INIT_COLLECT = void 0;
+exports.ListCollect = exports.LIST_COLLECT = exports.DotCollect = exports.DOT_COLLECT = exports.FormatCollect = exports.FORMAT_COLLECT = exports.GetCollect = exports.GET_COLLECT = exports.PutCollect = exports.PUT_COLLECT = exports.ModelCollect = exports.MODEL_COLLECT = exports.EmptyCollect = exports.EMPTY_COLLECT = exports.DeleteCollect = exports.DELETE_COLLECT = exports.RemoveCollect = exports.REMOVE_COLLECT = exports.CreateCollect = exports.CREATE_COLLECT = exports.WriteCollect = exports.WRITE_COLLECT = exports.ReadCollect = exports.READ_COLLECT = exports.FetchCollect = exports.FETCH_COLLECT = exports.UpdateCollect = exports.UPDATE_COLLECT = exports.InitCollect = exports.INIT_COLLECT = void 0;
 // Collect actions
 exports.INIT_COLLECT = "[Collect action] Init Collect";
 class InitCollect {
@@ -4324,11 +4341,19 @@ class DotCollect {
     }
 }
 exports.DotCollect = DotCollect;
+exports.LIST_COLLECT = "[List action] List Collect";
+class ListCollect {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.LIST_COLLECT;
+    }
+}
+exports.ListCollect = ListCollect;
 
 },{}],94:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.dotCollect = exports.formatCollect = exports.getCollect = exports.putCollect = exports.modelCollect = exports.removeCollect = exports.deleteCollect = exports.fetchCollect = exports.emptyCollect = exports.createCollect = exports.writeCollect = exports.readCollect = exports.updateCollect = exports.initCollect = void 0;
+exports.listCollect = exports.dotCollect = exports.formatCollect = exports.getCollect = exports.putCollect = exports.modelCollect = exports.removeCollect = exports.deleteCollect = exports.fetchCollect = exports.emptyCollect = exports.createCollect = exports.writeCollect = exports.readCollect = exports.updateCollect = exports.initCollect = void 0;
 var collect_buzz_1 = require("./buz/collect.buzz");
 Object.defineProperty(exports, "initCollect", { enumerable: true, get: function () { return collect_buzz_1.initCollect; } });
 var collect_buzz_2 = require("./buz/collect.buzz");
@@ -4357,6 +4382,8 @@ var collect_buzz_13 = require("./buz/collect.buzz");
 Object.defineProperty(exports, "formatCollect", { enumerable: true, get: function () { return collect_buzz_13.formatCollect; } });
 var collect_buzz_14 = require("./buz/collect.buzz");
 Object.defineProperty(exports, "dotCollect", { enumerable: true, get: function () { return collect_buzz_14.dotCollect; } });
+var collect_buzz_15 = require("./buz/collect.buzz");
+Object.defineProperty(exports, "listCollect", { enumerable: true, get: function () { return collect_buzz_15.listCollect; } });
 
 },{"./buz/collect.buzz":92}],95:[function(require,module,exports){
 "use strict";
@@ -4409,6 +4436,8 @@ function reducer(model = new collect_model_1.CollectModel(), act, state) {
             return Buzz.formatCollect(clone(model), act.bale, state);
         case Act.DOT_COLLECT:
             return Buzz.dotCollect(clone(model), act.bale, state);
+        case Act.LIST_COLLECT:
+            return Buzz.listCollect(clone(model), act.bale, state);
         default:
             return model;
     }

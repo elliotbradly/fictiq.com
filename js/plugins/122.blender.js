@@ -263,10 +263,12 @@ var patch = (ste, type, bale) => ste.dispatch({ type, bale });
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sceneRpgstage = exports.debugRpgstage = exports.updateRpgstage = exports.initRpgstage = void 0;
+const ActAtv = require("../../80.activity.unit/activity.action");
 const ActRps = require("../rpgstage.action");
 const ActHud = require("../../10.hud.unit/hud.action");
 const ActTxt = require("../../act/text.action");
 var bit, val, idx, dex, lst, dat, src;
+var display, hudData;
 const initRpgstage = async (cpy, bal, ste) => {
     var dat = bal.dat;
     cpy.shade = dat.shade;
@@ -286,6 +288,8 @@ const initRpgstage = async (cpy, bal, ste) => {
     cpy.graphics = dat.graphics;
     cpy.sceneManager = dat.sceneManager;
     cpy.dataActors = dat.dataActors;
+    //setTimeout( ()=>{
+    //}, 3333 )
     bit = await ste.hunt(ActRps.SCENE_RPGSTAGE, { val: 0 });
     //var openBld = window.BLENDER.ActBld.OPEN_BLENDER;
     //var initAtv = window.BLENDER.ActAtv.INIT_ACTIVITY;
@@ -361,30 +365,26 @@ const debugRpgstage = async (cpy, bal, ste) => {
     return cpy;
 };
 exports.debugRpgstage = debugRpgstage;
-var first = true;
 const sceneRpgstage = async (cpy, bal, ste) => {
-    if (first == true) {
-        first = false;
-        return;
-    }
-    var display = cpy.sceneManager._scene._spriteset;
+    display = cpy.sceneManager._scene._spriteset;
     display = cpy.sceneManager._scene._ultraHudContainer;
-    var hudData = { mainHUD: display._mainHUD };
+    hudData = { mainHUD: display._mainHUD };
+    bit = await cpy.shade.hunt(ActTxt.REMOVE_TEXT, { idx: 'txt00' });
     bit = await ste.hunt(ActHud.FIN_HUD, {});
     bit = await ste.hunt(ActHud.INIT_HUD, { dat: hudData });
-    bit = await ste.hunt(ActHud.READ_HUD, { idx: HUD.ICON_WINDOW });
     ste.hunt(ActHud.WRITE_HUD, { idx: HUD.DEBUG_WINDOW, dat: { visible: true } });
-    ste.hunt(ActHud.WRITE_HUD, { idx: HUD.ICON_WINDOW, dat: { visible: false } });
-    ste.hunt(ActHud.WRITE_HUD, { idx: HUD.PLAY_DATA_GROUP, dat: { visible: false } });
-    ste.hunt(ActHud.WRITE_HUD, { idx: HUD.WELCOME_WINDOW, dat: { visible: false } });
-    ste.hunt(ActHud.WRITE_HUD, { idx: HUD.ACTION_BAR, dat: { visible: false } });
+    //bit = await ste.hunt(ActHud.READ_HUD, { idx: HUD.ICON_WINDOW });
+    //ste.hunt(ActHud.WRITE_HUD, { idx: HUD.ICON_WINDOW, dat: { visible: false } });
+    //ste.hunt(ActHud.WRITE_HUD, { idx: HUD.PLAY_DATA_GROUP, dat: { visible: false } });
+    //ste.hunt(ActHud.WRITE_HUD, { idx: HUD.WELCOME_WINDOW, dat: { visible: false } });
+    //ste.hunt(ActHud.WRITE_HUD, { idx: HUD.ACTION_BAR, dat: { visible: false } });
     bit = await ste.hunt(ActHud.READ_HUD, { idx: HUD.DEBUG_WINDOW, dat: {} });
-    //var hud = bit.hudBit.dat.bit;
-    //dat = { txt: '', x: -138, y: -140, sze: 16, clr: 0xFFFFFF, wrp: 280, aln: 'left' }
-    //bit = await cpy.shade.hunt(ActTxt.WRITE_TEXT, { idx: 'txt00', dat })
-    //var text = bit.txtBit.dat.bit
-    //hud.addChild(text)
-    //bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: 'Welcome to Alligator Earth' });
+    var hud = bit.hudBit.dat.bit;
+    dat = { txt: '', x: -138, y: -140, sze: 16, clr: 0xFFFFFF, wrp: 280, aln: 'left' };
+    bit = await cpy.shade.hunt(ActTxt.WRITE_TEXT, { idx: 'txt00', dat });
+    var text = bit.txtBit.dat.bit;
+    hud.addChild(text);
+    bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: JSON.stringify(bal.dat) });
     //bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: 'init rpg stage' });
     //bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: '----------' });
     //bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: '----------' });
@@ -395,8 +395,10 @@ const sceneRpgstage = async (cpy, bal, ste) => {
     //bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: '----------' });
     //bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: '----------' });
     //bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: '----------' });
-    //bit = await ste.hunt(ActAtv.INIT_ACTIVITY, { val: 0 });
-    //bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: JSON.stringify(bit) });
+    if (cpy.live == true) {
+        bit = await ste.hunt(ActAtv.INIT_ACTIVITY, { val: 0 });
+        bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: JSON.stringify(bit) });
+    }
     //bit = await ste.hunt( ActRpa.INIT_RPGACTOR, { dat: cpy.dataActors });
     //cpy.mainHUD.visible = false
     //can you clear it
@@ -406,7 +408,7 @@ const sceneRpgstage = async (cpy, bal, ste) => {
 exports.sceneRpgstage = sceneRpgstage;
 const HUD = require("../../val/hud");
 
-},{"../../10.hud.unit/hud.action":33,"../../act/text.action":80,"../../val/hud":84,"../rpgstage.action":9}],9:[function(require,module,exports){
+},{"../../10.hud.unit/hud.action":33,"../../80.activity.unit/activity.action":38,"../../act/text.action":80,"../../val/hud":84,"../rpgstage.action":9}],9:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SceneRpgstage = exports.SCENE_RPGSTAGE = exports.DebugRpgstage = exports.DEBUG_RPGSTAGE = exports.UpdateRpgstage = exports.UPDATE_RPGSTAGE = exports.InitRpgstage = exports.INIT_RPGSTAGE = void 0;
@@ -463,8 +465,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.RpgstageModel = void 0;
 class RpgstageModel {
     constructor() {
+        this.live = false;
         this.debugList = [];
-        this.debugListSize = 8;
+        this.debugListSize = 10;
         //idx:string;
         //rpgstageBitList: RpgstageBit[] = [];
         //rpgstageBits: any = {};
@@ -974,9 +977,12 @@ const createHud = (cpy, bal, ste) => {
         bal.src = 'sprite-ultrahudcomponent-window';
     var dat = { idx: bal.idx, src: bal.src };
     var bit = comp.dat;
+    if (bit == null) {
+        bal.slv({ hudBit: { idx: "create-hud", dat } });
+        return;
+    }
     dat.bit = bit;
     dat.dat = bit._data;
-    //debugger
     //var dat = { idx: bal.idx, src: bal.src, bit, dat: bit._data };
     bal.slv({ hudBit: { idx: "create-hud", dat } });
     return cpy;
@@ -1576,6 +1582,7 @@ const writeCollect = async (cpy, bal, ste) => {
         bal.slv({ rskBit: { idx: 'write-collect-err', src: 'no-bit' } });
     var cabBit = cpy.caboodleBitList[cpy.caboodleBits[type]];
     bal.idx;
+    val = 0;
     if (cabBit.bits[bal.idx] == null) {
         bit = await ste.hunt(bal.bit, { idx: bal.idx, src: bal.src, dat: bal.dat });
         var objDat = bit[Object.keys(bit)[0]];
@@ -1594,6 +1601,7 @@ const writeCollect = async (cpy, bal, ste) => {
     else {
         var cabDat = cabBit.bitList[cabBit.bits[bal.idx]];
         bal.dat;
+        val = 1;
         for (var key in bal.dat) {
             if (cabDat == null)
                 cabDat = {};
@@ -1606,7 +1614,7 @@ const writeCollect = async (cpy, bal, ste) => {
     if (dat == null && bal.slv != null)
         bal.slv({ rskBit: { idx: 'write-collect-err', src: 'no-dat' } });
     if (bal.slv != null)
-        bal.slv({ clcBit: { idx: 'write-collect', dat } });
+        bal.slv({ clcBit: { idx: 'write-collect', val, dat } });
     return cpy;
 };
 exports.writeCollect = writeCollect;

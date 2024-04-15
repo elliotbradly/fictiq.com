@@ -465,7 +465,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.RpgstageModel = void 0;
 class RpgstageModel {
     constructor() {
-        this.live = false;
+        this.live = true;
         this.debugList = [];
         this.debugListSize = 10;
         //idx:string;

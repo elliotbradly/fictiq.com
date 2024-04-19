@@ -328,7 +328,7 @@ const openRpgstage = async (cpy, bal, ste) => {
         "maxLevel": 99,
         "name": "Ryan",
         "nickname": "",
-        "note": "map: 2, 9, 3\ndetail: tall",
+        "note": "map: 1, 9, 3\ndetail: tall",
         "profile": ""
     };
     bit = await ste.hunt(ActRpa.WRITE_RPGACTOR, { idx: itm.name, dat: itm });
@@ -348,7 +348,7 @@ const openRpgstage = async (cpy, bal, ste) => {
         "maxLevel": 99,
         "name": "Jordan",
         "nickname": "",
-        "note": "map: 3, 8, 3\ndetail: tall",
+        "note": "map: 1, 8, 3\ndetail: tall",
         "profile": ""
     };
     bit = await ste.hunt(ActRpa.WRITE_RPGACTOR, { idx: itm.name, dat: itm });

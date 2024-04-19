@@ -1,6 +1,13 @@
 [
 null,
-{"id":1,"expanded":true,"name":"MAP001-Astrokahn Hub","order":1,"parentId":0,"scrollX":571,"scrollY":1193},
-{"id":2,"expanded":true,"name":"MAP002-Fang-Swamp","order":2,"parentId":0,"scrollX":0,"scrollY":0},
-{"id":3,"expanded":false,"name":"MAP003-Bixie-Lixie","order":3,"parentId":0,"scrollX":0,"scrollY":0}
+{"id":1,"expanded":true,"name":"MAP001-Astrokahn Hub","order":1,"parentId":0,"scrollX":4229,"scrollY":3607},
+{"id":2,"expanded":true,"name":"MAP002-Fang-Swamp","order":2,"parentId":0,"scrollX":571,"scrollY":3607},
+{"id":3,"expanded":true,"name":"MAP003-Bixie-Lixie","order":3,"parentId":0,"scrollX":571,"scrollY":3607},
+{"id":4,"expanded":true,"name":"MAP004-Space-Jam","order":4,"parentId":0,"scrollX":571,"scrollY":3607},
+{"id":5,"expanded":true,"name":"MAP005-Space-Jam","order":5,"parentId":0,"scrollX":571,"scrollY":3607},
+{"id":6,"expanded":true,"name":"MAP006-Space-Jam","order":6,"parentId":0,"scrollX":571,"scrollY":3607},
+{"id":7,"expanded":true,"name":"MAP007-Space-Jam","order":7,"parentId":0,"scrollX":571,"scrollY":3607},
+{"id":8,"expanded":true,"name":"MAP008-Space-Jam","order":8,"parentId":0,"scrollX":579,"scrollY":3599},
+{"id":9,"expanded":true,"name":"MAP009-Space-Jam","order":9,"parentId":0,"scrollX":579,"scrollY":3599},
+{"id":10,"expanded":false,"name":"MAP010-Space-Jam","order":10,"parentId":0,"scrollX":579,"scrollY":3599}
 ]

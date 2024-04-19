@@ -80,10 +80,13 @@
         gameTroop: $gameTroop,
         gameMap: $gameMap,
         gamePlayer: $gamePlayer,
+        
+        partyPlugin: Party,
 
         sceneManager: SceneManager,
         shade: window.SHADE,
         graphics: Graphics,
+
 
         dataActors: $dataActors,
         dataMapInfos: $dataMapInfos,

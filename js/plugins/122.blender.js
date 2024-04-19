@@ -266,6 +266,7 @@ exports.sceneRpgstage = exports.debugRpgstage = exports.updateRpgstage = exports
 const ActAtv = require("../../80.activity.unit/activity.action");
 const ActRpa = require("../../02.rpgactor.unit/rpgactor.action");
 const ActRpm = require("../../03.rpgmap.unit/rpgmap.action");
+const ActRpp = require("../../04.rpgparty.unit/rpgparty.action");
 const ActRps = require("../rpgstage.action");
 const ActHud = require("../../10.hud.unit/hud.action");
 const ActTxt = require("../../act/text.action");
@@ -292,72 +293,70 @@ const initRpgstage = async (cpy, bal, ste) => {
     cpy.dataActors = dat.dataActors;
     cpy.dataMapInfos = dat.dataMapInfos;
     cpy.dataMap = dat.dataMap;
-    //setTimeout( ()=>{
-    //}, 3333 )
+    cpy.partyPlugin = dat.partyPlugin;
+    cpy.gamePlayer._moveSpeed = 7;
     bit = await ste.hunt(ActRps.SCENE_RPGSTAGE, { val: 0 });
-    //var openBld = window.BLENDER.ActBld.OPEN_BLENDER;
-    //var initAtv = window.BLENDER.ActAtv.INIT_ACTIVITY;
-    //var initMap = window.BLENDER.ActRpm.INIT_RPGMAP;
-    //var bit = await window.BLENDER.hunt(initAtv, { val: 0 });
-    //var bit = await window.BLENDER.hunt(initBld, { val: 0, dat: MQTT, src: local });
-    //window.BLENDER.hunt(openBld, { idx: "simo-beeing" });
-    //var display = SceneManager._scene._spriteset._characterSprites[6];
-    //var display = SceneManager._scene._spriteset._destinationSprite;
-    //display.alpha = 0.5;
-    //debugger
-    //_spriteset
-    //debugger;
-    //Spriteset_Map;
-    //var base = new Sprite(ImageManager.loadPicture("Actor1_1"));
-    //Graphics.app.stage.children[0].addChild(base);
-    //display.addChild(base);
-    //$gameTemp._pkdJoyStick.base.addChild(base);
-    //this.addChild(base);
-    //this.addChildToBack(base);
-    // var count = 0;
-    //Party.create(2);
-    //Party.addActor(2, 3);
-    //Party.setLocation(2, 12, 12, 5);
-    //Party.create(3);
-    //Party.addActor(3, 4);
-    //Party.setLocation(3, 15, 15, 5);
-    //setTimeout(() => {
-    //  Party.switch(2);
-    //}, 2222);
-    //setTimeout(() => {
-    //  Party.switch(3);
-    //}, 12222);
-    //setTimeout(() => {
-    //  Party.switch(1);
-    //}, 32222);
-    // setInterval(() => {
-    //   count += 1;
-    // document.dispatchEvent(
-    //   new KeyboardEvent("keydown", {
-    //     key: "e",
-    //     keyCode: 39, // example values.
-    //     code: "ArrowRight", // put everything you need in this object.
-    //     which: 69,
-    //     shiftKey: false, // you don't need to include values
-    //     ctrlKey: false, // if you aren't going to use them.
-    //     metaKey: false, // these are here for example's sake.
-    //   })
-    // );
-    //$gameMessage.add('\SEPLAY[]  ' + count );
-    //Game_Player_executeMove.call(this, 8);
-    //console.log('go')
-    // }, 1444);
     bal.slv({ intBit: { idx: "init-rpgstage" } });
     return cpy;
 };
 exports.initRpgstage = initRpgstage;
 const openRpgstage = async (cpy, bal, ste) => {
+    bit = await ste.hunt(ActAtv.INIT_ACTIVITY, { val: 0 });
+    bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: JSON.stringify(bit) });
     bit = await ste.hunt(ActRpa.INIT_RPGACTOR, { lst: cpy.dataActors });
     lst = bit.intBit.lst;
     lst.forEach((a) => { ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: a }); });
     bit = await ste.hunt(ActRpm.INIT_RPGMAP, { lst: cpy.dataMapInfos });
     lst = bit.intBit.lst;
     lst.forEach((a) => { ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: a }); });
+    bit = await ste.hunt(ActRpa.LIST_RPGACTOR, {});
+    lst = bit.rpaBit.lst;
+    bit = await ste.hunt(ActRpp.INIT_RPGPARTY, { lst });
+    lst = bit.intBit.lst;
+    lst.forEach((a) => { ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: a }); });
+    var itm = {
+        "id": 4,
+        "characterName": "Actor2",
+        "characterIndex": 3,
+        "faceName": "Actor1",
+        "faceIndex": 2,
+        "battlerName": "Actor1_3",
+        "classId": 1,
+        "equips": [0, 0, 0, 0, 0],
+        "traits": [],
+        "initialLevel": 1,
+        "maxLevel": 99,
+        "name": "Ryan",
+        "nickname": "",
+        "note": "map: 2, 9, 3\ndetail: tall",
+        "profile": ""
+    };
+    bit = await ste.hunt(ActRpa.WRITE_RPGACTOR, { idx: itm.name, dat: itm });
+    dat = bit.rpaBit.dat;
+    bit = await ste.hunt(ActRpp.WRITE_RPGPARTY, { idx: dat.idx, dat });
+    var itm = {
+        "id": 5,
+        "characterName": "Monster",
+        "characterIndex": 4,
+        "battlerName": "Actor1_3",
+        "faceName": "Actor1",
+        "faceIndex": 2,
+        "classId": 1,
+        "equips": [0, 0, 0, 0, 0],
+        "traits": [],
+        "initialLevel": 1,
+        "maxLevel": 99,
+        "name": "Jordan",
+        "nickname": "",
+        "note": "map: 3, 8, 3\ndetail: tall",
+        "profile": ""
+    };
+    bit = await ste.hunt(ActRpa.WRITE_RPGACTOR, { idx: itm.name, dat: itm });
+    dat = bit.rpaBit.dat;
+    bit = await ste.hunt(ActRpp.WRITE_RPGPARTY, { idx: dat.idx, dat });
+    //setTimeout ( async ()=>{
+    //    bit = await ste.hunt(ActRpp.SWITCH_RPGPARTY, { val:3 });
+    //}, 31111)
     bal.slv({ rpsBit: { idx: "open-rpgstage" } });
     return cpy;
 };
@@ -410,10 +409,8 @@ const sceneRpgstage = async (cpy, bal, ste) => {
     //bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: '----------' });
     //bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: '----------' });
     //bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: '----------' });
-    bit = await ste.hunt(ActAtv.INIT_ACTIVITY, { val: 0 });
-    bit = await ste.hunt(ActRps.DEBUG_RPGSTAGE, { src: JSON.stringify(bit) });
     if (cpy.sceneChangeCount == 0) {
-        await ste.hunt(ActRps.OPEN_RPGSTAGE, {});
+        ste.hunt(ActRps.OPEN_RPGSTAGE, {});
     }
     cpy.sceneChangeCount += 1;
     //cpy.mainHUD.visible = false
@@ -424,7 +421,7 @@ const sceneRpgstage = async (cpy, bal, ste) => {
 exports.sceneRpgstage = sceneRpgstage;
 const HUD = require("../../val/hud");
 
-},{"../../02.rpgactor.unit/rpgactor.action":15,"../../03.rpgmap.unit/rpgmap.action":21,"../../10.hud.unit/hud.action":35,"../../80.activity.unit/activity.action":40,"../../act/text.action":82,"../../val/hud":86,"../rpgstage.action":9}],9:[function(require,module,exports){
+},{"../../02.rpgactor.unit/rpgactor.action":15,"../../03.rpgmap.unit/rpgmap.action":21,"../../04.rpgparty.unit/rpgparty.action":29,"../../10.hud.unit/hud.action":35,"../../80.activity.unit/activity.action":40,"../../act/text.action":82,"../../val/hud":86,"../rpgstage.action":9}],9:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OpenRpgstage = exports.OPEN_RPGSTAGE = exports.SceneRpgstage = exports.SCENE_RPGSTAGE = exports.DebugRpgstage = exports.DEBUG_RPGSTAGE = exports.UpdateRpgstage = exports.UPDATE_RPGSTAGE = exports.InitRpgstage = exports.INIT_RPGSTAGE = void 0;
@@ -555,7 +552,7 @@ exports.default = RpgstageUnit;
 },{"../99.core/state":71,"typescript-ioc":344}],14:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteRpgactor = exports.createRpgactor = exports.removeRpgactor = exports.writeRpgactor = exports.readRpgactor = exports.updateRpgactor = exports.initRpgactor = void 0;
+exports.listRpgactor = exports.deleteRpgactor = exports.removeRpgactor = exports.writeRpgactor = exports.readRpgactor = exports.updateRpgactor = exports.createRpgactor = exports.initRpgactor = void 0;
 const ActRpa = require("../rpgactor.action");
 const ActCol = require("../../97.collect.unit/collect.action");
 var bit, val, idx, dex, lst, dat, src;
@@ -563,7 +560,7 @@ const initRpgactor = async (cpy, bal, ste) => {
     lst = bal.lst;
     var dex = lst.length - 1;
     var output = [];
-    var lstMsg = [];
+    var lstMsg = ['initizing rpg actor'];
     var nextActor = async () => {
         if (dex <= 0) {
             output;
@@ -581,6 +578,46 @@ const initRpgactor = async (cpy, bal, ste) => {
     return cpy;
 };
 exports.initRpgactor = initRpgactor;
+const createRpgactor = async (cpy, bal, ste) => {
+    var stageMod = ste.value.rpgstage;
+    if (bal.dat == null)
+        bal.dat = {};
+    var dat = { idx: bal.idx };
+    for (var key in bal.dat) {
+        if (key == 'id')
+            dat['dex'] = bal.dat[key];
+        else
+            dat[key] = bal.dat[key];
+    }
+    if (dat.note != null)
+        dat.note.replace('↵', '\n');
+    bit = await ste.hunt(ActCol.HASH_COLLECT, { src: dat.note });
+    var hash = bit.clcBit.dat;
+    //check and see if it is in the game object
+    var exits = false;
+    stageMod.dataActors.forEach((a => {
+        if (a == null)
+            return;
+        if (a.name == null)
+            return;
+        if (exits == true)
+            return;
+        if (a.name == bal.idx)
+            exits = true;
+    }));
+    if (exits == false) {
+        stageMod.dataActors.push(dat);
+        stageMod.gameActors.actor(dat.id);
+        //remove gameActorClass
+    }
+    //i think you will need to attach this to the $gameData object
+    if (hash.map != null)
+        dat.map = { idx: Number(hash.map[0]), x: Number(hash.map[1]), y: Number(hash.map[2]) };
+    dat;
+    bal.slv({ rpaBit: { idx: 'create-rpgactor', dat } });
+    return cpy;
+};
+exports.createRpgactor = createRpgactor;
 const updateRpgactor = async (cpy, bal, ste) => {
     bit = await ste.hunt(ActRpa.READ_RPGACTOR, { idx: bal.idx });
     dat = bit.rpaBit;
@@ -617,28 +654,23 @@ const removeRpgactor = async (cpy, bal, ste) => {
     return cpy;
 };
 exports.removeRpgactor = removeRpgactor;
-const createRpgactor = async (cpy, bal, ste) => {
-    if (bal.dat == null)
-        bal.dat = {};
-    bal.dat;
-    var dat = {};
-    for (var key in bal.dat) {
-        dat[key] = bal.dat[key];
-    }
-    bal.slv({ rpaBit: { idx: 'create-rpgactor', dat } });
-    return cpy;
-};
-exports.createRpgactor = createRpgactor;
 const deleteRpgactor = (cpy, bal, ste) => {
     debugger;
     return cpy;
 };
 exports.deleteRpgactor = deleteRpgactor;
+const listRpgactor = async (cpy, bal, ste) => {
+    bit = await ste.hunt(ActCol.LIST_COLLECT, { bit: ActRpa.CREATE_RPGACTOR });
+    lst = bit.clcBit.lst;
+    bal.slv({ rpaBit: { idx: 'list-rpgactor', lst } });
+    return cpy;
+};
+exports.listRpgactor = listRpgactor;
 
 },{"../../97.collect.unit/collect.action":53,"../rpgactor.action":15}],15:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DeleteRpgactor = exports.DELETE_RPGACTOR = exports.CreateRpgactor = exports.CREATE_RPGACTOR = exports.RemoveRpgactor = exports.REMOVE_RPGACTOR = exports.WriteRpgactor = exports.WRITE_RPGACTOR = exports.ReadRpgactor = exports.READ_RPGACTOR = exports.UpdateRpgactor = exports.UPDATE_RPGACTOR = exports.InitRpgactor = exports.INIT_RPGACTOR = void 0;
+exports.ListRpgactor = exports.LIST_RPGACTOR = exports.DeleteRpgactor = exports.DELETE_RPGACTOR = exports.CreateRpgactor = exports.CREATE_RPGACTOR = exports.RemoveRpgactor = exports.REMOVE_RPGACTOR = exports.WriteRpgactor = exports.WRITE_RPGACTOR = exports.ReadRpgactor = exports.READ_RPGACTOR = exports.UpdateRpgactor = exports.UPDATE_RPGACTOR = exports.InitRpgactor = exports.INIT_RPGACTOR = void 0;
 // Rpgactor actions
 exports.INIT_RPGACTOR = "[Rpgactor action] Init Rpgactor";
 class InitRpgactor {
@@ -696,11 +728,19 @@ class DeleteRpgactor {
     }
 }
 exports.DeleteRpgactor = DeleteRpgactor;
+exports.LIST_RPGACTOR = "[List action] List Rpgactor";
+class ListRpgactor {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.LIST_RPGACTOR;
+    }
+}
+exports.ListRpgactor = ListRpgactor;
 
 },{}],16:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteRpgactor = exports.createRpgactor = exports.removeRpgactor = exports.writeRpgactor = exports.readRpgactor = exports.updateRpgactor = exports.initRpgactor = void 0;
+exports.listRpgactor = exports.deleteRpgactor = exports.createRpgactor = exports.removeRpgactor = exports.writeRpgactor = exports.readRpgactor = exports.updateRpgactor = exports.initRpgactor = void 0;
 var rpgactor_buzz_1 = require("./buz/rpgactor.buzz");
 Object.defineProperty(exports, "initRpgactor", { enumerable: true, get: function () { return rpgactor_buzz_1.initRpgactor; } });
 var rpgactor_buzz_2 = require("./buz/rpgactor.buzz");
@@ -715,12 +755,20 @@ var rpgactor_buzz_6 = require("./buz/rpgactor.buzz");
 Object.defineProperty(exports, "createRpgactor", { enumerable: true, get: function () { return rpgactor_buzz_6.createRpgactor; } });
 var rpgactor_buzz_7 = require("./buz/rpgactor.buzz");
 Object.defineProperty(exports, "deleteRpgactor", { enumerable: true, get: function () { return rpgactor_buzz_7.deleteRpgactor; } });
+var rpgactor_buzz_8 = require("./buz/rpgactor.buzz");
+Object.defineProperty(exports, "listRpgactor", { enumerable: true, get: function () { return rpgactor_buzz_8.listRpgactor; } });
 
 },{"./buz/rpgactor.buzz":14}],17:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RpgactorModel = void 0;
 class RpgactorModel {
+    constructor() {
+        //idx:string;
+        //rpgactorBitList: RpgactorBit[] = [];
+        //rpgactorBits: any = {};
+        this.count = 1;
+    }
 }
 exports.RpgactorModel = RpgactorModel;
 
@@ -748,6 +796,8 @@ function reducer(model = new rpgactor_model_1.RpgactorModel(), act, state) {
             return Buzz.createRpgactor(clone(model), act.bale, state);
         case Act.DELETE_RPGACTOR:
             return Buzz.deleteRpgactor(clone(model), act.bale, state);
+        case Act.LIST_RPGACTOR:
+            return Buzz.listRpgactor(clone(model), act.bale, state);
         default:
             return model;
     }
@@ -789,7 +839,7 @@ const initRpgmap = async (cpy, bal, ste) => {
     lst = bal.lst;
     var dex = lst.length - 1;
     var output = [];
-    var lstMsg = [];
+    var lstMsg = ['initizing rpg map'];
     var nextMap = async () => {
         if (dex <= 0) {
             output;
@@ -1050,33 +1100,215 @@ exports.UpdateRpgmap = UpdateRpgmap;
 },{}],28:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateRpgparty = exports.initRpgparty = void 0;
-const initRpgparty = (cpy, bal, ste) => {
-    debugger;
-    return cpy;
+exports.switchRpgparty = exports.deleteRpgparty = exports.removeRpgparty = exports.writeRpgparty = exports.readRpgparty = exports.updateRpgparty = exports.createRpgparty = exports.initRpgparty = void 0;
+const ActRpp = require("../rpgparty.action");
+const ActRpa = require("../../02.rpgactor.unit/rpgactor.action");
+const ActCol = require("../../97.collect.unit/collect.action");
+var bit, val, idx, dex, lst, dat, src;
+const initRpgparty = async (cpy, bal, ste) => {
+    lst = bal.lst;
+    if (lst == null)
+        lst = [];
+    var dex = lst.length - 1;
+    var output = [];
+    var lstMsg = ['initizing rpg party'];
+    var nextParty = async () => {
+        if (dex < 0) {
+            output;
+            bal.slv({ intBit: { idx: "init-rpgparty", dat, lst: lstMsg } });
+            return cpy;
+        }
+        var itm = lst[dex];
+        bit = await ste.hunt(ActRpa.READ_RPGACTOR, { idx: itm });
+        dat = bit.rpaBit.dat;
+        if (dat.map == null) {
+            bal.slv({ intBit: { idx: "init-rpgparty-errorr" } });
+            return cpy;
+        }
+        bit = await ste.hunt(ActRpp.WRITE_RPGPARTY, { idx: dat.idx, dat });
+        lstMsg.push('party added: ' + dat.name);
+        dex -= 1;
+        await nextParty();
+    };
+    await nextParty();
 };
 exports.initRpgparty = initRpgparty;
-const updateRpgparty = (cpy, bal, ste) => {
+const createRpgparty = async (cpy, bal, ste) => {
+    var stageMod = ste.value.rpgstage;
+    if (bal.dat == null)
+        bal.dat = {};
+    var dat = { idx, dex: cpy.partyCount, name: bal.dat.name };
+    //for (var key in bal.dat) {
+    //    dat[key] = bal.dat[key]
+    //}
+    var map = bal.dat.map;
+    var index = bal.dat.dex + 1;
+    //debugger
+    stageMod.partyPlugin.create(index);
+    stageMod.partyPlugin.addActor(index, index);
+    stageMod.partyPlugin.setLocation(index, map.x, map.y, map.idx);
+    cpy.partyCount += 1;
+    bal.slv({ rppBit: { idx: 'create-rpgparty', dat } });
+    return cpy;
+};
+exports.createRpgparty = createRpgparty;
+const updateRpgparty = async (cpy, bal, ste) => {
+    bit = await ste.hunt(ActRpp.READ_RPGPARTY, { idx: bal.idx });
+    dat = bit.rpmBit;
+    bal.slv({ rppBit: { idx: "update-rpgparty", dat } });
     return cpy;
 };
 exports.updateRpgparty = updateRpgparty;
+const readRpgparty = async (cpy, bal, ste) => {
+    var slv = bal.slv;
+    if (bal.idx == null)
+        bal.idx = 'pty00';
+    bit = await ste.hunt(ActCol.READ_COLLECT, { idx: bal.idx, bit: ActRpp.CREATE_RPGPARTY });
+    var item = bit.clcBit.dat;
+    if (slv != null)
+        slv({ rppBit: { idx: "read-rpgparty", dat: item } });
+    return cpy;
+};
+exports.readRpgparty = readRpgparty;
+const writeRpgparty = async (cpy, bal, ste) => {
+    var slv = bal.slv;
+    bit = await ste.hunt(ActCol.WRITE_COLLECT, { idx: bal.idx, src: bal.src, dat: bal.dat, bit: ActRpp.CREATE_RPGPARTY });
+    var item = bit.clcBit.dat;
+    if (bit.clcBit.val == 1)
+        await ste.hunt(ActRpp.UPDATE_RPGPARTY, { idx: bal.idx, dat: bal.dat });
+    if (slv != null)
+        slv({ rppBit: { idx: "write-rpgparty", dat: item } });
+    return cpy;
+    return cpy;
+};
+exports.writeRpgparty = writeRpgparty;
+const removeRpgparty = async (cpy, bal, ste) => {
+    bit = await ste.hunt(ActCol.REMOVE_COLLECT, { idx: bal.idx, src: bal.src, dat: bal.dat, bit: ActRpp.DELETE_RPGPARTY });
+    if (bal.slv != null)
+        bal.slv({ rppBit: { idx: "remove-rpgparty", dat: bit.clcBit } });
+    return cpy;
+};
+exports.removeRpgparty = removeRpgparty;
+const deleteRpgparty = (cpy, bal, ste) => {
+    debugger;
+    return cpy;
+};
+exports.deleteRpgparty = deleteRpgparty;
+const switchRpgparty = (cpy, bal, ste) => {
+    var stageMod = ste.value.rpgstage;
+    stageMod.partyPlugin.switch(bal.val);
+    window.requestAnimationFrame(() => {
+        stageMod.gamePlayer;
+        debugger;
+    });
+    if (bal.slv != null)
+        bal.slv({ rppBit: { idx: "switch-rpgparty", dat: bit.clcBit } });
+    return cpy;
+};
+exports.switchRpgparty = switchRpgparty;
 
-},{}],29:[function(require,module,exports){
-arguments[4][26][0].apply(exports,arguments)
-},{"dup":26}],30:[function(require,module,exports){
+},{"../../02.rpgactor.unit/rpgactor.action":15,"../../97.collect.unit/collect.action":53,"../rpgparty.action":29}],29:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateRpgparty = exports.initRpgparty = void 0;
+exports.SwitchRpgparty = exports.SWITCH_RPGPARTY = exports.CreateRpgparty = exports.CREATE_RPGPARTY = exports.DeleteRpgparty = exports.DELETE_RPGPARTY = exports.RemoveRpgparty = exports.REMOVE_RPGPARTY = exports.WriteRpgparty = exports.WRITE_RPGPARTY = exports.ReadRpgparty = exports.READ_RPGPARTY = exports.UpdateRpgparty = exports.UPDATE_RPGPARTY = exports.InitRpgparty = exports.INIT_RPGPARTY = void 0;
+// Rpgparty actions
+exports.INIT_RPGPARTY = "[Rpgparty action] Init Rpgparty";
+class InitRpgparty {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.INIT_RPGPARTY;
+    }
+}
+exports.InitRpgparty = InitRpgparty;
+exports.UPDATE_RPGPARTY = "[Rpgparty action] Update Rpgparty";
+class UpdateRpgparty {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.UPDATE_RPGPARTY;
+    }
+}
+exports.UpdateRpgparty = UpdateRpgparty;
+exports.READ_RPGPARTY = "[Read action] Read Rpgparty";
+class ReadRpgparty {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.READ_RPGPARTY;
+    }
+}
+exports.ReadRpgparty = ReadRpgparty;
+exports.WRITE_RPGPARTY = "[Write action] Write Rpgparty";
+class WriteRpgparty {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.WRITE_RPGPARTY;
+    }
+}
+exports.WriteRpgparty = WriteRpgparty;
+exports.REMOVE_RPGPARTY = "[Remove action] Remove Rpgparty";
+class RemoveRpgparty {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.REMOVE_RPGPARTY;
+    }
+}
+exports.RemoveRpgparty = RemoveRpgparty;
+exports.DELETE_RPGPARTY = "[Delete action] Delete Rpgparty";
+class DeleteRpgparty {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.DELETE_RPGPARTY;
+    }
+}
+exports.DeleteRpgparty = DeleteRpgparty;
+exports.CREATE_RPGPARTY = "[Create action] Create Rpgparty";
+class CreateRpgparty {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.CREATE_RPGPARTY;
+    }
+}
+exports.CreateRpgparty = CreateRpgparty;
+exports.SWITCH_RPGPARTY = "[Switch action] Switch Rpgparty";
+class SwitchRpgparty {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.SWITCH_RPGPARTY;
+    }
+}
+exports.SwitchRpgparty = SwitchRpgparty;
+
+},{}],30:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.switchRpgparty = exports.createRpgparty = exports.deleteRpgparty = exports.removeRpgparty = exports.writeRpgparty = exports.readRpgparty = exports.updateRpgparty = exports.initRpgparty = void 0;
 var rpgparty_buzz_1 = require("./buz/rpgparty.buzz");
 Object.defineProperty(exports, "initRpgparty", { enumerable: true, get: function () { return rpgparty_buzz_1.initRpgparty; } });
 var rpgparty_buzz_2 = require("./buz/rpgparty.buzz");
 Object.defineProperty(exports, "updateRpgparty", { enumerable: true, get: function () { return rpgparty_buzz_2.updateRpgparty; } });
+var rpgparty_buzz_3 = require("./buz/rpgparty.buzz");
+Object.defineProperty(exports, "readRpgparty", { enumerable: true, get: function () { return rpgparty_buzz_3.readRpgparty; } });
+var rpgparty_buzz_4 = require("./buz/rpgparty.buzz");
+Object.defineProperty(exports, "writeRpgparty", { enumerable: true, get: function () { return rpgparty_buzz_4.writeRpgparty; } });
+var rpgparty_buzz_5 = require("./buz/rpgparty.buzz");
+Object.defineProperty(exports, "removeRpgparty", { enumerable: true, get: function () { return rpgparty_buzz_5.removeRpgparty; } });
+var rpgparty_buzz_6 = require("./buz/rpgparty.buzz");
+Object.defineProperty(exports, "deleteRpgparty", { enumerable: true, get: function () { return rpgparty_buzz_6.deleteRpgparty; } });
+var rpgparty_buzz_7 = require("./buz/rpgparty.buzz");
+Object.defineProperty(exports, "createRpgparty", { enumerable: true, get: function () { return rpgparty_buzz_7.createRpgparty; } });
+var rpgparty_buzz_8 = require("./buz/rpgparty.buzz");
+Object.defineProperty(exports, "switchRpgparty", { enumerable: true, get: function () { return rpgparty_buzz_8.switchRpgparty; } });
 
 },{"./buz/rpgparty.buzz":28}],31:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RpgpartyModel = void 0;
 class RpgpartyModel {
+    constructor() {
+        this.partyCount = 0;
+        //idx:string;
+        //rpgpartyBitList: RpgpartyBit[] = [];
+        //rpgpartyBits: any = {};
+    }
 }
 exports.RpgpartyModel = RpgpartyModel;
 
@@ -1094,6 +1326,18 @@ function reducer(model = new rpgparty_model_1.RpgpartyModel(), act, state) {
             return Buzz.updateRpgparty(clone(model), act.bale, state);
         case Act.INIT_RPGPARTY:
             return Buzz.initRpgparty(clone(model), act.bale, state);
+        case Act.READ_RPGPARTY:
+            return Buzz.readRpgparty(clone(model), act.bale, state);
+        case Act.WRITE_RPGPARTY:
+            return Buzz.writeRpgparty(clone(model), act.bale, state);
+        case Act.REMOVE_RPGPARTY:
+            return Buzz.removeRpgparty(clone(model), act.bale, state);
+        case Act.DELETE_RPGPARTY:
+            return Buzz.deleteRpgparty(clone(model), act.bale, state);
+        case Act.CREATE_RPGPARTY:
+            return Buzz.createRpgparty(clone(model), act.bale, state);
+        case Act.SWITCH_RPGPARTY:
+            return Buzz.switchRpgparty(clone(model), act.bale, state);
         default:
             return model;
     }
@@ -1703,7 +1947,7 @@ exports.default = ClientsocketUnit;
 },{"../99.core/state":71,"typescript-ioc":344}],52:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.listCollect = exports.formatCollect = exports.dotCollect = exports.emptyCollect = exports.deleteCollect = exports.modelCollect = exports.getCollect = exports.putCollect = exports.removeCollect = exports.createCollect = exports.writeCollect = exports.readCollect = exports.fetchCollect = exports.updateCollect = exports.initCollect = void 0;
+exports.hashCollect = exports.listCollect = exports.formatCollect = exports.dotCollect = exports.emptyCollect = exports.deleteCollect = exports.modelCollect = exports.getCollect = exports.putCollect = exports.removeCollect = exports.createCollect = exports.writeCollect = exports.readCollect = exports.fetchCollect = exports.updateCollect = exports.initCollect = void 0;
 const ActCol = require("../../97.collect.unit/collect.action");
 var bit, lst, dat, idx, val, src, dex;
 const initCollect = (cpy, bal, ste) => {
@@ -1907,19 +2151,50 @@ const listCollect = (cpy, bal, ste) => {
     var cabBit = cpy.caboodleBitList[cpy.caboodleBits[type]];
     lst = [];
     cabBit.bitList.forEach((a) => {
-        lst.push(a.idx);
+        if (a.idx != null)
+            lst.push(a.idx);
+        if (a.id != null)
+            lst.push(a.id);
     });
     bal.slv({ clcBit: { idx: 'list-collect', lst } });
     return cpy;
 };
 exports.listCollect = listCollect;
+const hashCollect = (cpy, bal, ste) => {
+    if (bal.src == null)
+        bal.src = '';
+    lst = bal.src.split('\n');
+    dat = {};
+    lst.forEach((a) => {
+        a = S(a).collapseWhitespace().s;
+        if (a.length < 3)
+            return;
+        var hold = a.split(':');
+        var dom = hold[0];
+        var sub = hold[1];
+        if (dom == null) {
+            return;
+        }
+        if (sub == null) {
+            return;
+        }
+        var now = sub.split(',');
+        now.forEach((b, c) => {
+            now[c] = S(b).collapseWhitespace().s;
+        });
+        dat[dom] = now;
+    });
+    bal.slv({ clcBit: { idx: 'hash-collect', dat } });
+    return cpy;
+};
+exports.hashCollect = hashCollect;
 const S = require("string");
 const doT = require("dot");
 
 },{"../../97.collect.unit/collect.action":53,"dot":163,"string":324}],53:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ListCollect = exports.LIST_COLLECT = exports.DotCollect = exports.DOT_COLLECT = exports.FormatCollect = exports.FORMAT_COLLECT = exports.GetCollect = exports.GET_COLLECT = exports.PutCollect = exports.PUT_COLLECT = exports.ModelCollect = exports.MODEL_COLLECT = exports.EmptyCollect = exports.EMPTY_COLLECT = exports.DeleteCollect = exports.DELETE_COLLECT = exports.RemoveCollect = exports.REMOVE_COLLECT = exports.CreateCollect = exports.CREATE_COLLECT = exports.WriteCollect = exports.WRITE_COLLECT = exports.ReadCollect = exports.READ_COLLECT = exports.FetchCollect = exports.FETCH_COLLECT = exports.UpdateCollect = exports.UPDATE_COLLECT = exports.InitCollect = exports.INIT_COLLECT = void 0;
+exports.HashCollect = exports.HASH_COLLECT = exports.ListCollect = exports.LIST_COLLECT = exports.DotCollect = exports.DOT_COLLECT = exports.FormatCollect = exports.FORMAT_COLLECT = exports.GetCollect = exports.GET_COLLECT = exports.PutCollect = exports.PUT_COLLECT = exports.ModelCollect = exports.MODEL_COLLECT = exports.EmptyCollect = exports.EMPTY_COLLECT = exports.DeleteCollect = exports.DELETE_COLLECT = exports.RemoveCollect = exports.REMOVE_COLLECT = exports.CreateCollect = exports.CREATE_COLLECT = exports.WriteCollect = exports.WRITE_COLLECT = exports.ReadCollect = exports.READ_COLLECT = exports.FetchCollect = exports.FETCH_COLLECT = exports.UpdateCollect = exports.UPDATE_COLLECT = exports.InitCollect = exports.INIT_COLLECT = void 0;
 // Collect actions
 exports.INIT_COLLECT = "[Collect action] Init Collect";
 class InitCollect {
@@ -2041,11 +2316,19 @@ class ListCollect {
     }
 }
 exports.ListCollect = ListCollect;
+exports.HASH_COLLECT = "[Hash action] Hash Collect";
+class HashCollect {
+    constructor(bale) {
+        this.bale = bale;
+        this.type = exports.HASH_COLLECT;
+    }
+}
+exports.HashCollect = HashCollect;
 
 },{}],54:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.listCollect = exports.dotCollect = exports.formatCollect = exports.getCollect = exports.putCollect = exports.modelCollect = exports.removeCollect = exports.deleteCollect = exports.fetchCollect = exports.emptyCollect = exports.createCollect = exports.writeCollect = exports.readCollect = exports.updateCollect = exports.initCollect = void 0;
+exports.hashCollect = exports.listCollect = exports.dotCollect = exports.formatCollect = exports.getCollect = exports.putCollect = exports.modelCollect = exports.removeCollect = exports.deleteCollect = exports.fetchCollect = exports.emptyCollect = exports.createCollect = exports.writeCollect = exports.readCollect = exports.updateCollect = exports.initCollect = void 0;
 var collect_buzz_1 = require("./buz/collect.buzz");
 Object.defineProperty(exports, "initCollect", { enumerable: true, get: function () { return collect_buzz_1.initCollect; } });
 var collect_buzz_2 = require("./buz/collect.buzz");
@@ -2076,6 +2359,8 @@ var collect_buzz_14 = require("./buz/collect.buzz");
 Object.defineProperty(exports, "dotCollect", { enumerable: true, get: function () { return collect_buzz_14.dotCollect; } });
 var collect_buzz_15 = require("./buz/collect.buzz");
 Object.defineProperty(exports, "listCollect", { enumerable: true, get: function () { return collect_buzz_15.listCollect; } });
+var collect_buzz_16 = require("./buz/collect.buzz");
+Object.defineProperty(exports, "hashCollect", { enumerable: true, get: function () { return collect_buzz_16.hashCollect; } });
 
 },{"./buz/collect.buzz":52}],55:[function(require,module,exports){
 "use strict";
@@ -2130,6 +2415,8 @@ function reducer(model = new collect_model_1.CollectModel(), act, state) {
             return Buzz.dotCollect(clone(model), act.bale, state);
         case Act.LIST_COLLECT:
             return Buzz.listCollect(clone(model), act.bale, state);
+        case Act.HASH_COLLECT:
+            return Buzz.hashCollect(clone(model), act.bale, state);
         default:
             return model;
     }

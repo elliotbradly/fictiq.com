@@ -1,5 +1,6 @@
 [
 null,
 {"id":1,"expanded":true,"name":"MAP001-Astrokahn Hub","order":1,"parentId":0,"scrollX":571,"scrollY":1193},
-{"id":2,"expanded":false,"name":"MAP002-Fang-Swamp","order":2,"parentId":0,"scrollX":0,"scrollY":0}
+{"id":2,"expanded":true,"name":"MAP002-Fang-Swamp","order":2,"parentId":0,"scrollX":0,"scrollY":0},
+{"id":3,"expanded":false,"name":"MAP003-Bixie-Lixie","order":3,"parentId":0,"scrollX":0,"scrollY":0}
 ]

@@ -274,6 +274,7 @@ var bit, val, idx, dex, lst, dat, src;
 var display, hudData;
 const initRpgstage = async (cpy, bal, ste) => {
     var dat = bal.dat;
+    dat.gameVariables.TIMECODE = 'now';
     cpy.shade = dat.shade;
     cpy.gameTemp = dat.gameTemp;
     cpy.gameSystem = dat.gameSystem;
@@ -380,10 +381,10 @@ const openRpgstage = async (cpy, bal, ste) => {
         await next();
     };
     await next();
-    setInterval(async () => {
-        val = getRandomInt(800);
-        bit = await ste.hunt(ActRpp.SWITCH_RPGPARTY, { val });
-    }, 13333);
+    //setInterval( async ()=>{
+    //    val = getRandomInt(800)
+    //    bit = await ste.hunt(ActRpp.SWITCH_RPGPARTY, { val })
+    //}, 13333)
 };
 exports.openRpgstage = openRpgstage;
 const updateRpgstage = (cpy, bal, ste) => {
@@ -412,6 +413,8 @@ const sceneRpgstage = async (cpy, bal, ste) => {
     bit = await ste.hunt(ActHud.FIN_HUD, {});
     bit = await ste.hunt(ActHud.INIT_HUD, { dat: hudData });
     ste.hunt(ActHud.WRITE_HUD, { idx: HUD.DEBUG_WINDOW, dat: { visible: true } });
+    ste.hunt(ActHud.WRITE_HUD, { idx: HUD.CLOCK_BAR, dat: { visible: true } });
+    ste.hunt(ActHud.WRITE_HUD, { idx: HUD.ACTION_BAR, dat: { visible: false } });
     //bit = await ste.hunt(ActHud.READ_HUD, { idx: HUD.ICON_WINDOW });
     //ste.hunt(ActHud.WRITE_HUD, { idx: HUD.ICON_WINDOW, dat: { visible: false } });
     //ste.hunt(ActHud.WRITE_HUD, { idx: HUD.PLAY_DATA_GROUP, dat: { visible: false } });
@@ -438,6 +441,7 @@ const sceneRpgstage = async (cpy, bal, ste) => {
         ste.hunt(ActRps.OPEN_RPGSTAGE, {});
     }
     cpy.sceneChangeCount += 1;
+    window['TIMECODE'] = cpy.sceneChangeCount;
     //cpy.mainHUD.visible = false
     //can you clear it
     bal.slv({ rpsBit: { idx: "scene-rpgstage" } });
@@ -517,6 +521,7 @@ class RpgstageModel {
         this.sceneChangeCount = 0;
         this.debugList = [];
         this.debugListSize = 10;
+        this.timecode = 'timecode : ';
         //idx:string;
         //rpgstageBitList: RpgstageBit[] = [];
         //rpgstageBits: any = {};
@@ -2059,7 +2064,7 @@ const writeCollect = async (cpy, bal, ste) => {
             cabDat[key] = bal.dat[key];
         }
         cabBit.bitList[cabBit.bits[bal.idx]] = cabDat;
-        dat = cabBit;
+        dat = cabDat;
         //!!! SUPER IMPORTANT
     }
     if (dat == null && bal.slv != null)
@@ -2198,12 +2203,6 @@ const hashCollect = (cpy, bal, ste) => {
         var hold = a.split(':');
         var dom = hold[0];
         var sub = hold[1];
-        if (dom == null) {
-            return;
-        }
-        if (sub == null) {
-            return;
-        }
         var now = sub.split(',');
         now.forEach((b, c) => {
             now[c] = S(b).collapseWhitespace().s;
@@ -3393,12 +3392,13 @@ exports.BLUE = "blue";
 },{}],86:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ACTION_BAR = exports.DEBUG_WINDOW = exports.ICON_WINDOW = exports.PLAY_DATA_GROUP = exports.WELCOME_WINDOW = void 0;
+exports.CLOCK_BAR = exports.ACTION_BAR = exports.DEBUG_WINDOW = exports.ICON_WINDOW = exports.PLAY_DATA_GROUP = exports.WELCOME_WINDOW = void 0;
 exports.WELCOME_WINDOW = "welcomeWindow";
 exports.PLAY_DATA_GROUP = "playerDataGroup";
 exports.ICON_WINDOW = "iconWindow";
 exports.DEBUG_WINDOW = "debugWindow";
 exports.ACTION_BAR = "actionBar";
+exports.CLOCK_BAR = "clockBar";
 
 },{}],87:[function(require,module,exports){
 'use strict';

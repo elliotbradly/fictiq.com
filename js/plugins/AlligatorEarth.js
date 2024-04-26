@@ -38,6 +38,8 @@
 (() => {
   $DEBUG = true;
 
+  window.TIMECODE = 'now'
+
   const pluginName = "Alligator-Earth";
 
   PluginManager.registerCommand(pluginName, "set", (args) => { });
@@ -57,6 +59,8 @@
     //}
 
     Window_TitleCommand.initCommandPosition();
+
+    $gameSystem.disableMenu()
 
     setTimeout(async () => {
 
@@ -100,6 +104,12 @@
       bit = await window.BLENDER.hunt(initStage, { dat });
 
       //window.BLENDER.hunt(debugStage, { src: 'Scene Boot' });
+
+      
+
+
+      
+      
 
       //var Scene_Map_create = Scene_Map.prototype.create;
       //Scene_Map.prototype.create = async function () {
